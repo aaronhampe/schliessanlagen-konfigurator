@@ -9,7 +9,7 @@
 -->
 
 <template>
-  <div class="flex-container" style="margin-top: 400px;">
+  <div class="flex-container" style="margin: 300px;">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
@@ -36,7 +36,7 @@
             <div class="quantity">
               <h3 v-show="rowIndex < 1">Anzahl</h3>
               <UInput v-model="checkbox.doorquantity" min="1" class="quantity-input" color="gray" size="sm"
-                type="number" variant="outline" style="width: 70px" />
+                type="number" variant="outline" style="width: 80px" />
             </div>
             <!--Zylindertyp-->
             <div class="cylinder-type">
@@ -50,33 +50,33 @@
               <div class="outside">
                 <h3 v-show="rowIndex < 1">Außen</h3>
                 <USelectMenu v-model="checkbox.outside" color="gray" :options="sizes" placeholder="..."
-                  style="width: 70px" />
+                  style="width: 80px" />
               </div>
               <div class="inside">
                 <h3 v-show="rowIndex < 1">Innen</h3>
                 <USelectMenu v-model="checkbox.inside" color="gray" :options="sizes" placeholder="..."
-                  style="width: 70px" />
+                  style="width: 80px" />
               </div>
             </div>
             <div class="sizes-halfcylinder" v-else-if="checkbox.type == 'Halbzylinder'">
               <div class="outside">
                 <h3 v-show="rowIndex < 1">Außen</h3>
                 <USelectMenu v-model="checkbox.outside" color="gray" :options="sizes" placeholder="..."
-                  style="width: 70px" />
+                  style="width: 80px" />
               </div>
               <div class="inside">
                 <h3 v-show="rowIndex < 1">Innen</h3>
-                <UBadge color="gray" variant="outline" size="lg" style="width: 70px">&nbsp;10&nbsp;</UBadge>
+                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;10&nbsp;</UBadge>
               </div>
             </div>
             <div class="sizes-empty" v-else>
               <div class="outside">
                 <h3 v-show="rowIndex < 1">Außen</h3>
-                <UBadge color="gray" variant="outline" size="lg" style="width: 70px">&nbsp;N/A&nbsp;</UBadge>
+                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;N/A&nbsp;</UBadge>
               </div>
               <div class="inside">
                 <h3 v-show="rowIndex < 1">Innen</h3>
-                <UBadge color="gray" variant="outline" size="lg" style="width: 70px">&nbsp;N/A&nbsp;</UBadge>
+                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;N/A&nbsp;</UBadge>
               </div>
             </div>
             <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
@@ -156,10 +156,15 @@
         <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
         </UButton>
       </div>
+      <div class="buttons-scnd" style="margin: 20px;">
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="addRow" size="sm" color="amber"
+          variant="solid" :trailing="false">Anlage laden</UButton>
+          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="addRow" size="sm" color="amber"
+          variant="solid" :trailing="false">Anlage speichern</UButton>
+      </div>
     </div>
     <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
-      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
-
+      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>  
   </div>
 </template>
 
@@ -379,7 +384,8 @@ export default {
 .buttons,
 .sizes-empty,
 .sizes-halfcylinder,
-.sizes {
+.sizes,
+.buttons-scnd {
   display: flex;
   /* Display buttons horizontally */
   justify-content: flex-start;
