@@ -9,7 +9,16 @@
 -->
 
 <template>
-  <div class="flex-container" style="margin: 300px;">
+  
+  <div class="heading">
+    <h1>Schließanlagenkonfigurator</h1>
+    <div class="number">
+      <h2>Anlagennummer:</h2>
+      <input type="text" readonly  v-model="anlageNr" placeholder="Anlagenummer" /> 
+    </div>
+    
+  </div>
+  <div class="flex-container" style="margin: 200px;">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
@@ -107,6 +116,7 @@
               writing-mode: vertical-rl;
               position: absolute;
               margin-top: -20.8em;
+              padding: 4px;
               height: 150px;
               cursor: default;
               border: 1px solid lightgray;
@@ -157,10 +167,12 @@
         </UButton>
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
-        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="addRow" size="sm" color="amber"
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
-          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="addRow" size="sm" color="amber"
+          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage speichern</UButton>
+          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="generateRandomAnlagenNummer()" size="sm" color="amber"
+          variant="solid" :trailing="false">Nummer </UButton>
       </div>
     </div>
     <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
@@ -180,8 +192,8 @@ export default {
   data() {
     return {
 
+      anlageNr: '',
       modalStates: {},
-
       rows: [
         [
           {
@@ -306,6 +318,12 @@ export default {
         this.tempSkill = ''
       }
     },
+    generateRandomAnlagenNummer() {
+      // Generieren Sie eine zufällige 6-stellige Zahl
+      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      // Setzen Sie die generierte Nummer als Wert für anlageNr
+      this.anlageNr = randomNum.toString();
+    },
 
     test() {
       const columnStructure = {
@@ -350,11 +368,28 @@ export default {
       this.rows[3][2].checked = true;
       this.rows[1][4].checked = true;
     },
+    mounted() {
+    // Rufen Sie die Funktion zum Generieren der zufälligen Anlagennummer auf, wenn die Komponente geladen wird
+    this.generateRandomAnlagenNummer();
+ },
   },
 };
 </script>
 
 <style scoped>
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.heading h1 {
+  font-size: 1.8em;
+}
+
 .flex-container {
   display: flex;
   flex-direction: row;
@@ -385,13 +420,22 @@ export default {
 .sizes-empty,
 .sizes-halfcylinder,
 .sizes,
-.buttons-scnd {
+.buttons-scnd,
+.number {
   display: flex;
   /* Display buttons horizontally */
   justify-content: flex-start;
   /* Align buttons to the right */
   gap: 10px;
   /* Spacing between buttons */
+}
+
+.number{
+  font-size: 20px;
+}
+
+.number input {
+  width: 80px;
 }
 
 .add-door-button {
