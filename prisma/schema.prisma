@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Anlage {
+  ID        Int       @unique(map: "Anlage_ID_IDX")
+  Objekt    String?   @db.VarChar(100)
+  Name      String?   @default("") @db.VarChar(256)
+  Vorname   String?   @db.VarChar(100)
+  EMail     String?   @db.VarChar(100)
+  Firma     String?   @db.VarChar(100)
+  TimeStamp DateTime? @default(now()) @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Position {
+  ID          Int?
+  POS         Int?
+  Bezeichnung String?  @db.VarChar(100)
+  Anzahl      String?  @db.VarChar(100)
+  Typ         String?  @db.VarChar(100)
+  SizeA       String?  @db.VarChar(100)
+  SizeI       String?  @db.VarChar(100)
+  O1          Boolean? @db.Bit(1)
+  O2          Boolean? @db.Bit(1)
+  O3          Boolean? @db.Bit(1)
+  O4          Boolean? @db.Bit(1)
+  O5          Boolean? @db.Bit(1)
+  O6          Boolean? @db.Bit(1)
+  O7          Boolean? @db.Bit(1)
+  O8          Boolean? @db.Bit(1)
+  O9          Boolean? @db.Bit(1)
+  O10         Boolean? @db.Bit(1)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Schliessplan {
+  ID            Int?
+  POSZylinder   Int?
+  POSSchluessel Int?
+  Berechtigung  Boolean? @db.Bit(1)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Schluessel {
+  ID          Int?
+  POS         Int?
+  Bezeichnung String? @db.VarChar(100)
+  Anzahl      Int?
+
+  @@ignore
+}
+
+model System {
+  ID         Int    @id
+  Name       String @db.VarChar(256)
+  Hersteller String @db.VarChar(256)
+  Techlevel  Int
+  Typ        Int
+}
