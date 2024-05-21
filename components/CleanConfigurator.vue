@@ -14,11 +14,11 @@
     <h1>Schließanlagenkonfigurator</h1>
     <div class="number">
       <h2>Anlagennummer:</h2>
-      <input type="text" readonly  v-model="anlageNr" placeholder="Anlagenummer" /> 
+      <input type="text" readonly style="width: 140px;"  v-model="anlageNr" placeholder="Anlagenummer"  /> 
     </div>
     
   </div>
-  <div class="flex-container" style="margin: 200px;">
+  <div class="flex-container" style="margin:240px 0 0 240px;">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
