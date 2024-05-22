@@ -181,9 +181,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import ColumnModal from './ColumnModal.vue';
-
 
 export default {
   components: {
