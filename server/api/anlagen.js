@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export default async (req, res) => {
   try {
+    
     const anlagen = await prisma.anlage.findMany();
     res.status(200).json({ anlagen });
   } catch (error) {
