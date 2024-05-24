@@ -185,13 +185,15 @@
 <script>
 import ColumnModal from './ColumnModal.vue';
 
+
+
 export default {
   components: {
     ColumnModal,
   },
   data() {
     return {
-
+      
       anlageNr: '',
       modalStates: {},
       rows: [
@@ -318,7 +320,7 @@ export default {
       this.anlageNr = randomNum.toString();
     },
 
-    test() {
+    async test() {
       const columnStructure = {
         checked: false,
         keyquantity: 1,
@@ -358,6 +360,13 @@ export default {
       this.rows[1][2].checked = true;
       this.rows[3][2].checked = true;
       this.rows[1][4].checked = true;
+      const  queryresult   = await $fetch('/api/sql', {
+        method: 'post',
+        body: { ID: 12345 }
+      })
+      this.rows[0][1].keyname = queryresult.test[0].ID
+      
+
     },
     mounted() {
 
