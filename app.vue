@@ -4,9 +4,9 @@ import CleanConfigurator from "./components/CleanConfigurator.vue";
 import Anlagenliste from "./components/Anlagenliste.vue";
 </script>
 <template>
-  <!--    <Configurator/>  <Matrix></Matrix>  <NewMatrix></NewMatrix> <CleanConfigurator></CleanConfigurator> <Anlagenliste></Anlagenliste> -->
+  <!--    <Configurator/>  <Matrix></Matrix>  <NewMatrix></NewMatrix> <CleanConfigurator></CleanConfigurator> -->
   
- 
+  <Anlagenliste></Anlagenliste> 
 </template>
 
 <style lang="scss">
