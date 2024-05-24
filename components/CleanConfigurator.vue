@@ -1,13 +1,3 @@
-<!-- Current problems:
-
-  the modal which contains the input for the key name only exists once -> so if i change value in the modal, all columns change their name
-
-  i need to create a new modal for every key (column ) that gets created -> with an individual value so i can change every columns name 
-
-  -> that also means that the showModal button of every column needs to show the right modal which contains the input for the key name of this exact column.
-
--->
-
 <template>
 
   <div class="heading">
@@ -170,9 +160,10 @@
       <div class="buttons-scnd" style="margin: 20px;">
         <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
-        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="openModal()" size="sm"
+        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="openModal(colIndex)" size="sm"
           color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
-          <SaveModal @update-column-name="updateColumnName($event)" />
+          <SaveModal :columnId="colIndex" v-model="modalStates[colIndex]"
+            @update-column-name="updateColumnName(colIndex, $event)"" />
         <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
         </UButton>
