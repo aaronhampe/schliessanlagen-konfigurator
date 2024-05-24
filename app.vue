@@ -1,14 +1,9 @@
 <script>
-
 import CleanConfigurator from "./components/CleanConfigurator.vue";
-import Anlagenliste from "./components/Anlagenliste.vue";
-import GtpConfigurator from "./components/GtpConfigurator.vue";
 </script>
 <template>
-  <!--    <Anlagenliste></Anlagenliste> -->
-  
-  <CleanConfigurator></CleanConfigurator> 
-
+  <!--<Anlagenliste></Anlagenliste>-->
+  <CleanConfigurator></CleanConfigurator>
 </template>
 
 <style lang="scss">
@@ -17,6 +12,7 @@ import GtpConfigurator from "./components/GtpConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
 }
+
 h1,
 h2,
 h3,

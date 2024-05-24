@@ -170,8 +170,9 @@
       <div class="buttons-scnd" style="margin: 20px;">
         <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
-        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="" size="sm"
+        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="openModal()" size="sm"
           color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
+          <SaveModal @update-column-name="updateColumnName($event)" />
         <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
         </UButton>
@@ -184,12 +185,14 @@
 
 <script>
 import ColumnModal from './ColumnModal.vue';
+import SaveModal from './SaveModal.vue';
 
 
 
 export default {
   components: {
     ColumnModal,
+    SaveModal,
   },
   data() {
     return {
@@ -265,27 +268,23 @@ export default {
 
     deleteRow(rowIndex) {
       if (rowIndex > 0) {
-        this.rows.splice(rowIndex, 1); // Entferne die Zeile an der gegebenen Indexposition
-      } // Entferne die Zeile an der gegebenen Indexposition
+        this.rows.splice(rowIndex, 1); 
+      } 
       else {
         alert("Hier ist Schluss!");
       }
     },
 
     duplicateRow(rowIndex) {
-      const currentRow = this.rows[rowIndex]; // Aktuelle Zeile
-      const newRow = this.deepCopy(currentRow); // Tiefe Kopie der aktuellen Zeile
-      this.rows.splice(rowIndex + 1, 0, newRow); // Füge die neue Zeile nach der aktuellen Zeile ein
+      const currentRow = this.rows[rowIndex]; 
+      const newRow = this.deepCopy(currentRow); 
+      this.rows.splice(rowIndex + 1, 0, newRow);
     },
 
     duplicateCol(colIndex) {
-      // Iteriere über alle Zeilen
       this.rows.forEach((row, rowIndex) => {
-        // Überprüfe, ob die Spalte existiert
         if (row[colIndex]) {
-          // Erstelle eine tiefe Kopie der Spalte
           const newCol = this.deepCopy(row[colIndex]);
-          // Füge die duplizierte Spalte in die entsprechende Position ein
           row.splice(colIndex + 1, 0, newCol);
         }
       });
@@ -326,47 +325,25 @@ export default {
         keyquantity: 1,
       };
       this.rows = [];
-      // Create 6 rows
-      for (let i = 0; i < 6; i++) {
-        // Create an array for the current row
+  
+      for (let i = 0; i < 4; i++) {
         const row = [];
-
-        // Create 5 columns for each row
-        for (let j = 0; j < 5; j++) {
-          // Clone the column structure to avoid reference issues
+        for (let j = 0; j < 4; j++) {
           const column = { ...columnStructure };
-          // Add any specific properties for the column here
-          // For example, setting a unique keyname for each column
           column.keyname = `Schlüssel ${j + 1}`;
 
-          // Add the column to the row
           row.push(column);
         }
 
-        // Add the row to the rows array
         this.rows.push(row);
       }
 
-
-      this.rows[0][1].keyname = "Schlüssel 22ahahaha";
-      this.rows[1][0].doorDesignation = "TürTest 22";
-      this.rows[0][0].doorquantity = "5";
-      this.rows[0][1].keyquantity = "6"
-      this.rows[0][0].type = "Doppelzylinder";
-      this.rows[0][0].inside = "35";
-      this.rows[0][0].outside = "35";
-      this.rows[0][0].options = "Not- & Gefahrenfunktion";
-      this.rows[1][1].checked = true;
-      this.rows[1][2].checked = true;
-      this.rows[3][2].checked = true;
-      this.rows[1][4].checked = true;
       const  queryresult   = await $fetch('/api/sql', {
         method: 'post',
         body: { ID: 12345 }
       })
-      this.rows[0][1].keyname = queryresult.test[0].ID
-      
 
+      this.rows[0][0].doorDesignation = queryresult.test[0].Objekt;
     },
     mounted() {
 
