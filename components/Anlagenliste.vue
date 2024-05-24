@@ -1,6 +1,7 @@
 <template>
   <div>
-    <pre>{{ data.test[0].ID}}</pre>
+    <pre>{{ data.test[0].Name }}</pre>
+    <div >{{ data.test[0] }}</div>
   </div>
 </template>
 
@@ -12,6 +13,5 @@
     body: { ID: 12345 }
   })
 //}
-
 
 </script>

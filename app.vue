@@ -2,11 +2,13 @@
 
 import CleanConfigurator from "./components/CleanConfigurator.vue";
 import Anlagenliste from "./components/Anlagenliste.vue";
+import GtpConfigurator from "./components/GtpConfigurator.vue";
 </script>
 <template>
-  <!--    <Configurator/>  <Matrix></Matrix>  <NewMatrix></NewMatrix> <CleanConfigurator></CleanConfigurator> -->
+  <!--    <Anlagenliste></Anlagenliste> -->
   
-  <Anlagenliste></Anlagenliste> 
+  <CleanConfigurator></CleanConfigurator> 
+
 </template>
 
 <style lang="scss">

@@ -9,14 +9,15 @@
 -->
 
 <template>
-  
+
   <div class="heading">
     <h1>Schließanlagenkonfigurator</h1>
     <div class="number">
       <h2>Anlagennummer:</h2>
-      <input type="text" readonly style="width: 140px;"  v-model="anlageNr" placeholder="Anlagenummer"  /> 
+      <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
+
     </div>
-    
+
   </div>
   <div class="flex-container" style="margin:240px 0 0 240px;">
     <div class="configurator">
@@ -169,14 +170,15 @@
       <div class="buttons-scnd" style="margin: 20px;">
         <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
-          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="" size="sm" color="amber"
-          variant="solid" :trailing="false">Anlage speichern</UButton>
-          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="generateRandomAnlagenNummer()" size="sm" color="amber"
-          variant="solid" :trailing="false">Nummer </UButton>
+        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="" size="sm"
+          color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
+        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+          @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
+        </UButton>
       </div>
     </div>
     <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
-      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>  
+      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
   </div>
 </template>
 
@@ -245,15 +247,11 @@ export default {
       //this.rows[this.rows.length - 1].options = []; // setting the empty array for each option /// very bad solution but no other idea at the moment
     },
 
-
-
-
     addCheckbox() {
       this.rows.forEach((checkbox) => {
         checkbox.push({ checked: false, keyquantity: 1 }); // Add one checkbox to each row
       });
     },
-
 
     deleteCheckbox(colIndex) {
       this.rows.forEach((row) => {
@@ -291,7 +289,6 @@ export default {
       });
     },
 
-    // Funktion zum Erstellen einer tiefen Kopie eines Objekts
     deepCopy(obj) {
       if (typeof obj !== "object" || obj === null) {
         return obj; // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
@@ -317,9 +314,7 @@ export default {
       }
     },
     generateRandomAnlagenNummer() {
-      // Generieren Sie eine zufällige 6-stellige Zahl
       const randomNum = Math.floor(100000 + Math.random() * 900000);
-      // Setzen Sie die generierte Nummer als Wert für anlageNr
       this.anlageNr = randomNum.toString();
     },
 
@@ -351,9 +346,7 @@ export default {
       }
 
 
-      this.rows[0][0].keyname = "Schlüssel 1blubb";
       this.rows[0][1].keyname = "Schlüssel 22ahahaha";
-      this.rows[0][0].doorDesignation = "TürTest";
       this.rows[1][0].doorDesignation = "TürTest 22";
       this.rows[0][0].doorquantity = "5";
       this.rows[0][1].keyquantity = "6"
@@ -367,15 +360,14 @@ export default {
       this.rows[1][4].checked = true;
     },
     mounted() {
-    // Rufen Sie die Funktion zum Generieren der zufälligen Anlagennummer auf, wenn die Komponente geladen wird
-    this.generateRandomAnlagenNummer();
- },
+
+      this.generateRandomAnlagenNummer();
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .heading {
   display: flex;
   flex-direction: column;
@@ -428,7 +420,7 @@ export default {
   /* Spacing between buttons */
 }
 
-.number{
+.number {
   font-size: 20px;
 }
 
