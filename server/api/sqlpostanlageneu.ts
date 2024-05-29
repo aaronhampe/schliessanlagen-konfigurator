@@ -7,10 +7,12 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const ID = body.ID
 
-    const queryresult = await prisma.$queryRaw`SELECT * FROM Anlage WHERE id=${ID};`;
+    const queryresult = await prisma.$queryRaw`
+    INSERT INTO  Anlage (ID, Objekt, Name, Vorname, EMail, Firma)
+    VALUES ("12346", "Hallo", "Ich", "bin", "hallo@ich.de", "Firma");`;
 
   return {
-     queryresult
+    queryresult
     //    hello
 //: 'world'
   }
