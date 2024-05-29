@@ -348,6 +348,11 @@ export default {
 
       const queryresult = await $fetch('/api/sql', {
         method: 'post',
+        body: { ID: 12345, Objekt: 'test', Name: name, Vorname: "Paul", EMail: email, Firma: "Tomatenfirma" },  }
+      })
+
+      const queryresult = await $fetch('/api/sqlpostanlageneu', {
+        method: 'post',
         body: { ID: 12345 }
       })
 
