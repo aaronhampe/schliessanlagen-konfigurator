@@ -154,19 +154,40 @@
       <div class="buttons">
         <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-        </UButton>
+        <!--  <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton> -->
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
         <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
-        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="openModal(colIndex)" size="sm"
-          color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
-          <SaveModal :columnId="colIndex" v-model="modalStates[colIndex]"
-            @update-column-name="updateColumnName(colIndex, $event)"" />
         <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+          @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
+        <UModal v-model="isOpen">
+          <div class="p-4">
+            
+            <h2>Anlage speichern</h2>
+            <br>
+            <form @submit.prevent="handleSubmit">
+              <div class="form-group">
+                <label for="email">E-Mail-Adresse:</label>
+                <UInput id="email" v-model="email" type="email" required />
+              </div>
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <UInput id="name" v-model="name" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="phone">Telefonnummer:</label>
+                <UInput id="phone" v-model="phone" type="tel" required />
+              </div>
+              <br>
+              <UButton type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
+            </form>
+          </div>
+        </UModal>
+        <!-- <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
-        </UButton>
+        </UButton> -->
       </div>
     </div>
     <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
@@ -176,20 +197,16 @@
 
 <script>
 import ColumnModal from './ColumnModal.vue';
-import SaveModal from './SaveModal.vue';
-
-
 
 export default {
   components: {
     ColumnModal,
-    SaveModal,
   },
   data() {
     return {
-      
       anlageNr: '',
       modalStates: {},
+      isOpen: false,
       rows: [
         [
           {
@@ -217,6 +234,9 @@ export default {
       sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
       cylinderOptions: ["Not- & Gefahrenfunktion"],
+      email: ref([]),
+      name: ref([]),
+      phone: ref([]),
     };
   },
   methods: {
@@ -259,16 +279,16 @@ export default {
 
     deleteRow(rowIndex) {
       if (rowIndex > 0) {
-        this.rows.splice(rowIndex, 1); 
-      } 
+        this.rows.splice(rowIndex, 1);
+      }
       else {
         alert("Hier ist Schluss!");
       }
     },
 
     duplicateRow(rowIndex) {
-      const currentRow = this.rows[rowIndex]; 
-      const newRow = this.deepCopy(currentRow); 
+      const currentRow = this.rows[rowIndex];
+      const newRow = this.deepCopy(currentRow);
       this.rows.splice(rowIndex + 1, 0, newRow);
     },
 
@@ -285,15 +305,12 @@ export default {
       if (typeof obj !== "object" || obj === null) {
         return obj; // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
       }
-
       const copy = Array.isArray(obj) ? [] : {}; // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
-
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
           copy[key] = this.deepCopy(obj[key]); // Rekursives Kopieren von Eigenschaften des Objekts
         }
       }
-
       return copy; // Rückgabe der tiefen Kopie des Objekts
     },
 
@@ -305,6 +322,7 @@ export default {
         this.tempSkill = ''
       }
     },
+
     generateRandomAnlagenNummer() {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
       this.anlageNr = randomNum.toString();
@@ -316,7 +334,7 @@ export default {
         keyquantity: 1,
       };
       this.rows = [];
-  
+
       for (let i = 0; i < 4; i++) {
         const row = [];
         for (let j = 0; j < 4; j++) {
@@ -325,19 +343,18 @@ export default {
 
           row.push(column);
         }
-
         this.rows.push(row);
       }
 
-      const  queryresult   = await $fetch('/api/sql', {
+      const queryresult = await $fetch('/api/sql', {
         method: 'post',
         body: { ID: 12345 }
       })
 
       this.rows[0][0].doorDesignation = queryresult.test[0].Objekt;
+      this.rows[1][0].doorDesignation = queryresult.test[0].Name;
     },
     mounted() {
-
       this.generateRandomAnlagenNummer();
     },
   },
