@@ -154,12 +154,28 @@
       <div class="buttons">
         <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-        </UButton>
+        <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton> -->
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
-        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="loadInstallation" size="sm" color="amber"
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
+          <UModal v-model="isOpenL">
+          <div class="p-4">
+
+            <h2>Anlage laden</h2>
+            <br>
+            <form @submit.prevent="handleSubmit">
+              <div class="form-group">
+                <label for="id">Anlagennummer:</label>
+                <UInput id="id" v-model="id" min="1" type="number" required />
+              </div>
+              
+              <br>
+              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
+            </form>
+          </div>
+        </UModal>
         <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
         <UModal v-model="isOpen">
@@ -207,6 +223,7 @@ export default {
       anlageNr: '',
       modalStates: {},
       isOpen: false,
+      isOpenL: false,
       rows: [
         [
           {
@@ -234,6 +251,7 @@ export default {
       sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
       cylinderOptions: ["Not- & Gefahrenfunktion"],
+      id: ref([]),
       email: ref([]),
       name: ref([]),
       phone: ref([]),
@@ -363,7 +381,7 @@ export default {
     async loadInstallation() {
       const queryresult = await $fetch('/api/sqlgetanlage', {
         method: 'post',
-        body: { ID: 12345 }
+        body: { ID: this.id }
       })
       this.rows[0][0].doorDesignation = queryresult.queryresult[0].Objekt;
       this.rows[1][0].doorDesignation = queryresult.queryresult[0].Name;
