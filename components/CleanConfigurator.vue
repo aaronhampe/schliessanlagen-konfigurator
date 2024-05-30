@@ -185,6 +185,10 @@
             <br>
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
+                <label for="object">Anlagenname:</label>
+                <UInput id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung" required />
+              </div>
+              <div class="form-group">
                 <label for="email">E-Mail-Adresse:</label>
                 <UInput id="email" v-model="email" type="email" required />
               </div>
@@ -194,7 +198,11 @@
               </div>
               <div class="form-group">
                 <label for="phone">Telefonnummer:</label>
-                <UInput id="phone" v-model="phone" type="tel" required />
+                <UInput id="phone" v-model="phone" type="tel" placeholder="Optional"  />
+              </div>
+              <div class="form-group">
+                <label for="company">Firma:</label>
+                <UInput id="company" v-model="company" type="tel" placeholder="Optional" />
               </div>
               <br>
               <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
@@ -251,10 +259,12 @@ export default {
       sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
       cylinderOptions: ["Not- & Gefahrenfunktion"],
+      object: ref([]),
       id: ref([]),
       email: ref([]),
       name: ref([]),
       phone: ref([]),
+      company: ref([]),
     };
   },
   methods: {
@@ -363,18 +373,12 @@ export default {
         }
         this.rows.push(row);
       }
-
-  
-
-
-      this.rows[0][0].doorDesignation = queryresult.queryresult[0].Objekt;
-      this.rows[1][0].doorDesignation = queryresult.queryresult[0].Name;
     },
 
     async saveInstallation() {
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
-        body: { ID: 12345, Objekt: "test", Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
+        body: { ID: 12345, Objekt: "Hubers' Anlage", Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
       })
     },
 
@@ -383,8 +387,11 @@ export default {
         method: 'post',
         body: { ID: this.id }
       })
-      this.rows[0][0].doorDesignation = queryresult.queryresult[0].Objekt;
-      this.rows[1][0].doorDesignation = queryresult.queryresult[0].Name;
+      this.anlageNr = queryresult.queryresult[0].ID;
+      this.object = queryresult.queryresult[0].Objekt;
+      this.name = queryresult.queryresult[0].Name;
+      this.email = queryresult.queryresult[0].EMail;
+      this.company = queryresult.queryresult[0].Firma;
     },
 
     mounted() {
