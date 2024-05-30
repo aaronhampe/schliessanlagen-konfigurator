@@ -154,8 +154,8 @@
       <div class="buttons">
         <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <!--  <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-        </UButton> -->
+        <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton>
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
         <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
@@ -164,7 +164,7 @@
           @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
         <UModal v-model="isOpen">
           <div class="p-4">
-            
+
             <h2>Anlage speichern</h2>
             <br>
             <form @submit.prevent="handleSubmit">
@@ -346,15 +346,13 @@ export default {
         this.rows.push(row);
       }
 
-     
-
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
-        body: { ID: 12345, Objekt: 'test', Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
+        body: { ID: 12345, Objekt: "test", Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
       })
 
-      this.rows[0][0].doorDesignation = queryresult.test[0].Objekt;
-      this.rows[1][0].doorDesignation = queryresult.test[0].Name;
+      this.rows[0][0].doorDesignation = queryresult[0].Objekt;
+      this.rows[1][0].doorDesignation = queryresult.Name;
     },
     mounted() {
       this.generateRandomAnlagenNummer();
