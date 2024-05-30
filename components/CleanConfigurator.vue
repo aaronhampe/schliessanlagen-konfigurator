@@ -5,10 +5,9 @@
     <div class="number">
       <h2>Anlagennummer:</h2>
       <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
-
     </div>
-
   </div>
+
   <div class="flex-container" style="margin:240px 0 0 240px;">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
@@ -101,6 +100,7 @@
             </div>
           </div>
         </div>
+        
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
           <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
             v-show="rowIndex < 1" style="
@@ -114,7 +114,6 @@
               border-radius: 8px;
               
             ">
-
           </input>
           <input min="1" type="number" placeholder="1" v-model="checkbox.keyquantity" v-show="rowIndex < 1" style="
               
