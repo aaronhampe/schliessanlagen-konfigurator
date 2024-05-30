@@ -158,7 +158,7 @@
         </UButton>
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
-        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="loadInstallation" size="sm" color="amber"
           variant="solid" :trailing="false">Anlage laden</UButton>
         <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
@@ -181,7 +181,7 @@
                 <UInput id="phone" v-model="phone" type="tel" required />
               </div>
               <br>
-              <UButton type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
+              <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
             </form>
           </div>
         </UModal>
@@ -346,14 +346,29 @@ export default {
         this.rows.push(row);
       }
 
+  
+
+
+      this.rows[0][0].doorDesignation = queryresult.queryresult[0].Objekt;
+      this.rows[1][0].doorDesignation = queryresult.queryresult[0].Name;
+    },
+
+    async saveInstallation() {
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
         body: { ID: 12345, Objekt: "test", Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
       })
-
-      this.rows[0][0].doorDesignation = queryresult[0].Objekt;
-      this.rows[1][0].doorDesignation = queryresult.Name;
     },
+
+    async loadInstallation() {
+      const queryresult = await $fetch('/api/sqlgetanlage', {
+        method: 'post',
+        body: { ID: 12345 }
+      })
+      this.rows[0][0].doorDesignation = queryresult.queryresult[0].Objekt;
+      this.rows[1][0].doorDesignation = queryresult.queryresult[0].Name;
+    },
+
     mounted() {
       this.generateRandomAnlagenNummer();
     },
