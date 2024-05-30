@@ -378,7 +378,7 @@ export default {
     async saveInstallation() {
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
-        body: { ID: 12345, Objekt: "Hubers' Anlage", Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
+        body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company}
       })
     },
 
