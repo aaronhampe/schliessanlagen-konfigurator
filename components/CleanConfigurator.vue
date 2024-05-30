@@ -346,14 +346,11 @@ export default {
         this.rows.push(row);
       }
 
-      const queryresult = await $fetch('/api/sql', {
-        method: 'post',
-        body: { ID: 12345, Objekt: 'test', Name: name, Vorname: "Paul", EMail: email, Firma: "Tomatenfirma" },  }
-      })
+     
 
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
-        body: { ID: 12345 }
+        body: { ID: 12345, Objekt: 'test', Name: this.name, Vorname: "Paul", EMail: this.email, Firma: "Tomatenfirma" }
       })
 
       this.rows[0][0].doorDesignation = queryresult.test[0].Objekt;
