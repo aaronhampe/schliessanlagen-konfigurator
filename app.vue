@@ -1,8 +1,8 @@
 <script>
 import CleanConfigurator from "./components/CleanConfigurator.vue";
 </script>
+
 <template>
-  <!--<Anlagenliste></Anlagenliste>-->
   <CleanConfigurator></CleanConfigurator>
 </template>
 

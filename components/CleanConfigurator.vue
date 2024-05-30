@@ -158,9 +158,9 @@
         </UButton> -->
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
-        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true" size="sm" color="amber"
-          variant="solid" :trailing="false">Anlage laden</UButton>
-          <UModal v-model="isOpenL">
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true" size="sm"
+          color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
+        <UModal v-model="isOpenL">
           <div class="p-4">
 
             <h2>Anlage laden</h2>
@@ -170,9 +170,10 @@
                 <label for="id">Anlagennummer:</label>
                 <UInput id="id" v-model="id" min="1" type="number" required />
               </div>
-              
+
               <br>
-              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
+              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken
+              </UButton>
             </form>
           </div>
         </UModal>
@@ -198,14 +199,15 @@
               </div>
               <div class="form-group">
                 <label for="phone">Telefonnummer:</label>
-                <UInput id="phone" v-model="phone" type="tel" placeholder="Optional"  />
+                <UInput id="phone" v-model="phone" type="tel" placeholder="Optional" />
               </div>
               <div class="form-group">
                 <label for="company">Firma:</label>
                 <UInput id="company" v-model="company" type="tel" placeholder="Optional" />
               </div>
               <br>
-              <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken</UButton>
+              <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken
+              </UButton>
             </form>
           </div>
         </UModal>
@@ -223,15 +225,32 @@
 import ColumnModal from './ColumnModal.vue';
 
 export default {
+
   components: {
+
     ColumnModal,
+
   },
+
   data() {
+
     return {
+
+      // Daten über die Anlage
       anlageNr: '',
+      object: ref([]),
+      id: ref([]),
+      email: ref([]),
+      name: ref([]),
+      phone: ref([]),
+      company: ref([]),
+
+      // Zum Öffnen und Schließen aller Modale
       modalStates: {},
       isOpen: false,
       isOpenL: false,
+
+      // Das Row Objekt mit Daten über die Konfiguration pro Zeile
       rows: [
         [
           {
@@ -248,6 +267,8 @@ export default {
           },
         ],
       ],
+
+      // Auswahlmöglichkeiten an Zylindern
       cylinderType: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",
@@ -256,55 +277,63 @@ export default {
         "Vorhangschloss 80mm",
         "Briefkastenschloss",
       ],
+
+      // Größe und Optionen
       sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
       cylinderOptions: ["Not- & Gefahrenfunktion"],
-      object: ref([]),
-      id: ref([]),
-      email: ref([]),
-      name: ref([]),
-      phone: ref([]),
-      company: ref([]),
+
     };
   },
+
   methods: {
+
+    // Zurücksetzen des angeklickten Selects
     resetOptions(rowIndex) {
       this.rows[rowIndex].options = [];
     },
 
+    // Öffnet das ColumnModal, abhängig vom Column Index
     openModal(colIndex) {
       this.modalStates[colIndex] = true;
     },
 
+    // Zum Benennen der Schlüssel
     updateColumnName(colIndex, newName) {
-      // Hier können Sie den neuen Namen der Spalte speichern
       this.rows[0][colIndex].keyname = newName;
     },
 
+    // Neues Row Objekt hinzufügen
     addRow() {
-      const numCheckboxes = this.rows[0].length; // Get the number of checkboxes in the first row
+      // Anzahl der Checkboxen
+      const numCheckboxes = this.rows[0].length;
       const newRow = [];
       for (let i = 0; i < numCheckboxes; i++) {
-        newRow.push({ checked: false, doorquantity: 1 }); // Create a new row with the same number of checkboxes as the first row
+        // Neue Zeile mit gleicher Anzahl an Checkboxen 
+        newRow.push({ checked: false, doorquantity: 1 });
       }
-      this.rows.push(newRow); // Add the new row
-      //this.rows[this.rows.length - 1].options = []; // setting the empty array for each option /// very bad solution but no other idea at the moment
+      // Neue Zeile 
+      this.rows.push(newRow);
     },
 
+    // Neue Checkboxen hinzufügen
     addCheckbox() {
       this.rows.forEach((checkbox) => {
-        checkbox.push({ checked: false, keyquantity: 1 }); // Add one checkbox to each row
+        // Fügt eine Checkbox an jede Reihe an
+        checkbox.push({ checked: false, keyquantity: 1 }); 
       });
     },
 
+    // Checkbox löschen
     deleteCheckbox(colIndex) {
       this.rows.forEach((row) => {
         if (row.length > 1) {
-          row.splice(colIndex, 1); // Remove the last checkbox from each row if more than one exists
+          row.splice(colIndex, 1); 
         }
       });
     },
 
+    // Zeile löschen
     deleteRow(rowIndex) {
       if (rowIndex > 0) {
         this.rows.splice(rowIndex, 1);
@@ -314,12 +343,14 @@ export default {
       }
     },
 
+    // Zeile duplizieren
     duplicateRow(rowIndex) {
       const currentRow = this.rows[rowIndex];
       const newRow = this.deepCopy(currentRow);
       this.rows.splice(rowIndex + 1, 0, newRow);
     },
 
+    // Spalte duplizieren
     duplicateCol(colIndex) {
       this.rows.forEach((row, rowIndex) => {
         if (row[colIndex]) {
@@ -329,33 +360,31 @@ export default {
       });
     },
 
+    // Funktion um ein Array tief zu kopieren
     deepCopy(obj) {
       if (typeof obj !== "object" || obj === null) {
-        return obj; // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
+         // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
+        return obj;
       }
-      const copy = Array.isArray(obj) ? [] : {}; // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
+       // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
+      const copy = Array.isArray(obj) ? [] : {};
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          copy[key] = this.deepCopy(obj[key]); // Rekursives Kopieren von Eigenschaften des Objekts
+          // Rekursives Kopieren von Eigenschaften des Objekts
+          copy[key] = this.deepCopy(obj[key]); 
         }
       }
-      return copy; // Rückgabe der tiefen Kopie des Objekts
+      // Rückgabe der tiefen Kopie des Objekts
+      return copy; 
     },
 
-    addSkill(a) {
-      if (a.key === ' ' && this.tempSkill && this.skills.length < 8) {
-        if (!this.skills.includes(this.tempSkill)) {
-          this.skills.push(this.tempSkill)
-        }
-        this.tempSkill = ''
-      }
-    },
-
+    // Erstellen einer Random Number
     generateRandomAnlagenNummer() {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
       this.anlageNr = randomNum.toString();
     },
 
+    // Zum Testen der API
     async test() {
       const columnStructure = {
         checked: false,
@@ -375,13 +404,15 @@ export default {
       }
     },
 
+    // Anlage speichern 
     async saveInstallation() {
       const queryresult = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
-        body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company}
+        body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
     },
 
+    // Anlage laden
     async loadInstallation() {
       const queryresult = await $fetch('/api/sqlgetanlage', {
         method: 'post',
