@@ -449,63 +449,8 @@ export default {
       this.isOpen = false;
     },
 
+   
     // Anlage laden
-    /* async loadInstallation() {
-
-      this.rows.length = 1;
-
-      const queryresultanlage = await $fetch('/api/sqlgetanlage', {
-        method: 'post',
-        body: { ID: this.id }
-      })
-      this.anlageNr = queryresultanlage.queryresult[0].ID;
-      this.object = queryresultanlage.queryresult[0].Objekt;
-      this.name = queryresultanlage.queryresult[0].Name;
-      this.email = queryresultanlage.queryresult[0].EMail;
-      this.company = queryresultanlage.queryresult[0].Firma;
-
-      // Zeilenanzahle 
-      const queryresultposition = await $fetch('/api/sqlgetposition', {
-        method: 'post',
-        body: { ID: this.id }
-      })
-
-      // Ermitteln Anzahl der Positionen der geladenen Anlage
-      var maxPosition = 0;
-      queryresultposition.queryresult.forEach(entry => {
-        // Aktualisiere den größten Positionswert, wenn der aktuelle Eintrag eine größere Position hat
-        if (entry.POS > maxPosition) {
-          maxPosition = entry.POS;
-        }
-      });
-
-      // Setzen der Zeilen und Checkboxen
-      for (let i = 0; i < maxPosition - 1; i++) {
-        const numCheckboxes = this.rows[0].length;
-        const newRow = [];
-        for (let j = 0; j < numCheckboxes; j++) {
-          // Neue Zeile mit gleicher Anzahl an Checkboxen 
-          newRow.push({ checked: false, doorquantity: 1 });
-        }
-        // Neue Zeile 
-        this.rows.push(newRow);
-
-      }
-
-      // Beschreiben der Positionswerte
-      for (let i = 0; i < maxPosition; i++) {
-        this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
-        this.rows[i][0].doorquantity = queryresultposition.queryresult[i].Anzahl;
-        this.rows[i][0].type = queryresultposition.queryresult[i].Typ;
-        this.rows[i][0].outside = queryresultposition.queryresult[i].SizeA;
-        this.rows[i][0].inside = queryresultposition.queryresult[i].SizeI;
-        this.rows[i][0].options = queryresultposition.queryresult[i].Option;
-      }
-
-      //Schließen des Modals
-      this.isOpenL = false;
-    } */
-
     async loadInstallation() {
       this.rows.length = 1;
 
