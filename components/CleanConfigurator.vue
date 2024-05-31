@@ -100,7 +100,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
           <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
             v-show="rowIndex < 1" style="
@@ -132,7 +132,7 @@
               margin-top: -4.4em;
             " />
           <ColumnModal :columnId="colIndex" v-model="modalStates[colIndex]"
-            @update-column-name="updateColumnName(colIndex, $event)" />
+            @update-column-name="updateColumnName(colIndex, $event)" @close-this-modal="closeModal(colIndex)" />
           <p v-show="rowIndex < 1">&nbsp;</p>
           <UCheckbox name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" />
           <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
@@ -161,8 +161,10 @@
           color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
         <UModal v-model="isOpenL">
           <div class="p-4">
-
-            <h2>Anlage laden</h2>
+            <div class="modal-flex-buttons-top">
+              <h2>Anlage laden</h2>
+              <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
+            </div>
             <br>
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
@@ -171,7 +173,7 @@
               </div>
 
               <br>
-              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken
+              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
               </UButton>
             </form>
           </div>
@@ -180,8 +182,10 @@
           @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
         <UModal v-model="isOpen">
           <div class="p-4">
-
-            <h2>Anlage speichern</h2>
+            <div class="modal-flex-buttons-top">
+              <h2>Anlage speichern</h2>
+              <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
+            </div>
             <br>
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
@@ -297,6 +301,10 @@ export default {
       this.modalStates[colIndex] = true;
     },
 
+    closeModal(colIndex) {
+      this.modalStates[colIndex] = false;
+    },
+
     // Zum Benennen der Schlüssel
     updateColumnName(colIndex, newName) {
       this.rows[0][colIndex].keyname = newName;
@@ -319,7 +327,7 @@ export default {
     addCheckbox() {
       this.rows.forEach((checkbox) => {
         // Fügt eine Checkbox an jede Reihe an
-        checkbox.push({ checked: false, keyquantity: 1 }); 
+        checkbox.push({ checked: false, keyquantity: 1 });
       });
     },
 
@@ -327,7 +335,7 @@ export default {
     deleteCheckbox(colIndex) {
       this.rows.forEach((row) => {
         if (row.length > 1) {
-          row.splice(colIndex, 1); 
+          row.splice(colIndex, 1);
         }
       });
     },
@@ -362,19 +370,19 @@ export default {
     // Funktion um ein Array tief zu kopieren
     deepCopy(obj) {
       if (typeof obj !== "object" || obj === null) {
-         // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
+        // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
         return obj;
       }
-       // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
+      // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
       const copy = Array.isArray(obj) ? [] : {};
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
           // Rekursives Kopieren von Eigenschaften des Objekts
-          copy[key] = this.deepCopy(obj[key]); 
+          copy[key] = this.deepCopy(obj[key]);
         }
       }
       // Rückgabe der tiefen Kopie des Objekts
-      return copy; 
+      return copy;
     },
 
     // Erstellen einer Random Number
@@ -409,6 +417,9 @@ export default {
         method: 'post',
         body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
+
+      //Schließen des Modals
+      this.isOpen = false;
     },
 
     // Anlage laden
@@ -422,46 +433,46 @@ export default {
       this.name = queryresultanlage.queryresult[0].Name;
       this.email = queryresultanlage.queryresult[0].EMail;
       this.company = queryresultanlage.queryresult[0].Firma;
-      
+
+      // Zeilenanzahle 
       const queryresultposition = await $fetch('/api/sqlgetposition', {
         method: 'post',
         body: { ID: this.id }
       })
-      
-      //Ermitteln Anzahl der Positionen der geladenen Anlage
-      var maxPosition=0;
+
+      // Ermitteln Anzahl der Positionen der geladenen Anlage
+      var maxPosition = 0;
       queryresultposition.queryresult.forEach(entry => {
         // Aktualisiere den größten Positionswert, wenn der aktuelle Eintrag eine größere Position hat
         if (entry.POS > maxPosition) {
           maxPosition = entry.POS;
         }
       });
-      
-      //Setzen der Zeilen und Checkboxen
-      for (let i=0; i < maxPosition-1 ; i++) {
-      const numCheckboxes = this.rows[0].length;
+
+      // Setzen der Zeilen und Checkboxen
+      for (let i = 0; i < maxPosition - 1; i++) {
+        const numCheckboxes = this.rows[0].length;
         const newRow = [];
         for (let j = 0; j < numCheckboxes; j++) {
-        // Neue Zeile mit gleicher Anzahl an Checkboxen 
-        newRow.push({ checked: false, doorquantity: 1 });
-      }
-      // Neue Zeile 
-      this.rows.push(newRow); 
+          // Neue Zeile mit gleicher Anzahl an Checkboxen 
+          newRow.push({ checked: false, doorquantity: 1 });
+        }
+        // Neue Zeile 
+        this.rows.push(newRow);
 
-    }
-      //Beschreiben der Positionswerte
-      for (let i=0; i < maxPosition ; i++) {
-       this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
-       this.rows[i][0].doorquantity = queryresultposition.queryresult[i].Anzahl;
-       this.rows[i][0].cylinderType = "Doppelzylinder";
-      // this.rows[i][0].cylinderType = queryresultposition.queryresult[i].Typ;
-       this.rows[i][0].outside = queryresultposition.queryresult[i].SizeA;
-       this.rows[i][0].inside = queryresultposition.queryresult[i].SizeI;
-        
       }
-      
-      
 
+      // Beschreiben der Positionswerte
+      for (let i = 0; i < maxPosition; i++) {
+        this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
+        this.rows[i][0].doorquantity = queryresultposition.queryresult[i].Anzahl;
+        this.rows[i][0].type = queryresultposition.queryresult[i].Typ;
+        this.rows[i][0].outside = queryresultposition.queryresult[i].SizeA;
+        this.rows[i][0].inside = queryresultposition.queryresult[i].SizeI;
+      }
+
+      //Schließen des Modals
+      this.isOpenL = false;
     },
 
     mounted() {
@@ -542,6 +553,11 @@ export default {
 
 .test-button {
   height: auto;
+}
+
+.modal-flex-buttons-top {
+  display: flex;
+  justify-content: space-between;
 }
 
 .add-key-button {
