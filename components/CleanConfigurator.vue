@@ -166,10 +166,10 @@
               <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
             </div>
             <br>
-            <form @submit.prevent="handleSubmit">
+            <form  @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="id">Anlagennummer:</label>
-                <UInput color="amber" autofocus="true" id="id" v-model="id" min="1" type="number" required />
+                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" />
               </div>
 
               <br>
@@ -190,7 +190,8 @@
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="object">Anlagenname:</label>
-                <UInput autofocus="true"color="amber" id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung" required />
+                <UInput autofocus color="amber" id="object" v-model="object" type="text"
+                  placeholder="z.B. Mustermann Schließung" required />
               </div>
               <div class="form-group">
                 <label for="email">E-Mail-Adresse:</label>
@@ -417,35 +418,35 @@ export default {
         method: 'post',
         body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
-      
-      
+
+
       const queryresultposition = await $fetch('/api/sqlpostposition', {
         method: 'post',
-        body:  
+        body:
           [{
-          "ID": 12345,
-      "POS": 1,
-      "Bezeichnung": "Haupteingang",
-      "Anzahl": "2",
-      "Typ": "Doppelzylinder",
-      "SizeA": "30",
-      "SizeI": "35",
-      "Option": ""
+            "ID": 12345,
+            "POS": 1,
+            "Bezeichnung": "Haupteingang",
+            "Anzahl": "2",
+            "Typ": "Doppelzylinder",
+            "SizeA": "30",
+            "SizeI": "35",
+            "Option": ""
           },
           {
             "ID": 12345,
-      "POS": 2,
-      "Bezeichnung": "Haupteingang",
-      "Anzahl": "2",
-      "Typ": "Doppelzylinder",
-      "SizeA": "30",
-      "SizeI": "35",
-      "Option": ""
+            "POS": 2,
+            "Bezeichnung": "Haupteingang",
+            "Anzahl": "2",
+            "Typ": "Doppelzylinder",
+            "SizeA": "30",
+            "SizeI": "35",
+            "Option": ""
           }
 
-          
-        
-      ]
+
+
+          ]
       })
 
       //Schließen des Modals
