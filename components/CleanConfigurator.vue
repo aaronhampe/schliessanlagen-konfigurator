@@ -417,6 +417,36 @@ export default {
         method: 'post',
         body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
+      
+      
+      const queryresultposition = await $fetch('/api/sqlpostposition', {
+        method: 'post',
+        body:  
+          [{
+          "ID": 12345,
+      "POS": 1,
+      "Bezeichnung": "Haupteingang",
+      "Anzahl": "2",
+      "Typ": "Doppelzylinder",
+      "SizeA": "30",
+      "SizeI": "35",
+      "Option": ""
+          },
+          {
+            "ID": 12345,
+      "POS": 2,
+      "Bezeichnung": "Haupteingang",
+      "Anzahl": "2",
+      "Typ": "Doppelzylinder",
+      "SizeA": "30",
+      "SizeI": "35",
+      "Option": ""
+          }
+
+          
+        
+      ]
+      })
 
       //Schließen des Modals
       this.isOpen = false;
@@ -472,6 +502,7 @@ export default {
         this.rows[i][0].type = queryresultposition.queryresult[i].Typ;
         this.rows[i][0].outside = queryresultposition.queryresult[i].SizeA;
         this.rows[i][0].inside = queryresultposition.queryresult[i].SizeI;
+        this.rows[i][0].options = queryresultposition.queryresult[i].Option;
       }
 
       //Schließen des Modals
