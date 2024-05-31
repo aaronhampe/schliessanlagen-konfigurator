@@ -169,7 +169,7 @@
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="id">Anlagennummer:</label>
-                <UInput id="id" v-model="id" min="1" type="number" required />
+                <UInput color="amber" autofocus="true" id="id" v-model="id" min="1" type="number" required />
               </div>
 
               <br>
@@ -190,23 +190,23 @@
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="object">Anlagenname:</label>
-                <UInput id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung" required />
+                <UInput autofocus="true"color="amber" id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung" required />
               </div>
               <div class="form-group">
                 <label for="email">E-Mail-Adresse:</label>
-                <UInput id="email" v-model="email" type="email" required />
+                <UInput color="amber" id="email" v-model="email" type="email" required />
               </div>
               <div class="form-group">
                 <label for="name">Name:</label>
-                <UInput id="name" v-model="name" type="text" required />
+                <UInput color="amber" id="name" v-model="name" type="text" required />
               </div>
               <div class="form-group">
                 <label for="phone">Telefonnummer:</label>
-                <UInput id="phone" v-model="phone" type="tel" placeholder="Optional" />
+                <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" />
               </div>
               <div class="form-group">
                 <label for="company">Firma:</label>
-                <UInput id="company" v-model="company" type="tel" placeholder="Optional" />
+                <UInput color="amber" id="company" v-model="company" type="tel" placeholder="Optional" />
               </div>
               <br>
               <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken
