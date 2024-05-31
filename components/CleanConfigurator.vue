@@ -166,7 +166,7 @@
               <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
             </div>
             <br>
-            <form  @submit.prevent="handleSubmit">
+            <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="id">Anlagennummer:</label>
                 <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" />
@@ -242,12 +242,12 @@ export default {
 
       // Daten über die Anlage
       anlageNr: '',
-      object: ref([]),
-      id: ref([]),
-      email: ref([]),
-      name: ref([]),
-      phone: ref([]),
-      company: ref([]),
+      object: '',
+      id: '',
+      email: '',
+      name: '',
+      phone: '',
+      company: '',
 
       // Zum Öffnen und Schließen aller Modale
       modalStates: {},
@@ -442,11 +442,7 @@ export default {
             "SizeA": "30",
             "SizeI": "35",
             "Option": ""
-          }
-
-
-
-          ]
+          }]
       })
 
       //Schließen des Modals
@@ -454,7 +450,7 @@ export default {
     },
 
     // Anlage laden
-    async loadInstallation() {
+    /* async loadInstallation() {
 
       this.rows.length = 1;
 
@@ -507,6 +503,68 @@ export default {
       }
 
       //Schließen des Modals
+      this.isOpenL = false;
+    } */
+
+    async loadInstallation() {
+      this.rows.length = 1;
+
+      // Abrufen der Anlagendaten
+      const queryresultanlage = await $fetch('/api/sqlgetanlage', {
+        method: 'post',
+        body: { ID: this.id }
+      });
+
+      // Überprüfen ob das Ergebnis gültig ist
+      if (queryresultanlage && queryresultanlage.queryresult && queryresultanlage.queryresult.length > 0) {
+        this.anlageNr = queryresultanlage.queryresult[0].ID || '';
+        this.object = queryresultanlage.queryresult[0].Objekt || '';
+        this.name = queryresultanlage.queryresult[0].Name || '';
+        this.email = queryresultanlage.queryresult[0].EMail || '';
+        this.company = queryresultanlage.queryresult[0].Firma || '';
+      }
+
+      // Abrufen der Positionsdaten
+      const queryresultposition = await $fetch('/api/sqlgetposition', {
+        method: 'post',
+        body: { ID: this.id }
+      });
+
+      // Überprüfen ob das Ergebnis gültig ist
+      if (queryresultposition && queryresultposition.queryresult) {
+        // Ermitteln Anzahl der Positionen der geladenen Anlage
+        let maxPosition = 0;
+        queryresultposition.queryresult.forEach(entry => {
+          if (entry.POS > maxPosition) {
+            maxPosition = entry.POS;
+          }
+        });
+
+        // Setzen der Zeilen und Checkboxen
+        for (let i = 0; i < maxPosition - 1; i++) {
+          const numCheckboxes = this.rows[0].length;
+          const newRow = [];
+          for (let j = 0; j < numCheckboxes; j++) {
+            newRow.push({ checked: false, doorquantity: 1 });
+          }
+          this.rows.push(newRow);
+        }
+
+        // Beschreiben der Positionswerte
+        for (let i = 0; i < maxPosition; i++) {
+          const positionData = queryresultposition.queryresult[i];
+          if (positionData) {
+            this.rows[i][0].doorDesignation = positionData.Bezeichnung || '';
+            this.rows[i][0].doorquantity = positionData.Anzahl || 1;
+            this.rows[i][0].type = positionData.Typ || '';
+            this.rows[i][0].outside = positionData.SizeA || '';
+            this.rows[i][0].inside = positionData.SizeI || '';
+            this.rows[i][0].options = positionData.Option || '';
+          }
+        }
+      }
+
+      // Schließen des Modals
       this.isOpenL = false;
     },
 

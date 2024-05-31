@@ -1,5 +1,5 @@
 <template>
-    <UModal class="modal" v-model="isOpen">
+    <UModal class="modal" v-model="isOpenC">
         <div class="p-4">
             <div class="modal-flex-buttons-top pb-6">
                 <h2>Schlüssel benennen</h2>
