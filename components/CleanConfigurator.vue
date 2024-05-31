@@ -427,10 +427,39 @@ export default {
         method: 'post',
         body: { ID: this.id }
       })
-
-      for (let i=0; i < 4; i++) {
-        this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
+      
+      //Ermitteln Anzahl der Positionen der geladenen Anlage
+      var maxPosition=0;
+      queryresultposition.queryresult.forEach(entry => {
+        // Aktualisiere den größten Positionswert, wenn der aktuelle Eintrag eine größere Position hat
+        if (entry.POS > maxPosition) {
+          maxPosition = entry.POS;
+        }
+      });
+      
+      //Setzen der Zeilen und Checkboxen
+      for (let i=0; i < maxPosition-1 ; i++) {
+      const numCheckboxes = this.rows[0].length;
+        const newRow = [];
+        for (let j = 0; j < numCheckboxes; j++) {
+        // Neue Zeile mit gleicher Anzahl an Checkboxen 
+        newRow.push({ checked: false, doorquantity: 1 });
       }
+      // Neue Zeile 
+      this.rows.push(newRow); 
+
+    }
+      //Beschreiben der Positionswerte
+      for (let i=0; i < maxPosition ; i++) {
+       this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
+       this.rows[i][0].doorquantity = queryresultposition.queryresult[i].Anzahl;
+       this.rows[i][0].cylinderType = "Doppelzylinder";
+      // this.rows[i][0].cylinderType = queryresultposition.queryresult[i].Typ;
+       this.rows[i][0].outside = queryresultposition.queryresult[i].SizeA;
+       this.rows[i][0].inside = queryresultposition.queryresult[i].SizeI;
+        
+      }
+      
       
 
     },
