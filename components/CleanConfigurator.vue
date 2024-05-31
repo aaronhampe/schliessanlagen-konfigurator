@@ -405,7 +405,7 @@ export default {
 
     // Anlage speichern 
     async saveInstallation() {
-      const queryresult = await $fetch('/api/sqlpostanlageneu', {
+      const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
         method: 'post',
         body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
@@ -413,15 +413,26 @@ export default {
 
     // Anlage laden
     async loadInstallation() {
-      const queryresult = await $fetch('/api/sqlgetanlage', {
+      const queryresultanlage = await $fetch('/api/sqlgetanlage', {
         method: 'post',
         body: { ID: this.id }
       })
-      this.anlageNr = queryresult.queryresult[0].ID;
-      this.object = queryresult.queryresult[0].Objekt;
-      this.name = queryresult.queryresult[0].Name;
-      this.email = queryresult.queryresult[0].EMail;
-      this.company = queryresult.queryresult[0].Firma;
+      this.anlageNr = queryresultanlage.queryresult[0].ID;
+      this.object = queryresultanlage.queryresult[0].Objekt;
+      this.name = queryresultanlage.queryresult[0].Name;
+      this.email = queryresultanlage.queryresult[0].EMail;
+      this.company = queryresultanlage.queryresult[0].Firma;
+      
+      const queryresultposition = await $fetch('/api/sqlgetposition', {
+        method: 'post',
+        body: { ID: this.id }
+      })
+
+      for (let i=0; i < 4; i++) {
+        this.rows[i][0].doorDesignation = queryresultposition.queryresult[i].Bezeichnung;
+      }
+      
+
     },
 
     mounted() {
