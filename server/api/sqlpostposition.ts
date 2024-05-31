@@ -6,25 +6,30 @@ const prisma = new PrismaClient()
  
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody(event)
-    const ID = body.ID
-    const Objekt = body.Objekt
-    const Name = body.Name
-    const EMail = body.EMail
-    const Firma = body.Firma 
+    var body = [{}];
+    body = await readBody(event)
+ 
+    
+  
 
-    const queryresult = await prisma.$queryRaw`
-    INSERT INTO  Anlage (ID, Objekt, Name, EMail, Firma)
-    VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Firma} )
-    ON DUPLICATE KEY UPDATE
-    Objekt = VALUES(Objekt),
-    Name = VALUES(Name),
-    EMail = VALUES(EMail),
-    Firma = VALUES(Firma);
-    ;`;
+    async function insertData() {
+      const insertQueries = body.map(item => {
+        return
+        prisma.$queryRaw`INSERT INTO deine_tabelle_name (ID, POS, Bezeichnung, Anzahl, Typ, SizeA, SizeI, Option) VALUES (${item.ID}, ${item.POS}, ${item.Bezeichnung}, ${item.Anzahl}, ${item.Typ}, ${item.SizeA}, ${item.SizeI}, ${item.Option})`;
+      });
+    
+      await Promise.all(insertQueries);
+    }
+    insertData()
+    .catch(e => {
+      console.error(e);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    }); 
 
   return {
-    queryresult
+    
     //    hello
 //: 'world'
   }
