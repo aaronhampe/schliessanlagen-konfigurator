@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
                              SizeI = ${item.SizeI}, 
                              Option = ${item.Option}`;
   });
-  console.log(insertQueries);
+  
     
      await Promise.all(insertQueries);
     }
