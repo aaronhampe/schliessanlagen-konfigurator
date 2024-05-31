@@ -424,6 +424,9 @@ export default {
 
     // Anlage laden
     async loadInstallation() {
+
+      this.rows.length = 1;
+
       const queryresultanlage = await $fetch('/api/sqlgetanlage', {
         method: 'post',
         body: { ID: this.id }
