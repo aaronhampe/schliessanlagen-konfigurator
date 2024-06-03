@@ -2,7 +2,7 @@
     <UModal class="modal" v-model="isOpenC">
         <div class="p-4">
             <div class="modal-flex-buttons-top pb-6">
-                <h2>Schlüssel benennen</h2>
+                <h2 class="modal-h2">Schlüssel benennen</h2>
                 <UButton color="red" @click="closeModal" style="font-weight: 600;">X</UButton>
             </div>
             <label for="input">Schlüsselbezeichnung:</label>
@@ -33,6 +33,10 @@ export default {
 </script>
 
 <style>
+
+.modal-h2 {
+  font-size: 1.4rem;
+}
 
 .modal-flex-buttons-top {
     display: flex;

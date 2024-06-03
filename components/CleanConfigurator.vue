@@ -116,7 +116,6 @@
             ">
           </input>
           <input min="1" type="number" placeholder="1" v-model="checkbox.keyquantity" v-show="rowIndex < 1" style="
-              
               position: absolute;
               margin-top: -11.8em;
               width: 33px;
@@ -162,7 +161,7 @@
         <UModal v-model="isOpenL">
           <div class="p-4">
             <div class="modal-flex-buttons-top">
-              <h2>Anlage laden</h2>
+              <h2 class="modal-h2" >Anlage laden</h2>
               <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
             </div>
             <br>
@@ -183,7 +182,7 @@
         <UModal v-model="isOpen">
           <div class="p-4">
             <div class="modal-flex-buttons-top">
-              <h2>Anlage speichern</h2>
+              <h2 class="modal-h2" >Anlage speichern</h2>
               <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
             </div>
             <br>
@@ -546,6 +545,10 @@ export default {
   margin-bottom: 10px;
   /* Spacing between rows */
   gap: 10px;
+}
+
+.modal-h2 {
+  font-size: 1.4rem;
 }
 
 .checkbox-item {
