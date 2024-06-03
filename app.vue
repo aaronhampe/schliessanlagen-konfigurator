@@ -1,9 +1,10 @@
 <script>
 import CleanConfigurator from "./components/CleanConfigurator.vue";
+import NewConfigurator from "./components/NewConfigurator.vue";
 </script>
 
 <template>
-  <CleanConfigurator></CleanConfigurator>
+  <NewConfigurator></NewConfigurator>
 </template>
 
 <style lang="scss">
