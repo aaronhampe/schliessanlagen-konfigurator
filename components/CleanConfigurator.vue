@@ -418,6 +418,17 @@ export default {
         body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
       })
 
+      
+      /* const temp = '[{';
+      for (i=0; i < this.rows.length; i++ ){
+        temp = temp + '"ID": this.anlageNr '
+
+      } */
+
+      const jsonstring = JSON.stringify(this.rows);
+
+
+      console.log(jsonstring);
 
       const queryresultposition = await $fetch('/api/sqlpostposition', {
         method: 'post',
