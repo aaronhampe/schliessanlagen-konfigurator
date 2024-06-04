@@ -308,7 +308,10 @@ export default {
             const numCheckboxes = this.rows[0].length;
             const newRow = [];
             for (let i = 0; i < numCheckboxes; i++) {
-                newRow.push({ checked: false, doorquantity: 1 });
+                newRow.push({ checked: false, doorquantity: 1,positionition: this.rows.length +1
+                 
+
+                 });
             }
             this.rows.push(newRow);
         },
@@ -369,6 +372,7 @@ export default {
         },
 
         async saveInstallation() {
+            this.anlageNr=12345;
             const RowObject = this.rows.map(row => ({
                 doorDesignation: row[0].doorDesignation,
                 doorquantity: row[0].doorquantity,
@@ -383,13 +387,21 @@ export default {
                 keyquantity: col.keyquantity,
             }));
 
-            const Matrix = this.rows.map(row => row.map(col => ({
-                checked: col.checked,
+            const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                position: rowIndex+1, // Set position to the current row index
+                keynr: colIndex+1, // Set keynr to the current column index
+                checked: col.checked || false, // Default checked to false if missing
             })));
 
-            console.log(JSON.stringify(RowObject));
-            console.log(JSON.stringify(KeyNameObject));
-            console.log(JSON.stringify(Matrix));
+            const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
+                method: 'post',
+                body: Matrix
+            });
+
+            //console.log(JSON.stringify(RowObject));
+            //console.log(JSON.stringify(KeyNameObject));
+            
+            console.log(JSON.stringify(Matrix, null,2 ));
 
             const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
                 method: 'post',
