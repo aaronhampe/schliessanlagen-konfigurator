@@ -372,7 +372,18 @@ export default {
         },
 
         async saveInstallation() {
-            this.anlageNr=12345;
+            let antwort;
+            if (this.anlageNr === '' || this.anlageNr === 12345 ) {
+               do {
+                    this.generateRandomAnlagenNummer();
+                    const response = await $fetch('/api/sqltestanlage?ID='+this.anlageNr , {
+                        method: 'post'
+                    });
+                    antwort = response.message;
+                    //console.log(antwort)
+                } while (antwort ==='Anlagennummer existiert.')     
+            }  
+            
             
             //Schickt die Anlagendaten per API in MYSQL_Datenbank
             const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
