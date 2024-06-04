@@ -373,54 +373,63 @@ export default {
 
         async saveInstallation() {
             this.anlageNr=12345;
-            const RowObject = this.rows.map(row => ({
-                doorDesignation: row[0].doorDesignation,
-                doorquantity: row[0].doorquantity,
-                type: row[0].type,
-                outside: row[0].outside,
-                inside: row[0].inside,
-                options: row[0].options,
-            }));
+            
+            //Schickt die Anlagendaten per API in MYSQL_Datenbank
+            const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
+                method: 'post',
+                body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
+            });
 
-            const KeyNameObject = this.rows[0].map(col => ({
-                keyname: col.keyname,
-                keyquantity: col.keyquantity,
-            }));
 
+            // Erstellt das JSON für die Übergabe der Positionen an MYSQL_Datenbank
+            const RowObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                POS: rowIndex+1, // Set position to the current row index
+                Bezeichnung: row[0].doorDesignation || '',
+                Anzahl: row[0].doorquantity || '',
+                Typ: row[0].type || '',
+                SizeA: row[0].outside || '',
+                SizeI: row[0].inside || '',
+                Option: row[0].options || ''   
+            })));
+
+            //console.log(JSON.stringify(RowObject));
+
+            // Schickt die Positionsdaten per API in MYSQL_Datenbank
+            const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
+                method: 'post',
+                body: RowObject
+            });
+
+
+            // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
+            const KeyNameObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                keyPos: colIndex+1,
+                keyname: col.keyname || '',
+                keyquantity: col.keyquantity || 1,
+            })));
+            
+            //console.log(JSON.stringify(KeyNameObject));
+
+            // Schickt die Schluesseldaten per API in MYSQL_Datenbank
+            const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
+                method: 'post',
+                body: KeyNameObject
+            });
+            
+            // Erstellt das JSON für die Übergabe der Matrix an MYSQL_Datenbank
             const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
                 position: rowIndex+1, // Set position to the current row index
                 keynr: colIndex+1, // Set keynr to the current column index
                 checked: col.checked || false, // Default checked to false if missing
             })));
 
+            //console.log(JSON.stringify(Matrix, null,2 ));
+            // Schickt die Matrixdaten per API in MYSQL_Datenbank
             const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
                 method: 'post',
                 body: Matrix
             });
-
-            //console.log(JSON.stringify(RowObject));
-            //console.log(JSON.stringify(KeyNameObject));
-            
-            console.log(JSON.stringify(Matrix, null,2 ));
-
-            const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
-                method: 'post',
-                body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
-            });
-
-            const queryresultposition = await $fetch('/api/sqlpostposition', {
-                method: 'post',
-                body: RowObject.map((obj, index) => ({
-                    ID: 12345,
-                    POS: index + 1,
-                    Bezeichnung: obj.doorDesignation,
-                    Anzahl: obj.doorquantity,
-                    Typ: obj.type,
-                    SizeA: obj.outside,
-                    SizeI: obj.inside,
-                    Option: obj.options
-                }))
-            });
+         
 
             this.isOpen = false;
         },

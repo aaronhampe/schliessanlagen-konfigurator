@@ -12,17 +12,18 @@ export default defineEventHandler(async (event) => {
   body = await readBody(event); // Stellen Sie sicher, dass readBody korrekt implementiert ist
 
   async function deleteData() {
-    const result = await prisma.$queryRaw`DELETE FROM Schliessplan WHERE id = ${id};`;
+    const result = await prisma.$queryRaw`DELETE FROM Schluessel WHERE id = ${id};`;
     
   }
 
   async function insertData() {
     const insertQueries = body.map(item => {
-      return prisma.$queryRaw`INSERT INTO Schliessplan (ID, POSZylinder, POSSchluessel, Berechtigung) 
-                               VALUES (${id}, ${item.position}, ${item.keynr}, ${item.checked}) 
+      return prisma.$queryRaw`INSERT INTO Schluessel (ID, KeyPOS, Bezeichnung, Anzahl) 
+                               VALUES (${id}, ${item.keyPos}, ${item.keyname}, ${item.keyquantity}) 
                                ON DUPLICATE KEY UPDATE 
-                               
-                               Berechtigung = ${item.checked};`;
+                               KeyPOS = ${item.keyPos},
+                               Bezeichnung =  ${item.keyname},
+                               Anzahl = ${item.keyquantity};`;
     });
 
     await Promise.all(insertQueries);
