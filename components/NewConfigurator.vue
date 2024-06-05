@@ -21,7 +21,7 @@
                 width: 30px;
                 display: flex;
                 justify-content: center;
-                align-items: center;            
+                align-items: center;
               ">
                                 {{ rowIndex + 1 }}
                             </UBadge>
@@ -176,9 +176,13 @@
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
                                 <label for="id">Anlagennummer:</label>
-                                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" />
+                                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" required />
                             </div>
-
+                            <div class="form-group">
+                                <label for="id">Passwort:</label>
+                                <UInput color="amber" id="password" v-model="password" min="1" type="password"
+                                    required />
+                            </div>
                             <br>
                             <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
                             </UButton>
@@ -249,6 +253,7 @@ export default {
             anlageNr: '',
             object: '',
             id: '',
+            password: '',
             email: '',
             name: '',
             phone: '',
@@ -288,6 +293,8 @@ export default {
 
     methods: {
 
+
+
         resetOptions(rowIndex) {
             this.rows[rowIndex].options = [];
         },
@@ -308,10 +315,11 @@ export default {
             const numCheckboxes = this.rows[0].length;
             const newRow = [];
             for (let i = 0; i < numCheckboxes; i++) {
-                newRow.push({ checked: false, doorquantity: 1,positionition: this.rows.length +1
-                 
+                newRow.push({
+                    checked: false, doorquantity: 1, positionition: this.rows.length + 1
 
-                 });
+
+                });
             }
             this.rows.push(newRow);
         },
@@ -372,77 +380,84 @@ export default {
         },
 
         async saveInstallation() {
-            let antwort;
-            if (this.anlageNr === '' || this.anlageNr === 12345 ) {
-               do {
-                    this.generateRandomAnlagenNummer();
-                    const response = await $fetch('/api/sqltestanlage?ID='+this.anlageNr , {
-                        method: 'post'
-                    });
-                    antwort = response.message;
-                    //console.log(antwort)
-                } while (antwort ==='Anlagennummer existiert.')     
-            }  
-            
-            
-            //Schickt die Anlagendaten per API in MYSQL_Datenbank
-            const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
-                method: 'post',
-                body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
-            });
+
+            const form = document.querySelector('form');
+            if (form.checkValidity()) {
+                let antwort;
+                if (this.anlageNr === '' || this.anlageNr === 12345) {
+                    do {
+                        this.generateRandomAnlagenNummer();
+                        const response = await $fetch('/api/sqltestanlage?ID=' + this.anlageNr, {
+                            method: 'post'
+                        });
+                        antwort = response.message;
+                        //console.log(antwort)
+                    } while (antwort === 'Anlagennummer existiert.')
+                }
 
 
-            // Erstellt das JSON für die Übergabe der Positionen an MYSQL_Datenbank
-            const RowObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                POS: rowIndex+1, // Set position to the current row index
-                Bezeichnung: row[0].doorDesignation || '',
-                Anzahl: row[0].doorquantity || '',
-                Typ: row[0].type || '',
-                SizeA: row[0].outside || '',
-                SizeI: row[0].inside || '',
-                Option: row[0].options || ''   
-            })));
-
-            //console.log(JSON.stringify(RowObject));
-
-            // Schickt die Positionsdaten per API in MYSQL_Datenbank
-            const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
-                method: 'post',
-                body: RowObject
-            });
+                //Schickt die Anlagendaten per API in MYSQL_Datenbank
+                const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
+                    method: 'post',
+                    body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
+                });
 
 
-            // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
-            const KeyNameObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                keyPos: colIndex+1,
-                keyname: col.keyname || '',
-                keyquantity: col.keyquantity || 1,
-            })));
-            
-            //console.log(JSON.stringify(KeyNameObject));
+                // Erstellt das JSON für die Übergabe der Positionen an MYSQL_Datenbank
+                const RowObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                    POS: rowIndex + 1, // Set position to the current row index
+                    Bezeichnung: row[0].doorDesignation || '',
+                    Anzahl: row[0].doorquantity || '',
+                    Typ: row[0].type || '',
+                    SizeA: row[0].outside || '',
+                    SizeI: row[0].inside || '',
+                    Option: row[0].options || ''
+                })));
 
-            // Schickt die Schluesseldaten per API in MYSQL_Datenbank
-            const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
-                method: 'post',
-                body: KeyNameObject
-            });
-            
-            // Erstellt das JSON für die Übergabe der Matrix an MYSQL_Datenbank
-            const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                position: rowIndex+1, // Set position to the current row index
-                keynr: colIndex+1, // Set keynr to the current column index
-                checked: col.checked || false, // Default checked to false if missing
-            })));
+                //console.log(JSON.stringify(RowObject));
 
-            //console.log(JSON.stringify(Matrix, null,2 ));
-            // Schickt die Matrixdaten per API in MYSQL_Datenbank
-            const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
-                method: 'post',
-                body: Matrix
-            });
-         
+                // Schickt die Positionsdaten per API in MYSQL_Datenbank
+                const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
+                    method: 'post',
+                    body: RowObject
+                });
 
-            this.isOpen = false;
+
+                // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
+                const KeyNameObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                    keyPos: colIndex + 1,
+                    keyname: col.keyname || '',
+                    keyquantity: col.keyquantity || 1,
+                })));
+
+                //console.log(JSON.stringify(KeyNameObject));
+
+                // Schickt die Schluesseldaten per API in MYSQL_Datenbank
+                const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
+                    method: 'post',
+                    body: KeyNameObject
+                });
+
+                // Erstellt das JSON für die Übergabe der Matrix an MYSQL_Datenbank
+                const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                    position: rowIndex + 1, // Set position to the current row index
+                    keynr: colIndex + 1, // Set keynr to the current column index
+                    checked: col.checked || false, // Default checked to false if missing
+                })));
+
+                //console.log(JSON.stringify(Matrix, null,2 ));
+                // Schickt die Matrixdaten per API in MYSQL_Datenbank
+                const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
+                    method: 'post',
+                    body: Matrix
+                });
+
+
+                this.isOpen = false;
+            } else {
+                // Zeige Validierungsfehler an
+                form.reportValidity();
+            }
         },
 
         async loadInstallation() {
