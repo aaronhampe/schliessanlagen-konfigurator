@@ -464,6 +464,7 @@ export default {
 
         async loadInstallation() {
             this.rows.length = 1;
+            this.rows[0].length =1;
 
 
             // Daten für die Anlage
@@ -480,7 +481,7 @@ export default {
                 this.company = queryresultanlage.queryresult[0].Firma || '';
             }
 
-            // Positionsdaten 
+            // Positionsdaten
             const queryresultposition = await $fetch('/api/sqlgetposition', {
                 method: 'post',
                 body: { ID: this.id }
@@ -528,16 +529,37 @@ export default {
                 while (this.rows[0].length < numCheckboxes) {
                     this.addCheckbox();
                 }
-
+                //console.log(JSON.stringify(queryresultschluessel, null,2 ));
                 for (let i = 0; i < numCheckboxes; i++) {
                     const keyData = queryresultschluessel.queryresult[i];
                     if (keyData) {
-                        this.rows[0][i].keyname = keyData.keyname;
-                        this.rows[0][i].keyquantity = keyData.keyquantity;
+                        this.rows[0][i].keyname = keyData.Bezeichnung;
+                        this.rows[0][i].keyquantity = keyData.Anzahl;
                     }
                 }
             }
+            // Matrix
 
+            const queryresultmatrix = await $fetch('/api/sqlgetmatrix', {
+                method: 'post',
+                body: { ID: this.id }
+            });
+                
+                const maxSchluessel = this.rows[0].length;
+                
+           
+                console.log(JSON.stringify(queryresultmatrix, null,2 ));
+                console.log(maxSchluessel);
+
+
+           /*      for (let i = 0; i < numCheckboxes; i++) {
+                    const keyData = queryresultmatrix.queryresult[i];
+                    if (keyData) {
+                        this.rows[0][i].keyname = keyData.Bezeichnung;
+                        this.rows[0][i].keyquantity = keyData.Anzahl;
+                    }
+                } */
+            
 
             this.isOpenL = false;
         },
