@@ -384,7 +384,7 @@ export default {
             const form = document.querySelector('form');
             if (form.checkValidity()) {
                 let antwort;
-                if (this.anlageNr === '' || this.anlageNr === 12345) {
+                if (this.anlageNr === '') {
                     do {
                         this.generateRandomAnlagenNummer();
                         const response = await $fetch('/api/sqltestanlage?ID=' + this.anlageNr, {
@@ -414,7 +414,7 @@ export default {
                     Option: row[0].options || ''
                 })));
 
-                
+
 
                 // Schickt die Positionsdaten per API in MYSQL_Datenbank
                 const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
@@ -425,13 +425,13 @@ export default {
 
                 // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
                 const KeyNameObject = this.rows
-                 .filter((_, rowIndex) => rowIndex === 0)
-                 .flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                      keyPos: colIndex + 1,
-                         keyname: col.keyname,
-                     keyquantity: col.keyquantity || 1,
-                 })));
-               // console.log(JSON.stringify(this.rows));
+                    .filter((_, rowIndex) => rowIndex === 0)
+                    .flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                        keyPos: colIndex + 1,
+                        keyname: col.keyname,
+                        keyquantity: col.keyquantity || 1,
+                    })));
+                // console.log(JSON.stringify(this.rows));
                 //console.log(JSON.stringify(KeyNameObject));
 
                 // Schickt die Schluesseldaten per API in MYSQL_Datenbank
@@ -465,6 +465,8 @@ export default {
         async loadInstallation() {
             this.rows.length = 1;
 
+
+            // Daten für die Anlage
             const queryresultanlage = await $fetch('/api/sqlgetanlage', {
                 method: 'post',
                 body: { ID: this.id }
@@ -478,6 +480,7 @@ export default {
                 this.company = queryresultanlage.queryresult[0].Firma || '';
             }
 
+            // Positionsdaten 
             const queryresultposition = await $fetch('/api/sqlgetposition', {
                 method: 'post',
                 body: { ID: this.id }
@@ -512,6 +515,29 @@ export default {
                     }
                 }
             }
+
+            // Schlüsseldaten 
+
+            const queryresultschluessel = await $fetch('/api/sqlgetschluessel', {
+                method: 'post',
+                body: { ID: this.id }
+            });
+
+            if (queryresultschluessel && queryresultschluessel.queryresult) {
+                const numCheckboxes = queryresultschluessel.queryresult.length;
+                while (this.rows[0].length < numCheckboxes) {
+                    this.addCheckbox();
+                }
+
+                for (let i = 0; i < numCheckboxes; i++) {
+                    const keyData = queryresultschluessel.queryresult[i];
+                    if (keyData) {
+                        this.rows[0][i].keyname = keyData.keyname;
+                        this.rows[0][i].keyquantity = keyData.keyquantity;
+                    }
+                }
+            }
+
 
             this.isOpenL = false;
         },
