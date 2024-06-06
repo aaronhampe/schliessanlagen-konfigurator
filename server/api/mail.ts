@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     from: 'office@secutimetec.de', 
     to: body.to, // Empfängeradresse aus dem Anfrage-Body
     subject: body.subject, // Betreff der E-Mail
-    text: body.text, // Textinhalt der E-Mail
+    html: body.html, // Textinhalt der E-Mail
   };
 
   try {

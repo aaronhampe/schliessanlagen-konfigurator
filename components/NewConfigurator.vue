@@ -272,8 +272,9 @@ export default {
                         inside: "",
                         options: "",
                         checked: false,
-                        keyname: "",
                         keyquantity: 1,
+                        keyname: "Schlüssel 1",
+                        
                     },
                 ],
             ],
@@ -326,7 +327,7 @@ export default {
 
         addCheckbox() {
             this.rows.forEach((checkbox) => {
-                checkbox.push({ checked: false, keyquantity: 1 });
+                checkbox.push({ checked: false, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length+1)});
             });
         },
 
@@ -432,7 +433,7 @@ export default {
                         keyquantity: col.keyquantity || 1,
                     })));
                 // console.log(JSON.stringify(this.rows));
-                //console.log(JSON.stringify(KeyNameObject));
+                // console.log(JSON.stringify(KeyNameObject));
 
                 // Schickt die Schluesseldaten per API in MYSQL_Datenbank
                 const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
@@ -453,7 +454,32 @@ export default {
                     method: 'post',
                     body: Matrix
                 });
-
+                
+                //Mail an Kunden
+                const queryresultmail = $fetch('/api/mail', {
+                    method: 'post',
+                    body: { to: this.email, 
+                            subject: 'stt-shop.de -- Ihre Konfiguration ' + this.anlageNr + ' wurde verschickt',
+                            html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
+                                    'Objekt: ' + this.object +  '<br>' +
+                                    'Name: ' + this.name + '<br>' +
+                                    'Firma:' + this.company + '<br>' +
+                                    'Telefon: ' + this.phone
+                    }
+                });
+                
+                //Mail an uns
+                const queryresultmailstt = $fetch('/api/mail', {
+                    method: 'post',
+                    body: { to: 'office@secutimetec.de', 
+                            subject: 'stt-shop.de -- Eine Konfiguration ' + this.anlageNr + ' wurde gespeichert',
+                            html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
+                                    'Objekt: ' + this.object +  '<br>' +
+                                    'Name: ' + this.name + '<br>' +
+                                    'Firma:' + this.company + '<br>' +
+                                    'Telefon: ' + this.phone
+                    }
+                });
 
                 this.isOpen = false;
             } else {
@@ -546,10 +572,8 @@ export default {
             this.rows[zeile][spalte].checked = item.Berechtigung;
             });
 
-                console.log(JSON.stringify(queryresultmatrix, null,2 ));
-                console.log(maxZeile);
-                console.log(maxSpalte);
-
+                //console.log(JSON.stringify(queryresultmatrix, null,2 ));
+                
 7
             
 
