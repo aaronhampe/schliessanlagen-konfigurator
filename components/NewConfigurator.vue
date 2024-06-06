@@ -486,58 +486,50 @@ export default {
                 method: 'post',
                 body: { ID: this.id }
             });
-
-            if (queryresultposition && queryresultposition.queryresult) {
-                let maxPosition = 0;
-                queryresultposition.queryresult.forEach(entry => {
-                    if (entry.POS > maxPosition) {
-                        maxPosition = entry.POS;
-                    }
-                });
-
-                for (let i = 0; i < maxPosition - 1; i++) {
-                    const numCheckboxes = this.rows[0].length;
-                    const newRow = [];
-                    for (let j = 0; j < numCheckboxes; j++) {
+            const maxZeilePosition = Math.max(...queryresultposition.queryresult.map(item => item.POS));
+            
+            for (let i = 0; i < maxZeilePosition - 1; i++) {
+                const numCheckboxes = this.rows[0].length;
+                const newRow = [];
+                for (let j = 0; j < numCheckboxes; j++) {
                         newRow.push({ checked: false, doorquantity: 1 });
-                    }
-                    this.rows.push(newRow);
                 }
-
-                for (let i = 0; i < maxPosition; i++) {
-                    const positionData = queryresultposition.queryresult[i];
-                    if (positionData) {
-                        this.rows[i][0].doorDesignation = positionData.Bezeichnung || '';
-                        this.rows[i][0].doorquantity = positionData.Anzahl || 1;
-                        this.rows[i][0].type = positionData.Typ || '';
-                        this.rows[i][0].outside = positionData.SizeA || '';
-                        this.rows[i][0].inside = positionData.SizeI || '';
-                        this.rows[i][0].options = positionData.Option || '';
-                    }
-                }
+                this.rows.push(newRow);
             }
 
+            queryresultposition.queryresult.forEach(item => {
+                const zeile = item.POS - 1; // Annahme: POSZylinder beginnt bei 1
+                this.rows[zeile][0].doorDesignation = item.Bezeichnung;
+                this.rows[zeile][0].doorquantity = item.Anzahl || 1;
+                this.rows[zeile][0].type = item.Typ || '';
+                this.rows[zeile][0].outside = item.SizeA || '';
+                this.rows[zeile][0].inside = item.SizeI || '';
+                this.rows[zeile][0].options = item.Option || '';
+            });
+           
+            
             // Schlüsseldaten 
 
             const queryresultschluessel = await $fetch('/api/sqlgetschluessel', {
                 method: 'post',
                 body: { ID: this.id }
             });
-
-            if (queryresultschluessel && queryresultschluessel.queryresult) {
-                const numCheckboxes = queryresultschluessel.queryresult.length;
-                while (this.rows[0].length < numCheckboxes) {
+            
+            const maxSpalteSchluessel = Math.max(...queryresultschluessel.queryresult.map(item => item.KeyPOS));
+            
+            
+                while (this.rows[0].length < maxSpalteSchluessel) {
                     this.addCheckbox();
                 }
-                //console.log(JSON.stringify(queryresultschluessel, null,2 ));
-                for (let i = 0; i < numCheckboxes; i++) {
-                    const keyData = queryresultschluessel.queryresult[i];
-                    if (keyData) {
-                        this.rows[0][i].keyname = keyData.Bezeichnung;
-                        this.rows[0][i].keyquantity = keyData.Anzahl;
-                    }
-                }
-            }
+        
+            queryresultschluessel.queryresult.forEach(item => {
+            const spalte = item.KeyPOS - 1 ; // Annahme: POSSchluessel beginnt bei 1
+            this.rows[0][spalte].keyname = item.Bezeichnung;
+            this.rows[0][spalte].keyquantity = item.Anzahl;
+            });
+                        
+                
+            
             // Matrix
 
             const queryresultmatrix = await $fetch('/api/sqlgetmatrix', {
@@ -545,20 +537,20 @@ export default {
                 body: { ID: this.id }
             });
                 
-                const maxSchluessel = this.rows[0].length;
-                
-           
+            const maxZeile = Math.max(...queryresultmatrix.queryresult.map(item => item.POSZylinder));
+            const maxSpalte = Math.max(...queryresultmatrix.queryresult.map(item => item.POSSchluessel));
+
+            queryresultmatrix.queryresult.forEach(item => {
+            const zeile = item.POSZylinder - 1; // Annahme: POSZylinder beginnt bei 1
+            const spalte = item.POSSchluessel - 1 ; // Annahme: POSSchluessel beginnt bei 1
+            this.rows[zeile][spalte].checked = item.Berechtigung;
+            });
+
                 console.log(JSON.stringify(queryresultmatrix, null,2 ));
-                console.log(maxSchluessel);
+                console.log(maxZeile);
+                console.log(maxSpalte);
 
-
-           /*      for (let i = 0; i < numCheckboxes; i++) {
-                    const keyData = queryresultmatrix.queryresult[i];
-                    if (keyData) {
-                        this.rows[0][i].keyname = keyData.Bezeichnung;
-                        this.rows[0][i].keyquantity = keyData.Anzahl;
-                    }
-                } */
+7
             
 
             this.isOpenL = false;
