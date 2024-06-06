@@ -163,12 +163,12 @@
                 <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
           </UButton> -->
             </div>
-            <div class="buttons-scnd" v-if="showLoadButton" style="margin: 20px;">
-                <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
+            <div class="buttons-scnd"  style="margin: 20px;">
+                <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
                     size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
                 <UModal v-model="isOpenL">
                     <div class="p-4">
-                        <div class="modal-flex-buttons-top">
+                        <div  class="modal-flex-buttons-top">
                             <h2 class="modal-h2">Anlage laden</h2>
                             <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
                         </div>
