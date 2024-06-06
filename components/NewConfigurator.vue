@@ -414,7 +414,7 @@ export default {
                     Option: row[0].options || ''
                 })));
 
-                //console.log(JSON.stringify(RowObject));
+                
 
                 // Schickt die Positionsdaten per API in MYSQL_Datenbank
                 const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
@@ -426,11 +426,11 @@ export default {
                 // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
                 const KeyNameObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
                     keyPos: colIndex + 1,
-                    keyname: col.keyname || '',
+                    keyname: col.keyname ,
                     keyquantity: col.keyquantity || 1,
                 })));
-
-                //console.log(JSON.stringify(KeyNameObject));
+                console.log(JSON.stringify(this.rows));
+                console.log(JSON.stringify(KeyNameObject));
 
                 // Schickt die Schluesseldaten per API in MYSQL_Datenbank
                 const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {

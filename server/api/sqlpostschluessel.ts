@@ -20,8 +20,7 @@ export default defineEventHandler(async (event) => {
     const insertQueries = body.map(item => {
       return prisma.$queryRaw`INSERT INTO Schluessel (ID, KeyPOS, Bezeichnung, Anzahl) 
                                VALUES (${id}, ${item.keyPos}, ${item.keyname}, ${item.keyquantity}) 
-                               ON DUPLICATE KEY UPDATE 
-                               KeyPOS = ${item.keyPos},
+                               ON DUPLICATE KEY UPDATE                             
                                Bezeichnung =  ${item.keyname},
                                Anzahl = ${item.keyquantity};`;
     });
