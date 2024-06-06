@@ -163,7 +163,7 @@
                 <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
           </UButton> -->
             </div>
-            <div class="buttons-scnd" style="margin: 20px;">
+            <div class="buttons-scnd" v-if="showLoadButton" style="margin: 20px;">
                 <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
                     size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
                 <UModal v-model="isOpenL">
@@ -270,7 +270,7 @@ export default {
                         type: "",
                         outside: "",
                         inside: "",
-                        options: "",
+                        options: "keine Option",
                         checked: false,
                         keyquantity: 1,
                         keyname: "Schlüssel 1",
@@ -288,8 +288,15 @@ export default {
             ],
             sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
             selectedOptions: ref([]),
-            cylinderOptions: ["Not- & Gefahrenfunktion"],
+            cylinderOptions: [
+                "keine Option",
+                "Not- & Gefahrenfunktion"],
         };
+    },
+    computed: {
+        showLoadButton() {
+            return this.$route.path.includes('/admin/');
+        },
     },
 
     methods: {
