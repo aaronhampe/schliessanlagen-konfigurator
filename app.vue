@@ -1,10 +1,10 @@
 <script>
-
 import CleanConfigurator from "./components/CleanConfigurator.vue";
+import NewConfigurator from "./components/NewConfigurator.vue";
 </script>
+
 <template>
-  <!--    <Configurator/>  <Matrix></Matrix>  <NewMatrix></NewMatrix>  -->
-  <CleanConfigurator></CleanConfigurator>!
+  <NewConfigurator/>
 </template>
 
 <style lang="scss">
@@ -13,6 +13,7 @@ import CleanConfigurator from "./components/CleanConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
 }
+
 h1,
 h2,
 h3,

@@ -1,23 +1,13 @@
-<!-- Current problems:
-
-  the modal which contains the input for the key name only exists once -> so if i change value in the modal, all columns change their name
-
-  i need to create a new modal for every key (column ) that gets created -> with an individual value so i can change every columns name 
-
-  -> that also means that the showModal button of every column needs to show the right modal which contains the input for the key name of this exact column.
-
--->
-
 <template>
-  
+
   <div class="heading">
     <h1>Schließanlagenkonfigurator</h1>
     <div class="number">
       <h2>Anlagennummer:</h2>
-      <input type="text" readonly style="width: 140px;"  v-model="anlageNr" placeholder="Anlagenummer"  /> 
+      <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
-    
   </div>
+
   <div class="flex-container" style="margin:240px 0 0 240px;">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
@@ -110,6 +100,7 @@
             </div>
           </div>
         </div>
+
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
           <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
             v-show="rowIndex < 1" style="
@@ -123,10 +114,8 @@
               border-radius: 8px;
               
             ">
-
           </input>
           <input min="1" type="number" placeholder="1" v-model="checkbox.keyquantity" v-show="rowIndex < 1" style="
-              
               position: absolute;
               margin-top: -11.8em;
               width: 33px;
@@ -142,7 +131,7 @@
               margin-top: -4.4em;
             " />
           <ColumnModal :columnId="colIndex" v-model="modalStates[colIndex]"
-            @update-column-name="updateColumnName(colIndex, $event)" />
+            @update-column-name="updateColumnName(colIndex, $event)" @close-this-modal="closeModal(colIndex)" />
           <p v-show="rowIndex < 1">&nbsp;</p>
           <UCheckbox name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" />
           <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
@@ -163,37 +152,108 @@
       <div class="buttons">
         <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-        </UButton>
+        <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton> -->
       </div>
       <div class="buttons-scnd" style="margin: 20px;">
-        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="" size="sm" color="amber"
-          variant="solid" :trailing="false">Anlage laden</UButton>
-          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="" size="sm" color="amber"
-          variant="solid" :trailing="false">Anlage speichern</UButton>
-          <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="generateRandomAnlagenNummer()" size="sm" color="amber"
-          variant="solid" :trailing="false">Nummer </UButton>
+        <UButton class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true" size="sm"
+          color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
+        <UModal v-model="isOpenL">
+          <div class="p-4">
+            <div class="modal-flex-buttons-top">
+              <h2 class="modal-h2" >Anlage laden</h2>
+              <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
+            </div>
+            <br>
+            <form @submit.prevent="handleSubmit">
+              <div class="form-group">
+                <label for="id">Anlagennummer:</label>
+                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" />
+              </div>
+
+              <br>
+              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
+              </UButton>
+            </form>
+          </div>
+        </UModal>
+        <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+          @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern</UButton>
+        <UModal v-model="isOpen">
+          <div class="p-4">
+            <div class="modal-flex-buttons-top">
+              <h2 class="modal-h2" >Anlage speichern</h2>
+              <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
+            </div>
+            <br>
+            <form @submit.prevent="handleSubmit">
+              <div class="form-group">
+                <label for="object">Anlagenname:</label>
+                <UInput autofocus color="amber" id="object" v-model="object" type="text"
+                  placeholder="z.B. Mustermann Schließung" required />
+              </div>
+              <div class="form-group">
+                <label for="email">E-Mail-Adresse:</label>
+                <UInput color="amber" id="email" v-model="email" type="email" required />
+              </div>
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <UInput color="amber" id="name" v-model="name" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="phone">Telefonnummer:</label>
+                <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" />
+              </div>
+              <div class="form-group">
+                <label for="company">Firma:</label>
+                <UInput color="amber" id="company" v-model="company" type="tel" placeholder="Optional" />
+              </div>
+              <br>
+              <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und abschicken
+              </UButton>
+            </form>
+          </div>
+        </UModal>
+        <!-- <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+          @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
+        </UButton> -->
       </div>
     </div>
     <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
-      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>  
+      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
 import ColumnModal from './ColumnModal.vue';
 
-
 export default {
+
   components: {
+
     ColumnModal,
+
   },
+
   data() {
+
     return {
 
+      // Daten über die Anlage
       anlageNr: '',
+      object: '',
+      id: '',
+      email: '',
+      name: '',
+      phone: '',
+      company: '',
+
+      // Zum Öffnen und Schließen aller Modale
       modalStates: {},
+      isOpen: false,
+      isOpenL: false,
+
+      // Das Row Objekt mit Daten über die Konfiguration pro Zeile
       rows: [
         [
           {
@@ -210,6 +270,8 @@ export default {
           },
         ],
       ],
+
+      // Auswahlmöglichkeiten an Zylindern
       cylinderType: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",
@@ -218,166 +280,257 @@ export default {
         "Vorhangschloss 80mm",
         "Briefkastenschloss",
       ],
+
+      // Größe und Optionen
       sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
       cylinderOptions: ["Not- & Gefahrenfunktion"],
+
     };
   },
+
   methods: {
+
+    // Zurücksetzen des angeklickten Selects
     resetOptions(rowIndex) {
       this.rows[rowIndex].options = [];
     },
 
+    // Öffnet das ColumnModal, abhängig vom Column Index
     openModal(colIndex) {
       this.modalStates[colIndex] = true;
     },
 
+    closeModal(colIndex) {
+      this.modalStates[colIndex] = false;
+    },
+
+    // Zum Benennen der Schlüssel
     updateColumnName(colIndex, newName) {
-      // Hier können Sie den neuen Namen der Spalte speichern
       this.rows[0][colIndex].keyname = newName;
     },
 
+    // Neues Row Objekt hinzufügen
     addRow() {
-      const numCheckboxes = this.rows[0].length; // Get the number of checkboxes in the first row
+      // Anzahl der Checkboxen
+      const numCheckboxes = this.rows[0].length;
       const newRow = [];
       for (let i = 0; i < numCheckboxes; i++) {
-        newRow.push({ checked: false, doorquantity: 1 }); // Create a new row with the same number of checkboxes as the first row
+        // Neue Zeile mit gleicher Anzahl an Checkboxen 
+        newRow.push({ checked: false, doorquantity: 1 });
       }
-      this.rows.push(newRow); // Add the new row
-      //this.rows[this.rows.length - 1].options = []; // setting the empty array for each option /// very bad solution but no other idea at the moment
+      // Neue Zeile 
+      this.rows.push(newRow);
     },
 
-
-
-
+    // Neue Checkboxen hinzufügen
     addCheckbox() {
       this.rows.forEach((checkbox) => {
-        checkbox.push({ checked: false, keyquantity: 1 }); // Add one checkbox to each row
+        // Fügt eine Checkbox an jede Reihe an
+        checkbox.push({ checked: false, keyquantity: 1 });
       });
     },
 
-
+    // Checkbox löschen
     deleteCheckbox(colIndex) {
       this.rows.forEach((row) => {
         if (row.length > 1) {
-          row.splice(colIndex, 1); // Remove the last checkbox from each row if more than one exists
+          row.splice(colIndex, 1);
         }
       });
     },
 
+    // Zeile löschen
     deleteRow(rowIndex) {
       if (rowIndex > 0) {
-        this.rows.splice(rowIndex, 1); // Entferne die Zeile an der gegebenen Indexposition
-      } // Entferne die Zeile an der gegebenen Indexposition
+        this.rows.splice(rowIndex, 1);
+      }
       else {
         alert("Hier ist Schluss!");
       }
     },
 
+    // Zeile duplizieren
     duplicateRow(rowIndex) {
-      const currentRow = this.rows[rowIndex]; // Aktuelle Zeile
-      const newRow = this.deepCopy(currentRow); // Tiefe Kopie der aktuellen Zeile
-      this.rows.splice(rowIndex + 1, 0, newRow); // Füge die neue Zeile nach der aktuellen Zeile ein
+      const currentRow = this.rows[rowIndex];
+      const newRow = this.deepCopy(currentRow);
+      this.rows.splice(rowIndex + 1, 0, newRow);
     },
 
+    // Spalte duplizieren
     duplicateCol(colIndex) {
-      // Iteriere über alle Zeilen
       this.rows.forEach((row, rowIndex) => {
-        // Überprüfe, ob die Spalte existiert
         if (row[colIndex]) {
-          // Erstelle eine tiefe Kopie der Spalte
           const newCol = this.deepCopy(row[colIndex]);
-          // Füge die duplizierte Spalte in die entsprechende Position ein
           row.splice(colIndex + 1, 0, newCol);
         }
       });
     },
 
-    // Funktion zum Erstellen einer tiefen Kopie eines Objekts
+    // Funktion um ein Array tief zu kopieren
     deepCopy(obj) {
       if (typeof obj !== "object" || obj === null) {
-        return obj; // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
+        // Rückgabe des Objekts selbst, wenn es kein Objekt ist oder null ist
+        return obj;
       }
-
-      const copy = Array.isArray(obj) ? [] : {}; // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
-
+      // Erstellen eines leeren Arrays für Arrays oder eines leeren Objekts für Objekte
+      const copy = Array.isArray(obj) ? [] : {};
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          copy[key] = this.deepCopy(obj[key]); // Rekursives Kopieren von Eigenschaften des Objekts
+          // Rekursives Kopieren von Eigenschaften des Objekts
+          copy[key] = this.deepCopy(obj[key]);
         }
       }
-
-      return copy; // Rückgabe der tiefen Kopie des Objekts
+      // Rückgabe der tiefen Kopie des Objekts
+      return copy;
     },
 
-    addSkill(a) {
-      if (a.key === ' ' && this.tempSkill && this.skills.length < 8) {
-        if (!this.skills.includes(this.tempSkill)) {
-          this.skills.push(this.tempSkill)
-        }
-        this.tempSkill = ''
-      }
-    },
+    // Erstellen einer Random Number
     generateRandomAnlagenNummer() {
-      // Generieren Sie eine zufällige 6-stellige Zahl
       const randomNum = Math.floor(100000 + Math.random() * 900000);
-      // Setzen Sie die generierte Nummer als Wert für anlageNr
       this.anlageNr = randomNum.toString();
     },
 
-    test() {
+    // Zum Testen der API
+    async test() {
       const columnStructure = {
         checked: false,
         keyquantity: 1,
       };
       this.rows = [];
-      // Create 6 rows
-      for (let i = 0; i < 6; i++) {
-        // Create an array for the current row
-        const row = [];
 
-        // Create 5 columns for each row
-        for (let j = 0; j < 5; j++) {
-          // Clone the column structure to avoid reference issues
+      for (let i = 0; i < 4; i++) {
+        const row = [];
+        for (let j = 0; j < 4; j++) {
           const column = { ...columnStructure };
-          // Add any specific properties for the column here
-          // For example, setting a unique keyname for each column
           column.keyname = `Schlüssel ${j + 1}`;
 
-          // Add the column to the row
           row.push(column);
         }
-
-        // Add the row to the rows array
         this.rows.push(row);
       }
-
-
-      this.rows[0][0].keyname = "Schlüssel 1blubb";
-      this.rows[0][1].keyname = "Schlüssel 22ahahaha";
-      this.rows[0][0].doorDesignation = "TürTest";
-      this.rows[1][0].doorDesignation = "TürTest 22";
-      this.rows[0][0].doorquantity = "5";
-      this.rows[0][1].keyquantity = "6"
-      this.rows[0][0].type = "Doppelzylinder";
-      this.rows[0][0].inside = "35";
-      this.rows[0][0].outside = "35";
-      this.rows[0][0].options = "Not- & Gefahrenfunktion";
-      this.rows[1][1].checked = true;
-      this.rows[1][2].checked = true;
-      this.rows[3][2].checked = true;
-      this.rows[1][4].checked = true;
     },
+
+    // Anlage speichern 
+    async saveInstallation() {
+      const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
+        method: 'post',
+        body: { ID: 12345, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
+      })
+
+      
+      /* const temp = '[{';
+      for (i=0; i < this.rows.length; i++ ){
+        temp = temp + '"ID": this.anlageNr '
+
+      } */
+
+      const jsonstring = JSON.stringify(this.rows);
+
+
+      console.log(jsonstring);
+
+      const queryresultposition = await $fetch('/api/sqlpostposition', {
+        method: 'post',
+        body:
+          [{
+            "ID": 12345,
+            "POS": 1,
+            "Bezeichnung": "Haupteingang",
+            "Anzahl": "2",
+            "Typ": "Doppelzylinder",
+            "SizeA": "30",
+            "SizeI": "35",
+            "Option": ""
+          },
+          {
+            "ID": 12345,
+            "POS": 2,
+            "Bezeichnung": "Haupteingang",
+            "Anzahl": "2",
+            "Typ": "Doppelzylinder",
+            "SizeA": "30",
+            "SizeI": "35",
+            "Option": ""
+          }]
+      })
+
+      //Schließen des Modals
+      this.isOpen = false;
+    },
+
+   
+    // Anlage laden
+    async loadInstallation() {
+      this.rows.length = 1;
+
+      // Abrufen der Anlagendaten
+      const queryresultanlage = await $fetch('/api/sqlgetanlage', {
+        method: 'post',
+        body: { ID: this.id }
+      });
+
+      // Überprüfen ob das Ergebnis gültig ist
+      if (queryresultanlage && queryresultanlage.queryresult && queryresultanlage.queryresult.length > 0) {
+        this.anlageNr = queryresultanlage.queryresult[0].ID || '';
+        this.object = queryresultanlage.queryresult[0].Objekt || '';
+        this.name = queryresultanlage.queryresult[0].Name || '';
+        this.email = queryresultanlage.queryresult[0].EMail || '';
+        this.company = queryresultanlage.queryresult[0].Firma || '';
+      }
+
+      // Abrufen der Positionsdaten
+      const queryresultposition = await $fetch('/api/sqlgetposition', {
+        method: 'post',
+        body: { ID: this.id }
+      });
+
+      // Überprüfen ob das Ergebnis gültig ist
+      if (queryresultposition && queryresultposition.queryresult) {
+        // Ermitteln Anzahl der Positionen der geladenen Anlage
+        let maxPosition = 0;
+        queryresultposition.queryresult.forEach(entry => {
+          if (entry.POS > maxPosition) {
+            maxPosition = entry.POS;
+          }
+        });
+
+        // Setzen der Zeilen und Checkboxen
+        for (let i = 0; i < maxPosition - 1; i++) {
+          const numCheckboxes = this.rows[0].length;
+          const newRow = [];
+          for (let j = 0; j < numCheckboxes; j++) {
+            newRow.push({ checked: false, doorquantity: 1 });
+          }
+          this.rows.push(newRow);
+        }
+
+        // Beschreiben der Positionswerte
+        for (let i = 0; i < maxPosition; i++) {
+          const positionData = queryresultposition.queryresult[i];
+          if (positionData) {
+            this.rows[i][0].doorDesignation = positionData.Bezeichnung || '';
+            this.rows[i][0].doorquantity = positionData.Anzahl || 1;
+            this.rows[i][0].type = positionData.Typ || '';
+            this.rows[i][0].outside = positionData.SizeA || '';
+            this.rows[i][0].inside = positionData.SizeI || '';
+            this.rows[i][0].options = positionData.Option || '';
+          }
+        }
+      }
+
+      // Schließen des Modals
+      this.isOpenL = false;
+    },
+
     mounted() {
-    // Rufen Sie die Funktion zum Generieren der zufälligen Anlagennummer auf, wenn die Komponente geladen wird
-    this.generateRandomAnlagenNummer();
- },
+      this.generateRandomAnlagenNummer();
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .heading {
   display: flex;
   flex-direction: column;
@@ -405,6 +558,10 @@ export default {
   gap: 10px;
 }
 
+.modal-h2 {
+  font-size: 1.4rem;
+}
+
 .checkbox-item {
   display: flex;
   flex-direction: column;
@@ -430,7 +587,7 @@ export default {
   /* Spacing between buttons */
 }
 
-.number{
+.number {
   font-size: 20px;
 }
 
@@ -448,6 +605,11 @@ export default {
 
 .test-button {
   height: auto;
+}
+
+.modal-flex-buttons-top {
+  display: flex;
+  justify-content: space-between;
 }
 
 .add-key-button {

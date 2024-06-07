@@ -4,13 +4,17 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   devtools: { enabled: true },
+  app:{baseURL: process.env.publicPath},
   runtimeConfig: {
     MAILHOST: process.env.MAILHOST,
     MAILPORT: process.env.MAILPORT,
     MAILUSER: process.env.MAILUSER,
     MAILPASSWORD: process.env.MAILPASSWORD,
-    CONTACTMAIL: process.env.CONTACTMAIL
-},
+    CONTACTMAIL: process.env.CONTACTMAIL,
+   
+    },
+
+
 css: [
   '@/scss/main.scss'
 ],
