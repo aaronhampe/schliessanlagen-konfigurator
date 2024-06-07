@@ -1,45 +1,55 @@
 import { PrismaClient } from '@prisma/client';
-import { empty } from '@prisma/client/runtime/library';
-// import { defineEventHandler } from 'some-framework'; // Ersetzen Sie 'some-framework' durch den tatsächlichen Importpfad
 
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event); // Stellen Sie sicher, dass getQuery korrekt implementiert ist
   const id: string = query.ID;
-  var body = [{}];
+  let body = [{}];
 
   body = await readBody(event); // Stellen Sie sicher, dass readBody korrekt implementiert ist
 
-  async function deleteData() {
-    const result = await prisma.$queryRaw`DELETE FROM Position WHERE id = ${id};`;
-    
+  async function executeWithRetry(fn, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (error.code === 'P1001' && attempt < maxRetries) {
+          console.log(`Retrying... (Attempt ${attempt})`);
+        } else {
+          throw error;
+        }
+      }
+    }
   }
 
-  async function insertData() {
-    const insertQueries = body.map(item => {
-      return prisma.$queryRaw`INSERT INTO Position (ID, POS, Bezeichnung, Anzahl, Typ, SizeA, SizeI, Option) 
-      VALUES (${id}, ${item.POS}, ${item.Bezeichnung}, ${item.Anzahl}, ${item.Typ}, ${item.SizeA}, ${item.SizeI}, ${item.Option}) 
-      ON DUPLICATE KEY UPDATE 
-      Bezeichnung = ${item.Bezeichnung}, 
-      Anzahl = ${item.Anzahl}, 
-      Typ = ${item.Typ}, 
-      SizeA = ${item.SizeA}, 
-      SizeI = ${item.SizeI}, 
-      Option = ${item.Option}`;
-    });
+  async function handleData() {
+    return await prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`DELETE FROM Position WHERE id = ${id};`;
 
-    await Promise.all(insertQueries);
+      for (const item of body) {
+        await tx.$executeRaw`
+          INSERT INTO Position (ID, POS, Bezeichnung, Anzahl, Typ, SizeA, SizeI, Option) 
+          VALUES (${id}, ${item.POS}, ${item.Bezeichnung}, ${item.Anzahl}, ${item.Typ}, ${item.SizeA}, ${item.SizeI}, ${item.Option}) 
+          ON DUPLICATE KEY UPDATE 
+          Bezeichnung = ${item.Bezeichnung}, 
+          Anzahl = ${item.Anzahl}, 
+          Typ = ${item.Typ}, 
+          SizeA = ${item.SizeA}, 
+          SizeI = ${item.SizeI}, 
+          Option = ${item.Option};
+        `;
+      }
+    });
   }
 
   try {
-    await deleteData();
-    await insertData();
-    return { message: 'Daten gelöscht und eingefügt.' }; // Rückgabewert für den EventHandler
+    await executeWithRetry(handleData);
+    return { message: 'Daten gelöscht und eingefügt.' };
   } catch (e) {
     console.error(e);
-    return { error: 'Ein Fehler ist aufgetreten.' }; // Rückgabewert für den EventHandler bei Fehlern
+    return { error: 'Ein Fehler ist aufgetreten.' };
   } finally {
-    await prisma.$disconnect(); // Stellen Sie sicher, dass prisma richtig getrennt wird
+    await prisma.$disconnect();
   }
 });
