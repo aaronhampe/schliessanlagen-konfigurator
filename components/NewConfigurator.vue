@@ -463,7 +463,7 @@ export default {
                 });
                 
                 //Mail an Kunden
-                const queryresultmail = await $fetch('http://localhost:3000/api/mail', {
+                const queryresultmail = await $fetch('/api/mail', {
                     method: 'post',
                     body: { to: this.email, 
                             subject: 'stt-shop.de -- Ihre Konfiguration ' + this.anlageNr + ' wurde verschickt',
@@ -476,7 +476,7 @@ export default {
                 });
                 
                 //Mail an uns
-                const queryresultmailstt = await $fetch('http://localhost:3000/api/mail', {
+                const queryresultmailstt = await $fetch('/api/mail', {
                     method: 'post',
                     body: { to: 'office@secutimetec.de', 
                             subject: 'stt-shop.de -- Eine Konfiguration ' + this.anlageNr + ' wurde gespeichert',
