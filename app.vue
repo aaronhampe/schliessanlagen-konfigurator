@@ -5,6 +5,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
 
 <template>
   <NewConfigurator/>
+  abc
 </template>
 
 <style lang="scss">
@@ -13,7 +14,6 @@ import NewConfigurator from "./components/NewConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
 }
-abc
 h1,
 h2,
 h3,
