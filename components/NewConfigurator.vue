@@ -160,42 +160,13 @@
             <div class="buttons">
                 <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm"
                     color="amber" variant="solid" :trailing="false">Tür hinzufügen</UButton>
-                <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-          </UButton> -->
-            </div>
-            <div class="buttons-scnd"  style="margin: 20px;">
-                <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
-                    size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
-                <UModal v-model="isOpenL">
-                    <div class="p-4">
-                        <div  class="modal-flex-buttons-top">
-                            <h2 class="modal-h2">Anlage laden</h2>
-                            <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
-                        </div>
-                        <br>
-                        <form @submit.prevent="handleSubmit">
-                            <div class="form-group">
-                                <label for="id">Anlagennummer:</label>
-                                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="id">Passwort:</label>
-                                <UInput color="amber" id="password" v-model="password" min="1" type="password"
-                                    required />
-                            </div>
-                            <br>
-                            <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
-                            </UButton>
-                        </form>
-                    </div>
-                </UModal>
-                <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
-                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern
+                    <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage verschicken
                 </UButton>
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2 class="modal-h2">Anlage speichern</h2>
+                            <h2 class="modal-h2">Anlage verschicken</h2>
                             <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
                         </div>
                         <br>
@@ -225,6 +196,35 @@
                             <br>
                             <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und
                                 abschicken
+                            </UButton>
+                        </form>
+                    </div>
+                </UModal>
+                <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+          </UButton> -->
+            </div>
+            <div class="buttons-scnd"  style="margin: 20px;">
+                <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
+                    size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
+                <UModal v-model="isOpenL">
+                    <div class="p-4">
+                        <div  class="modal-flex-buttons-top">
+                            <h2 class="modal-h2">Anlage laden</h2>
+                            <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
+                        </div>
+                        <br>
+                        <form @submit.prevent="handleSubmit">
+                            <div class="form-group">
+                                <label for="id">Anlagennummer:</label>
+                                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="id">Passwort:</label>
+                                <UInput color="amber" id="password" v-model="password" min="1" type="password"
+                                    required />
+                            </div>
+                            <br>
+                            <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
                             </UButton>
                         </form>
                     </div>
