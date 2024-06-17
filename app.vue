@@ -5,6 +5,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
 
 <template>
   <NewConfigurator/>
+  haha1
 </template>
 
 <style lang="scss">
