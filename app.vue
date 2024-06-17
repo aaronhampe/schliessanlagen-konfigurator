@@ -5,7 +5,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
 
 <template>
   <NewConfigurator/>
-  abc
+  abcdef
 </template>
 
 <style lang="scss">
