@@ -5,7 +5,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
 
 <template>
   <NewConfigurator/>
-
+  supertest
 </template>
 
 <style lang="scss">
