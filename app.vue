@@ -6,7 +6,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
 <template>
   <NewConfigurator/>
   <br>
-  
+  working?
 </template>
 
 <style lang="scss">
