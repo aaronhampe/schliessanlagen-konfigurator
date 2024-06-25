@@ -1,5 +1,4 @@
 <script>
-import CleanConfigurator from "./components/CleanConfigurator.vue";
 import NewConfigurator from "./components/NewConfigurator.vue";
 </script>
 

@@ -350,7 +350,7 @@ export default {
             if (rowIndex > 0) {
                 this.rows.splice(rowIndex, 1);
             } else {
-                alert("Hier ist Schluss!");
+                alert("Die erste Zeile kann nicht entfernt werden.");
             }
         },
 
