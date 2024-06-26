@@ -173,7 +173,7 @@
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
                                 <label for="object">Anlagenname:</label>
-                                <UInput autofocus color="amber" id="object" v-model="object" type="text"
+                                <UInput color="amber" id="object" v-model="object" type="text"
                                     placeholder="z.B. Mustermann Schließung" required />
                             </div>
                             <div class="form-group">
@@ -216,7 +216,7 @@
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
                                 <label for="id">Anlagennummer:</label>
-                                <UInput color="amber" autofocus id="id" v-model="id" min="1" type="number" required />
+                                <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
                             </div>
                             <div class="form-group">
                                 <label for="id">Passwort:</label>
@@ -300,8 +300,6 @@ export default {
     },
 
     methods: {
-
-
 
         resetOptions(rowIndex) {
             this.rows[rowIndex].options = [];
