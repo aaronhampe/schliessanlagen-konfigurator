@@ -6,7 +6,7 @@
                 <UButton color="red" @click="closeModal" style="font-weight: 600;">X</UButton>
             </div>
             <label for="input">Schlüsselbezeichnung:</label>
-            <UInput autofocus class="input pb-6" v-model="columnName" color="amber" />
+            <UInput class="input pb-6 z-10" v-model="columnName" color="amber" />
             <UButton class="button" @click="closeModal" color="amber">Speichern</UButton>
         </div>
     </UModal>
