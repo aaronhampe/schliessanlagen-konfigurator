@@ -334,11 +334,16 @@ export default {
         },
 
         deleteCheckbox(colIndex) {
-            this.rows.forEach((row) => {
+            if (colIndex > 0) {
+                 this.rows.forEach((row) => {
                 if (row.length > 1) {
                     row.splice(colIndex, 1);
                 }
             });
+            } else {
+                alert("Die erste Spalte kann nicht entfernt werden.");
+            }
+           
         },
 
         deleteRow(rowIndex) {
