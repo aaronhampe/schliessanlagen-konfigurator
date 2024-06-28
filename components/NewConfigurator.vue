@@ -29,19 +29,19 @@
                         <!--Türbezeichnung-->
                         <div class="door-designation" v-if ="colIndex < 1">
                             <h3 v-if ="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
-                            <UInput v-if ="colIndex < 1" v-model="checkbox.doorDesignation" color="gray" size="sm"
+                            <UInput v-if ="colIndex < 1" v-model="checkbox.doorDesignation" color="blue" size="sm"
                                 variant="outline" placeholder="z.B. Haupteingang" style="width: 200px" />
                         </div>
                         <!--Zylinderanzahl-->
                         <div class="quantity">
                             <h3 v-if ="rowIndex < 1">Anzahl</h3>
-                            <UInput v-model="checkbox.doorquantity" min="1" class="quantity-input" color="gray"
+                            <UInput v-model="checkbox.doorquantity" min="1" class="quantity-input" color="blue"
                                 size="sm" type="number" variant="outline" style="width: 80px" />
                         </div>
                         <!--Zylindertyp-->
                         <div class="cylinder-type">
                             <h3 v-if ="rowIndex < 1">Zylinder-Typ</h3>
-                            <USelectMenu v-model="checkbox.type" color="gray" :options="cylinderType"
+                            <USelectMenu v-model="checkbox.type" color="blue" :options="cylinderType"
                                 placeholder="Zylinder wählen..." style="width: 200px" />
                         </div>
                         <div class="sizes" v-if="checkbox.type == 'Doppelzylinder' ||
@@ -49,19 +49,19 @@
                 ">
                             <div class="outside">
                                 <h3 v-if ="rowIndex < 1">Außen</h3>
-                                <USelectMenu v-model="checkbox.outside" color="gray" :options="sizes" placeholder="..."
+                                <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px" />
                             </div>
                             <div class="inside">
                                 <h3 v-if ="rowIndex < 1">Innen</h3>
-                                <USelectMenu v-model="checkbox.inside" color="gray" :options="sizes" placeholder="..."
+                                <USelectMenu v-model="checkbox.inside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px" />
                             </div>
                         </div>
                         <div class="sizes-halfcylinder" v-else-if="checkbox.type == 'Halbzylinder'">
                             <div class="outside">
                                 <h3 v-if ="rowIndex < 1">Außen</h3>
-                                <USelectMenu v-model="checkbox.outside" color="gray" :options="sizes" placeholder="..."
+                                <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px" />
                             </div>
                             <div class="inside">
@@ -84,7 +84,7 @@
                         </div>
                         <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
                             <h3 v-if ="rowIndex < 1">N&G-Funktion</h3>
-                            <USelectMenu v-model="checkbox.options" :options="cylinderOptions" color="gray"
+                            <USelectMenu v-model="checkbox.options" :options="cylinderOptions" color="blue"
                                 placeholder="Optionen auswählen" @click="resetOptions(rowIndex)" style="width: 200px" />
                         </div>
                         <div class="options-empty" v-else>
@@ -119,7 +119,7 @@
                 border-radius: 8px;
               ">
                     </input>
-                    <input min="1" type="number" placeholder="1" v-model="checkbox.keyquantity" v-if = "rowIndex < 1"
+                    <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity" v-if = "rowIndex < 1"
                         style="
                 position: absolute;
                 margin-top: -11.8em;
@@ -691,4 +691,14 @@ export default {
     width: 30px;
     overflow: hidden;
 }
+
+.key-name:focus,
+.key-quantity:focus {
+  outline: none;
+  border-color: rgb(48, 48, 224);
+  box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
+}
+
+
+
 </style>
