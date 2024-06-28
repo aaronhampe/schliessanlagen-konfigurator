@@ -9,7 +9,6 @@
             <UInput autofocus class="input pb-6" v-model="columnName" color="amber" />
             <UButton class="button" @click="closeModal" color="amber">Speichern</UButton>
         </div>
-
     </UModal>
 </template>
 
