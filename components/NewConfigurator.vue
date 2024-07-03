@@ -8,7 +8,7 @@
         </div>
     </div>
 
-    <div class="flex-container" style="margin:240px 0 0 240px;">
+    <div class="flex-container" style="margin:240px 0 0 340px;">
         <div class="configurator">
             <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
                 <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show ="colIndex < 1">
