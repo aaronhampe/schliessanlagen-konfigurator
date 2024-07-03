@@ -160,12 +160,12 @@
                 <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm"
                     color="amber" variant="solid" :trailing="false">Tür hinzufügen</UButton>
                     <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
-                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage verschicken
+                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Angebot anfordern
                 </UButton>
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2 class="modal-h2">Anlage verschicken</h2>
+                            <h2 class="modal-h2">Angebot anfordern</h2>
                             <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
                         </div>
                         <br>
