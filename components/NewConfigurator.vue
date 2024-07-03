@@ -11,7 +11,7 @@
         <div class="configurator">
             <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
                 <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show ="colIndex < 1">
-                    <div class="flex-container" v-if  ="colIndex < 1">
+                    <div class="flex-container" v-if="colIndex < 1">
                         <!--Position-->
                         <div>
                             <h3 v-if="rowIndex < 1 && colIndex < 1"> Pos. </h3>
