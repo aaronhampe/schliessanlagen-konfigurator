@@ -1,7 +1,6 @@
 <template>
 
     <div class="heading">
-        <h1>Schließanlagenkonfigurator</h1>
         <div class="number">
             <h2>Anlagennummer: </h2>
             <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
