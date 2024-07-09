@@ -1,13 +1,6 @@
 <script>
 import NewConfigurator from "./components/NewConfigurator.vue";
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // Füge CSS-Regeln hinzu oder ändere Klassen, um den Dark Mode zu ignorieren
-    document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
-    // Andere Elemente entsprechend anpassen
-}
-
 </script>
 
 <template>
