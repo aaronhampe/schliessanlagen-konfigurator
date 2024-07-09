@@ -5,7 +5,7 @@
                 <h2 class="modal-h2">Schlüssel benennen</h2>
                 <UButton color="red"  @click="closeModal" style="font-weight: 600; color:white;">X</UButton>
             </div>
-            <label for="input" style="color: white;" >Schlüsselbezeichnung:</label>
+            <label for="input" >Schlüsselbezeichnung:</label>
             <UInput autofocus class="input pb-6 z-10" v-model="columnName" color="amber" />
             <UButton class="button" style="color: white;" @click="closeModal" color="amber">Speichern</UButton>
         </div>
@@ -33,9 +33,18 @@ export default {
 
 <style>
 
+
+@media(prefers-color-scheme: dark) {
+    .modal-h2 {
+      color: #ffffff;
+    }
+    label {
+        color: #ffffff;
+    }
+}
+
 .modal-h2 {
   font-size: 1.4rem;
-  color: white;
 }
 
 .modal-flex-buttons-top {

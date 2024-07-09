@@ -167,30 +167,30 @@
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2 style="color: white;" class="modal-h2">Angebot anfordern</h2>
+                            <h2  class="modal-h2">Angebot anfordern</h2>
                             <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white;">X</UButton>
                         </div>
                         <br>
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
-                                <label for="object" style="color: white;" >Anlagenname:</label>
+                                <label for="object" >Anlagenname:</label>
                                 <UInput color="amber" id="object" v-model="object" type="text"
                                     placeholder="z.B. Mustermann Schließung" required />
                             </div>
                             <div class="form-group">
-                                <label for="email" style="color: white;" >E-Mail-Adresse:</label>
+                                <label for="email" >E-Mail-Adresse:</label>
                                 <UInput color="amber" id="email" v-model="email" type="email" required />
                             </div>
                             <div class="form-group">
-                                <label for="name" style="color: white;" >Name:</label>
+                                <label for="name" >Name:</label>
                                 <UInput color="amber" id="name" v-model="name" type="text" required />
                             </div>
                             <div class="form-group">
-                                <label for="phone" style="color: white;" >Telefonnummer:</label>
+                                <label for="phone" >Telefonnummer:</label>
                                 <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" />
                             </div>
                             <div class="form-group">
-                                <label for="company" style="color: white;" >Firma:</label>
+                                <label for="company" >Firma:</label>
                                 <UInput color="amber" id="company" v-model="company" type="tel"
                                     placeholder="Optional" />
                             </div>

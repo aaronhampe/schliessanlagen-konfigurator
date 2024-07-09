@@ -13,10 +13,10 @@ import NewConfigurator from "./components/NewConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
   background: inherit;
-  @media (prefers-color-scheme: light), (prefers-color-scheme: dark) {
+  @media(prefers-color-scheme: dark) {
     body {
       background-color: #ffffff; 
-      color: #333333; 
+      color: #333333;
     }
   }
 }
