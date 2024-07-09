@@ -1,18 +1,17 @@
 <template>
 
     <div class="heading">
-        <h1>Schließanlagenkonfigurator</h1>
         <div class="number">
             <h2>Anlagennummer: </h2>
             <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
         </div>
     </div>
 
-    <div class="flex-container" style="margin:240px 0 0 240px;">
+    <div class="flex-container" style="margin:240px 0 0 340px;">
         <div class="configurator">
             <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
                 <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show ="colIndex < 1">
-                    <div class="flex-container" v-if  ="colIndex < 1">
+                    <div class="flex-container" v-if="colIndex < 1">
                         <!--Position-->
                         <div>
                             <h3 v-if="rowIndex < 1 && colIndex < 1"> Pos. </h3>
@@ -160,12 +159,12 @@
                 <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm"
                     color="amber" variant="solid" :trailing="false">Tür hinzufügen</UButton>
                     <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
-                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage verschicken
+                    @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Angebot anfordern
                 </UButton>
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2 class="modal-h2">Anlage verschicken</h2>
+                            <h2 class="modal-h2">Angebot anfordern</h2>
                             <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
                         </div>
                         <br>
