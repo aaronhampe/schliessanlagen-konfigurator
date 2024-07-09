@@ -140,7 +140,7 @@
                         @update-column-name="updateColumnName(colIndex, $event)"
                         @close-this-modal="closeModal(colIndex)" />
                     <p v-if ="rowIndex < 1">&nbsp;</p>
-                    <UCheckbox name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" variant="solid"/>
+                    <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" variant="solid"/>
                     <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
                     <UButton @click="deleteCheckbox(colIndex)" v-if ="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" style="
@@ -702,6 +702,7 @@ export default {
   border-color: rgb(48, 48, 224);
   box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
 }
+
 
 
 
