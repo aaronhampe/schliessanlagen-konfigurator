@@ -19,6 +19,6 @@ h3,
 h4,
 h5,
 h6 {
-  color: rgb(51, 51, 51);
+  color: rgb(52, 51, 51);
 }
 </style>
