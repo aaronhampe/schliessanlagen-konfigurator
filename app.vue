@@ -12,6 +12,8 @@ import NewConfigurator from "./components/NewConfigurator.vue";
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
+  background: none;
+  color: inherit;
 }
 h1,
 h2,
