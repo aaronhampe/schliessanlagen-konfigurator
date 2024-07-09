@@ -1,11 +1,10 @@
 <script>
 import NewConfigurator from "./components/NewConfigurator.vue";
-
 </script>
 
 <template>
-  <NewConfigurator/>
-  <br>
+  <NewConfigurator />
+  <br />
 </template>
 
 <style lang="scss">
@@ -20,6 +19,6 @@ h3,
 h4,
 h5,
 h6 {
-  color: rgb(51, 51, 51);
+  color: rgb(52, 51, 51);
 }
 </style>
