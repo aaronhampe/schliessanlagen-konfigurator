@@ -13,6 +13,7 @@ import NewConfigurator from "./components/NewConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
   background-color: white;
+  color: rgb(51, 51, 51);
 }
 h1,
 h2,
