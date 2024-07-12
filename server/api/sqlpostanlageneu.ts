@@ -11,15 +11,17 @@ export default defineEventHandler(async (event) => {
     const Objekt = body.Objekt
     const Name = body.Name
     const EMail = body.EMail
+    const Telefon = body.Telefon
     const Firma = body.Firma 
 
     const queryresult = await prisma.$queryRaw`
-    INSERT INTO  Anlage (ID, Objekt, Name, EMail, Firma)
-    VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Firma} )
+    INSERT INTO  Anlage (ID, Objekt, Name, EMail, Telefon, Firma)
+    VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Telefon}, ${Firma} )
     ON DUPLICATE KEY UPDATE
     Objekt = VALUES(Objekt),
     Name = VALUES(Name),
     EMail = VALUES(EMail),
+    Telefon = VALUES(Telefon),
     Firma = VALUES(Firma);
     ;`;
 

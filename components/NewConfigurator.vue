@@ -287,7 +287,7 @@ export default {
                 "Vorhangschloss 80mm",
                 "Briefkastenschloss",
             ],
-            sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
+            sizes: [27, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
             selectedOptions: ref([]),
             cylinderOptions: [
                 "keine Option",
@@ -409,7 +409,7 @@ export default {
                 //Schickt die Anlagendaten per API in MYSQL_Datenbank
                 const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
                     method: 'post',
-                    body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
+                    body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Telefon: this.phone, Firma: this.company }
                 });
 
 
@@ -472,6 +472,7 @@ export default {
                             html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
                                     'Objekt: ' + this.object +  '<br>' +
                                     'Name: ' + this.name + '<br>' +
+                                    'Mail: ' + this.email + '<br>' +
                                     'Firma:' + this.company + '<br>' +
                                     'Telefon: ' + this.phone
                     }
@@ -485,6 +486,7 @@ export default {
                             html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
                                     'Objekt: ' + this.object +  '<br>' +
                                     'Name: ' + this.name + '<br>' +
+                                    'Mail: ' + this.email + '<br>' +
                                     'Firma:' + this.company + '<br>' +
                                     'Telefon: ' + this.phone
                     }
@@ -513,6 +515,7 @@ export default {
                 this.object = queryresultanlage.queryresult[0].Objekt || '';
                 this.name = queryresultanlage.queryresult[0].Name || '';
                 this.email = queryresultanlage.queryresult[0].EMail || '';
+                this.phone = queryresultanlage.queryresult[0].Telefon || '';
                 this.company = queryresultanlage.queryresult[0].Firma || '';
             }
 
