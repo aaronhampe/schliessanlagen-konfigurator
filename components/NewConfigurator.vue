@@ -187,7 +187,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone">Telefonnummer:</label>
-                                <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" required />
+                                <UInput color="amber" id="phone" v-model="phone" type="tel" required />
                             </div>
                             <div class="form-group">
                                 <label for="company" >Firma:</label>
