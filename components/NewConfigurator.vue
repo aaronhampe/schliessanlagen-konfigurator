@@ -21,6 +21,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                color: #ffffff;
               ">
                                 {{ rowIndex + 1 }}
                             </UBadge>
@@ -29,19 +30,19 @@
                         <div class="door-designation" v-if ="colIndex < 1">
                             <h3 v-if ="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
                             <UInput v-if ="colIndex < 1" v-model="checkbox.doorDesignation" color="blue" size="sm"
-                                variant="outline" placeholder="z.B. Haupteingang" style="width: 200px" />
+                                variant="outline" placeholder="z.B. Haupteingang" style="width: 200px; color: #333333; " />
                         </div>
                         <!--Zylinderanzahl-->
                         <div class="quantity">
                             <h3 v-if ="rowIndex < 1">Anzahl</h3>
                             <UInput v-model="checkbox.doorquantity" min="1" class="quantity-input" color="blue"
-                                size="sm" type="number" variant="outline" style="width: 80px" />
+                                size="sm" type="number" variant="outline" style="width: 80px; color: #333333;" />
                         </div>
                         <!--Zylindertyp-->
                         <div class="cylinder-type">
                             <h3 v-if ="rowIndex < 1">Zylinder-Typ</h3>
                             <USelectMenu v-model="checkbox.type" color="blue" :options="cylinderType"
-                                placeholder="Zylinder wählen..." style="width: 200px" />
+                                placeholder="Zylinder wählen..." style="width: 200px; color: #333333; " />
                         </div>
                         <div class="sizes" v-if="checkbox.type == 'Doppelzylinder' ||
                 checkbox.type == 'Knaufzylinder (innen)'
@@ -49,42 +50,42 @@
                             <div class="outside">
                                 <h3 v-if ="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
-                                    style="width: 80px" />
+                                    style="width: 80px; color: #333333;" />
                             </div>
                             <div class="inside">
                                 <h3 v-if ="rowIndex < 1">Innen</h3>
                                 <USelectMenu v-model="checkbox.inside" color="blue" :options="sizes" placeholder="..."
-                                    style="width: 80px" />
+                                    style="width: 80px; color: #333333;" />
                             </div>
                         </div>
                         <div class="sizes-halfcylinder" v-else-if="checkbox.type == 'Halbzylinder'">
                             <div class="outside">
                                 <h3 v-if ="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
-                                    style="width: 80px" />
+                                    style="width: 80px; color: #333333;" />
                             </div>
                             <div class="inside">
                                 <h3 v-if ="rowIndex < 1">Innen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;10&nbsp;
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;10&nbsp;
                                 </UBadge>
                             </div>
                         </div>
                         <div class="sizes-empty" v-else>
                             <div class="outside">
                                 <h3 v-if ="rowIndex < 1">Außen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;N/A&nbsp;
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;N/A&nbsp;
                                 </UBadge>
                             </div>
                             <div class="inside">
                                 <h3 v-if ="rowIndex < 1">Innen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px">&nbsp;N/A&nbsp;
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;N/A&nbsp;
                                 </UBadge>
                             </div>
                         </div>
                         <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
                             <h3 v-if ="rowIndex < 1">N&G-Funktion</h3>
                             <USelectMenu v-model="checkbox.options" :options="cylinderOptions" color="blue"
-                                placeholder="Optionen auswählen" @click="resetOptions(rowIndex)" style="width: 200px" />
+                                placeholder="Optionen auswählen" @click="resetOptions(rowIndex)" style="width: 200px; color: #333333;" />
                         </div>
                         <div class="options-empty" v-else>
                             <h3 v-if ="rowIndex < 1">N&G-Funktion</h3>
@@ -99,7 +100,7 @@
                         </div>
                         <div class="delete">
                             <br v-if ="rowIndex < 1" />
-                            <UButton icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false"
+                            <UButton icon="i-heroicons-trash" style="color: white;" size="sm" color="red" variant="solid" :trailing="false"
                                 @click="deleteRow(rowIndex)" />
                         </div>
                     </div>
@@ -133,18 +134,20 @@
                 writing-mode: vertical-rl;
                 position: absolute;
                 margin-top: -4.4em;
+                color:white;
               " />
                     <ColumnModal v-if = "rowIndex < 1" :columnId="colIndex" v-model="modalStates[colIndex]"
                         @update-column-name="updateColumnName(colIndex, $event)"
                         @close-this-modal="closeModal(colIndex)" />
                     <p v-if ="rowIndex < 1">&nbsp;</p>
-                    <UCheckbox name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" />
+                    <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" variant="solid"/>
                     <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
                     <UButton @click="deleteCheckbox(colIndex)" v-if ="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" style="
                 writing-mode: vertical-rl;
                 position: absolute;
                 margin-top: 5.5em;
+                color: white;
               " />
                     <UButton @click="duplicateCol(colIndex)" v-if ="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false"
@@ -164,35 +167,35 @@
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2 class="modal-h2">Angebot anfordern</h2>
-                            <UButton color="red" @click="isOpen = false" style="font-weight: 600;">X</UButton>
+                            <h2  class="modal-h2">Angebot anfordern</h2>
+                            <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white;">X</UButton>
                         </div>
                         <br>
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
-                                <label for="object">Anlagenname:</label>
+                                <label for="object" >Anlagenname:</label>
                                 <UInput color="amber" id="object" v-model="object" type="text"
                                     placeholder="z.B. Mustermann Schließung" required />
                             </div>
                             <div class="form-group">
-                                <label for="email">E-Mail-Adresse:</label>
+                                <label for="email" >E-Mail-Adresse:</label>
                                 <UInput color="amber" id="email" v-model="email" type="email" required />
                             </div>
                             <div class="form-group">
-                                <label for="name">Name:</label>
+                                <label for="name" >Name:</label>
                                 <UInput color="amber" id="name" v-model="name" type="text" required />
                             </div>
                             <div class="form-group">
                                 <label for="phone">Telefonnummer:</label>
-                                <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" required />
+                                <UInput color="amber" id="phone" v-model="phone" type="tel" placeholder="Optional" />
                             </div>
                             <div class="form-group">
-                                <label for="company">Firma:</label>
+                                <label for="company" >Firma:</label>
                                 <UInput color="amber" id="company" v-model="company" type="tel"
                                     placeholder="Optional" />
                             </div>
                             <br>
-                            <UButton @click="saveInstallation" type="submit" color="amber" variant="solid">Speichern und
+                            <UButton @click="saveInstallation" style="color: white;" type="submit" color="amber" variant="solid">Speichern und
                                 abschicken
                             </UButton>
                         </form>
@@ -233,7 +236,7 @@
             </div>
         </div>
         <UButton class="add-key-button" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
-            variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
+            variant="solid" style="color: white;" :trailing="false">Schlüssel hinzufügen</UButton>
     </div>
 </template>
 
@@ -284,7 +287,7 @@ export default {
                 "Vorhangschloss 80mm",
                 "Briefkastenschloss",
             ],
-            sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
+            sizes: [27, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
             selectedOptions: ref([]),
             cylinderOptions: [
                 "keine Option",
@@ -406,7 +409,7 @@ export default {
                 //Schickt die Anlagendaten per API in MYSQL_Datenbank
                 const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
                     method: 'post',
-                    body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Firma: this.company }
+                    body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Telefon: this.phone, Firma: this.company }
                 });
 
 
@@ -469,6 +472,7 @@ export default {
                             html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
                                     'Objekt: ' + this.object +  '<br>' +
                                     'Name: ' + this.name + '<br>' +
+                                    'Mail: ' + this.email + '<br>' +
                                     'Firma:' + this.company + '<br>' +
                                     'Telefon: ' + this.phone
                     }
@@ -482,6 +486,7 @@ export default {
                             html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
                                     'Objekt: ' + this.object +  '<br>' +
                                     'Name: ' + this.name + '<br>' +
+                                    'Mail: ' + this.email + '<br>' +
                                     'Firma:' + this.company + '<br>' +
                                     'Telefon: ' + this.phone
                     }
@@ -510,6 +515,7 @@ export default {
                 this.object = queryresultanlage.queryresult[0].Objekt || '';
                 this.name = queryresultanlage.queryresult[0].Name || '';
                 this.email = queryresultanlage.queryresult[0].EMail || '';
+                this.phone = queryresultanlage.queryresult[0].Telefon || '';
                 this.company = queryresultanlage.queryresult[0].Firma || '';
             }
 
@@ -595,6 +601,7 @@ export default {
 
 
 <style scoped>
+
 .heading {
     display: flex;
     flex-direction: column;
@@ -665,6 +672,7 @@ export default {
     font-weight: 600;
     height: 36px;
     width: 200px;
+    color: #ffffff;
 }
 
 .test-button {
@@ -697,6 +705,7 @@ export default {
   border-color: rgb(48, 48, 224);
   box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
 }
+
 
 
 
