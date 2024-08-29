@@ -201,8 +201,8 @@
                         </form>
                     </div>
                 </UModal>
-                <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-          </UButton> -->
+                 <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+                 </UButton>
             </div>
             <div class="buttons-scnd"  style="margin: 20px;">
                 <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
@@ -242,6 +242,7 @@
 
 <script>
 import ColumnModal from './ColumnModal.vue';
+
 
 export default {
 
@@ -387,6 +388,31 @@ export default {
         generateRandomAnlagenNummer() {
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             this.anlageNr = randomNum.toString();
+        },
+
+        async test() {
+            
+            const productId = 25012;  // Beispiel Produkt-ID
+            const quantity = 1;       // Beispiel Anzahl
+            
+            const productPrice = 500; // Produktpreis
+            const cartResponse = ref(null);
+            const error = ref(null);
+           
+            
+            const cart_key = await $fetch('/api/wc-cart-add-item', {
+                          method: 'POST',
+                          headers: {
+                             'Content-Type': 'application/json'
+                             },
+                          body: JSON.stringify({ productId, quantity })
+                });
+            
+            console.log(cart_key);
+                window.open('https://www.stt-shop.de/warenkorb/?cocart-load-cart=' + cart_key, '_blank');
+            
+      
+
         },
 
         async saveInstallation() {
