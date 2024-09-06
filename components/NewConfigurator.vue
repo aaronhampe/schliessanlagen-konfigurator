@@ -201,12 +201,13 @@
                         </form>
                     </div>
                 </UModal>
-                 <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-                 </UButton>
+                
             </div>
             <div class="buttons-scnd"  style="margin: 20px;">
                 <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
                     size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
+                    <UButton v-if="showLoadButton" class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+                    </UButton>
                 <UModal v-model="isOpenL">
                     <div class="p-4">
                         <div  class="modal-flex-buttons-top">
