@@ -389,31 +389,44 @@ export default {
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             this.anlageNr = randomNum.toString();
         },
-
         async test() {
-            
-            const productId = 25012;  // Beispiel Produkt-ID
-            const quantity = 1;       // Beispiel Anzahl
-            
-            const productPrice = 500; // Produktpreis
-            const cartResponse = ref(null);
-            const error = ref(null);
-           
-            
-            const cart_key = await $fetch('/api/wc-cart-add-item', {
-                          method: 'POST',
-                          headers: {
-                             'Content-Type': 'application/json'
-                             },
-                          body: JSON.stringify({ productId, quantity })
-                });
-            
-            console.log(cart_key);
-                window.open('https://www.stt-shop.de/warenkorb/?cocart-load-cart=' + cart_key, '_blank');
-            
-      
+            console.log('test');
+  try {
+    const response = await fetch('/api/wc-cart-add-item', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: 25012,
+        price: 50,
+        quantity: 1,
+        billing_first_name: "Frank",
+        billing_last_name: "Bose",
+        billing_address_1: "Walsroder Straße 24-26",
+        billing_city: "Wedemark",
+        billing_postcode: "30900",
+        billing_country: "DE",
+        billing_email: "fb@secutimetec.de"
+      })
+    });
+console.log(test);
+    const result = await response.json();
+    if (result.success) {
+      console.log = 'Produkt erfolgreich in den Warenkorb gelegt.';
+    } else {
+      console.log = 'Fehler beim Hinzufügen des Produkts: ' + result.message;
+    }
+  } catch (error) {
+    console.log = 'Es gab einen Fehler bei der Anfrage: ' + error;
+  }
 
-        },
+
+
+  
+
+},
+
 
         async saveInstallation() {
 
