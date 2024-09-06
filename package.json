@@ -19,6 +19,8 @@
   "dependencies": {
     "@nuxt/ui": "^2.13.0",
     "@prisma/client": "^5.14.0",
+    "axios": "^1.7.3",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.11",
     "prisma": "^5.14.0",
     "sass": "^1.71.1",

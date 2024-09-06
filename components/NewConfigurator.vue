@@ -201,8 +201,8 @@
                         </form>
                     </div>
                 </UModal>
-                <!-- <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-          </UButton> -->
+                 <UButton class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
+                 </UButton>
             </div>
             <div class="buttons-scnd"  style="margin: 20px;">
                 <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
@@ -242,6 +242,7 @@
 
 <script>
 import ColumnModal from './ColumnModal.vue';
+
 
 export default {
 
@@ -388,6 +389,44 @@ export default {
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             this.anlageNr = randomNum.toString();
         },
+        async test() {
+            console.log('test');
+  try {
+    const response = await fetch('/api/wc-cart-add-item', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: 25012,
+        price: 50,
+        quantity: 1,
+        billing_first_name: "Frank",
+        billing_last_name: "Bose",
+        billing_address_1: "Walsroder Straße 24-26",
+        billing_city: "Wedemark",
+        billing_postcode: "30900",
+        billing_country: "DE",
+        billing_email: "fb@secutimetec.de"
+      })
+    });
+console.log(test);
+    const result = await response.json();
+    if (result.success) {
+      console.log = 'Produkt erfolgreich in den Warenkorb gelegt.';
+    } else {
+      console.log = 'Fehler beim Hinzufügen des Produkts: ' + result.message;
+    }
+  } catch (error) {
+    console.log = 'Es gab einen Fehler bei der Anfrage: ' + error;
+  }
+
+
+
+  
+
+},
+
 
         async saveInstallation() {
 
