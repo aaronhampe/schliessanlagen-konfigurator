@@ -289,7 +289,7 @@ export default {
                 "Vorhangschloss 80mm",
                 "Briefkastenschloss",
             ],
-            sizes: [27, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
+            sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
             selectedOptions: ref([]),
             cylinderOptions: [
                 "keine Option",
