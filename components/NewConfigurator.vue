@@ -10,12 +10,12 @@
     <div class="flex-container" style="margin:240px 0 0 340px;">
         <div class="configurator">
             <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-                <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show ="colIndex < 1">
+                <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
                     <div class="flex-container" v-if="colIndex < 1">
                         <!--Position-->
                         <div>
                             <h3 v-if="rowIndex < 1 && colIndex < 1"> Pos. </h3>
-                            <UBadge v-if ="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
+                            <UBadge v-if="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
                                 variant="solid" style="
                 width: 30px;
                 display: flex;
@@ -27,20 +27,21 @@
                             </UBadge>
                         </div>
                         <!--Türbezeichnung-->
-                        <div class="door-designation" v-if ="colIndex < 1">
-                            <h3 v-if ="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
-                            <UInput v-if ="colIndex < 1" v-model="checkbox.doorDesignation" color="blue" size="sm"
-                                variant="outline" placeholder="z.B. Haupteingang" style="width: 200px; color: #333333; " />
+                        <div class="door-designation" v-if="colIndex < 1">
+                            <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
+                            <UInput v-if="colIndex < 1" v-model="checkbox.doorDesignation" color="blue" size="sm"
+                                variant="outline" placeholder="z.B. Haupteingang"
+                                style="width: 200px; color: #333333; " />
                         </div>
                         <!--Zylinderanzahl-->
                         <div class="quantity">
-                            <h3 v-if ="rowIndex < 1">Anzahl</h3>
+                            <h3 v-if="rowIndex < 1">Anzahl</h3>
                             <UInput v-model="checkbox.doorquantity" min="1" class="quantity-input" color="blue"
                                 size="sm" type="number" variant="outline" style="width: 80px; color: #333333;" />
                         </div>
                         <!--Zylindertyp-->
                         <div class="cylinder-type">
-                            <h3 v-if ="rowIndex < 1">Zylinder-Typ</h3>
+                            <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
                             <USelectMenu v-model="checkbox.type" color="blue" :options="cylinderType"
                                 placeholder="Zylinder wählen..." style="width: 200px; color: #333333; " />
                         </div>
@@ -48,67 +49,71 @@
                 checkbox.type == 'Knaufzylinder (innen)'
                 ">
                             <div class="outside">
-                                <h3 v-if ="rowIndex < 1">Außen</h3>
+                                <h3 v-if="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px; color: #333333;" />
                             </div>
                             <div class="inside">
-                                <h3 v-if ="rowIndex < 1">Innen</h3>
+                                <h3 v-if="rowIndex < 1">Innen</h3>
                                 <USelectMenu v-model="checkbox.inside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px; color: #333333;" />
                             </div>
                         </div>
                         <div class="sizes-halfcylinder" v-else-if="checkbox.type == 'Halbzylinder'">
                             <div class="outside">
-                                <h3 v-if ="rowIndex < 1">Außen</h3>
+                                <h3 v-if="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
                                     style="width: 80px; color: #333333;" />
                             </div>
                             <div class="inside">
-                                <h3 v-if ="rowIndex < 1">Innen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;10&nbsp;
+                                <h3 v-if="rowIndex < 1">Innen</h3>
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">
+                                    &nbsp;10&nbsp;
                                 </UBadge>
                             </div>
                         </div>
                         <div class="sizes-empty" v-else>
                             <div class="outside">
-                                <h3 v-if ="rowIndex < 1">Außen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;N/A&nbsp;
+                                <h3 v-if="rowIndex < 1">Außen</h3>
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">
+                                    &nbsp;N/A&nbsp;
                                 </UBadge>
                             </div>
                             <div class="inside">
-                                <h3 v-if ="rowIndex < 1">Innen</h3>
-                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">&nbsp;N/A&nbsp;
+                                <h3 v-if="rowIndex < 1">Innen</h3>
+                                <UBadge color="gray" variant="outline" size="lg" style="width: 80px; color: #333333;">
+                                    &nbsp;N/A&nbsp;
                                 </UBadge>
                             </div>
                         </div>
                         <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
-                            <h3 v-if ="rowIndex < 1">N&G-Funktion</h3>
+                            <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
                             <USelectMenu v-model="checkbox.options" :options="cylinderOptions" color="blue"
-                                placeholder="Optionen auswählen" @click="resetOptions(rowIndex)" style="width: 200px; color: #333333;" />
+                                placeholder="Optionen auswählen" @click="resetOptions(rowIndex)"
+                                style="width: 200px; color: #333333;" />
                         </div>
                         <div class="options-empty" v-else>
-                            <h3 v-if ="rowIndex < 1">N&G-Funktion</h3>
+                            <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
                             <UBadge color="gray" variant="outline" size="lg" style="width: 200px">&nbsp;N/A&nbsp;
                             </UBadge>
                         </div>
                         <!--Zylinder löschen & duplizieren-->
                         <div class="duplicate">
-                            <br v-if ="rowIndex < 1" />
+                            <br v-if="rowIndex < 1" />
                             <UButton icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline"
                                 :trailing="false" @click="duplicateRow(rowIndex)" />
                         </div>
                         <div class="delete">
-                            <br v-if ="rowIndex < 1" />
-                            <UButton icon="i-heroicons-trash" style="color: white;" size="sm" color="red" variant="solid" :trailing="false"
-                                @click="deleteRow(rowIndex)" />
+                            <br v-if="rowIndex < 1" />
+                            <UButton icon="i-heroicons-trash" style="color: white;" size="sm" color="red"
+                                variant="solid" :trailing="false" @click="deleteRow(rowIndex)" />
                         </div>
                     </div>
                 </div>
 
                 <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
                     <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
-                        v-if ="rowIndex < 1" style="
+                        v-if="rowIndex < 1" style="
                 writing-mode: vertical-rl;
                 position: absolute;
                 margin-top: -20.8em;
@@ -119,8 +124,8 @@
                 border-radius: 8px;
               ">
                     </input>
-                    <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity" v-if = "rowIndex < 1"
-                        style="
+                    <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
+                        v-if="rowIndex < 1" style="
                 position: absolute;
                 margin-top: -11.8em;
                 width: 33px;
@@ -129,27 +134,28 @@
                 border: 1px dotted lightblue;
                 border-radius: 4px;
                 "></input>
-                    <UButton icon="i-heroicons-pencil" v-if ="rowIndex < 1" @click="openModal(colIndex)" size="sm"
+                    <UButton icon="i-heroicons-pencil" v-if="rowIndex < 1" @click="openModal(colIndex)" size="sm"
                         color="sky" variant="solid" :trailing="false" style="
                 writing-mode: vertical-rl;
                 position: absolute;
                 margin-top: -4.4em;
                 color:white;
               " />
-                    <ColumnModal v-if = "rowIndex < 1" :columnId="colIndex" v-model="modalStates[colIndex]"
+                    <ColumnModal v-if="rowIndex < 1" :columnId="colIndex" v-model="modalStates[colIndex]"
                         @update-column-name="updateColumnName(colIndex, $event)"
                         @close-this-modal="closeModal(colIndex)" />
-                    <p v-if ="rowIndex < 1">&nbsp;</p>
-                    <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue" variant="solid"/>
+                    <p v-if="rowIndex < 1">&nbsp;</p>
+                    <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked"
+                        color="blue" variant="solid" />
                     <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
-                    <UButton @click="deleteCheckbox(colIndex)" v-if ="rowIndex == this.rows.length - 1"
+                    <UButton @click="deleteCheckbox(colIndex)" v-if="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" style="
                 writing-mode: vertical-rl;
                 position: absolute;
                 margin-top: 5.5em;
                 color: white;
               " />
-                    <UButton @click="duplicateCol(colIndex)" v-if ="rowIndex == this.rows.length - 1"
+                    <UButton @click="duplicateCol(colIndex)" v-if="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false"
                         style="
                 writing-mode: vertical-rl;
@@ -161,28 +167,33 @@
             <div class="buttons">
                 <UButton class="add-door-button" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm"
                     color="amber" variant="solid" :trailing="false">Tür hinzufügen</UButton>
-                    <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
+                <UButton class="add-door-button" @click="navigateToSysteme" size="sm" color="amber" variant="solid">
+                    Zur Systemübersicht
+                </UButton>
+                <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
                     @click="isOpen = true" size="sm" color="amber" variant="solid" :trailing="false">Angebot anfordern
                 </UButton>
+
                 <UModal v-model="isOpen">
                     <div class="p-4">
                         <div class="modal-flex-buttons-top">
-                            <h2  class="modal-h2">Angebot anfordern</h2>
-                            <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white;">X</UButton>
+                            <h2 class="modal-h2">Angebot anfordern</h2>
+                            <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white;">X
+                            </UButton>
                         </div>
                         <br>
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
-                                <label for="object" >Anlagenname:</label>
+                                <label for="object">Anlagenname:</label>
                                 <UInput color="amber" id="object" v-model="object" type="text"
                                     placeholder="z.B. Mustermann Schließung" required />
                             </div>
                             <div class="form-group">
-                                <label for="email" >E-Mail-Adresse:</label>
+                                <label for="email">E-Mail-Adresse:</label>
                                 <UInput color="amber" id="email" v-model="email" type="email" required />
                             </div>
                             <div class="form-group">
-                                <label for="name" >Name:</label>
+                                <label for="name">Name:</label>
                                 <UInput color="amber" id="name" v-model="name" type="text" required />
                             </div>
                             <div class="form-group">
@@ -190,27 +201,30 @@
                                 <UInput color="amber" id="phone" v-model="phone" type="tel" required />
                             </div>
                             <div class="form-group">
-                                <label for="company" >Firma:</label>
+                                <label for="company">Firma:</label>
                                 <UInput color="amber" id="company" v-model="company" type="tel"
                                     placeholder="Optional" />
                             </div>
                             <br>
-                            <UButton @click="saveInstallation" style="color: white;" type="submit" color="amber" variant="solid">Speichern und
+                            <UButton @click="saveInstallation" style="color: white;" type="submit" color="amber"
+                                variant="solid">Speichern und
                                 abschicken
                             </UButton>
                         </form>
                     </div>
                 </UModal>
-                
+
             </div>
-            <div class="buttons-scnd"  style="margin: 20px;">
-                <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid" @click="isOpenL = true"
-                    size="sm" color="amber" variant="solid" :trailing="false">Anlage laden</UButton>
-                    <UButton v-if="showLoadButton" class="test-button" @click="test" size="sm" color="amber" variant="solid" :trailing="false">Test
-                    </UButton>
+            <div class="buttons-scnd" style="margin: 20px;">
+                <UButton v-if="showLoadButton" class="add-door-button" icon="i-heroicons-cloud-arrow-down-16-solid"
+                    @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
+                </UButton>
+                <UButton v-if="showLoadButton" class="test-button" @click="test" size="sm" color="amber" variant="solid"
+                    :trailing="false">Test
+                </UButton>
                 <UModal v-model="isOpenL">
                     <div class="p-4">
-                        <div  class="modal-flex-buttons-top">
+                        <div class="modal-flex-buttons-top">
                             <h2 class="modal-h2">Anlage laden</h2>
                             <UButton color="red" @click="isOpenL = false" style="font-weight: 600;">X</UButton>
                         </div>
@@ -277,7 +291,7 @@ export default {
                         checked: false,
                         keyquantity: 1,
                         keyname: "Schlüssel 1",
-                        
+
                     },
                 ],
             ],
@@ -308,6 +322,10 @@ export default {
             this.rows[rowIndex].options = [];
         },
 
+        navigateToSysteme() {
+            this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr } });
+        },
+
         openModal(colIndex) {
             this.modalStates[colIndex] = true;
         },
@@ -333,21 +351,21 @@ export default {
 
         addCheckbox() {
             this.rows.forEach((checkbox) => {
-                checkbox.push({ checked: false, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length+1)});
+                checkbox.push({ checked: false, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length + 1) });
             });
         },
 
         deleteCheckbox(colIndex) {
             if (colIndex > 0) {
-                 this.rows.forEach((row) => {
-                if (row.length > 1) {
-                    row.splice(colIndex, 1);
-                }
-            });
+                this.rows.forEach((row) => {
+                    if (row.length > 1) {
+                        row.splice(colIndex, 1);
+                    }
+                });
             } else {
                 alert("Die erste Spalte kann nicht entfernt werden.");
             }
-           
+
         },
 
         deleteRow(rowIndex) {
@@ -390,47 +408,46 @@ export default {
             const randomNum = Math.floor(100000 + Math.random() * 900000);
             this.anlageNr = randomNum.toString();
         },
+
         async test() {
             console.log('test');
-  try {
-    const response = await fetch('/api/wc-cart-add-item', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        product_id: 25012,
-        price: 50,
-        quantity: 1,
-        billing_first_name: "Frank",
-        billing_last_name: "Bose",
-        billing_address_1: "Walsroder Straße 24-26",
-        billing_city: "Wedemark",
-        billing_postcode: "30900",
-        billing_country: "DE",
-        billing_email: "fb@secutimetec.de"
-      })
-    });
-console.log(test);
-    const result = await response.json();
-    if (result.success) {
-      console.log = 'Produkt erfolgreich in den Warenkorb gelegt.';
-    } else {
-      console.log = 'Fehler beim Hinzufügen des Produkts: ' + result.message;
-    }
-  } catch (error) {
-    console.log = 'Es gab einen Fehler bei der Anfrage: ' + error;
-  }
+            try {
+                const response = await fetch('/api/wc-cart-add-item', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: 25012,
+                        price: 50,
+                        quantity: 1,
+                        billing_first_name: "Frank",
+                        billing_last_name: "Bose",
+                        billing_address_1: "Walsroder Straße 24-26",
+                        billing_city: "Wedemark",
+                        billing_postcode: "30900",
+                        billing_country: "DE",
+                        billing_email: "fb@secutimetec.de"
+                    })
+                });
+                console.log(test);
+                const result = await response.json();
+                if (result.success) {
+                    console.log = 'Produkt erfolgreich in den Warenkorb gelegt.';
+                } else {
+                    console.log = 'Fehler beim Hinzufügen des Produkts: ' + result.message;
+                }
+            } catch (error) {
+                console.log = 'Es gab einen Fehler bei der Anfrage: ' + error;
+            }
 
 
 
-  
 
-},
 
+        },
 
         async saveInstallation() {
-
             const form = document.querySelector('form');
             if (form.checkValidity()) {
                 let antwort;
@@ -441,107 +458,68 @@ console.log(test);
                             method: 'post'
                         });
                         antwort = response.message;
-                        //console.log(antwort)
-                    } while (antwort === 'Anlagennummer existiert.')
+                    } while (antwort === 'Anlagennummer existiert.');
                 }
 
-
-                //Schickt die Anlagendaten per API in MYSQL_Datenbank
+                // Schritt 1: Anlage in der Datenbank speichern
                 const queryresultanlage = await $fetch('/api/sqlpostanlageneu', {
                     method: 'post',
                     body: { ID: this.anlageNr, Objekt: this.object, Name: this.name, EMail: this.email, Telefon: this.phone, Firma: this.company }
                 });
 
+                if (queryresultanlage) {
+                    // Schritt 2: Positionen speichern
+                    const RowObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                        POS: rowIndex + 1,
+                        Bezeichnung: row[0].doorDesignation || '',
+                        Anzahl: row[0].doorquantity || '',
+                        Typ: row[0].type || '',
+                        SizeA: row[0].outside || '',
+                        SizeI: row[0].inside || '',
+                        Option: row[0].options || ''
+                    })));
 
-                // Erstellt das JSON für die Übergabe der Positionen an MYSQL_Datenbank
-                const RowObject = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                    POS: rowIndex + 1, // Set position to the current row index
-                    Bezeichnung: row[0].doorDesignation || '',
-                    Anzahl: row[0].doorquantity || '',
-                    Typ: row[0].type || '',
-                    SizeA: row[0].outside || '',
-                    SizeI: row[0].inside || '',
-                    Option: row[0].options || ''
-                })));
+                    const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
+                        method: 'post',
+                        body: RowObject
+                    });
 
-
-
-                // Schickt die Positionsdaten per API in MYSQL_Datenbank
-                const queryresultposition = await $fetch('/api/sqlpostposition?ID=' + this.anlageNr, {
-                    method: 'post',
-                    body: RowObject
-                });
-
-
-                // Erstellt das JSON für die Übergabe der Schlüssel an MYSQL_Datenbank 
-                const KeyNameObject = this.rows
-                    .filter((_, rowIndex) => rowIndex === 0)
-                    .flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                    // Schritt 3: Schlüssel speichern
+                    const KeyNameObject = this.rows.filter((_, rowIndex) => rowIndex === 0).flatMap((row) => row.map((col, colIndex) => ({
                         keyPos: colIndex + 1,
                         keyname: col.keyname,
                         keyquantity: col.keyquantity || 1,
                     })));
-                // console.log(JSON.stringify(this.rows));
-                // console.log(JSON.stringify(KeyNameObject));
 
-                // Schickt die Schluesseldaten per API in MYSQL_Datenbank
-                const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
-                    method: 'post',
-                    body: KeyNameObject
-                });
+                    const queryresultschluessel = await $fetch('/api/sqlpostschluessel?ID=' + this.anlageNr, {
+                        method: 'post',
+                        body: KeyNameObject
+                    });
 
-                // Erstellt das JSON für die Übergabe der Matrix an MYSQL_Datenbank
-                const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
-                    position: rowIndex + 1, // Set position to the current row index
-                    keynr: colIndex + 1, // Set keynr to the current column index
-                    checked: col.checked || false, // Default checked to false if missing
-                })));
+                    // Schritt 4: Matrix speichern
+                    const Matrix = this.rows.flatMap((row, rowIndex) => row.map((col, colIndex) => ({
+                        position: rowIndex + 1,
+                        keynr: colIndex + 1,
+                        checked: col.checked || false,
+                    })));
 
-                //console.log(JSON.stringify(Matrix, null,2 ));
-                // Schickt die Matrixdaten per API in MYSQL_Datenbank
-                const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
-                    method: 'post',
-                    body: Matrix
-                });
-                
-                //Mail an Kunden
-                const queryresultmail = await $fetch('/api/mail', {
-                    method: 'post',
-                    body: { to: this.email, 
-                            subject: 'stt-shop.de -- Ihre Konfiguration ' + this.anlageNr + ' wurde verschickt',
-                            html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
-                                    'Objekt: ' + this.object +  '<br>' +
-                                    'Name: ' + this.name + '<br>' +
-                                    'Mail: ' + this.email + '<br>' +
-                                    'Firma:' + this.company + '<br>' +
-                                    'Telefon: ' + this.phone
-                    }
-                });
-                
-                //Mail an uns
-                const queryresultmailstt = await $fetch('/api/mail', {
-                    method: 'post',
-                    body: { to: 'office@secutimetec.de', 
-                            subject: 'stt-shop.de -- Eine Konfiguration ' + this.anlageNr + ' wurde gespeichert',
-                            html: 'Anlagennummer: ' + this.anlageNr + '<br>' +
-                                    'Objekt: ' + this.object +  '<br>' +
-                                    'Name: ' + this.name + '<br>' +
-                                    'Mail: ' + this.email + '<br>' +
-                                    'Firma:' + this.company + '<br>' +
-                                    'Telefon: ' + this.phone
-                    }
-                }); 
+                    const queryresultmatrix = await $fetch('/api/sqlpostmatrix?ID=' + this.anlageNr, {
+                        method: 'post',
+                        body: Matrix
+                    });
 
-                this.isOpen = false;
+                    // Schritt 5: Navigiere zur systeme.vue Seite mit der Anlagennummer
+                    this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr } });
+                }
             } else {
-                // Zeige Validierungsfehler an
                 form.reportValidity();
             }
         },
 
+
         async loadInstallation() {
             this.rows.length = 1;
-            this.rows[0].length =1;
+            this.rows[0].length = 1;
 
 
             // Daten für die Anlage
@@ -565,12 +543,12 @@ console.log(test);
                 body: { ID: this.id }
             });
             const maxZeilePosition = Math.max(...queryresultposition.queryresult.map(item => item.POS));
-            
+
             for (let i = 0; i < maxZeilePosition - 1; i++) {
                 const numCheckboxes = this.rows[0].length;
                 const newRow = [];
                 for (let j = 0; j < numCheckboxes; j++) {
-                        newRow.push({ checked: false, doorquantity: 1 });
+                    newRow.push({ checked: false, doorquantity: 1 });
                 }
                 this.rows.push(newRow);
             }
@@ -584,50 +562,50 @@ console.log(test);
                 this.rows[zeile][0].inside = item.SizeI || '';
                 this.rows[zeile][0].options = item.Option || '';
             });
-           
-            
+
+
             // Schlüsseldaten 
 
             const queryresultschluessel = await $fetch('/api/sqlgetschluessel', {
                 method: 'post',
                 body: { ID: this.id }
             });
-            
+
             const maxSpalteSchluessel = Math.max(...queryresultschluessel.queryresult.map(item => item.KeyPOS));
-            
-            
-                while (this.rows[0].length < maxSpalteSchluessel) {
-                    this.addCheckbox();
-                }
-        
+
+
+            while (this.rows[0].length < maxSpalteSchluessel) {
+                this.addCheckbox();
+            }
+
             queryresultschluessel.queryresult.forEach(item => {
-            const spalte = item.KeyPOS - 1 ; // Annahme: POSSchluessel beginnt bei 1
-            this.rows[0][spalte].keyname = item.Bezeichnung;
-            this.rows[0][spalte].keyquantity = item.Anzahl;
+                const spalte = item.KeyPOS - 1; // Annahme: POSSchluessel beginnt bei 1
+                this.rows[0][spalte].keyname = item.Bezeichnung;
+                this.rows[0][spalte].keyquantity = item.Anzahl;
             });
-                        
-                
-            
+
+
+
             // Matrix
 
             const queryresultmatrix = await $fetch('/api/sqlgetmatrix', {
                 method: 'post',
                 body: { ID: this.id }
             });
-                
+
             const maxZeile = Math.max(...queryresultmatrix.queryresult.map(item => item.POSZylinder));
             const maxSpalte = Math.max(...queryresultmatrix.queryresult.map(item => item.POSSchluessel));
 
             queryresultmatrix.queryresult.forEach(item => {
-            const zeile = item.POSZylinder - 1; // Annahme: POSZylinder beginnt bei 1
-            const spalte = item.POSSchluessel - 1 ; // Annahme: POSSchluessel beginnt bei 1
-            this.rows[zeile][spalte].checked = item.Berechtigung;
+                const zeile = item.POSZylinder - 1; // Annahme: POSZylinder beginnt bei 1
+                const spalte = item.POSSchluessel - 1; // Annahme: POSSchluessel beginnt bei 1
+                this.rows[zeile][spalte].checked = item.Berechtigung;
             });
 
-                //console.log(JSON.stringify(queryresultmatrix, null,2 ));
-                
-7
-            
+            //console.log(JSON.stringify(queryresultmatrix, null,2 ));
+
+            7
+
 
             this.isOpenL = false;
         },
@@ -641,7 +619,6 @@ console.log(test);
 
 
 <style scoped>
-
 .heading {
     display: flex;
     flex-direction: column;
@@ -741,12 +718,8 @@ console.log(test);
 
 .key-name:focus,
 .key-quantity:focus {
-  outline: none;
-  border-color: rgb(48, 48, 224);
-  box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
+    outline: none;
+    border-color: rgb(48, 48, 224);
+    box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
 }
-
-
-
-
 </style>

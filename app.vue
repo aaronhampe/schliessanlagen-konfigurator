@@ -1,9 +1,8 @@
-<script>
-import NewConfigurator from "./components/NewConfigurator.vue";
-</script>
-
 <template>
-  <NewConfigurator />
+
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
   <br />
 </template>
 
@@ -13,13 +12,15 @@ import NewConfigurator from "./components/NewConfigurator.vue";
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
   background: inherit;
+
   @media(prefers-color-scheme: dark) {
     body {
-      background-color: #ffffff; 
+      background-color: #ffffff;
       color: #333333;
     }
   }
 }
+
 h1,
 h2,
 h3,
