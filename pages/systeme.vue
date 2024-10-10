@@ -7,6 +7,7 @@
     
     <div v-if="positionData.length">
       <h3>Türpositionen:</h3>
+      <div>Gesamtpreis: {{ priceAbus550 }} Euro</div>
       <div v-for="(position, index) in positionData" :key="index" class="position-item">
         <p><strong>Position:</strong> {{ position.POS }}</p>
         <p><strong>Türbezeichnung:</strong> {{ position.Bezeichnung }}</p>
@@ -48,26 +49,25 @@ const anlageNr = route.query.anlageNr || '';
 const positionData = ref([]);  // Speichert die Türpositionen
 const keyData = ref([]);       // Speichert die Schlüssel-Konfiguration
 const matrixData = ref([]);    // Speichert die Berechtigungsmatrix
+const priceAbus550 = 0;               // Preis für das 1. System
 
 onMounted(async () => {
   if (anlageNr) {
     try {
       // Lade die Türpositionen
-      const { data: positionResponse, error: positionError } = await useFetch(`/api/sqlgetposition`, {
+      const positionResponse = await $fetch(`/api/sqlgetposition`, {
         method: 'POST',
         body: { ID: anlageNr }
       });
-      if (positionError) {
-        console.error('Fehler beim Laden der Türpositionen:', positionError);
-      } else {
-        positionData.value = positionResponse.value?.queryresult || [];
-      }
-
+        
+        positionData.value = positionResponse.queryresult || [];
+        
       // Lade die Schlüssel-Konfiguration
       const { data: keyResponse, error: keyError } = await useFetch(`/api/sqlgetschluessel`, {
         method: 'POST',
         body: { ID: anlageNr }
       });
+      console.log(keyResponse.value);
       if (keyError) {
         console.error('Fehler beim Laden der Schlüssel-Konfiguration:', keyError);
       } else {
