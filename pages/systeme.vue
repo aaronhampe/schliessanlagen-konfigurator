@@ -49,7 +49,7 @@ const anlageNr = route.query.anlageNr || '';
 const positionData = ref([]);  // Speichert die Türpositionen
 const keyData = ref([]);       // Speichert die Schlüssel-Konfiguration
 const matrixData = ref([]);    // Speichert die Berechtigungsmatrix
-const priceAbus550 = 0;               // Preis für das 1. System
+var priceAbus550 = 0;               // Preis für das 1. System
 
 onMounted(async () => {
   if (anlageNr) {
@@ -61,7 +61,24 @@ onMounted(async () => {
       });
         
         positionData.value = positionResponse.queryresult || [];
-        
+        positionResponse.queryresult.forEach(item => {
+                const zeile = item.POS - 1; // Annahme: POSZylinder beginnt bei 1
+                if (item.Typ==='Doppelzylinder') {
+                     priceAbus550=priceAbus550+10;
+                     priceAbus550=priceAbus550+parseInt(item.SizeA)*0,8;
+                     priceAbus550=priceAbus550+parseInt(item.SizeI)*0,8;
+                 }
+                if (item.Typ==='Halbzylinder') {priceAbus550=priceAbus550+5}
+                
+                //this.rows[zeile][0].doorDesignation = item.Bezeichnung;
+                //this.rows[zeile][0].doorquantity = item.Anzahl || 1;
+                //this.rows[zeile][0].type = item.Typ || '';
+                //this.rows[zeile][0].outside = item.SizeA || '';
+                //this.rows[zeile][0].inside = item.SizeI || '';
+                //this.rows[zeile][0].options = item.Option || '';
+            });
+
+
       // Lade die Schlüssel-Konfiguration
       const { data: keyResponse, error: keyError } = await useFetch(`/api/sqlgetschluessel`, {
         method: 'POST',
