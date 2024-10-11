@@ -64,19 +64,22 @@ onMounted(async () => {
         positionResponse.queryresult.forEach(item => {
                 const zeile = item.POS - 1; // Annahme: POSZylinder beginnt bei 1
                 if (item.Typ==='Doppelzylinder') {
-                     priceAbus550=priceAbus550+10;
-                     priceAbus550=priceAbus550+parseInt(item.SizeA)*0,8;
-                     priceAbus550=priceAbus550+parseInt(item.SizeI)*0,8;
+                     priceAbus550=priceAbus550+18.85;
+                     priceAbus550=priceAbus550+((parseInt(item.SizeA)-30)/5)*2.1;
+                     priceAbus550=priceAbus550+((parseInt(item.SizeI)-30)/5)*2.1;
                  }
-                if (item.Typ==='Halbzylinder') {priceAbus550=priceAbus550+5}
-                
+                if (item.Typ==='Halbzylinder') {
+                     priceAbus550=priceAbus550+14.65;
+                     priceAbus550=priceAbus550+((parseInt(item.SizeA)-30)/5)*2.1;
+                 }
+
                 //this.rows[zeile][0].doorDesignation = item.Bezeichnung;
                 //this.rows[zeile][0].doorquantity = item.Anzahl || 1;
                 //this.rows[zeile][0].type = item.Typ || '';
                 //this.rows[zeile][0].outside = item.SizeA || '';
                 //this.rows[zeile][0].inside = item.SizeI || '';
                 //this.rows[zeile][0].options = item.Option || '';
-            });
+    });
 
 
       // Lade die Schlüssel-Konfiguration
