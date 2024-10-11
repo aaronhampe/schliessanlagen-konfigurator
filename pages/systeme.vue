@@ -67,10 +67,12 @@ onMounted(async () => {
                      priceAbus550=priceAbus550+18.85;
                      priceAbus550=priceAbus550+((parseInt(item.SizeA)-30)/5)*2.1;
                      priceAbus550=priceAbus550+((parseInt(item.SizeI)-30)/5)*2.1;
+                     priceAbus550=priceAbus550*parseInt(item.Anzahl);
                  }
                 if (item.Typ==='Halbzylinder') {
                      priceAbus550=priceAbus550+14.65;
                      priceAbus550=priceAbus550+((parseInt(item.SizeA)-30)/5)*2.1;
+                     priceAbus550=priceAbus550*parseInt(item.Anzahl);
                  }
 
                 //this.rows[zeile][0].doorDesignation = item.Bezeichnung;
