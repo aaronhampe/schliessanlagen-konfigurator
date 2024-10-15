@@ -1,10 +1,9 @@
-
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   devtools: { enabled: false },
   app: { baseURL: process.env.publicPath },
+
   runtimeConfig: {
     MAILHOST: process.env.MAILHOST,
     MAILPORT: process.env.MAILPORT,
@@ -13,10 +12,13 @@ export default defineNuxtConfig({
     CONTACTMAIL: process.env.CONTACTMAIL,
 
   },
+
   pages: true,
+
   css: [
     '@/scss/main.scss'
   ],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -27,5 +29,7 @@ export default defineNuxtConfig({
         },
       },
     },
-  }
+  },
+
+  compatibilityDate: '2024-10-15'
 })
