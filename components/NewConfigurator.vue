@@ -1,11 +1,14 @@
 <template>
 
     <div class="heading">
+        <h1>{{ isSchliessanlage ? 'Konfigurator für eine Schließanlage' : 'Konfigurator für eine Gleichschließung' }}
+        </h1>
         <div class="number">
             <h2>Anlagennummer: </h2>
             <input type="text" readonly style="width: 140px;" v-model="anlageNr" placeholder="Anlagenummer" />
         </div>
     </div>
+
 
     <div class="flex-container" style="margin:240px 0 0 340px;">
         <div class="configurator">
@@ -46,8 +49,8 @@
                                 placeholder="Zylinder wählen..." style="width: 200px; color: #333333; " />
                         </div>
                         <div class="sizes" v-if="checkbox.type == 'Doppelzylinder' ||
-                checkbox.type == 'Knaufzylinder (innen)'
-                ">
+            checkbox.type == 'Knaufzylinder (innen)'
+            ">
                             <div class="outside">
                                 <h3 v-if="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
@@ -261,6 +264,13 @@ import ColumnModal from './ColumnModal.vue';
 
 export default {
 
+    props: {
+        isSchliessanlage: {
+            type: Boolean,
+            required: true,
+        },
+    },
+    
     components: {
         ColumnModal,
     },
@@ -312,11 +322,10 @@ export default {
     },
     computed: {
         showLoadButton() {
-           //return this.$route.path.includes('/admin/');
-           return true;
+            //return this.$route.path.includes('/admin/');
+            return true;
         },
     },
-
     methods: {
 
         resetOptions(rowIndex) {
