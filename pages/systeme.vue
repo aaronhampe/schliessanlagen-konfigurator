@@ -2,91 +2,29 @@
   <div class="systeme-page">
     <h2>Systemübersicht</h2>
     <div v-if="anlageNr">
+      <!--240742-->
       <p>
         Zuletzt erstellte Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
     </div>
 
-    <!-- Aktuelle Anlage: 867392 -->
-
-    <!-- Displaying the calculated offers for ABUS EC550, EC660, and ABUS 880 -->
     <div class="offer-container" v-if="positionData.length">
-      <!-- ABUS EC550 Offer -->
-      <!-- Updated tile layout and additional design elements -->
-      <div class="offer">
-        <img
-          src="/image/abus-ec550-300x300.webp"
-          alt="ABUS EC550"
-          class="offer-image"
-        />
+      <div class="offer" v-for="(offer, index) in filteredOffers" :key="index">
+        <img :src="offer.image" :alt="offer.alt" class="offer-image" />
         <div class="offer-details">
-          <h3>Angebot für ABUS EC550:</h3>
+          <h3>{{ offer.title }}</h3>
           <div class="offer-price">
-            Gesamtpreis: <strong>{{ roundPrice(priceAbus550) }} €</strong>
+            Gesamtpreis: <strong>{{ roundPrice(offer.price) }} €</strong>
           </div>
           <ul class="offer-features">
-            <li><i class="icon-check"></i> Platzhalter: Feature 1</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 2</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 3</li>
+            <li v-for="(feature, i) in offer.features" :key="i">
+              <i class="icon-check"></i> {{ feature }}
+            </li>
           </ul>
           <UButton
             icon="i-heroicons-shopping-cart-16-solid"
             class="select-system-button"
-            @click="addToCart('ABUS EC550', priceAbus550)"
-          >
-            System auswählen
-          </UButton>
-        </div>
-      </div>
-
-      <!-- ABUS EC660 Offer -->
-      <div class="offer">
-        <img
-          src="/image/abus-ec660-300x300.webp"
-          alt="ABUS EC660"
-          class="offer-image"
-        />
-        <div class="offer-details">
-          <h3>Angebot für ABUS EC660:</h3>
-          <div class="offer-price">
-            Gesamtpreis: <strong>{{ roundPrice(priceAbus660) }} €</strong>
-          </div>
-          <ul class="offer-features">
-            <li><i class="icon-check"></i> Platzhalter: Feature 1</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 2</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 3</li>
-          </ul>
-          <UButton
-            icon="i-heroicons-shopping-cart-16-solid"
-            class="select-system-button"
-            @click="addToCart('ABUS EC660', priceAbus660)"
-          >
-            System auswählen
-          </UButton>
-        </div>
-      </div>
-
-      <!-- ABUS 880 Offer -->
-      <div class="offer">
-        <img
-          src="/image/abus-ec880-300x300.webp"
-          alt="ABUS EC880"
-          class="offer-image"
-        />
-        <div class="offer-details">
-          <h3>Angebot für ABUS EC880:</h3>
-          <div class="offer-price">
-            Gesamtpreis: <strong>{{ roundPrice(priceAbus880) }} €</strong>
-          </div>
-          <ul class="offer-features">
-            <li><i class="icon-check"></i> Platzhalter: Feature 1</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 2</li>
-            <li><i class="icon-check"></i> Platzhalter: Feature 3</li>
-          </ul>
-          <UButton
-            icon="i-heroicons-shopping-cart-16-solid"
-            class="select-system-button"
-            @click="addToCart('ABUS EC880', priceAbus880)"
+            @click="addToCart(offer.title, offer.price)"
           >
             System auswählen
           </UButton>
@@ -103,9 +41,9 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import { useFetch } from "nuxt/app";
 
 const route = useRoute();
+const isSchliessanlage = route.query.isSchliessanlage === 'true'; 
 const anlageNr = route.query.anlageNr || "";
 const navigateBack = () => {
   window.history.back();
@@ -117,14 +55,40 @@ const addToCart = (systemName, price) => {
 };
 
 const positionData = ref([]);
-const keyData = ref([]);
-const matrixData = ref([]);
-var priceAbus550 = 0;
-var priceAbus660 = 0;
-var priceAbus880 = 0;
+const offers = ref([]);
+
+var priceAbusEC550 = 0;
+var priceAbusEC660 = 0;
+var priceAbusEC880 = 0;
+var priceAbusTi14 = 0;
+var priceAbusA93 = 0;
+var priceAbusMagtec = 0;
+var priceDomTwido = 0;
+var priceDomRN = 0;
+var priceDomSigma = 0;
+var priceIseoR6 = 0;
+var priceKeso8000 = 0;
 
 const roundPrice = (price) => {
   return price.toFixed(2);
+};
+
+const filteredOffers = computed(() => {
+  return offers.value.filter((offer) =>
+    isSchliessanlage
+      ? offer.suitableFor.includes("schliessanlage")
+      : offer.suitableFor.includes("gleichschliessung")
+  );
+});
+
+
+const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
+  let price = basePrice;
+  price += ((parseInt(item.SizeA) - 30) / 5) * sizeFactorA;
+  if (item.SizeI) {
+    price += ((parseInt(item.SizeI) - 30) / 5) * sizeFactorI;
+  }
+  return price * parseInt(item.Anzahl);
 };
 
 onMounted(async () => {
@@ -134,74 +98,178 @@ onMounted(async () => {
         method: "POST",
         body: { ID: anlageNr },
       });
-
       positionData.value = positionResponse.queryresult || [];
+
       positionResponse.queryresult.forEach((item) => {
-        if (item.Typ === "Doppelzylinder") {
-          priceAbus550 += 18.85;
-          priceAbus550 += ((parseInt(item.SizeA) - 30) / 5) * 2.1;
-          priceAbus550 += ((parseInt(item.SizeI) - 30) / 5) * 2.1;
-          priceAbus550 *= parseInt(item.Anzahl);
-        }
-        if (item.Typ === "Halbzylinder") {
-          priceAbus550 += 14.65;
-          priceAbus550 += ((parseInt(item.SizeA) - 30) / 5) * 2.1;
-          priceAbus550 *= parseInt(item.Anzahl);
-        }
+        switch (item.Typ) {
+          case "Doppelzylinder":
+            priceAbusTi14 += calculatePrice(item, 11.75, 1.8, 1.8);
+            priceAbusA93 += calculatePrice(item, 13, 1.8, 1.8);
+            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1);
+            priceAbusEC660 += calculatePrice(item, 25, 3.0, 3.0);
+            priceAbusEC880 += calculatePrice(item, 22, 2.5, 2.5);
+            priceAbusMagtec += calculatePrice(item, 22, 2, 2); 
+            priceDomTwido += calculatePrice(item, 23, 2.2, 2.1);
+            priceDomRN += calculatePrice(item, 21, 1.9, 2.0); 
+            priceDomSigma += calculatePrice(item, 24, 2.3, 2.2); 
+            priceIseoR6 += calculatePrice(item, 16, 1.8, 1.9); 
+            priceKeso8000 += calculatePrice(item, 25, 2.4, 2.3); 
 
-        if (item.Typ === "Doppelzylinder") {
-          priceAbus660 += 25.0;
-          priceAbus660 += ((parseInt(item.SizeA) - 30) / 5) * 3.0;
-          priceAbus660 += ((parseInt(item.SizeI) - 30) / 5) * 3.0;
-          priceAbus660 *= parseInt(item.Anzahl);
-        }
-        if (item.Typ === "Halbzylinder") {
-          priceAbus660 += 20.0;
-          priceAbus660 += ((parseInt(item.SizeA) - 30) / 5) * 3.0;
-          priceAbus660 *= parseInt(item.Anzahl);
-        }
-
-        if (item.Typ === "Doppelzylinder") {
-          priceAbus880 += 22.0;
-          priceAbus880 += ((parseInt(item.SizeA) - 30) / 5) * 2.5;
-          priceAbus880 += ((parseInt(item.SizeI) - 30) / 5) * 2.5;
-          priceAbus880 *= parseInt(item.Anzahl);
-        }
-        if (item.Typ === "Halbzylinder") {
-          priceAbus880 += 18.0;
-          priceAbus880 += ((parseInt(item.SizeA) - 30) / 5) * 2.5;
-          priceAbus880 *= parseInt(item.Anzahl);
+            break;
+          case "Halbzylinder":
+            priceAbusTi14 += calculatePrice(item, 9.95, 1.8, 0);
+            priceAbusA93 += calculatePrice(item, 10, 1.8, 0);
+            priceAbusEC550 += calculatePrice(item, 14.65, 2.1, 0);
+            priceAbusEC660 += calculatePrice(item, 20, 3.0, 0);
+            priceAbusEC880 += calculatePrice(item, 18, 2.5, 0);
+            priceAbusMagtec += calculatePrice(item, 16, 2, 2); 
+            priceDomTwido += calculatePrice(item, 20, 1.6, 1.8);
+            priceDomRN += calculatePrice(item, 21, 1.4, 1.6); 
+            priceDomSigma += calculatePrice(item, 22, 2.0, 2.0); 
+            priceIseoR6 += calculatePrice(item, 18, 1.6, 1.9); 
+            priceKeso8000 += calculatePrice(item, 25, 2.4, 1.9); 
+            break;
         }
       });
 
-      const { data: keyResponse, error: keyError } = await useFetch(
-        `/api/sqlgetschluessel`,
-        {
-          method: "POST",
-          body: { ID: anlageNr },
-        }
-      );
-      if (keyError) {
-        console.error(
-          "Fehler beim Laden der Schlüssel-Konfiguration:",
-          keyError
-        );
-      } else {
-        keyData.value = keyResponse.value?.queryresult || [];
-      }
+      //Zylinder Modelle
 
-      const { data: matrixResponse, error: matrixError } = await useFetch(
-        `/api/sqlgetmatrix`,
+      offers.value = [
         {
-          method: "POST",
-          body: { ID: anlageNr },
-        }
-      );
-      if (matrixError) {
-        console.error("Fehler beim Laden der Matrix-Daten:", matrixError);
-      } else {
-        matrixData.value = matrixResponse.value?.queryresult || [];
-      }
+          image: "/images/abus-ti14-300x300.webp",
+          alt: "ABUS TI14",
+          title: "ABUS TI14",
+          price: priceAbusTi14,
+          features: [
+            "Robuste Konstruktion",
+            "Einfache Installation",
+            "Lange Lebensdauer",
+          ],
+          suitableFor: ["gleichschliessung"], // Für beide Konfigurationen geeignet
+        },
+
+        {
+          image: "/images/abus-a93-300x300.webp",
+          alt: "ABUS A93",
+          title: "ABUS A93",
+          price: priceAbusA93,
+          features: ["Kein Picking", "Verstärkter Kern", "Mehrschlüsseloption"],
+          suitableFor: ["gleichschliessung"],
+        },
+
+        {
+          image: "/images/abus-ec550-300x300.webp",
+          alt: "ABUS EC550",
+          title: "ABUS EC550",
+          price: priceAbusEC550,
+          features: [
+            "Zuverlässiger Basisschutz",
+            "Anti-Pick und Bohrschutz",
+            "Für Wohnhäusern",
+          ],
+          suitableFor: ["gleichschliessung"], // Für beide Optionen geeignet
+        },
+
+        {
+          image: "/images/abus-ec660-300x300.webp",
+          alt: "ABUS EC660",
+          title: "ABUS EC660",
+          price: priceAbusEC660,
+          features: [
+            "Sicherheitsstufe 2",
+            "Bohrschutz",
+            "Mehrfachverriegelung",
+          ],
+          suitableFor: ["gleichschliessung"], // Nur für Gleichschließungen geeignet
+        },
+
+        {
+          image: "/images/abus-ec880-300x300.webp",
+          alt: "ABUS EC880",
+          title: "ABUS EC880",
+          price: priceAbusEC880,
+          features: [
+            "Bohr- und Ziehschutz",
+            "Wendeschlüssel",
+            "Geschäftsgebäude",
+          ],
+          suitableFor: ["gleichschliessung"], // Für beide Optionen geeignet
+        },
+
+        {
+          image: "/images/abus-magtec-300x300.webp",
+          alt: "ABUS Magtec",
+          title: "ABUS Magtec",
+          price: priceAbusMagtec,
+          features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
+          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
+        },
+
+        {
+          image: "/images/dom-ixtwido-300x300.webp",
+          alt: "DOM IX Twido",
+          title: "DOM IX Twido",
+          price: priceDomTwido,
+          features: [
+            "Hoher Kopierschutz",
+            "Modulare Bauweise",
+            "Komplexe Schließanlagen",
+          ],
+          suitableFor: ["schliessanlage"], // Nur für Schließanlagen geeignet
+        },
+
+        {
+          image: "/images/dom-rn-300x300.webp",
+          alt: "DOM RN",
+          title: "DOM RN",
+          price: priceDomRN,
+          features: [
+            "Manipulationsschutz",
+            "Langlebige Materialien",
+            "Privat & Gewerblich",
+          ],
+          suitableFor: ["gleichschliessung"], // Für Schließanlagen und Gleichschließungen geeignet
+        },
+
+        {
+          image: "/images/dom-rs-sigma-300x300.webp",
+          alt: "DOM RS Sigma",
+          title: "DOM RS Sigma",
+          price: priceDomSigma,
+          features: [
+            "Sicherheitsstufe 2",
+            "Aufbohrschutz",
+            "Patentierter Schlüssel",
+          ],
+          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
+        },
+
+        {
+          image: "/images/iseo-r6-300x300.webp",
+          alt: "ISEO R6",
+          title: "ISEO R6",
+          price: priceIseoR6,
+          features: [
+            "Sicherheitsstufe 2",
+            "Patentschutz",
+            "Langlebiger Zylinder",
+          ],
+          suitableFor: ["gleichschliessung"], // Für Gleichschließung geeignet
+        },
+
+        {
+          image: "/images/keso-omega8000-300x300.webp",
+          alt: "KESO 8000",
+          title: "KESO 8000",
+          price: priceKeso8000,
+          features: [
+            "Sicherheitsstufe 3",
+            "Zertifizierte Sicherheit",
+            "Schlagschutz",
+          ],
+          suitableFor: ["schliessanlage"], // Für beide geeignet
+        },
+      ];
     } catch (error) {
       console.error("Fehler beim Laden der Konfigurationsdaten:", error);
     }
@@ -235,7 +303,6 @@ onMounted(async () => {
   overflow: hidden;
   transition: transform 0.3s ease; /* Hover effect */
 }
-
 
 .offer:hover {
   transform: translateY(-5px); /* Lift tile on hover */
@@ -292,7 +359,6 @@ onMounted(async () => {
   font-size: 18px;
   font-weight: bold;
 }
-
 
 .back-button {
   background-color: #ffcc00;

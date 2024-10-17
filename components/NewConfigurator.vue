@@ -333,7 +333,7 @@ export default {
         },
 
         navigateToSysteme() {
-            this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr } });
+            this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr, isSchliessanlage: this.isSchliessanlage } });
         },
 
         openModal(colIndex) {
@@ -451,10 +451,6 @@ export default {
                 console.log = 'Es gab einen Fehler bei der Anfrage: ' + error;
             }
 
-
-
-
-
         },
 
         async saveInstallation() {
@@ -519,7 +515,7 @@ export default {
                     });
 
                     // Schritt 5: Navigiere zur systeme.vue Seite mit der Anlagennummer
-                    this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr } });
+                    this.$router.push({ name: 'systeme', query: { anlageNr: this.anlageNr, isSchliessanlage: this.isSchliessanlage } });
                 }
             } else {
                 form.reportValidity();
