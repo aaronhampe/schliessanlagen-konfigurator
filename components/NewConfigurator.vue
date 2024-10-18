@@ -116,19 +116,19 @@
 
                 <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
                     <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
-                        v-if="rowIndex < 1" style="
-                writing-mode: vertical-rl;
-                position: absolute;
-                margin-top: -20.8em;
-                padding: 4px;
-                height: 150px;
-                cursor: default;
-                border: 1px solid lightgray;
-                border-radius: 8px;
-              ">
+                        v-if="rowIndex < 1" :style="{
+            'writing-mode': 'vertical-rl',
+            'position': 'absolute',
+            'margin-top': isSchliessanlage ? '-20.8em' : '-16em',
+            'padding': '4px',
+            'height': '150px',
+            'cursor': 'default',
+            'border': '1px solid lightgray',
+            'border-radius': '8px'
+        }">
                     </input>
-                    <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
-                        v-if="rowIndex < 1" style="
+                    <input min=" 1" v-show="isSchliessanlage" class="key-quantity" type="number" placeholder="1"
+                        v-model="checkbox.keyquantity" v-if="rowIndex < 1" style="
                 position: absolute;
                 margin-top: -11.8em;
                 width: 33px;
@@ -149,7 +149,8 @@
                         @close-this-modal="closeModal(colIndex)" />
                     <p v-if="rowIndex < 1">&nbsp;</p>
                     <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked"
-                        color="blue" variant="solid" />
+                        color="blue" variant="solid" :disabled="!isSchliessanlage" :true-value="true"
+                        :false-value="false" />
                     <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
                     <UButton @click="deleteCheckbox(colIndex)" v-if="rowIndex == this.rows.length - 1"
                         icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" style="
@@ -270,7 +271,7 @@ export default {
             required: true,
         },
     },
-    
+
     components: {
         ColumnModal,
     },
@@ -298,7 +299,7 @@ export default {
                         outside: "",
                         inside: "",
                         options: "keine Option",
-                        checked: false,
+                        checked: !this.isSchliessanlage,
                         keyquantity: 1,
                         keyname: "Schlüssel 1",
 
@@ -352,7 +353,12 @@ export default {
             const numCheckboxes = this.rows[0].length;
             const newRow = [];
             for (let i = 0; i < numCheckboxes; i++) {
-                newRow.push({
+                if (!this.isSchliessanlage) {
+                    newRow.push({
+                        checked: true, doorquantity: 1, position: this.rows.length + 1
+                    });
+                }
+                else newRow.push({
                     checked: false, doorquantity: 1, position: this.rows.length + 1
                 });
             }
@@ -361,7 +367,11 @@ export default {
 
         addCheckbox() {
             this.rows.forEach((checkbox) => {
-                checkbox.push({ checked: false, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length + 1) });
+
+                if (!this.isSchliessanlage) {
+                    checkbox.push({ checked: true, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length + 1) });
+                }
+                else checkbox.push({ checked: false, keyquantity: 1, keyname: 'Schlüssel ' + (this.rows[0].length + 1) });
             });
         },
 
@@ -569,7 +579,6 @@ export default {
                 this.rows[zeile][0].options = item.Option || '';
             });
 
-
             // Schlüsseldaten 
 
             const queryresultschluessel = await $fetch('/api/sqlgetschluessel', {
@@ -590,8 +599,6 @@ export default {
                 this.rows[0][spalte].keyquantity = item.Anzahl;
             });
 
-
-
             // Matrix
 
             const queryresultmatrix = await $fetch('/api/sqlgetmatrix', {
@@ -609,9 +616,6 @@ export default {
             });
 
             //console.log(JSON.stringify(queryresultmatrix, null,2 ));
-
-            7
-
 
             this.isOpenL = false;
         },
