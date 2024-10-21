@@ -7,7 +7,7 @@
         Zuletzt erstellte Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
     </div>
-
+    <h2 class="heading">Folgende Systeme passen zu Ihren Anforderungen:</h2>
     <div class="offer-container" v-if="positionData.length">
       <div class="offer" v-for="(offer, index) in filteredOffers" :key="index">
         <img :src="offer.image" :alt="offer.alt" class="offer-image" />
@@ -105,7 +105,7 @@ onMounted(async () => {
           case "Doppelzylinder":
             priceAbusTi14 += calculatePrice(item, 11.75, 1.8, 1.8);
             priceAbusA93 += calculatePrice(item, 13, 1.8, 1.8);
-            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1);
+            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.45); //done
             priceAbusEC660 += calculatePrice(item, 25, 3.0, 3.0);
             priceAbusEC880 += calculatePrice(item, 22, 2.5, 2.5);
             priceAbusMagtec += calculatePrice(item, 22, 2, 2); 
@@ -136,7 +136,7 @@ onMounted(async () => {
 
       offers.value = [
         {
-          image: "/images/abus-ti14-300x300.webp",
+          image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
           alt: "ABUS TI14",
           title: "ABUS TI14",
           price: priceAbusTi14,
@@ -149,7 +149,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-a93-300x300.webp",
+          image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
           alt: "ABUS A93",
           title: "ABUS A93",
           price: priceAbusA93,
@@ -158,7 +158,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-ec550-300x300.webp",
+          image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
           alt: "ABUS EC550",
           title: "ABUS EC550",
           price: priceAbusEC550,
@@ -171,7 +171,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-ec660-300x300.webp",
+          image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
           alt: "ABUS EC660",
           title: "ABUS EC660",
           price: priceAbusEC660,
@@ -184,7 +184,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-ec880-300x300.webp",
+          image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
           alt: "ABUS EC880",
           title: "ABUS EC880",
           price: priceAbusEC880,
@@ -197,7 +197,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-magtec-300x300.webp",
+          image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
           alt: "ABUS Magtec",
           title: "ABUS Magtec",
           price: priceAbusMagtec,
@@ -206,7 +206,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/dom-ixtwido-300x300.webp",
+          image: "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
           alt: "DOM IX Twido",
           title: "DOM IX Twido",
           price: priceDomTwido,
@@ -219,7 +219,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/dom-rn-300x300.webp",
+          image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
           alt: "DOM RN",
           title: "DOM RN",
           price: priceDomRN,
@@ -232,7 +232,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/dom-rs-sigma-300x300.webp",
+          image: "/images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
           alt: "DOM RS Sigma",
           title: "DOM RS Sigma",
           price: priceDomSigma,
@@ -245,7 +245,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/iseo-r6-300x300.webp",
+          image: "/images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
           alt: "ISEO R6",
           title: "ISEO R6",
           price: priceIseoR6,
@@ -258,7 +258,7 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/keso-omega8000-300x300.webp",
+          image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
           alt: "KESO 8000",
           title: "KESO 8000",
           price: priceKeso8000,
@@ -281,6 +281,11 @@ onMounted(async () => {
 .systeme-page {
   margin: 50px;
   font-size: 18px;
+}
+
+.heading {
+  margin: 0px;
+  font-size: 24px;
 }
 
 .offer-container {
