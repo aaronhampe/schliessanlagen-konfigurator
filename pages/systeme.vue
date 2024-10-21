@@ -103,8 +103,8 @@ onMounted(async () => {
       positionResponse.queryresult.forEach((item) => {
         switch (item.Typ) {
           case "Doppelzylinder":
-            priceAbusTi14 += calculatePrice(item, 11.75, 1.8, 1.8);
-            priceAbusA93 += calculatePrice(item, 13, 1.8, 1.8);
+            priceAbusTi14 += calculatePrice(item, 11.75, 1.62, 1.62); //done
+            priceAbusA93 += calculatePrice(item, 14, 2.4, 2.7); //done
             priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.45); //done
             priceAbusEC660 += calculatePrice(item, 25, 3.0, 3.0);
             priceAbusEC880 += calculatePrice(item, 22, 2.5, 2.5);
