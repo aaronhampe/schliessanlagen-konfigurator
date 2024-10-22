@@ -41,6 +41,7 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
+import { abusEC550Sizes } from '../data/cylinderSizes.js';
 
 const route = useRoute();
 const isSchliessanlage = route.query.isSchliessanlage === 'true'; 
@@ -92,6 +93,8 @@ const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
 };
 
 onMounted(async () => {
+  const availableSizesForEC550 = abusEC550Sizes;
+  console.log(availableSizesForEC550); 
   if (anlageNr) {
     try {
       const positionResponse = await $fetch(`/api/sqlgetposition`, {
