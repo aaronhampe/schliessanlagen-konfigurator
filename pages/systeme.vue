@@ -41,10 +41,9 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import { abusEC550Sizes } from '../data/cylinderSizes.js';
 
 const route = useRoute();
-const isSchliessanlage = route.query.isSchliessanlage === 'true'; 
+const isSchliessanlage = route.query.isSchliessanlage === "true";
 const anlageNr = route.query.anlageNr || "";
 const navigateBack = () => {
   window.history.back();
@@ -82,7 +81,6 @@ const filteredOffers = computed(() => {
   );
 });
 
-
 const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
   let price = basePrice;
   price += ((parseInt(item.SizeA) - 30) / 5) * sizeFactorA;
@@ -93,8 +91,6 @@ const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
 };
 
 onMounted(async () => {
-  const availableSizesForEC550 = abusEC550Sizes;
-  console.log(availableSizesForEC550); 
   if (anlageNr) {
     try {
       const positionResponse = await $fetch(`/api/sqlgetposition`, {
@@ -106,18 +102,29 @@ onMounted(async () => {
       positionResponse.queryresult.forEach((item) => {
         switch (item.Typ) {
           case "Doppelzylinder":
-            priceAbusTi14 += calculatePrice(item, 11.75, 1.62, 1.62); //done
-            priceAbusA93 += calculatePrice(item, 14, 2.4, 2.7); //done
-            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.45); //done
-            priceAbusEC660 += calculatePrice(item, 29, 3.4, 3.4); //done 
-            priceAbusEC880 += calculatePrice(item, 22, 2.5, 2.5); 
-            priceAbusMagtec += calculatePrice(item, 22, 2, 2); 
-            priceDomTwido += calculatePrice(item, 23, 2.2, 2.1);
-            priceDomRN += calculatePrice(item, 21, 1.9, 2.0); 
-            priceDomSigma += calculatePrice(item, 24, 2.3, 2.2); 
-            priceIseoR6 += calculatePrice(item, 16, 1.8, 1.9); 
-            priceKeso8000 += calculatePrice(item, 25, 2.4, 2.3); 
-
+            priceAbusTi14 += calculatePrice(item, 11.75, 1.62, 1.62); 
+            priceAbusA93 += calculatePrice(item, 13.95, 2.4, 2.7); 
+            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1); 
+            priceAbusEC660 += calculatePrice(item, 28.95, 3.4, 3.4); 
+            priceAbusEC880 += calculatePrice(item, 52.95, 3.5, 3.5); 
+            priceAbusMagtec += calculatePrice(item, 42.95, 2.5, 2.5); 
+            priceDomTwido += calculatePrice(item, 73.95, 3, 3); 
+            priceDomRN += calculatePrice(item, 20.95, 1.9, 2.0); 
+            priceDomSigma += calculatePrice(item, 43.95, 2.3, 2.2); 
+            priceIseoR6 += calculatePrice(item, 31.95, 1, 1); 
+            priceKeso8000 += calculatePrice(item, 110, 6, 6); 
+            break;
+          case "Knaufzylinder (innen)":
+            priceAbusA93 += calculatePrice(item, 28.86, 1.8, 1.8);
+            priceAbusEC550 += calculatePrice(item, 30.40, 2.5, 2.5);
+            priceAbusEC660 += calculatePrice(item, 40.95, 3, 3);
+            priceAbusEC880 += calculatePrice(item, 47.95, 1.5, 1.5);
+            priceAbusMagtec += calculatePrice(item, 65.95, 3, 3);
+            priceDomTwido += calculatePrice(item, 71.95, 3, 3);
+            priceDomRN += calculatePrice(item, 31.95, 3, 3);
+            priceDomSigma += calculatePrice(item, 41.95, 3.2, 3.2);
+            priceIseoR6 += calculatePrice(item, 45.95, 1.2, 1.2);
+            priceKeso8000 += calculatePrice(item, 111.90, 13, 13); //done
             break;
           case "Halbzylinder":
             priceAbusTi14 += calculatePrice(item, 9.95, 1.8, 0);
@@ -125,12 +132,12 @@ onMounted(async () => {
             priceAbusEC550 += calculatePrice(item, 14.65, 2.1, 0);
             priceAbusEC660 += calculatePrice(item, 20, 3.0, 0);
             priceAbusEC880 += calculatePrice(item, 18, 2.5, 0);
-            priceAbusMagtec += calculatePrice(item, 16, 2, 2); 
+            priceAbusMagtec += calculatePrice(item, 16, 2, 2);
             priceDomTwido += calculatePrice(item, 20, 1.6, 1.8);
-            priceDomRN += calculatePrice(item, 21, 1.4, 1.6); 
-            priceDomSigma += calculatePrice(item, 22, 2.0, 2.0); 
-            priceIseoR6 += calculatePrice(item, 18, 1.6, 1.9); 
-            priceKeso8000 += calculatePrice(item, 25, 2.4, 1.9); 
+            priceDomRN += calculatePrice(item, 21, 1.4, 1.6);
+            priceDomSigma += calculatePrice(item, 22, 2.0, 2.0);
+            priceIseoR6 += calculatePrice(item, 18, 1.6, 1.9);
+            priceKeso8000 += calculatePrice(item, 25, 2.4, 1.9);
             break;
         }
       });
@@ -200,7 +207,8 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
+          image:
+            "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
           alt: "ABUS Magtec",
           title: "ABUS Magtec",
           price: priceAbusMagtec,
@@ -209,7 +217,8 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
+          image:
+            "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
           alt: "DOM IX Twido",
           title: "DOM IX Twido",
           price: priceDomTwido,
@@ -218,7 +227,7 @@ onMounted(async () => {
             "Modulare Bauweise",
             "Komplexe Schließanlagen",
           ],
-          suitableFor: ["schliessanlage"], // Nur für Schließanlagen geeignet
+          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
         },
 
         {
@@ -261,7 +270,8 @@ onMounted(async () => {
         },
 
         {
-          image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
+          image:
+            "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
           alt: "KESO 8000",
           title: "KESO 8000",
           price: priceKeso8000,
@@ -270,7 +280,7 @@ onMounted(async () => {
             "Zertifizierte Sicherheit",
             "Schlagschutz",
           ],
-          suitableFor: ["schliessanlage"], // Für beide geeignet
+          suitableFor: ["schliessanlage", "gleichschliessung"], // Für beide geeignet
         },
       ];
     } catch (error) {
