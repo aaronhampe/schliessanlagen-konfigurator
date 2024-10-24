@@ -177,7 +177,7 @@ onMounted(async () => {
             "Anti-Pick und Bohrschutz",
             "Für Wohnhäusern",
           ],
-          suitableFor: ["gleichschliessung"], // Für beide Optionen geeignet
+          suitableFor: ["gleichschliessung"], 
         },
 
         {
@@ -190,7 +190,7 @@ onMounted(async () => {
             "Bohrschutz",
             "Mehrfachverriegelung",
           ],
-          suitableFor: ["gleichschliessung"], // Nur für Gleichschließungen geeignet
+          suitableFor: ["gleichschliessung"], 
         },
 
         {
@@ -203,7 +203,7 @@ onMounted(async () => {
             "Wendeschlüssel",
             "Geschäftsgebäude",
           ],
-          suitableFor: ["gleichschliessung"], // Für beide Optionen geeignet
+          suitableFor: ["gleichschliessung"], 
         },
 
         {
@@ -213,7 +213,7 @@ onMounted(async () => {
           title: "ABUS Magtec",
           price: priceAbusMagtec,
           features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
-          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
+          suitableFor: ["schliessanlage", "gleichschliessung"], 
         },
 
         {
@@ -227,7 +227,7 @@ onMounted(async () => {
             "Modulare Bauweise",
             "Komplexe Schließanlagen",
           ],
-          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
+          suitableFor: ["schliessanlage", "gleichschliessung"],
         },
 
         {
@@ -240,7 +240,7 @@ onMounted(async () => {
             "Langlebige Materialien",
             "Privat & Gewerblich",
           ],
-          suitableFor: ["gleichschliessung"], // Für Schließanlagen und Gleichschließungen geeignet
+          suitableFor: ["gleichschliessung"], 
         },
 
         {
@@ -253,7 +253,7 @@ onMounted(async () => {
             "Aufbohrschutz",
             "Patentierter Schlüssel",
           ],
-          suitableFor: ["schliessanlage", "gleichschliessung"], // Nur für Schließanlagen geeignet
+          suitableFor: ["schliessanlage", "gleichschliessung"], 
         },
 
         {
