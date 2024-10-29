@@ -20,12 +20,12 @@
                             <h3 v-if="rowIndex < 1 && colIndex < 1"> Pos. </h3>
                             <UBadge v-if="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
                                 variant="solid" style="
-                width: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: #ffffff;
-              ">
+                                    width: 30px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    color: #ffffff;
+                                ">
                                 {{ rowIndex + 1 }}
                             </UBadge>
                         </div>
@@ -49,8 +49,8 @@
                                 placeholder="Zylinder wählen..." style="width: 200px; color: #333333; " />
                         </div>
                         <div class="sizes" v-if="checkbox.type == 'Doppelzylinder' ||
-            checkbox.type == 'Knaufzylinder (innen)'
-            ">
+                             checkbox.type == 'Knaufzylinder (innen)'
+                              ">
                             <div class="outside">
                                 <h3 v-if="rowIndex < 1">Außen</h3>
                                 <USelectMenu v-model="checkbox.outside" color="blue" :options="sizes" placeholder="..."
