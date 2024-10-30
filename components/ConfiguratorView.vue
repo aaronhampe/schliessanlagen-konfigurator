@@ -28,12 +28,12 @@
           :key="colIndex"
           v-show="colIndex < 1"
         >
-          <div class="flex-container-scnd" v-if="colIndex < 1">
+          <div class="door-row" v-if="colIndex < 1">
             <!--Position-->
             <div>
               <h3 v-if="rowIndex < 1 && colIndex < 1">Pos.</h3>
               <UBadge
-                class="UBadge"
+                class="u-badge"
                 v-if="colIndex < 1"
                 v-model="checkbox.position"
                 color="sky"
@@ -48,12 +48,12 @@
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
               <UInput
                 v-if="colIndex < 1"
+                class="door-designation"
                 v-model="checkbox.doorDesignation"
                 color="blue"
                 size="sm"
                 variant="outline"
                 placeholder="z.B. Haupteingang"
-                style="width: 200px; color: #333333"
               />
             </div>
             <!--Zylinderanzahl-->
@@ -61,13 +61,12 @@
               <h3 v-if="rowIndex < 1">Anzahl</h3>
               <UInput
                 v-model="checkbox.doorquantity"
-                min="1"
                 class="quantity-input"
+                min="1"
                 color="blue"
                 size="sm"
                 type="number"
                 variant="outline"
-                style="width: 80px; color: #333333"
               />
             </div>
             <!--Zylindertyp-->
@@ -75,10 +74,10 @@
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
               <USelectMenu
                 v-model="checkbox.type"
+                class="cylinder-type"
                 color="blue"
                 :options="cylinderType"
                 placeholder="Zylinder wählen..."
-                style="width: 200px; color: #333333"
               />
             </div>
             <div
@@ -95,7 +94,6 @@
                   color="blue"
                   :options="sizes"
                   placeholder="..."
-                  style="width: 80px; color: #333333"
                 />
               </div>
               <div class="inside">
@@ -105,7 +103,6 @@
                   color="blue"
                   :options="sizes"
                   placeholder="..."
-                  style="width: 80px; color: #333333"
                 />
               </div>
             </div>
@@ -120,16 +117,15 @@
                   color="blue"
                   :options="sizes"
                   placeholder="..."
-                  style="width: 80px; color: #333333"
                 />
               </div>
               <div class="inside">
                 <h3 v-if="rowIndex < 1">Innen</h3>
                 <UBadge
+                  class="u-badge"
                   color="gray"
                   variant="outline"
                   size="lg"
-                  style="width: 80px; color: #333333"
                 >
                   &nbsp;10&nbsp;
                 </UBadge>
@@ -139,10 +135,10 @@
               <div class="outside">
                 <h3 v-if="rowIndex < 1">Außen</h3>
                 <UBadge
+                  class="u-badge"
                   color="gray"
                   variant="outline"
                   size="lg"
-                  style="width: 80px; color: #333333"
                 >
                   &nbsp;N/A&nbsp;
                 </UBadge>
@@ -150,10 +146,10 @@
               <div class="inside">
                 <h3 v-if="rowIndex < 1">Innen</h3>
                 <UBadge
+                  class="u-badge"
                   color="gray"
                   variant="outline"
                   size="lg"
-                  style="width: 80px; color: #333333"
                 >
                   &nbsp;N/A&nbsp;
                 </UBadge>
@@ -167,16 +163,11 @@
                 color="blue"
                 placeholder="Optionen auswählen"
                 @click="resetOptions(rowIndex)"
-                style="width: 200px; color: #333333"
               />
             </div>
-            <div class="options-empty" v-else>
+            <div class="options" v-else>
               <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
-              <UBadge
-                color="gray"
-                variant="outline"
-                size="lg"
-                style="width: 200px"
+              <UBadge class="u-badge" color="gray" variant="outline" size="lg"
                 >&nbsp;N/A&nbsp;
               </UBadge>
             </div>
@@ -219,37 +210,22 @@
             class="key-name"
             v-model="checkbox.keyname"
             v-if="rowIndex < 1"
-            :style="{
-              'writing-mode': 'vertical-rl',
-              position: 'absolute',
-              'margin-top': isSchliessanlage ? '-20.8em' : '-16em',
-              padding: '4px',
-              height: '150px',
-              cursor: 'default',
-              border: '1px solid lightgray',
-              'border-radius': '8px',
-            }"
+            :class="
+              isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
+            "
           />
 
           <input
             min=" 1"
-            v-show="isSchliessanlage"
             class="key-quantity"
             type="number"
             placeholder="1"
+            :disabled="!isSchliessanlage"
             v-model="checkbox.keyquantity"
-            v-if="rowIndex < 1"
-            style="
-              position: absolute;
-              margin-top: -11.8em;
-              width: 33px;
-              height: 20px;
-              font-size: 12px;
-              border: 1px dotted lightblue;
-              border-radius: 4px;
-            "
+            v-if="rowIndex < 1 && isSchliessanlage"
           />
           <UButton
+            class="button-edit"
             icon="i-heroicons-pencil"
             v-if="rowIndex < 1"
             @click="openModal(colIndex)"
@@ -257,12 +233,6 @@
             color="sky"
             variant="solid"
             :trailing="false"
-            style="
-              writing-mode: vertical-rl;
-              position: absolute;
-              margin-top: -4.4em;
-              color: white;
-            "
           />
           <ColumnModal
             v-if="rowIndex < 1"
@@ -286,37 +256,28 @@
           <UButton
             @click="deleteCheckbox(colIndex)"
             v-if="rowIndex == this.rows.length - 1"
+            class="button-delete"
             icon="i-heroicons-trash"
             size="sm"
             color="red"
             variant="solid"
             :trailing="false"
-            style="
-              writing-mode: vertical-rl;
-              position: absolute;
-              margin-top: 5.5em;
-              color: white;
-            "
           />
           <UButton
             @click="duplicateCol(colIndex)"
             v-if="rowIndex == this.rows.length - 1"
+            class="button-duplicate"
             icon="i-heroicons-document-duplicate"
             size="sm"
             color="sky"
             variant="outline"
             :trailing="false"
-            style="
-              writing-mode: vertical-rl;
-              position: absolute;
-              margin-top: 11.4em;
-            "
           />
         </div>
       </div>
       <div class="buttons">
         <UButton
-          class="add-door-button"
+          class="button-default"
           icon="i-heroicons-plus-16-solid"
           @click="addRow"
           size="sm"
@@ -326,7 +287,7 @@
           >Tür hinzufügen</UButton
         >
         <UButton
-          class="add-door-button"
+          class="button-default"
           @click="navigateToSysteme"
           size="sm"
           color="amber"
@@ -335,7 +296,7 @@
           Zur Systemübersicht
         </UButton>
         <UButton
-          class="add-door-button"
+          class="button-default"
           icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
           @click="isOpen = true"
           size="sm"
@@ -422,10 +383,10 @@
           </div>
         </UModal>
       </div>
-      <div class="buttons-scnd" style="margin: 20px">
+      <div class="buttons" style="margin-top: 20px">
         <UButton
           v-if="showLoadButton"
-          class="add-door-button"
+          class="button-default"
           icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true"
           size="sm"
@@ -436,7 +397,7 @@
         </UButton>
         <UButton
           v-if="showLoadButton"
-          class="test-button"
+          class="button-default"
           @click="test"
           size="sm"
           color="amber"
@@ -451,7 +412,6 @@
               <UButton
                 color="red"
                 @click="isOpenL = false"
-                style="font-weight: 600"
                 >X</UButton
               >
             </div>
@@ -490,19 +450,15 @@
             </form>
           </div>
         </UModal>
-        <!-- <UButton class="add-door-button" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
-            @click="generateRandomAnlagenNummer()" size="sm" color="amber" variant="solid" :trailing="false">Nummer
-          </UButton> -->
       </div>
     </div>
     <UButton
-      class="add-key-button"
+      class="button-add-key"
       icon="i-heroicons-plus-16-solid"
       @click="addCheckbox"
       size="sm"
       color="amber"
       variant="solid"
-      style="color: white"
       :trailing="false"
       >Schlüssel hinzufügen</UButton
     >
@@ -510,6 +466,7 @@
 </template>
 
 <script>
+import IsGleichschliessung from "../pages/isGleichschliessung.vue";
 import ColumnModal from "./ColumnModal.vue";
 
 export default {
@@ -517,6 +474,7 @@ export default {
     isSchliessanlage: {
       type: Boolean,
       required: true,
+      default: true,
     },
   },
 
@@ -930,6 +888,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//HEADING AND SYSTEMBUMER -------------------------------------------------------------------------------------------------
 .heading {
   display: flex;
   flex-direction: column;
@@ -950,107 +909,179 @@ export default {
   }
 }
 
-.UBadge {
-  width: 30px;
-  display: flex;
-  justify-content: center;
-}
-
 .flex-container {
   display: flex;
   flex-direction: row;
   gap: 10px;
   margin: 240px 0 0 340px;
-}
 
-.flex-container-scnd {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
+  .checkbox-row {
+    display: flex;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
 
-.checkbox-row {
-  display: flex;
-  /* Display rows horizontally */
-  margin-bottom: 10px;
-  /* Spacing between rows */
-  gap: 10px;
-}
+  //DOORROW ELEMENT -----------------------------------------------------------------------------------
+  .door-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    .u-badge {
+      width: 30px;
+      display: flex;
+      justify-content: center;
+    }
+    .door-designation {
+      width: 200px;
+      color: #333333;
+    }
+    .quantity-input {
+      width: 60px;
+      color: #333333;
+    }
+    .cylinder-type {
+      width: 200px;
+      color: #333333;
+    }
+    .sizes {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
 
-.modal-h2 {
-  font-size: 1.4rem;
-}
+      .outside {
+        width: 80px;
+        color: #333333;
+      }
+      .inside {
+        width: 80px;
+        color: #333333;
+      }
+    }
+    .sizes-halfcylinder {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
 
-.checkbox-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* Display rows vertically */
-  align-items: center;
-  margin-right: 10px;
-  /* Spacing between checkboxes */
-  padding-bottom: -10px;
-}
+      .outside {
+        width: 80px;
+        color: #333333;
+      }
+      .inside {
+        color: #333333;
+        .u-badge {
+          width: 80px;
+        }
+      }
+    }
+    .sizes-empty {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
 
-.buttons,
-.sizes-empty,
-.sizes-halfcylinder,
-.sizes,
-.buttons-scnd,
-.number {
-  display: flex;
-  /* Display buttons horizontally */
-  justify-content: flex-start;
-  /* Align buttons to the right */
-  gap: 10px;
-  /* Spacing between buttons */
-}
+      .outside {
+        color: #333333;
+        .u-badge {
+          width: 80px;
+        }
+      }
+      .inside {
+        color: #333333;
+        .u-badge {
+          width: 80px;
+        }
+      }
+    }
+    .options {
+      width: 200px;
+      color: #333333;
+      .u-badge {
+        width: 200px;
+      }
+    }
+  }
 
-.number {
-  font-size: 20px;
-}
+  //CHECKBOX ELEMENT -------------------------------------------------------------------------------
+  .checkbox-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    padding-bottom: -10px;
+    .key-name {
+      width: 32px;
+      overflow: hidden;
+      writing-mode: vertical-rl;
+      position: absolute;
+      padding: 4px;
+      height: 150px;
+      cursor: default;
+      border: 1px solid lightgray;
+      border-radius: 8px;
+      &.default-margin {
+        margin-top: -20.8em;
+      }
+      &.gleichschliessung-margin {
+        margin-top: -16.4em;
+      }
+    }
 
-.number input {
-  width: 80px;
-}
-
-.add-door-button {
-  display: flex;
-  justify-content: center;
-  font-weight: 600;
-  height: 36px;
-  width: 200px;
-  color: #ffffff;
-}
-
-.test-button {
-  height: auto;
-}
-
-.modal-flex-buttons-top {
-  display: flex;
-  justify-content: space-between;
-}
-
-.add-key-button {
-  margin: 23px 0 0 2px;
-  writing-mode: vertical-rl;
-  display: flex;
-  justify-content: center;
-  /* Align buttons to the right */
-  font-weight: 600;
-  height: 200px;
-}
-
-.key-name {
-  width: 30px;
-  overflow: hidden;
-}
-
-.key-name:focus,
-.key-quantity:focus {
-  outline: none;
-  border-color: rgb(48, 48, 224);
-  box-shadow: 0 0 0 2px rgba(44, 44, 219, 0.5);
+    .key-quantity {
+      position: absolute;
+      margin-top: -11.8em;
+      width: 33px;
+      height: 20px;
+      font-size: 12px;
+      border: 1px dotted lightblue;
+      border-radius: 4px;
+    }
+    .key-name:focus,
+    .key-quantity:focus {
+      outline: none;
+      border-color: rgb(126, 126, 192);
+      box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+    }
+    .button-edit {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: -4.4em;
+      color: white;
+    }
+    .button-delete {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 5.5em;
+      color: white;
+    }
+    .button-duplicate {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 11.4em;
+    }
+  }
+  .button-add-key {
+    margin: 23px 0 0 2px;
+    writing-mode: vertical-rl;
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    height: 200px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    .button-default {
+      display: flex;
+      justify-content: center;
+      font-weight: 600;
+      height: 36px;
+      width: 200px;
+      color: #ffffff;
+    }
+    .modal-h2 {
+      font-size: 1.44rem;
+    }
+  }
 }
 </style>
