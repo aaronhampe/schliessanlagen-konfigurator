@@ -1,6 +1,6 @@
 <template>
     <!-- <NewConfigurator :isSchliessanlage="$route.query.isSchliessanlage === 'true'" /> -->
-    <ConfiguratorView></ConfiguratorView>
+    <ConfiguratorView :isSchliessanlage="true" />
 </template>
   
 
