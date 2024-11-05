@@ -1,0 +1,191 @@
+// Variablen
+$primary-color: #333333;
+$input-width: 80px;
+$badge-width: 80px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin input-style {
+  width: $input-width;
+  color: $primary-color;
+}
+
+@mixin badge-style {
+  width: $badge-width;
+}
+
+// HEADING AND SYSTEMNUMMER -------------------------------------------------------------------------------------------------
+.heading {
+  @include flex-center;
+  flex-direction: column;
+  margin-top: 30px;
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .system-number {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: 20px;
+
+    input {
+      width: 180px;
+    }
+  }
+}
+
+// FLEX CONTAINER
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 240px 0 0 340px;
+
+  .checkbox-row {
+    display: flex;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  // DOORROW ELEMENT -----------------------------------------------------------------------------------
+  .door-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .u-badge {
+      @include flex-center;
+      width: 30px;
+    }
+
+    .door-designation, .quantity-input, .cylinder-type {
+      width: 200px;
+      color: $primary-color;
+    }
+
+    .quantity-input {
+      width: 60px;
+    }
+
+    .sizes, .sizes-halfcylinder, .sizes-empty {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+
+      .outside, .inside {
+        @include input-style;
+        
+        .u-badge {
+          @include badge-style;
+        }
+      }
+    }
+
+    .options {
+      width: 200px;
+      color: $primary-color;
+
+      .u-badge {
+        width: 200px;
+      }
+    }
+  }
+
+  // CHECKBOX ELEMENT -------------------------------------------------------------------------------
+  .checkbox-item {
+    @include flex-center;
+    flex-direction: column;
+    margin-right: 10px;
+    padding-bottom: -10px;
+
+    .key-name {
+      width: 32px;
+      overflow: hidden;
+      writing-mode: vertical-rl;
+      position: absolute;
+      padding: 4px;
+      height: 150px;
+      cursor: default;
+      border: 1px solid lightgray;
+      border-radius: 8px;
+
+      &.default-margin {
+        margin-top: -20.8em;
+      }
+
+      &.gleichschliessung-margin {
+        margin-top: -16.4em;
+      }
+    }
+
+    .key-quantity {
+      position: absolute;
+      margin-top: -11.8em;
+      width: 33px;
+      height: 20px;
+      font-size: 12px;
+      border: 1px dotted lightblue;
+      border-radius: 4px;
+    }
+
+    .key-name:focus,
+    .key-quantity:focus {
+      outline: none;
+      border-color: rgb(126, 126, 192);
+      box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+    }
+
+    .button-edit {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: -4.4em;
+      color: white;
+    }
+
+    .button-delete {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 5.5em;
+      color: white;
+    }
+
+    .button-duplicate {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 11.4em;
+    }
+  }
+
+  .button-add-key {
+    margin: 23px 0 0 2px;
+    writing-mode: vertical-rl;
+    @include flex-center;
+    font-weight: 600;
+    height: 200px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+
+    .button-default {
+      @include flex-center;
+      font-weight: 600;
+      height: 36px;
+      width: 200px;
+      color: #ffffff;
+    }
+
+    .modal-h2 {
+      font-size: 1.44rem;
+    }
+  }
+}
