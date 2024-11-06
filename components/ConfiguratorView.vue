@@ -18,14 +18,17 @@
       />
     </div>
     <!-- Modellauswahl -->
-    <USelectMenu
-    color="blue"
-    class="model-select"
-    v-model="selectedModel"
-    :options="modelOptions"
-    @change="changeModel"
-    placeholder="Zylindermodell auswählen"
-  />
+    <div class="model-container">
+      <h3>Modellpräferenz:</h3>
+      <USelectMenu
+        color="blue"
+        class="model-select"
+        v-model="selectedModel"
+        :options="modelOptions"
+        @change="changeModel"
+        placeholder="Zylindermodell auswählen"
+      />
+    </div>
   </div>
 
   <div class="flex-container">
@@ -165,7 +168,7 @@
               </div>
             </div>
             <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
-              <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
+              <h3 v-if="rowIndex < 1">Sonderoptionen</h3>
               <USelectMenu
                 v-model="checkbox.options"
                 :options="options"
@@ -175,7 +178,7 @@
               />
             </div>
             <div class="options" v-else>
-              <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
+              <h3 v-if="rowIndex < 1">Sonderoptionen</h3>
               <UBadge class="u-badge" color="gray" variant="outline" size="lg"
                 >&nbsp;N/A&nbsp;
               </UBadge>
@@ -471,7 +474,6 @@
 </template>
 
 <script>
-import IsGleichschliessung from "../pages/isGleichschliessung.vue";
 import ColumnModal from "./ColumnModal.vue";
 import zylindermodelle from "../data/cylinder.js";
 
@@ -486,6 +488,8 @@ export default {
     });
     const sizes = computed(() => store.sizes);
     const options = computed(() => store.options);
+    const cylinderType = computed(() => store.cylinderType);
+    const isSchliessanlage = computed(() => store.isSchliessanlage);
 
     function changeModel(event) {
       store.setModel(event.target.value);
@@ -496,15 +500,10 @@ export default {
       modelOptions,
       sizes,
       options,
+      cylinderType,
+      isSchliessanlage,
       changeModel,
     };
-  },
-  props: {
-    isSchliessanlage: {
-      type: Boolean,
-      required: true,
-      default: true,
-    },
   },
 
   components: {
@@ -539,14 +538,6 @@ export default {
             keyname: "Schlüssel 1",
           },
         ],
-      ],
-      cylinderType: [
-        "Doppelzylinder",
-        "Knaufzylinder (innen)",
-        "Halbzylinder",
-        "Vorhangschloss 50mm",
-        "Vorhangschloss 80mm",
-        "Briefkastenschloss",
       ],
       selectedOptions: ref([]),
       cylinderOptions: [],
@@ -623,25 +614,24 @@ export default {
     },
 
     deleteCheckbox(colIndex) {
-      if (colIndex > 0) {
-        this.rows.forEach((row) => {
-          if (row.length > 1) {
-            row.splice(colIndex, 1);
-          }
-        });
+      const hasMultipleColumns = this.rows.some((row) => row.length > 1);
+
+      if (hasMultipleColumns || colIndex > 0) {
+        // Entfernen der Spalte nur erlauben, wenn es mehr als eine Spalte gibt oder nicht die erste Spalte ist
+        this.rows.forEach((row) => row.splice(colIndex, 1));
       } else {
-        alert("Die erste Spalte kann nicht entfernt werden.");
+        alert("Die letzte Spalte kann nicht entfernt werden.");
       }
     },
 
     deleteRow(rowIndex) {
-      if (rowIndex > 0) {
+      if (this.rows.length > 1 || rowIndex > 0) {
+        // Entfernen nur blockieren, wenn es nur eine Zeile gibt und es die erste Zeile ist
         this.rows.splice(rowIndex, 1);
       } else {
-        alert("Die erste Zeile kann nicht entfernt werden.");
+        alert("Die letzte Zeile kann nicht entfernt werden.");
       }
     },
-
     duplicateRow(rowIndex) {
       const currentRow = this.rows[rowIndex];
       const newRow = this.deepCopy(currentRow);
