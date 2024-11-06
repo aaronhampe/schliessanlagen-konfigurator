@@ -1,8 +1,7 @@
 <template>
     <!-- <NewConfigurator :isSchliessanlage="$route.query.isSchliessanlage === 'true'" /> -->
-    <!-- <ConfiguratorView :isSchliessanlage="true" /> -->
-    <CompAPI :isSchliessanlage="true" />
-    
+    <ConfiguratorView :isSchliessanlage="true" />
+    <!-- <CompAPI :isSchliessanlage="true" /> -->
 </template>
   
 
