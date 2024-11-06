@@ -17,6 +17,15 @@
         placeholder="Anlagenummer"
       />
     </div>
+    <!-- Modellauswahl -->
+    <USelectMenu
+    color="blue"
+    class="model-select"
+    v-model="selectedModel"
+    :options="modelOptions"
+    @change="changeModel"
+    placeholder="Zylindermodell auswählen"
+  />
   </div>
 
   <div class="flex-container">
@@ -159,7 +168,7 @@
               <h3 v-if="rowIndex < 1">N&G-Funktion</h3>
               <USelectMenu
                 v-model="checkbox.options"
-                :options="cylinderOptions"
+                :options="options"
                 color="blue"
                 placeholder="Optionen auswählen"
                 @click="resetOptions(rowIndex)"
@@ -409,11 +418,7 @@
           <div class="p-4">
             <div class="modal-flex-buttons-top">
               <h2 class="modal-h2">Anlage laden</h2>
-              <UButton
-                color="red"
-                @click="isOpenL = false"
-                >X</UButton
-              >
+              <UButton color="red" @click="isOpenL = false">X</UButton>
             </div>
             <br />
             <form @submit.prevent="handleSubmit">
@@ -468,8 +473,32 @@
 <script>
 import IsGleichschliessung from "../pages/isGleichschliessung.vue";
 import ColumnModal from "./ColumnModal.vue";
+import zylindermodelle from "../data/cylinder.js";
 
 export default {
+  setup() {
+    const store = useKonfiguratorStore();
+    const modelOptions = Object.keys(zylindermodelle); // Zylindermodelle für Auswahl
+
+    const selectedModel = computed({
+      get: () => store.currentModel,
+      set: (model) => store.setModel(model),
+    });
+    const sizes = computed(() => store.sizes);
+    const options = computed(() => store.options);
+
+    function changeModel(event) {
+      store.setModel(event.target.value);
+    }
+
+    return {
+      selectedModel,
+      modelOptions,
+      sizes,
+      options,
+      changeModel,
+    };
+  },
   props: {
     isSchliessanlage: {
       type: Boolean,
@@ -519,9 +548,8 @@ export default {
         "Vorhangschloss 80mm",
         "Briefkastenschloss",
       ],
-      sizes: [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80],
       selectedOptions: ref([]),
-      cylinderOptions: ["keine Option", "Not- & Gefahrenfunktion"],
+      cylinderOptions: [],
     };
   },
   computed: {
@@ -888,6 +916,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/configurator.scss';
+@import "./styles/configurator.scss";
 </style>
-

@@ -39,7 +39,14 @@ $badge-width: 80px;
       width: 180px;
     }
   }
+
+  ::v-deep .model-select {
+    width: 300px;
+    margin-top: 20px;
+  }
 }
+
+
 
 // FLEX CONTAINER
 .flex-container {
@@ -65,7 +72,9 @@ $badge-width: 80px;
       width: 30px;
     }
 
-    .door-designation, .quantity-input, .cylinder-type {
+    .door-designation,
+    .quantity-input,
+    .cylinder-type {
       width: 200px;
       color: $primary-color;
     }
@@ -74,14 +83,17 @@ $badge-width: 80px;
       width: 60px;
     }
 
-    .sizes, .sizes-halfcylinder, .sizes-empty {
+    .sizes,
+    .sizes-halfcylinder,
+    .sizes-empty {
       display: flex;
       justify-content: flex-start;
       gap: 10px;
 
-      .outside, .inside {
+      .outside,
+      .inside {
         @include input-style;
-        
+
         .u-badge {
           @include badge-style;
         }
