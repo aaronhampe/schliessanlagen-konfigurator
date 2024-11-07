@@ -23,7 +23,7 @@
       <USelectMenu
         color="blue"
         class="model-select"
-        v-model="selectedModel"
+        v-model="modell"
         :options="modelOptions"
         @change="changeModel"
         placeholder="Zylindermodell auswählen"
@@ -520,6 +520,8 @@ export default {
       name: "",
       phone: "",
       company: "",
+      typ: "",
+      modell: "",
       modalStates: {},
       isOpen: false,
       isOpenL: false,
@@ -632,6 +634,7 @@ export default {
         alert("Die letzte Zeile kann nicht entfernt werden.");
       }
     },
+
     duplicateRow(rowIndex) {
       const currentRow = this.rows[rowIndex];
       const newRow = this.deepCopy(currentRow);
@@ -687,6 +690,7 @@ export default {
           }),
         });
         console.log(test);
+        // https://www.stt-shop.de/warenkorb/?cocart-load-cart=t_e7d1a169c9f7858d77450e9a4927dc
         const result = await response.json();
         if (result.success) {
           console.log = "Produkt erfolgreich in den Warenkorb gelegt.";
@@ -726,6 +730,8 @@ export default {
             EMail: this.email,
             Telefon: this.phone,
             Firma: this.company,
+            Typ: this.typ,
+            Modell: 'ABUS EC550'
           },
         });
 
@@ -822,6 +828,8 @@ export default {
         this.email = queryresultanlage.queryresult[0].EMail || "";
         this.phone = queryresultanlage.queryresult[0].Telefon || "";
         this.company = queryresultanlage.queryresult[0].Firma || "";
+        this.typ = queryresultanlage.queryresult[0].Typ || "";
+        this.modell = queryresultanlage.queryresult[0].Modell || "";
       }
 
       // Positionsdaten
