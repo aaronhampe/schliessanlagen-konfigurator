@@ -23,11 +23,12 @@
       <USelectMenu
         color="blue"
         class="model-select"
-        v-model="modell"
+        v-model="selectedModel"
         :options="modelOptions"
         @change="changeModel"
         placeholder="Zylindermodell auswählen"
       />
+      <p>Zylinder: {{  selectedModel }}</p>
     </div>
   </div>
 
@@ -491,8 +492,8 @@ export default {
     const cylinderType = computed(() => store.cylinderType);
     const isSchliessanlage = computed(() => store.isSchliessanlage);
 
-    function changeModel(event) {
-      store.setModel(event.target.value);
+    function changeModel() {
+      store.setModel(modell);
     }
 
     return {
@@ -521,7 +522,6 @@ export default {
       phone: "",
       company: "",
       typ: "",
-      modell: "",
       modalStates: {},
       isOpen: false,
       isOpenL: false,
@@ -731,7 +731,7 @@ export default {
             Telefon: this.phone,
             Firma: this.company,
             Typ: this.typ,
-            Modell: 'ABUS EC550'
+            Modell: this.selectedModel,
           },
         });
 
@@ -829,7 +829,7 @@ export default {
         this.phone = queryresultanlage.queryresult[0].Telefon || "";
         this.company = queryresultanlage.queryresult[0].Firma || "";
         this.typ = queryresultanlage.queryresult[0].Typ || "";
-        this.modell = queryresultanlage.queryresult[0].Modell || "";
+        this.selectedModel = queryresultanlage.queryresult[0].Modell || "";
       }
 
       // Positionsdaten
