@@ -233,9 +233,8 @@
             class="key-quantity"
             type="number"
             placeholder="1"
-            :disabled="!isSchliessanlage"
             v-model="checkbox.keyquantity"
-            v-if="rowIndex < 1 && isSchliessanlage"
+            v-if="rowIndex < 1"
           />
           <UButton
             class="button-edit"
