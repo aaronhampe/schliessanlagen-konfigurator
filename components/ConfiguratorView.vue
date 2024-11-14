@@ -28,7 +28,7 @@
         @change="changeModel"
         placeholder="Zylindermodell auswählen"
       />
-      <p>Zylinder: {{  selectedModel }}</p>
+      <p>Zylinder: {{ selectedModel }}</p>
     </div>
   </div>
 
@@ -91,6 +91,7 @@
                 color="blue"
                 :options="cylinderType"
                 placeholder="Zylinder wählen..."
+                @change="onTypeChange(checkbox)"
               />
             </div>
             <div
@@ -100,38 +101,31 @@
                 checkbox.type == 'Knaufzylinder (innen)'
               "
             >
-              <div class="outside">
-                <h3 v-if="rowIndex < 1">Außen</h3>
-                <USelectMenu
-                  v-model="checkbox.outside"
-                  color="blue"
-                  :options="sizes"
-                  placeholder="..."
-                />
-              </div>
               <div class="inside">
                 <h3 v-if="rowIndex < 1">Innen</h3>
                 <USelectMenu
-                  v-model="checkbox.inside"
+                  v-model.number="checkbox.inside"
                   color="blue"
-                  :options="sizes"
+                  :options="getAvailableInsideSizes(checkbox)"
+                  placeholder="..."
+                />
+              </div>
+              <div class="outside">
+                <h3 v-if="rowIndex < 1">Außen</h3> 
+                <USelectMenu
+                  v-model.number="checkbox.outside"
+                  color="blue"
+                  :options="getAvailableOutsideSizes(checkbox)"
                   placeholder="..."
                 />
               </div>
             </div>
+
+            <!-- Sizes for Halbzylinder -->
             <div
               class="sizes-halfcylinder"
               v-else-if="checkbox.type == 'Halbzylinder'"
             >
-              <div class="outside">
-                <h3 v-if="rowIndex < 1">Außen</h3>
-                <USelectMenu
-                  v-model="checkbox.outside"
-                  color="blue"
-                  :options="sizes"
-                  placeholder="..."
-                />
-              </div>
               <div class="inside">
                 <h3 v-if="rowIndex < 1">Innen</h3>
                 <UBadge
@@ -142,6 +136,15 @@
                 >
                   &nbsp;10&nbsp;
                 </UBadge>
+              </div>
+              <div class="outside">
+                <h3 v-if="rowIndex < 1">Außen</h3>
+                <USelectMenu
+                  v-model="checkbox.outside"
+                  color="blue"
+                  :options="getAvailableOutsideSizes(checkbox)"
+                  placeholder="..."
+                />
               </div>
             </div>
             <div class="sizes-empty" v-else>
@@ -476,36 +479,9 @@
 <script>
 import ColumnModal from "./ColumnModal.vue";
 import zylindermodelle from "../data/cylinder.js";
+import { useKonfiguratorStore } from "@/stores/configuratorStore";
 
 export default {
-  setup() {
-    const store = useKonfiguratorStore();
-    const modelOptions = Object.keys(zylindermodelle); // Zylindermodelle für Auswahl
-
-    const selectedModel = computed({
-      get: () => store.currentModel,
-      set: (model) => store.setModel(model),
-    });
-    const sizes = computed(() => store.sizes);
-    const options = computed(() => store.options);
-    const cylinderType = computed(() => store.cylinderType);
-    const isSchliessanlage = computed(() => store.isSchliessanlage);
-
-    function changeModel() {
-      store.setModel(modell);
-    }
-
-    return {
-      selectedModel,
-      modelOptions,
-      sizes,
-      options,
-      cylinderType,
-      isSchliessanlage,
-      changeModel,
-    };
-  },
-
   components: {
     ColumnModal,
   },
@@ -531,8 +507,8 @@ export default {
             doorDesignation: "",
             doorquantity: 1,
             type: "",
-            outside: "",
-            inside: "",
+            outside: null, // Changed from "" to null
+            inside: null, // Changed from "" to null
             options: "keine Option",
             checked: !this.isSchliessanlage,
             keyquantity: 1,
@@ -540,17 +516,111 @@ export default {
           },
         ],
       ],
-      selectedOptions: ref([]),
+      selectedOptions: [],
       cylinderOptions: [],
     };
   },
+
   computed: {
+    store() {
+      return useKonfiguratorStore();
+    },
+    modelOptions() {
+      return Object.keys(zylindermodelle);
+    },
+    selectedModel: {
+      get() {
+        return this.store.currentModel;
+      },
+      set(value) {
+        this.store.setModel(value);
+      },
+    },
+    sizesDouble() {
+      return this.store.sizesDouble;
+    },
+    sizesKnob() {
+      return this.store.sizesKnob;
+    },
+    sizesHalf() {
+      return this.store.sizesHalf;
+    },
+    options() {
+      return this.store.options;
+    },
+    cylinderType() {
+      return this.store.cylinderType;
+    },
+    isSchliessanlage() {
+      return this.store.isSchliessanlage;
+    },
     showLoadButton() {
-      //return this.$route.path.includes('/admin/');
+      // return this.$route.path.includes('/admin/');
       return true;
     },
   },
   methods: {
+    changeModel() {
+      this.store.setModel(this.selectedModel);
+      // Reset selections if needed
+      this.rows.forEach((row) => {
+        row.forEach((checkbox) => {
+          checkbox.type = "";
+          checkbox.inside = "";
+          checkbox.outside = "";
+          checkbox.options = "keine Option";
+        });
+      });
+    },
+
+    getAvailableInsideSizes(checkbox) {
+      let sizes = [];
+      if (checkbox.type === "Doppelzylinder") {
+        sizes = this.sizesDouble;
+      } else if (checkbox.type === "Knaufzylinder (innen)") {
+        sizes = this.sizesKnob;
+      } else if (checkbox.type === "Halbzylinder") {
+        sizes = this.sizesHalf;
+      }
+
+      if (checkbox.outside) {
+        sizes = sizes.filter((s) => s.outside === Number(checkbox.outside));
+      }
+
+      const insideSizes = [...new Set(sizes.map((s) => s.inside))];
+      return insideSizes.map((size) => ({
+        label: size.toString(),
+        value: size,
+      }));
+    },
+
+    getAvailableOutsideSizes(checkbox) {
+      let sizes = [];
+      if (checkbox.type === "Doppelzylinder") {
+        sizes = this.sizesDouble;
+      } else if (checkbox.type === "Knaufzylinder (innen)") {
+        sizes = this.sizesKnob;
+      } else if (checkbox.type === "Halbzylinder") {
+        sizes = this.sizesHalf;
+      }
+
+      if (checkbox.inside) {
+        sizes = sizes.filter((s) => s.inside === Number(checkbox.inside));
+      }
+
+      const outsideSizes = [...new Set(sizes.map((s) => s.outside))];
+      return outsideSizes.map((size) => ({
+        label: size.toString(),
+        value: size,
+      }));
+    },
+
+    onTypeChange(checkbox) {
+      // Reset inside and outside sizes when the type changes
+      checkbox.inside = "";
+      checkbox.outside = "";
+    },
+
     resetOptions(rowIndex) {
       this.rows[rowIndex].options = [];
     },
