@@ -47,6 +47,7 @@ $badge-width: 80px;
     gap: 10px;
     margin-top: 10px;
   }
+
   ::v-deep .model-select {
     width: 300px;
   }
@@ -81,39 +82,81 @@ $badge-width: 80px;
     .door-designation,
     .quantity-input,
     .cylinder-type {
-      width: 200px;
-      color: $primary-color;
+      margin-top: 10px;
+      width: 300px;
+
+      select {
+        @include input-style;
+        width: 100%;
+        height: 36px;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 14px;
+        background-color: white;
+        color: $primary-color;
+
+        &:hover {
+          border-color: rgba(94, 94, 167, 0.8);
+        }
+
+        &:focus {
+          border-color: rgb(94, 94, 167);
+          box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+        }
+
+        option {
+          font-size: 14px;
+          color: $primary-color;
+        }
+      }
     }
+
 
     .quantity-input {
       width: 60px;
     }
 
-    .sizes,
-    .sizes-halfcylinder,
-    .sizes-empty {
+    .sizes {
       display: flex;
-      justify-content: flex-start;
-      gap: 10px;
+      flex-direction: row;
+      gap: 20px; // Abstand zwischen Innen- und Außengröße
+      align-items: center; // Zentrierung der Dropdowns
 
-      .outside,
-      .inside {
+      .inside,
+      .outside {
         @include input-style;
-
-        .u-badge {
-          @include badge-style;
-        }
+        width: 100px; // Breite der Dropdowns anpassen
+        height: 36px; // Einheitliche Höhe für besseres Layout
+        border: 1px solid lightgray; // Optional: Rahmen zur besseren Sichtbarkeit
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 14px;
       }
     }
 
     .options {
-      width: 200px;
-      color: $primary-color;
+      margin-top: 10px;
+      width: 300px;
 
-      .u-badge {
-        width: 200px;
+      select {
+        @include input-style;
+        width: 100%;
+        height: 36px;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 14px;
+        background-color: white;
+        color: $primary-color;
+
+        &:focus {
+          border-color: rgb(94, 94, 167);
+          box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+        }
       }
     }
+
   }
 
   // CHECKBOX ELEMENT -------------------------------------------------------------------------------

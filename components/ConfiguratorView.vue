@@ -20,14 +20,19 @@
     <!-- Modellauswahl -->
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
-      <USelectMenu
-        color="blue"
-        class="model-select"
-        v-model="selectedModel"
-        :options="modelOptions"
-        @change="changeModel"
-        placeholder="Zylindermodell auswählen"
-      />
+      <select
+        v-model="store.selectedModel"
+        @change="store.setModel($event.target.value)"
+      >
+        <option value="" disabled>Wählen Sie ein Modell</option>
+        <option
+          v-for="model in store.availableModels"
+          :key="model"
+          :value="model"
+        >
+          {{ model }}
+        </option>
+      </select>
       <p>Zylinder: {{ selectedModel }}</p>
     </div>
   </div>
@@ -85,108 +90,74 @@
             <!--Zylindertyp-->
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
-              <USelectMenu
+              <select
                 v-model="checkbox.type"
-                class="cylinder-type"
-                color="blue"
-                :options="cylinderType"
-                placeholder="Zylinder wählen..."
                 @change="onTypeChange(checkbox)"
-              />
-            </div>
-            <div
-              class="sizes"
-              v-if="
-                checkbox.type == 'Doppelzylinder' ||
-                checkbox.type == 'Knaufzylinder (innen)'
-              "
-            >
-              <div class="inside">
-                <h3 v-if="rowIndex < 1">Innen</h3>
-                <USelectMenu
-                  v-model.number="checkbox.inside"
-                  color="blue"
-                  :options="getAvailableInsideSizes(checkbox)"
-                  placeholder="..."
-                />
-              </div>
-              <div class="outside">
-                <h3 v-if="rowIndex < 1">Außen</h3> 
-                <USelectMenu
-                  v-model.number="checkbox.outside"
-                  color="blue"
-                  :options="getAvailableOutsideSizes(checkbox)"
-                  placeholder="..."
-                />
-              </div>
+                class="cylinder-type"
+              >
+                <option value="" disabled>Wählen Sie einen Zylinder-Typ</option>
+                <option
+                  v-for="type in store.availableTypes"
+                  :key="type"
+                  :value="type"
+                >
+                  {{ type }}
+                </option>
+              </select>
             </div>
 
-            <!-- Sizes for Halbzylinder -->
-            <div
-              class="sizes-halfcylinder"
-              v-else-if="checkbox.type == 'Halbzylinder'"
-            >
-              <div class="inside">
-                <h3 v-if="rowIndex < 1">Innen</h3>
-                <UBadge
-                  class="u-badge"
-                  color="gray"
-                  variant="outline"
-                  size="lg"
+            <div class="sizes">
+              <!-- Innengröße Auswahl -->
+              <select
+                class="inside"
+                v-model.number="checkbox.inside"
+                @change="onInsideSizeChange(checkbox)"
+              >
+                <option value="" disabled>Wählen Sie eine Innengröße</option>
+                <option
+                  v-for="size in getAvailableInsideSizes(checkbox)"
+                  :key="size"
+                  :value="size"
                 >
-                  &nbsp;10&nbsp;
-                </UBadge>
-              </div>
-              <div class="outside">
-                <h3 v-if="rowIndex < 1">Außen</h3>
-                <USelectMenu
-                  v-model="checkbox.outside"
-                  color="blue"
-                  :options="getAvailableOutsideSizes(checkbox)"
-                  placeholder="..."
-                />
-              </div>
-            </div>
-            <div class="sizes-empty" v-else>
-              <div class="outside">
-                <h3 v-if="rowIndex < 1">Außen</h3>
-                <UBadge
-                  class="u-badge"
-                  color="gray"
-                  variant="outline"
-                  size="lg"
+                  {{ size }} mm
+                </option>
+              </select>
+
+              <!-- Außengröße Auswahl -->
+              <select
+                class="outside"
+                v-model.number="checkbox.outside"
+                @change="onOutsideSizeChange(checkbox)"
+              >
+                <option value="" disabled>Wählen Sie eine Außengröße</option>
+                <option
+                  v-for="size in getAvailableOutsideSizes(checkbox)"
+                  :key="size"
+                  :value="size"
                 >
-                  &nbsp;N/A&nbsp;
-                </UBadge>
-              </div>
-              <div class="inside">
-                <h3 v-if="rowIndex < 1">Innen</h3>
-                <UBadge
-                  class="u-badge"
-                  color="gray"
-                  variant="outline"
-                  size="lg"
+                  {{ size }} mm
+                </option>
+              </select>
+            </div>
+
+            <!-- Optionen Auswahl -->
+            <div class="options">
+              <h3 v-if="rowIndex < 1">Option</h3>
+              <select
+                v-model="checkbox.selectedOption"
+                @change="setSingleOption(checkbox, $event.target.value)"
+              >
+                <option value="" disabled>Wählen Sie eine Option</option>
+                <option
+                  v-for="option in getAllOptionsForType(checkbox)"
+                  :key="option"
+                  :value="option"
                 >
-                  &nbsp;N/A&nbsp;
-                </UBadge>
-              </div>
+                  {{ option }}
+                </option>
+              </select>
             </div>
-            <div class="options" v-if="checkbox.type == 'Doppelzylinder'">
-              <h3 v-if="rowIndex < 1">Sonderoptionen</h3>
-              <USelectMenu
-                v-model="checkbox.options"
-                :options="options"
-                color="blue"
-                placeholder="Optionen auswählen"
-                @click="resetOptions(rowIndex)"
-              />
-            </div>
-            <div class="options" v-else>
-              <h3 v-if="rowIndex < 1">Sonderoptionen</h3>
-              <UBadge class="u-badge" color="gray" variant="outline" size="lg"
-                >&nbsp;N/A&nbsp;
-              </UBadge>
-            </div>
+
             <!--Zylinder löschen & duplizieren-->
             <div class="duplicate">
               <br v-if="rowIndex < 1" />
@@ -480,6 +451,7 @@
 import ColumnModal from "./ColumnModal.vue";
 import zylindermodelle from "../data/cylinder.js";
 import { useKonfiguratorStore } from "@/stores/configuratorStore";
+import { useCylinderStore } from "@/stores/cylinderStores.js";
 
 export default {
   components: {
@@ -513,6 +485,7 @@ export default {
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
+            selectedOptions: {},
           },
         ],
       ],
@@ -523,7 +496,7 @@ export default {
 
   computed: {
     store() {
-      return useKonfiguratorStore();
+      return useCylinderStore();
     },
     modelOptions() {
       return Object.keys(zylindermodelle);
@@ -574,53 +547,95 @@ export default {
     },
 
     getAvailableInsideSizes(checkbox) {
-      let sizes = [];
-      if (checkbox.type === "Doppelzylinder") {
-        sizes = this.sizesDouble;
-      } else if (checkbox.type === "Knaufzylinder (innen)") {
-        sizes = this.sizesKnob;
-      } else if (checkbox.type === "Halbzylinder") {
-        sizes = this.sizesHalf;
-      }
-
+      const sizes = this.getSizesForType(checkbox.type);
       if (checkbox.outside) {
-        sizes = sizes.filter((s) => s.outside === Number(checkbox.outside));
+        return sizes
+          .filter((size) => size.outside === Number(checkbox.outside))
+          .map((size) => size.inside)
+          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+      } else {
+        return sizes
+          .map((size) => size.inside)
+          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
       }
-
-      const insideSizes = [...new Set(sizes.map((s) => s.inside))];
-      return insideSizes.map((size) => ({
-        label: size.toString(),
-        value: size,
-      }));
     },
 
     getAvailableOutsideSizes(checkbox) {
-      let sizes = [];
-      if (checkbox.type === "Doppelzylinder") {
-        sizes = this.sizesDouble;
-      } else if (checkbox.type === "Knaufzylinder (innen)") {
-        sizes = this.sizesKnob;
-      } else if (checkbox.type === "Halbzylinder") {
-        sizes = this.sizesHalf;
-      }
-
+      const sizes = this.getSizesForType(checkbox.type);
       if (checkbox.inside) {
-        sizes = sizes.filter((s) => s.inside === Number(checkbox.inside));
+        return sizes
+          .filter((size) => size.inside === Number(checkbox.inside))
+          .map((size) => size.outside)
+          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+      } else {
+        return sizes
+          .map((size) => size.outside)
+          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
       }
+    },
 
-      const outsideSizes = [...new Set(sizes.map((s) => s.outside))];
-      return outsideSizes.map((size) => ({
-        label: size.toString(),
-        value: size,
-      }));
+    getSizesForType(type) {
+      if (this.store.selectedModel && type) {
+        const typeKey = type.replace(/\s*\(.*?\)/g, ""); // Entfernt optionale Klammern in Typnamen
+        return this.store.getSizesForType(typeKey);
+      }
+      return [];
+    },
+
+    getAvailableOptions(checkbox) {
+      if (this.store.selectedModel && checkbox.type) {
+        const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
+        return this.store.getOptionsForType(typeKey);
+      }
+      return {};
+    },
+
+    setOption(checkbox, category, value) {
+      if (!checkbox.selectedOptions) {
+        this.$set(checkbox, "selectedOptions", {});
+      }
+      this.$set(checkbox.selectedOptions, category, value);
+    },
+    getAllOptionsForType(checkbox) {
+      if (this.store.selectedModel && checkbox.type) {
+        const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, ""); // Entfernt optionale Klammern
+        return this.store.getOptionsForType(typeKey);
+      }
+      return [];
+    },
+    setSingleOption(checkbox, value) {
+      checkbox.selectedOption = value;
     },
 
     onTypeChange(checkbox) {
-      // Reset inside and outside sizes when the type changes
+      // Reset inside and outside sizes and options when the type changes
       checkbox.inside = "";
       checkbox.outside = "";
+      checkbox.selectedOptions = {};
     },
 
+    onInsideSizeChange(checkbox) {
+      // Prüfen, ob die Kombination gültig ist, ansonsten Außengröße zurücksetzen
+      if (!this.isSizeCombinationValid(checkbox)) {
+        checkbox.outside = "";
+      }
+    },
+
+    onOutsideSizeChange(checkbox) {
+      // Prüfen, ob die Kombination gültig ist, ansonsten Innengröße zurücksetzen
+      if (!this.isSizeCombinationValid(checkbox)) {
+        checkbox.inside = "";
+      }
+    },
+
+    isSizeCombinationValid(checkbox) {
+      const sizes = this.getSizesForType(checkbox.type);
+      return sizes.some(
+        (size) =>
+          size.inside === Number(checkbox.inside) &&
+          size.outside === Number(checkbox.outside)
+      );
+    },
     resetOptions(rowIndex) {
       this.rows[rowIndex].options = [];
     },
