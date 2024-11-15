@@ -24,7 +24,6 @@
         v-model="store.selectedModel"
         @change="store.setModel($event.target.value)"
       >
-        <option value="" disabled>Wählen Sie ein Modell</option>
         <option
           v-for="model in store.availableModels"
           :key="model"
@@ -33,7 +32,7 @@
           {{ model }}
         </option>
       </select>
-      <p>Zylinder: {{ selectedModel }}</p>
+      <p>Zylinder: {{ store.selectedModel }}</p>
     </div>
   </div>
 
@@ -453,7 +452,6 @@
 <script>
 import ColumnModal from "./ColumnModal.vue";
 import zylindermodelle from "../data/cylinder.js";
-import { useKonfiguratorStore } from "@/stores/configuratorStore";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 
 export default {
@@ -465,6 +463,7 @@ export default {
     return {
       anlageNr: "",
       object: "",
+      selectedModel: "",
       id: "",
       password: "",
       email: "",
@@ -916,7 +915,11 @@ export default {
         this.phone = queryresultanlage.queryresult[0].Telefon || "";
         this.company = queryresultanlage.queryresult[0].Firma || "";
         this.typ = queryresultanlage.queryresult[0].Typ || "";
-        this.selectedModel = queryresultanlage.queryresult[0].Modell || "";
+
+
+        //Modell lädt nicht richtig
+        const loadedModel = queryresultanlage.queryresult[0].Modell;
+        this.store.setModel(loadedModel);
       }
 
       // Positionsdaten

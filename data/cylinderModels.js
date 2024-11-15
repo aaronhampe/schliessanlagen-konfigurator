@@ -1,3 +1,5 @@
+import IsSchliessanlage from "~/pages/isSchliessanlage.vue";
+
 export default {
     "Kein bestimmtes Modell": {
       Doppelzylinder: {
@@ -17,8 +19,8 @@ export default {
       },
       Halbzylinder: {
         sizes: [
-          { inside: 30, outside: 0 },
-          { inside: 35, outside: 0 },
+          { inside: 30, outside: 10 },
+          { inside: 35, outside: 10 },
         ],
         options: ["Nickel", "Bronze", "Standard", "Security"],
       },

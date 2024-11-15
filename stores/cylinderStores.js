@@ -4,7 +4,7 @@ import cylinderModels from '../data/cylinderModels.js'
 
 export const useCylinderStore = defineStore('cylinderStore', {
     state: () => ({
-        selectedModel: '',
+        selectedModel: 'Kein bestimmtes Modell',
         selectedType: '',
         selectedInsideSize: null,
         selectedOutsideSize: null,
