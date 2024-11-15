@@ -82,7 +82,7 @@ $badge-width: 80px;
     .door-designation,
     .quantity-input,
     .cylinder-type {
-      margin-top: 10px;
+      margin-top: 0px;
       width: 300px;
 
       select {
@@ -120,7 +120,7 @@ $badge-width: 80px;
     .sizes {
       display: flex;
       flex-direction: row;
-      gap: 20px; // Abstand zwischen Innen- und Außengröße
+      gap: 10px; // Abstand zwischen Innen- und Außengröße
       align-items: center; // Zentrierung der Dropdowns
 
       .inside,
@@ -136,7 +136,7 @@ $badge-width: 80px;
     }
 
     .options {
-      margin-top: 10px;
+      margin-top: 0px;
       width: 300px;
 
       select {

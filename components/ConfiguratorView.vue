@@ -107,37 +107,40 @@
             </div>
 
             <div class="sizes">
-              <!-- Innengröße Auswahl -->
-              <select
-                class="inside"
-                v-model.number="checkbox.inside"
-                @change="onInsideSizeChange(checkbox)"
-              >
-                <option value="" disabled>Wählen Sie eine Innengröße</option>
-                <option
-                  v-for="size in getAvailableInsideSizes(checkbox)"
-                  :key="size"
-                  :value="size"
+              <div>
+                <h3 v-if="rowIndex < 1">Innen</h3>
+                <select
+                  class="inside"
+                  v-model.number="checkbox.inside"
+                  @change="onInsideSizeChange(checkbox)"
                 >
-                  {{ size }} mm
-                </option>
-              </select>
-
-              <!-- Außengröße Auswahl -->
-              <select
-                class="outside"
-                v-model.number="checkbox.outside"
-                @change="onOutsideSizeChange(checkbox)"
-              >
-                <option value="" disabled>Wählen Sie eine Außengröße</option>
-                <option
-                  v-for="size in getAvailableOutsideSizes(checkbox)"
-                  :key="size"
-                  :value="size"
+                  <option value="" disabled>Wählen Sie eine Innengröße</option>
+                  <option
+                    v-for="size in getAvailableInsideSizes(checkbox)"
+                    :key="size"
+                    :value="size"
+                  >
+                    {{ size }} mm
+                  </option>
+                </select>
+              </div>
+              <div>
+                <h3 v-if="rowIndex < 1">Außen</h3>
+                <select
+                  class="outside"
+                  v-model.number="checkbox.outside"
+                  @change="onOutsideSizeChange(checkbox)"
                 >
-                  {{ size }} mm
-                </option>
-              </select>
+                  <option value="" disabled>Wählen Sie eine Außengröße</option>
+                  <option
+                    v-for="size in getAvailableOutsideSizes(checkbox)"
+                    :key="size"
+                    :value="size"
+                  >
+                    {{ size }} mm
+                  </option>
+                </select>
+              </div>
             </div>
 
             <!-- Optionen Auswahl -->
