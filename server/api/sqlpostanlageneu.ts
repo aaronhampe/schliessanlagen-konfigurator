@@ -16,6 +16,8 @@ export default defineEventHandler(async (event) => {
     const Typ = body.Typ
     const Modell = body.Modell
 
+    console.log("Speichere folgende Daten:", { ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell });
+
     const queryresult = await prisma.$queryRaw`
     INSERT INTO  Anlage (ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell)
     VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Telefon}, ${Firma}, ${Typ}, ${Modell} )

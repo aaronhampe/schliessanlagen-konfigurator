@@ -817,9 +817,12 @@ export default {
             Telefon: this.phone,
             Firma: this.company,
             Typ: this.typ,
-            Modell: this.selectedModel,
+            Modell: this.store.selectedModel,
           },
+          
         });
+    
+
 
         if (queryresultanlage) {
           // Schritt 2: Positionen speichern
