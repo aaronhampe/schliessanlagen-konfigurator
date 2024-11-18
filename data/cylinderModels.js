@@ -60,7 +60,11 @@ export default {
           { inside: 40, outside: 45 },
           { inside: 50, outside: 30 },
         ],
-        options: ["Nickel", "Bronze", "Brass", "Standard", "High Security", "Not- & Gefahrenfunktion"],
+        options: {
+          Material: ["Nickel", "Bronze", "Brass"],
+          Sicherheit: ["Standard", "High Security", "Not- & Gefahrenfunktion"],
+          Finish: ["Matt", "Poliert"],
+        },
       },
       Knaufzylinder: {
         sizes: [
