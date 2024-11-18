@@ -83,7 +83,7 @@ $badge-width: 80px;
     .quantity-input,
     .cylinder-type {
       margin-top: 0px;
-      width: 300px;
+      width: 200px;
 
       select {
         @include input-style;
@@ -126,7 +126,7 @@ $badge-width: 80px;
       .inside,
       .outside {
         @include input-style;
-        width: 100px; // Breite der Dropdowns anpassen
+        width: 80px; // Breite der Dropdowns anpassen
         height: 36px; // Einheitliche Höhe für besseres Layout
         border: 1px solid lightgray; // Optional: Rahmen zur besseren Sichtbarkeit
         border-radius: 6px;
@@ -137,7 +137,7 @@ $badge-width: 80px;
 
     .options {
       margin-top: 0px;
-      width: 300px;
+      width: 200px;
 
       select {
         @include input-style;
