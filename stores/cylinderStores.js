@@ -8,7 +8,7 @@ export const useCylinderStore = defineStore('cylinderStore', {
         selectedType: '',
         selectedInsideSize: null,
         selectedOutsideSize: null,
-        selectedOptions: {},
+        options: {},
     }),
     getters: {
         availableModels(state) {
@@ -62,13 +62,13 @@ export const useCylinderStore = defineStore('cylinderStore', {
             this.selectedType = ''
             this.selectedInsideSize = null
             this.selectedOutsideSize = null
-            this.selectedOptions = {}
+            this.options = {}
         },
         setType(type) {
             this.selectedType = type
             this.selectedInsideSize = null
             this.selectedOutsideSize = null
-            this.selectedOptions = {}
+            this.options = {}
         },
         setInsideSize(size) {
             this.selectedInsideSize = size
@@ -85,7 +85,7 @@ export const useCylinderStore = defineStore('cylinderStore', {
             }
         },
         setOption(category, value) {
-            this.selectedOptions[category] = value
+            this.options[category] = value
         },
         isSizeCombinationValid(inside, outside) {
             const sizes = this.allSizes

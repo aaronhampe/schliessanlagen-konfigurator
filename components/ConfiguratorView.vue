@@ -10,25 +10,13 @@
     </h1>
     <div class="system-number">
       <h2>Anlagennummer:</h2>
-      <input
-        type="text"
-        readonly
-        v-model="anlageNr"
-        placeholder="Anlagenummer"
-      />
+      <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
     <!-- Modellauswahl -->
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
-      <select
-        v-model="store.selectedModel"
-        @change="store.setModel($event.target.value)"
-      >
-        <option
-          v-for="model in store.availableModels"
-          :key="model"
-          :value="model"
-        >
+      <select v-model="store.selectedModel" @change="store.setModel($event.target.value)">
+        <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
@@ -39,67 +27,34 @@
   <div class="flex-container">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-        <div
-          class="checkbox-item"
-          v-for="(checkbox, colIndex) in row"
-          :key="colIndex"
-          v-show="colIndex < 1"
-        >
+        <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
           <div class="door-row" v-if="colIndex < 1">
             <!--Position-->
             <div>
               <h3 v-if="rowIndex < 1 && colIndex < 1">Pos.</h3>
-              <UBadge
-                class="u-badge"
-                v-if="colIndex < 1"
-                v-model="checkbox.position"
-                color="sky"
-                size="lg"
-                variant="solid"
-              >
+              <UBadge class="u-badge" v-if="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
+                variant="solid">
                 {{ rowIndex + 1 }}
               </UBadge>
             </div>
             <!--Türbezeichnung-->
             <div class="door-designation" v-if="colIndex < 1">
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
-              <UInput
-                v-if="colIndex < 1"
-                class="door-designation"
-                v-model="checkbox.doorDesignation"
-                color="blue"
-                size="sm"
-                variant="outline"
-                placeholder="z.B. Haupteingang"
-              />
+              <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="blue"
+                size="sm" variant="outline" placeholder="z.B. Haupteingang" />
             </div>
             <!--Zylinderanzahl-->
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
-              <UInput
-                v-model="checkbox.doorquantity"
-                class="quantity-input"
-                min="1"
-                color="blue"
-                size="sm"
-                type="number"
-                variant="outline"
-              />
+              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="blue" size="sm"
+                type="number" variant="outline" />
             </div>
             <!--Zylindertyp-->
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
-              <select
-                v-model="checkbox.type"
-                @change="onTypeChange(checkbox)"
-                class="cylinder-type"
-              >
+              <select v-model="checkbox.type" @change="onTypeChange(checkbox)" class="cylinder-type">
                 <option value="" disabled>Wählen Sie einen Zylinder-Typ</option>
-                <option
-                  v-for="type in store.availableTypes"
-                  :key="type"
-                  :value="type"
-                >
+                <option v-for="type in store.availableTypes" :key="type" :value="type">
                   {{ type }}
                 </option>
               </select>
@@ -108,34 +63,18 @@
             <div class="sizes">
               <div>
                 <h3 v-if="rowIndex < 1">Innen</h3>
-                <select
-                  class="inside"
-                  v-model.number="checkbox.inside"
-                  @change="onInsideSizeChange(checkbox)"
-                >
+                <select class="inside" v-model.number="checkbox.inside" @change="onInsideSizeChange(checkbox)">
                   <option value="" disabled>Wählen Sie eine Innengröße</option>
-                  <option
-                    v-for="size in getAvailableInsideSizes(checkbox)"
-                    :key="size"
-                    :value="size"
-                  >
+                  <option v-for="size in getAvailableInsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
               </div>
               <div>
                 <h3 v-if="rowIndex < 1">Außen</h3>
-                <select
-                  class="outside"
-                  v-model.number="checkbox.outside"
-                  @change="onOutsideSizeChange(checkbox)"
-                >
+                <select class="outside" v-model.number="checkbox.outside" @change="onOutsideSizeChange(checkbox)">
                   <option value="" disabled>Wählen Sie eine Außengröße</option>
-                  <option
-                    v-for="size in getAvailableOutsideSizes(checkbox)"
-                    :key="size"
-                    :value="size"
-                  >
+                  <option v-for="size in getAvailableOutsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
@@ -145,16 +84,9 @@
             <!-- Optionen Auswahl -->
             <div class="options">
               <h3 v-if="rowIndex < 1">Option</h3>
-              <select
-                v-model="checkbox.selectedOption"
-                @change="setSingleOption(checkbox, $event.target.value)"
-              >
+              <select v-model="checkbox.options" @change="setSingleOption(checkbox, $event.target.value)">
                 <option value="" disabled>Wählen Sie eine Option</option>
-                <option
-                  v-for="option in getAllOptionsForType(checkbox)"
-                  :key="option"
-                  :value="option"
-                >
+                <option v-for="option in getAllOptionsForType(checkbox)" :key="option" :value="option">
                   {{ option }}
                 </option>
               </select>
@@ -163,235 +95,92 @@
             <!--Zylinder löschen & duplizieren-->
             <div class="duplicate">
               <br v-if="rowIndex < 1" />
-              <UButton
-                icon="i-heroicons-document-duplicate"
-                size="sm"
-                color="sky"
-                variant="outline"
-                :trailing="false"
-                @click="duplicateRow(rowIndex)"
-              />
+              <UButton icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false"
+                @click="duplicateRow(rowIndex)" />
             </div>
             <div class="delete">
               <br v-if="rowIndex < 1" />
-              <UButton
-                icon="i-heroicons-trash"
-                style="color: white"
-                size="sm"
-                color="red"
-                variant="solid"
-                :trailing="false"
-                @click="deleteRow(rowIndex)"
-              />
+              <UButton icon="i-heroicons-trash" style="color: white" size="sm" color="red" variant="solid"
+                :trailing="false" @click="deleteRow(rowIndex)" />
             </div>
           </div>
         </div>
 
-        <div
-          class="checkbox-item"
-          v-for="(checkbox, colIndex) in row"
-          :key="colIndex"
-        >
-          <input
-            type="text"
-            placeholder="Schlüsselname"
-            readonly
-            class="key-name"
-            v-model="checkbox.keyname"
-            v-if="rowIndex < 1"
-            :class="
-              isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
-            "
-          />
+        <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
+          <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
+            v-if="rowIndex < 1" :class="isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
+        " />
 
-          <input
-            min=" 1"
-            class="key-quantity"
-            type="number"
-            placeholder="1"
-            v-model="checkbox.keyquantity"
-            v-if="rowIndex < 1"
-          />
-          <UButton
-            class="button-edit"
-            icon="i-heroicons-pencil"
-            v-if="rowIndex < 1"
-            @click="openModal(colIndex)"
-            size="sm"
-            color="sky"
-            variant="solid"
-            :trailing="false"
-          />
-          <ColumnModal
-            v-if="rowIndex < 1"
-            :columnId="colIndex"
-            v-model="modalStates[colIndex]"
-            @update-column-name="updateColumnName(colIndex, $event)"
-            @close-this-modal="closeModal(colIndex)"
-          />
+          <input min=" 1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
+            v-if="rowIndex < 1" />
+          <UButton class="button-edit" icon="i-heroicons-pencil" v-if="rowIndex < 1" @click="openModal(colIndex)"
+            size="sm" color="sky" variant="solid" :trailing="false" />
+          <ColumnModal v-if="rowIndex < 1" :columnId="colIndex" v-model="modalStates[colIndex]"
+            @update-column-name="updateColumnName(colIndex, $event)" @close-this-modal="closeModal(colIndex)" />
           <p v-if="rowIndex < 1">&nbsp;</p>
-          <UCheckbox
-            class="checkbox"
-            name="{{ rowIndex * 100 + colIndex + 1 }}"
-            v-model="checkbox.checked"
-            color="blue"
-            variant="solid"
-            :disabled="!isSchliessanlage"
-            :true-value="true"
-            :false-value="false"
-          />
+          <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue"
+            variant="solid" :disabled="!isSchliessanlage" :true-value="true" :false-value="false" />
           <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
-          <UButton
-            @click="deleteCheckbox(colIndex)"
-            v-if="rowIndex == this.rows.length - 1"
-            class="button-delete"
-            icon="i-heroicons-trash"
-            size="sm"
-            color="red"
-            variant="solid"
-            :trailing="false"
-          />
-          <UButton
-            @click="duplicateCol(colIndex)"
-            v-if="rowIndex == this.rows.length - 1"
-            class="button-duplicate"
-            icon="i-heroicons-document-duplicate"
-            size="sm"
-            color="sky"
-            variant="outline"
-            :trailing="false"
-          />
+          <UButton @click="deleteCheckbox(colIndex)" v-if="rowIndex == this.rows.length - 1" class="button-delete"
+            icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" />
+          <UButton @click="duplicateCol(colIndex)" v-if="rowIndex == this.rows.length - 1" class="button-duplicate"
+            icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false" />
         </div>
       </div>
       <div class="buttons">
-        <UButton
-          class="button-default"
-          icon="i-heroicons-plus-16-solid"
-          @click="addRow"
-          size="sm"
-          color="amber"
-          variant="solid"
-          :trailing="false"
-          >Tür hinzufügen</UButton
-        >
-        <UButton
-          class="button-default"
-          @click="navigateToSysteme"
-          size="sm"
-          color="amber"
-          variant="solid"
-        >
+        <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
+          variant="solid" :trailing="false">Tür hinzufügen</UButton>
+        <UButton class="button-default" @click="navigateToSysteme" size="sm" color="amber" variant="solid">
           Zur Systemübersicht
         </UButton>
-        <UButton
-          class="button-default"
-          icon="i-heroicons-arrow-left-start-on-rectangle-16-solid"
-          @click="isOpen = true"
-          size="sm"
-          color="amber"
-          variant="solid"
-          :trailing="false"
-          >Angebot anfordern
+        <UButton class="button-default" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="isOpen = true"
+          size="sm" color="amber" variant="solid" :trailing="false">Angebot anfordern
         </UButton>
 
         <UModal v-model="isOpen">
           <div class="p-4">
             <div class="modal-flex-buttons-top">
               <h2 class="modal-h2">Angebot anfordern</h2>
-              <UButton
-                color="red"
-                @click="isOpen = false"
-                style="font-weight: 600; color: white"
-                >X
+              <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white">X
               </UButton>
             </div>
             <br />
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="object">Anlagenname:</label>
-                <UInput
-                  color="amber"
-                  id="object"
-                  v-model="object"
-                  type="text"
-                  placeholder="z.B. Mustermann Schließung"
-                  required
-                />
+                <UInput color="amber" id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung"
+                  required />
               </div>
               <div class="form-group">
                 <label for="email">E-Mail-Adresse:</label>
-                <UInput
-                  color="amber"
-                  id="email"
-                  v-model="email"
-                  type="email"
-                  required
-                />
+                <UInput color="amber" id="email" v-model="email" type="email" required />
               </div>
               <div class="form-group">
                 <label for="name">Name:</label>
-                <UInput
-                  color="amber"
-                  id="name"
-                  v-model="name"
-                  type="text"
-                  required
-                />
+                <UInput color="amber" id="name" v-model="name" type="text" required />
               </div>
               <div class="form-group">
                 <label for="phone">Telefonnummer:</label>
-                <UInput
-                  color="amber"
-                  id="phone"
-                  v-model="phone"
-                  type="tel"
-                  required
-                />
+                <UInput color="amber" id="phone" v-model="phone" type="tel" required />
               </div>
               <div class="form-group">
                 <label for="company">Firma:</label>
-                <UInput
-                  color="amber"
-                  id="company"
-                  v-model="company"
-                  type="tel"
-                  placeholder="Optional"
-                />
+                <UInput color="amber" id="company" v-model="company" type="tel" placeholder="Optional" />
               </div>
               <br />
-              <UButton
-                @click="saveInstallation"
-                style="color: white"
-                type="submit"
-                color="amber"
-                variant="solid"
-                >Speichern und abschicken
+              <UButton @click="saveInstallation" style="color: white" type="submit" color="amber" variant="solid">
+                Speichern und abschicken
               </UButton>
             </form>
           </div>
         </UModal>
       </div>
       <div class="buttons" style="margin-top: 20px">
-        <UButton
-          v-if="showLoadButton"
-          class="button-default"
-          icon="i-heroicons-cloud-arrow-down-16-solid"
-          @click="isOpenL = true"
-          size="sm"
-          color="amber"
-          variant="solid"
-          :trailing="false"
-          >Anlage laden
+        <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
+          @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        <UButton
-          v-if="showLoadButton"
-          class="button-default"
-          @click="test"
-          size="sm"
-          color="amber"
-          variant="solid"
-          :trailing="false"
-          >Test
+        <UButton v-if="showLoadButton" class="button-default" @click="test" size="sm" color="amber" variant="solid"
+          :trailing="false">Test
         </UButton>
         <UModal v-model="isOpenL">
           <div class="p-4">
@@ -403,49 +192,22 @@
             <form @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="id">Anlagennummer:</label>
-                <UInput
-                  color="amber"
-                  id="id"
-                  v-model="id"
-                  min="1"
-                  type="number"
-                  required
-                />
+                <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
               </div>
               <div class="form-group">
                 <label for="id">Passwort:</label>
-                <UInput
-                  color="amber"
-                  id="password"
-                  v-model="password"
-                  min="1"
-                  type="password"
-                  required
-                />
+                <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
               </div>
               <br />
-              <UButton
-                @click="loadInstallation"
-                type="submit"
-                color="amber"
-                variant="solid"
-                >Laden
+              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
               </UButton>
             </form>
           </div>
         </UModal>
       </div>
     </div>
-    <UButton
-      class="button-add-key"
-      icon="i-heroicons-plus-16-solid"
-      @click="addCheckbox"
-      size="sm"
-      color="amber"
-      variant="solid"
-      :trailing="false"
-      >Schlüssel hinzufügen</UButton
-    >
+    <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
+      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
   </div>
 </template>
 
@@ -483,16 +245,13 @@ export default {
             type: "",
             outside: null, // Changed from "" to null
             inside: null, // Changed from "" to null
-            options: "keine Option",
+            options: "",
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
-            selectedOptions: {},
           },
         ],
       ],
-      selectedOptions: [],
-      cylinderOptions: [],
     };
   },
 
@@ -543,7 +302,7 @@ export default {
           checkbox.type = "";
           checkbox.inside = "";
           checkbox.outside = "";
-          checkbox.options = "keine Option";
+          checkbox.options = "";
         });
       });
     },
@@ -593,10 +352,10 @@ export default {
     },
 
     setOption(checkbox, category, value) {
-      if (!checkbox.selectedOptions) {
-        this.$set(checkbox, "selectedOptions", {});
+      if (!checkbox.options) {
+        this.$set(checkbox, "options", {});
       }
-      this.$set(checkbox.selectedOptions, category, value);
+      this.$set(checkbox.options, category, value);
     },
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
@@ -606,14 +365,14 @@ export default {
       return [];
     },
     setSingleOption(checkbox, value) {
-      checkbox.selectedOption = value;
+      checkbox.options = value;
     },
 
     onTypeChange(checkbox) {
       // Reset inside and outside sizes and options when the type changes
       checkbox.inside = "";
       checkbox.outside = "";
-      checkbox.selectedOptions = {};
+      checkbox.options = {};
     },
 
     onInsideSizeChange(checkbox) {
@@ -819,9 +578,9 @@ export default {
             Typ: this.typ,
             Modell: this.store.selectedModel,
           },
-          
+
         });
-    
+
 
 
         if (queryresultanlage) {
