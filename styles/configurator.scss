@@ -89,7 +89,7 @@ $badge-width: 80px;
         @include input-style;
         width: 100%;
         height: 36px;
-        border: 1px solid lightgray;
+        border: 1px solid #438fc2;
         border-radius: 6px;
         padding: 4px;
         font-size: 14px;
@@ -128,7 +128,7 @@ $badge-width: 80px;
         @include input-style;
         width: 80px; // Breite der Dropdowns anpassen
         height: 36px; // Einheitliche Höhe für besseres Layout
-        border: 1px solid lightgray; // Optional: Rahmen zur besseren Sichtbarkeit
+        border: 1px solid #438fc2; // Optional: Rahmen zur besseren Sichtbarkeit
         border-radius: 6px;
         padding: 4px;
         font-size: 14px;
