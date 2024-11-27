@@ -83,14 +83,27 @@
 
             <!-- Optionen Auswahl -->
             <div class="options">
-              <h3 v-if="rowIndex < 1">Option</h3>
-              <select v-model="checkbox.options" @change="setSingleOption(checkbox, $event.target.value)">
-                <option value="" disabled>Wählen Sie eine Option</option>
-                <option v-for="option in getAllOptionsForType(checkbox)" :key="option" :value="option">
-                  {{ option }}
-                </option>
-              </select>
+              <h3 v-if="rowIndex < 1">Optionen</h3>
+              <div class="dropdown" @click.stop="toggleDropdown(rowIndex)">
+                <button class="dropdown-button">
+                  {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
+                </button>
+                <div v-if="isDropdownOpen[rowIndex]" class="dropdown-menu">
+                  <div v-for="(categoryOptions, categoryName) in getAllOptionsForType(checkbox)" :key="categoryName"
+                    class="option-category">
+                    <h4>{{ categoryName }}</h4>
+                    <div class="radio-group">
+                      <label v-for="option in categoryOptions" :key="option" class="radio-item">
+                        <input type="radio" :name="'option-' + categoryName + '-' + rowIndex" :value="option"
+                          v-model="checkbox.options[categoryName]" />
+                        {{ option }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
 
             <!--Zylinder löschen & duplizieren-->
             <div class="duplicate">
@@ -236,6 +249,7 @@ export default {
       modalStates: {},
       isOpen: false,
       isOpenL: false,
+      isDropdownOpen: {},
       rows: [
         [
           {
@@ -294,6 +308,81 @@ export default {
     },
   },
   methods: {
+    toggleDropdown(rowIndex) {
+      if (!this.isDropdownOpen[rowIndex]) {
+        this.isDropdownOpen[rowIndex] = true;
+      } else {
+        this.isDropdownOpen[rowIndex] = !this.isDropdownOpen[rowIndex];
+      }
+    },
+
+    // Ruft die Optionen für den ausgewählten Zylindertyp ab
+    getAllOptionsForType(checkbox) {
+      if (this.store.selectedModel && checkbox.type) {
+        const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
+        const optionsData = this.store.getOptionsForType(typeKey);
+        if (Array.isArray(optionsData)) {
+          // Wenn Optionen ein Array sind, in eine Kategorie "Optionen" einordnen
+          return { Optionen: optionsData };
+        } else {
+          // Optionen nach Kategorien
+          return optionsData;
+        }
+      }
+      return {};
+    },
+
+    // Gibt den Text der ausgewählten Optionen zurück
+    getSelectedOptionsText(checkbox) {
+      if (checkbox.options) {
+        const optionsArray = [];
+        for (const category in checkbox.options) {
+          optionsArray.push(checkbox.options[category]);
+        }
+        return optionsArray.join(", ");
+      }
+      return "";
+    },
+
+    // Konvertiert das Optionen-Objekt in einen String
+    optionsToString(options) {
+      const optionsArray = [];
+      for (const category in options) {
+        if (options[category]) {
+          optionsArray.push(`${category}:${options[category]}`);
+        }
+      }
+      return optionsArray.join(", ");
+    },
+
+    // Konvertiert den Optionen-String zurück in ein Objekt
+    stringToOptions(optionsString, availableOptions) {
+      const optionsArray = optionsString.split(", ").filter(Boolean);
+      const options = {};
+      optionsArray.forEach((optionPair) => {
+        const [category, option] = optionPair.split(":");
+        if (category && option && availableOptions[category]?.includes(option)) {
+          options[category] = option;
+        } else if (availableOptions.Optionen?.includes(optionPair)) {
+          // Falls Optionen nicht kategorisiert sind
+          options.Optionen = optionPair;
+        }
+      });
+      return options;
+    },
+
+    // Schließt alle Dropdowns, wenn außerhalb geklickt wird
+    closeAllDropdowns() {
+      this.isDropdownOpen = {};
+    },
+    handleClickOutside(event) {
+      if (
+        this.$refs.dropdownContainer &&
+        !this.$refs.dropdownContainer.contains(event.target)
+      ) {
+        this.isDropdownOpen = false; // Schließt Dropdown bei Klick außerhalb
+      }
+    },
     changeModel() {
       this.store.setModel(this.selectedModel);
       // Reset selections if needed
@@ -593,7 +682,7 @@ export default {
               Typ: row[0].type || "",
               SizeA: row[0].outside || "",
               SizeI: row[0].inside || "",
-              Option: row[0].options || "",
+              Option: this.optionsToString(row[0].options) || "",
             }))
           );
 
@@ -709,7 +798,8 @@ export default {
         this.rows[zeile][0].type = item.Typ || "";
         this.rows[zeile][0].outside = item.SizeA || "";
         this.rows[zeile][0].inside = item.SizeI || "";
-        this.rows[zeile][0].options = item.Option || "";
+        const availableOptions = this.getAllOptionsForType(this.rows[zeile][0]);
+        this.rows[zeile][0].options = this.stringToOptions(item.Option || "", availableOptions);
       });
 
       // Schlüsseldaten
@@ -760,6 +850,10 @@ export default {
 
     mounted() {
       this.generateRandomAnlagenNummer();
+      document.addEventListener("click", this.closeAllDropdowns);
+    },
+    beforeUnmount() {
+      document.removeEventListener("click", this.closeAllDropdowns);
     },
   },
 };

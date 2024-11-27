@@ -100,10 +100,14 @@ export const useCylinderStore = defineStore('cylinderStore', {
         },
         getOptionsForType(type) {
             if (this.selectedModel && type) {
-                const options = cylinderModels[this.selectedModel][type]?.options || {};
-                return options;
+              const typeKey = type.replace(/\s*\(.*?\)/g, '');
+              const modelData = cylinderModels[this.selectedModel];
+              if (modelData && modelData[typeKey] && modelData[typeKey].options) {
+                return modelData[typeKey].options;
+              }
             }
             return {};
-        },
+          },
+          
     }
 })
