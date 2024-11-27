@@ -53,8 +53,8 @@
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
               <select v-model="checkbox.type" @change="onTypeChange(checkbox)" class="cylinder-type">
-                <option value="" disabled>Wählen Sie einen Zylinder-Typ</option>
-                <option v-for="type in store.availableTypes" :key="type" :value="type">
+                <option disabled value="">Bitte Typ auswählen</option>
+                <option  v-for="type in store.availableTypes" :key="type" :value="type">
                   {{ type }}
                 </option>
               </select>
@@ -64,7 +64,7 @@
               <div>
                 <h3 v-if="rowIndex < 1">Innen</h3>
                 <select class="inside" v-model.number="checkbox.inside" @change="onInsideSizeChange(checkbox)">
-                  <option value="" disabled>Wählen Sie eine Innengröße</option>
+                  <option disabled value="">...</option>
                   <option v-for="size in getAvailableInsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
@@ -73,7 +73,7 @@
               <div>
                 <h3 v-if="rowIndex < 1">Außen</h3>
                 <select class="outside" v-model.number="checkbox.outside" @change="onOutsideSizeChange(checkbox)">
-                  <option value="" disabled>Wählen Sie eine Außengröße</option>
+                  <option disabled value="">...</option>
                   <option v-for="size in getAvailableOutsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
@@ -86,7 +86,7 @@
               <h3 v-if="rowIndex < 1">Optionen</h3>
               <div class="dropdown" @click.stop="toggleDropdown(rowIndex)">
                 <button class="dropdown-button">
-                  {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
+                  {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }} <span class="dropdown-icon">▼</span>
                 </button>
                 <div v-if="isDropdownOpen[rowIndex]" class="dropdown-menu">
                   <div v-for="(categoryOptions, categoryName) in getAllOptionsForType(checkbox)" :key="categoryName"
