@@ -7,9 +7,9 @@ export default {
         { inside: 40, outside: 45 },
       ],
       options: {
-        Material: ["Nickel", "Bronze", "Brass"],
+        Material: ["Standard","Nickel", "Bronze", "Brass"],
         Sicherheit: ["Standard", "High Security"],
-        Finish: ["Matt", "Poliert"],
+        Finish: ["Standard","Matt", "Poliert"],
       },
     },
     Knaufzylinder: {

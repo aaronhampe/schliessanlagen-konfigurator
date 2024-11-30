@@ -147,12 +147,14 @@
               <h3 v-if="rowIndex < 1">Optionen</h3>
               <div class="dropdown" @click="toggleDropdown(rowIndex)">
                 <button class="dropdown-button">
-                  {{
-                    getSelectedOptionsText(checkbox) || "Optionen auswählen"
-                  }}
+                  {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
                   <span class="dropdown-icon">▼</span>
                 </button>
-                <div v-if="isDropdownOpen[rowIndex]" class="dropdown-menu" @click.stop>
+                <div
+                  v-if="isDropdownOpen[rowIndex]"
+                  class="dropdown-menu"
+                  @click.stop
+                >
                   <div
                     v-for="(
                       categoryOptions, categoryName
@@ -168,10 +170,11 @@
                         class="radio-item"
                       >
                         <URadio
-                         color="sky"
+                          color="sky"
                           :name="'option-' + categoryName + '-' + rowIndex"
                           :value="option"
                           v-model="checkbox.options[categoryName]"
+                          @change="toggleRadio(checkbox, categoryName, option)"
                         />
                         <span> &nbsp; </span>{{ option }}
                       </label>
@@ -781,6 +784,16 @@ export default {
           });
       }
       this.rows.push(newRow);
+    },
+
+    toggleRadio(checkbox, categoryName, option) {
+      // Wenn der aktuelle Wert bereits ausgewählt ist, de-selektieren
+      if (checkbox.options[categoryName] === option) {
+        this.set(checkbox.options, categoryName, null);
+      } else {
+        // Andernfalls die neue Option setzen
+        this.set(checkbox.options, categoryName, option);
+      }
     },
 
     addCheckbox() {
