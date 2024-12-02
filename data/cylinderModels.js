@@ -9,7 +9,7 @@ export default {
       options: {
         Material: ["Standard","Nickel", "Bronze", "Brass"],
         Sicherheit: ["Standard", "High Security"],
-        Finish: ["Standard","Matt", "Poliert"],
+        Oberfläche: ["Standard","Matt", "Poliert"],
       },
     },
     Knaufzylinder: {
@@ -18,7 +18,7 @@ export default {
         { inside: 35, outside: 40 },
       ],
       options: {
-        Form: ["Round", "Oval"],
+        Form: ["Rund", "Oval"],
         Material: ["Nickel", "Bronze"],
         Besonderheit: ["Not- & Gefahrenfunktion"],
       },

@@ -113,7 +113,7 @@
                   v-model.number="checkbox.inside"
                   @change="onInsideSizeChange(checkbox)"
                 >
-                  <option disabled value="">...</option>
+                  <option value="">...</option>
                   <option
                     v-for="size in getAvailableInsideSizes(checkbox)"
                     :key="size"
@@ -130,7 +130,7 @@
                   v-model.number="checkbox.outside"
                   @change="onOutsideSizeChange(checkbox)"
                 >
-                  <option disabled value="">...</option>
+                  <option value="">...</option>
                   <option
                     v-for="size in getAvailableOutsideSizes(checkbox)"
                     :key="size"
@@ -171,10 +171,10 @@
                       >
                         <URadio
                           color="sky"
+                          class="radio-button"
                           :name="'option-' + categoryName + '-' + rowIndex"
                           :value="option"
                           v-model="checkbox.options[categoryName]"
-                          @change="toggleRadio(checkbox, categoryName, option)"
                         />
                         <span> &nbsp; </span>{{ option }}
                       </label>
@@ -627,8 +627,11 @@ export default {
 
     // Schließt alle Dropdowns, wenn außerhalb geklickt wird
     closeAllDropdowns() {
-      this.isDropdownOpen = {};
+      Object.keys(this.isDropdownOpen).forEach((key) => {
+        this.isDropdownOpen[key] = false; // Setzt alle Dropdowns auf geschlossen
+      });
     },
+
     handleClickOutside(event) {
       if (
         this.$refs.dropdownContainer &&

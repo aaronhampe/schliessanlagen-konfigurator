@@ -95,6 +95,7 @@ $badge-width: 80px;
         font-size: 14px;
         background-color: white;
         color: $primary-color;
+        cursor: pointer;
 
         &:hover {
           border-color: rgba(94, 94, 167, 0.8);
@@ -133,6 +134,7 @@ $badge-width: 80px;
         border-radius: 6px;
         padding: 4px;
         font-size: 14px;
+        cursor: pointer;
       }
     }
 
@@ -191,11 +193,10 @@ $badge-width: 80px;
       .radio-item {
         display: flex;
         align-items: center;
+        margin-bottom: 1px;
       }
 
-      .radio-item input[type="radio"] {
-        margin-right: 8px;
-      }
+
 
     }
 
