@@ -86,6 +86,7 @@
                 variant="outline"
               />
             </div>
+
             <!--Zylindertyp-->
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
@@ -145,43 +146,16 @@
             <!-- Optionen Auswahl -->
             <div class="options">
               <h3 v-if="rowIndex < 1">Optionen</h3>
-              <div class="dropdown" @click="toggleDropdown(rowIndex)">
-                <button class="dropdown-button">
-                  {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
-                  <span class="dropdown-icon">▼</span>
-                </button>
-                <div
-                  v-if="isDropdownOpen[rowIndex]"
-                  class="dropdown-menu"
-                  @click.stop
-                >
-                  <div
-                    v-for="(
-                      categoryOptions, categoryName
-                    ) in getAllOptionsForType(checkbox)"
-                    :key="categoryName"
-                    class="option-category"
-                  >
-                    <h4>{{ categoryName }}</h4>
-                    <div class="radio-group">
-                      <label
-                        v-for="option in categoryOptions"
-                        :key="option"
-                        class="radio-item"
-                      >
-                        <URadio
-                          color="sky"
-                          class="radio-button"
-                          :name="'option-' + categoryName + '-' + rowIndex"
-                          :value="option"
-                          v-model="checkbox.options[categoryName]"
-                        />
-                        <span> &nbsp; </span>{{ option }}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- Anstatt Dropdown ein Button der ein Modal öffnet -->
+              <UButton
+                @click="openOptionsModal(rowIndex)"
+                variant="outline"
+                size="sm"
+                color="sky"
+                class="dropdown-button"
+              >
+                {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
+              </UButton>
             </div>
 
             <!--Zylinder löschen & duplizieren-->
@@ -471,6 +445,65 @@
       :trailing="false"
       >Schlüssel hinzufügen</UButton
     >
+    <!-- Neues Modal für Optionen -->
+    <UModal
+      v-for="(row, rowIndex) in rows"
+      :key="'options-modal-' + rowIndex"
+      v-model="isOptionsModalOpen[rowIndex]"
+    >
+      <div class="p-4">
+        <div class="modal-flex-buttons-top">
+          <h2 class="modal-h2">Optionen auswählen</h2>
+          <UButton
+            color="red"
+            @click="closeOptionsModal(rowIndex)"
+            style="font-weight: 600; color: white"
+          >
+            X
+          </UButton>
+        </div>
+        <br />
+        <div
+          v-for="(checkbox, colIndex) in row"
+          :key="colIndex"
+          v-show="colIndex < 1"
+        >
+          <div
+            v-for="(categoryOptions, categoryName) in getAllOptionsForType(
+              checkbox
+            )"
+            :key="categoryName"
+            class="option-category"
+          >
+            <h4>{{ categoryName }}</h4>
+            <div class="radio-group">
+              <label
+                v-for="option in categoryOptions"
+                :key="option"
+                class="radio-item"
+              >
+                <URadio
+                  color="sky"
+                  class="radio-button"
+                  :name="'option-' + categoryName + '-' + rowIndex"
+                  :value="option"
+                  v-model="checkbox.options[categoryName]"
+                />
+                <span> &nbsp; </span>{{ option }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <UButton
+          style="color: white"
+          color="amber"
+          @click="closeOptionsModal(rowIndex)"
+          >Speichern</UButton
+        >
+      </div>
+    </UModal>
   </div>
 </template>
 
@@ -500,6 +533,7 @@ export default {
       isOpen: false,
       isOpenL: false,
       isDropdownOpen: {},
+      isOptionsModalOpen: {},
       rows: [
         [
           {
@@ -558,6 +592,13 @@ export default {
     },
   },
   methods: {
+    openOptionsModal(rowIndex) {
+      this.isOptionsModalOpen[rowIndex] = true;
+    },
+    closeOptionsModal(rowIndex) {
+      this.isOptionsModalOpen[rowIndex] = false;
+    },
+
     toggleDropdown(rowIndex) {
       if (!this.isDropdownOpen[rowIndex]) {
         this.isDropdownOpen[rowIndex] = true;
