@@ -32,7 +32,6 @@
           {{ model }}
         </option>
       </select>
-      <p>Zylinder: {{ store.selectedModel }}</p>
     </div>
   </div>
 
@@ -151,10 +150,11 @@
                 @click="openOptionsModal(rowIndex)"
                 variant="outline"
                 size="sm"
-                color="sky"
+                color="sky" 
                 class="dropdown-button"
-              >
-                {{ getSelectedOptionsText(checkbox) || "Optionen auswählen" }}
+                icon="i-heroicons-cog"
+              > 
+                {{ getSelectedOptionsText(checkbox) || "..." }}
               </UButton>
             </div>
 
@@ -450,58 +450,63 @@
       v-for="(row, rowIndex) in rows"
       :key="'options-modal-' + rowIndex"
       v-model="isOptionsModalOpen[rowIndex]"
+      class="options-modal"
     >
-      <div class="p-4">
-        <div class="modal-flex-buttons-top">
+      <div class="modal-content">
+        <div class="modal-header">
           <h2 class="modal-h2">Optionen auswählen</h2>
           <UButton
+            class="close-button"
             color="red"
             @click="closeOptionsModal(rowIndex)"
-            style="font-weight: 600; color: white"
           >
             X
           </UButton>
         </div>
-        <br />
-        <div
-          v-for="(checkbox, colIndex) in row"
-          :key="colIndex"
-          v-show="colIndex < 1"
-        >
+        <div class="modal-body">
+          <!-- Hier wird nur der erste Eintrag pro row betrachtet -->
           <div
-            v-for="(categoryOptions, categoryName) in getAllOptionsForType(
-              checkbox
-            )"
-            :key="categoryName"
-            class="option-category"
+            v-for="(checkbox, colIndex) in row"
+            :key="colIndex"
+            v-show="colIndex < 1"
           >
-            <h4>{{ categoryName }}</h4>
-            <div class="radio-group">
-              <label
-                v-for="option in categoryOptions"
-                :key="option"
-                class="radio-item"
-              >
-                <URadio
-                  color="sky"
-                  class="radio-button"
-                  :name="'option-' + categoryName + '-' + rowIndex"
-                  :value="option"
-                  v-model="checkbox.options[categoryName]"
-                />
-                <span> &nbsp; </span>{{ option }}
-              </label>
+            <div
+              v-for="(categoryOptions, categoryName) in getAllOptionsForType(
+                checkbox
+              )"
+              :key="categoryName"
+              class="option-category"
+            >
+              <h4 class="category-title">{{ categoryName }}</h4>
+              <div class="radio-group">
+                <label
+                  v-for="option in categoryOptions"
+                  :key="option"
+                  class="radio-item"
+                >
+                  <URadio
+                    color="sky"
+                    class="radio-button"
+                    :name="'option-' + categoryName + '-' + rowIndex"
+                    :value="option"
+                    v-model="checkbox.options[categoryName]"
+                  />
+                  <span class="radio-label">{{ option }}</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-
-        <br />
-        <UButton
-          style="color: white"
-          color="amber"
-          @click="closeOptionsModal(rowIndex)"
-          >Speichern</UButton
-        >
+        <div class="modal-footer">
+          <UButton
+            class="save-button"
+            style="color: white"
+            color="amber"
+            @click="closeOptionsModal(rowIndex)"
+          >
+            Speichern
+          </UButton>
+        </div>
       </div>
     </UModal>
   </div>
@@ -1168,4 +1173,99 @@ export default {
 
 <style lang="scss" scoped>
 @import "./styles/configurator.scss";
+
+.options-modal ::v-deep .u-modal-content {
+  background: #f9f9f9; /* heller Hintergrund für bessere Lesbarkeit */
+  border-radius: 8px;
+
+}
+
+/* Modal Layout */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 10px;
+}
+
+/* Header Styling */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+/* Close Button */
+.close-button {
+  font-weight: 600;
+  color: white !important;
+}
+
+/* Body Styling */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Kategorien Styling */
+.option-category {
+  background: rgb(255, 255, 255);
+  border: 1px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 15px;
+  margin: 10px;
+}
+
+.category-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Radio-Group Styling */
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #fafafa;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+/* Radio Button Anpassungen */
+.radio-button ::v-deep .u-radio__check {
+  border-color: #3b82f6 !important; /* sky-blue */
+}
+
+.radio-label {
+  color: #333;
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  font-weight: 500;
+  color: white !important;
+  background-color: #f59e0b !important; /* amber */
+}
 </style>
