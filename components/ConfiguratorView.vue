@@ -142,18 +142,18 @@
               </div>
             </div>
 
-            <!-- Optionen Auswahl -->
+            <!--Optionen-->
             <div class="options">
               <h3 v-if="rowIndex < 1">Optionen</h3>
               <!-- Anstatt Dropdown ein Button der ein Modal öffnet -->
               <UButton
                 @click="openOptionsModal(rowIndex)"
-                variant="outline"
+                variant="solid"
                 size="sm"
-                color="sky" 
+                color="sky"
                 class="dropdown-button"
                 icon="i-heroicons-cog"
-              > 
+              >
                 {{ getSelectedOptionsText(checkbox) || "..." }}
               </UButton>
             </div>
@@ -463,6 +463,9 @@
             X
           </UButton>
         </div>
+        <h6>
+          Bitte wählen Sie die gewünschten Optionen für den Zylinder aus. Keine Optionen = Standard
+        </h6>
         <div class="modal-body">
           <!-- Hier wird nur der erste Eintrag pro row betrachtet -->
           <div
@@ -1177,7 +1180,6 @@ export default {
 .options-modal ::v-deep .u-modal-content {
   background: #f9f9f9; /* heller Hintergrund für bessere Lesbarkeit */
   border-radius: 8px;
-
 }
 
 /* Modal Layout */

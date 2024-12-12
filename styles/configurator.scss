@@ -88,7 +88,7 @@ $badge-width: 80px;
       select {
         @include input-style;
         width: 100%;
-        height: 36px;
+        height: 32px;
         border: 1px solid #438fc2;
         border-radius: 6px;
         padding: 4px;
@@ -129,7 +129,7 @@ $badge-width: 80px;
       .outside {
         @include input-style;
         width: 80px; // Breite der Dropdowns anpassen
-        height: 36px; // Einheitliche Höhe für besseres Layout
+        height: 32px; // Einheitliche Höhe für besseres Layout
         border: 1px solid #438fc2; // Optional: Rahmen zur besseren Sichtbarkeit
         border-radius: 6px;
         padding: 4px;
@@ -152,8 +152,10 @@ $badge-width: 80px;
 
       .dropdown-button {
         background-color: white;
+        border: 1px solid #438fc2;
+        color:#333333;
         border-radius: 6px;
-        padding: 8px 12px;
+        padding: 5px 12px;
         cursor: pointer;
         width: 320px;
         text-align: left;
@@ -163,41 +165,7 @@ $badge-width: 80px;
         justify-content: space-between;
       }
 
-      .dropdown-menu {
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        z-index: 1000;
-        width: 300px;
-        max-height: 300px;
-        overflow-y: auto;
-        margin-top: 5px;
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-
-      }
-
-      .dropdown-icon {
-        margin-left: 8px;
-        font-size: 12px;
-        color: #a74747;
-      }
-
-      .option-category {
-        padding: 8px;
-        border-bottom: 1px solid #eaeaea;
-        font-size: 14px;
-      }
-
-      .radio-group {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .radio-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1px;
-      }
+      
     }
   }
 

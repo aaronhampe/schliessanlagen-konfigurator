@@ -7,7 +7,7 @@ export default {
         { inside: 40, outside: 45 },
       ],
       options: {
-        Material: ["Standard","Nickel", "Bronze", "Brass"],
+        Material: ["Standard","Nickel", "Bronze (+5€)", "Brass"],
         Sicherheit: ["Standard", "High Security"],
         Oberfläche: ["Standard","Matt", "Poliert"],
       },
