@@ -127,33 +127,47 @@ $badge-width: 80px;
 
       .inside,
       .outside {
-        @include input-style;
-        width: 80px; // Breite der Dropdowns anpassen
-        height: 32px; // Einheitliche Höhe für besseres Layout
-        border: 1px solid #438fc2; // Optional: Rahmen zur besseren Sichtbarkeit
+        width: 100px;
+        /* Breitere Anzeige, um den Inhalt nicht so schmal wirken zu lassen */
+        height: 36px;
+        border: 1px solid #438fc2;
         border-radius: 6px;
         padding: 4px;
         font-size: 14px;
+        background-color: white;
+        color: #333;
         cursor: pointer;
+        appearance: none;
+        /* Entfernt das Standard-Pfeil-Icon des Browsers (Safari, Chrome) */
+        background-image: url("your-icon.svg");
+        /* Eigenes Icon einfügen */
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+
+        &:focus {
+          border-color: #5e5ea7;
+          box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+        }
       }
+
     }
 
     .options {
       margin-top: 0px;
       width: 320px;
-    
+
 
       .dropdown {
         position: relative;
         display: inline-block;
         color: 333333;
-       
+
       }
 
       .dropdown-button {
         background-color: white;
         border: 1px solid #438fc2;
-        color:#333333;
+        color: #333333;
         border-radius: 6px;
         padding: 5px 12px;
         cursor: pointer;
@@ -165,7 +179,7 @@ $badge-width: 80px;
         justify-content: space-between;
       }
 
-      
+
     }
   }
 

@@ -464,8 +464,10 @@
           </UButton>
         </div>
         <h6>
-          Bitte wählen Sie die gewünschten Optionen für den Zylinder aus. Keine Optionen = Standard
+          Bitte wählen Sie die gewünschten Optionen für den Zylinder aus. 
         </h6>
+        <h6>Keine Optionen = Standard</h6>
+        
         <div class="modal-body">
           <!-- Hier wird nur der erste Eintrag pro row betrachtet -->
           <div
@@ -1178,16 +1180,18 @@ export default {
 @import "./styles/configurator.scss";
 
 .options-modal ::v-deep .u-modal-content {
-  background: #f9f9f9; /* heller Hintergrund für bessere Lesbarkeit */
-  border-radius: 8px;
+  background: #ffffff; /* Reines Weiß für einen cleanen Look */
+  border-radius: 12px;
+  padding: 20px; /* Etwas mehr Padding für Luft */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Leichter, weicher Schatten für Tiefe */
 }
 
 /* Modal Layout */
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 10px;
+  gap: 15px;
+  margin: 8px;
 }
 
 /* Header Styling */
@@ -1198,16 +1202,27 @@ export default {
 }
 
 .modal-h2 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
   color: #333;
 }
 
-/* Close Button */
 .close-button {
   font-weight: 600;
-  color: white !important;
+  color: #ffffff !important;
+  background: #dc2626 !important; /* Red Accent */
+  border-radius: 6px;
+  padding: 4px 8px;
+  box-shadow: none;
+}
+
+/* Hinweis-Text */
+h6 {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
 /* Body Styling */
@@ -1219,44 +1234,54 @@ export default {
 
 /* Kategorien Styling */
 .option-category {
-  background: rgb(255, 255, 255);
-  border: 1px solid #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  box-shadow: none;
+  border-radius: 8px;
   padding: 15px;
-  margin: 10px;
+  margin: 0; /* Entferne die Margin und arbeite mit Gap außerhalb */
 }
 
 .category-title {
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 10px;
-  color: #555;
+  color: #444;
 }
 
 /* Radio-Group Styling */
 .radio-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .radio-item {
   display: flex;
   align-items: center;
-  gap: 5px;
-  background: #fafafa;
-  padding: 5px 10px;
-  border-radius: 4px;
+  gap: 8px;
+  background: #ffffff;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:hover {
+    border-color: #3b82f6;
+    background-color: #f0faff; /* Leichter Blauton als Hover */
+  }
 }
 
 /* Radio Button Anpassungen */
 .radio-button ::v-deep .u-radio__check {
   border-color: #3b82f6 !important; /* sky-blue */
+  width: 18px;
+  height: 18px;
 }
 
 .radio-label {
   color: #333;
+  font-size: 0.95rem;
 }
 
 /* Footer */
@@ -1267,7 +1292,21 @@ export default {
 
 .save-button {
   font-weight: 500;
-  color: white !important;
+  color: #ffffff !important;
   background-color: #f59e0b !important; /* amber */
+  border-radius: 6px;
+  padding: 6px 14px;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: #d97706 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Optional: etwas mehr Abstand zwischen Kategorien schaffen */
+.option-category + .option-category {
+  margin-top: 10px;
 }
 </style>
