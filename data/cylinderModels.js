@@ -1,5 +1,6 @@
 export default {
   "Kein bestimmtes Modell": {
+    isSchliessanlage: true,
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -123,6 +124,7 @@ export default {
     ],
   },
   "ABUS EC550": {
+    isSchliessanlage: false,
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -195,6 +197,7 @@ export default {
     ],
   },
   "ABUS EC660": {
+    isSchliessanlage: false,
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -241,6 +244,7 @@ export default {
     ],
   },
   "ABUS EC880": {
+    isSchliessanlage: false,
     Doppelzylinder: {
       sizes: [
         { inside: 50, outside: 30 },

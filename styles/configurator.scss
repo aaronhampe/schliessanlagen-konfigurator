@@ -274,6 +274,54 @@ $badge-width: 80px;
   }
 }
 
+.first-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-icon {
+  display: inline-block;
+  position: relative; 
+  cursor: pointer; 
+  margin-left: 8px;
+
+  i {
+    font-size: 1.2rem; 
+    color: #888; /* leicht graues Icon */
+  }
+
+  &:hover i {
+    color: #333; /* dunkler beim Hover */
+  }
+}
+
+.tooltip-box {
+  position: absolute;
+  top: 120%; 
+  left: 50%;
+  transform: translateX(-50%); 
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #333;
+  width: 220px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+// Einfache Fade-Transition
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .2s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+
+
 
 .options-modal ::v-deep .u-modal-content {
   background: #ffffff; /* Reines Weiß für einen cleanen Look */

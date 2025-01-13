@@ -54,7 +54,13 @@ export const useCylinderStore = defineStore('cylinderStore', {
                 return cylinderModels[state.selectedModel][typeKey]?.options || {}
             }
             return {}
-        }
+        },
+        isSchliessanlage(state) {
+            if (!state.selectedModel) return false;
+            const modelData = cylinderModels[state.selectedModel];
+            // Fallback: Falls nicht definiert, default false
+            return modelData && modelData.isSchliessanlage === true;
+        },
     },
     actions: {
         setModel(model) {
@@ -100,14 +106,14 @@ export const useCylinderStore = defineStore('cylinderStore', {
         },
         getOptionsForType(type) {
             if (this.selectedModel && type) {
-              const typeKey = type.replace(/\s*\(.*?\)/g, '');
-              const modelData = cylinderModels[this.selectedModel];
-              if (modelData && modelData[typeKey] && modelData[typeKey].options) {
-                return modelData[typeKey].options;
-              }
+                const typeKey = type.replace(/\s*\(.*?\)/g, '');
+                const modelData = cylinderModels[this.selectedModel];
+                if (modelData && modelData[typeKey] && modelData[typeKey].options) {
+                    return modelData[typeKey].options;
+                }
             }
             return {};
-          },
-          
+        },
+
     }
 })
