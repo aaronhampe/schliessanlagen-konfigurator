@@ -46,12 +46,38 @@ $badge-width: 80px;
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
+    select {
+      @include input-style;
+      width: 220px;
+      height: 32px;
+      border: 1px solid #438fc2;
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 14px;
+      background-color: white;
+      color: $primary-color;
+      cursor: pointer;
+
+      &:hover {
+        border-color: rgba(94, 94, 167, 0.8);
+      }
+
+      &:focus {
+        border-color: rgb(94, 94, 167);
+        box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+      }
+
+      option {
+        font-size: 14px;
+        color: $primary-color;
+      }
+    }
   }
 
   ::v-deep .model-select {
     width: 300px;
   }
-  
+
 }
 
 // FLEX CONTAINER
@@ -282,25 +308,27 @@ $badge-width: 80px;
 
 .info-icon {
   display: inline-block;
-  position: relative; 
-  cursor: pointer; 
+  position: relative;
+  cursor: pointer;
   margin-left: 8px;
 
   i {
-    font-size: 1.2rem; 
-    color: #888; /* leicht graues Icon */
+    font-size: 1.2rem;
+    color: #888;
+    /* leicht graues Icon */
   }
 
   &:hover i {
-    color: #333; /* dunkler beim Hover */
+    color: #333;
+    /* dunkler beim Hover */
   }
 }
 
 .tooltip-box {
   position: absolute;
-  top: 120%; 
+  top: 120%;
   left: 50%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -308,15 +336,18 @@ $badge-width: 80px;
   font-size: 0.85rem;
   color: #333;
   width: 220px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 999;
 }
 
 // Einfache Fade-Transition
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity .2s ease;
 }
-.fade-enter-from, .fade-leave-to {
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -324,10 +355,13 @@ $badge-width: 80px;
 
 
 .options-modal ::v-deep .u-modal-content {
-  background: #ffffff; /* Reines Weiß für einen cleanen Look */
+  background: #ffffff;
+  /* Reines Weiß für einen cleanen Look */
   border-radius: 12px;
-  padding: 20px; /* Etwas mehr Padding für Luft */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Leichter, weicher Schatten für Tiefe */
+  padding: 20px;
+  /* Etwas mehr Padding für Luft */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  /* Leichter, weicher Schatten für Tiefe */
 }
 
 /* Modal Layout */
@@ -355,7 +389,8 @@ $badge-width: 80px;
 .close-button {
   font-weight: 600;
   color: #ffffff !important;
-  background: #dc2626 !important; /* Red Accent */
+  background: #dc2626 !important;
+  /* Red Accent */
   border-radius: 6px;
   padding: 4px 8px;
   box-shadow: none;
@@ -383,7 +418,8 @@ h6 {
   box-shadow: none;
   border-radius: 8px;
   padding: 15px;
-  margin: 0; /* Entferne die Margin und arbeite mit Gap außerhalb */
+  margin: 0;
+  /* Entferne die Margin und arbeite mit Gap außerhalb */
 }
 
 .category-title {
@@ -412,13 +448,15 @@ h6 {
 
   &:hover {
     border-color: #3b82f6;
-    background-color: #f0faff; /* Leichter Blauton als Hover */
+    background-color: #f0faff;
+    /* Leichter Blauton als Hover */
   }
 }
 
 /* Radio Button Anpassungen */
 .radio-button ::v-deep .u-radio__check {
-  border-color: #3b82f6 !important; /* sky-blue */
+  border-color: #3b82f6 !important;
+  /* sky-blue */
   width: 18px;
   height: 18px;
 }
@@ -437,7 +475,8 @@ h6 {
 .save-button {
   font-weight: 500;
   color: #ffffff !important;
-  background-color: #f59e0b !important; /* amber */
+  background-color: #f59e0b !important;
+  /* amber */
   border-radius: 6px;
   padding: 6px 14px;
   transition: background-color 0.2s, transform 0.1s;
@@ -450,6 +489,130 @@ h6 {
 }
 
 /* Optional: etwas mehr Abstand zwischen Kategorien schaffen */
-.option-category + .option-category {
+.option-category+.option-category {
   margin-top: 10px;
+}
+
+/* Beispiel: Moderne Warnungsmodal-Klasse */
+.warning-modal {
+
+  /* Damit wir das UModal-Content ansprechen können, 
+     falls deine UI-Library z.B. .u-modal-content generiert: */
+  ::v-deep .u-modal-content {
+    background: #ffffff;
+    /* Weißer Container */
+    border-radius: 12px;
+    /* Abgerundete Ecken */
+    padding: 24px 28px;
+    /* Luft nach innen, etwas größer für "Luft" */
+    max-width: 500px;
+    /* Begrenzte Breite, sonst wird's sehr breit */
+    margin: 0 auto;
+    /* Zentrieren */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    /* Weicher Schatten */
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Abstand zwischen Header, Body und Footer */
+  }
+
+  /* Header-Bereich */
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 10px;
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    
+    }
+
+    .close-button {
+      background: #dc2626;
+      /* ein kräftiges Rot */
+      color: #ffffff !important;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 4px 10px;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #b91c1c;
+      }
+    }
+  }
+
+  /* Body-Bereich */
+  .modal-body {
+    color: #444;
+    line-height: 1.4;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  /* Footer-Bereich mit den Buttons */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 10px;
+
+    /* Buttons innen */
+    .confirm-button {
+      background: #ef4444;
+      /* Rot-Orange */
+      color: #fff !important;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      padding: 8px 16px;
+      cursor: pointer;
+
+      transition: background-color 0.2s, transform 0.1s;
+
+      &:hover {
+        background-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .cancel-button {
+      background: #f3f4f6;
+      /* Hellgrau */
+      color: #374151;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      padding: 8px 16px;
+      cursor: pointer;
+
+      transition: background-color 0.2s, transform 0.1s;
+
+      &:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+}
+
+/* Einfache Fade-Transition-Klassen (falls du <transition name="fade"> nutzt) */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

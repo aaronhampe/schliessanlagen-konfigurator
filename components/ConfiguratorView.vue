@@ -27,15 +27,32 @@
       <h2>Anlagennummer:</h2>
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
-    <!-- Modellauswahl -->
+    <!-- Modellpräferenz -->
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
-      <select v-model="store.selectedModel" @change="store.setModel($event.target.value)">
+      <select :value="selectedModelLocal" @change="onModelSelect($event)">
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
     </div>
+
+    <!-- Warnungs-Modal -->
+    <UModal v-model="isWarningModalOpen" class="warning-modal">
+      <div class="modal-header">
+        <h2>Achtung!</h2>
+        <button class="close-button" @click="isWarningModalOpen = false">X</button>
+      </div>
+      <div class="modal-body">
+        <p>Beim Wechsel des Modells können alle eingegebenen Daten verloren gehen.</p>
+        <p>Möchten Sie den Modellwechsel wirklich durchführen?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="confirm-button" @click="confirmChange">Ja, ändern</button>
+        <button class="cancel-button" @click="cancelChange">Abbrechen</button>
+      </div>
+    </UModal>
+
   </div>
 
   <div class="flex-container">
@@ -292,6 +309,15 @@ export default {
       isDropdownOpen: {},
       isOptionsModalOpen: {},
       hoverInfo: false,
+      // Lokale Kopie des Modells, das im Select angezeigt wird
+      selectedModelLocal: '',
+      oldModel: '',
+
+      // Modal-Flag
+      isWarningModalOpen: false,
+
+      // Zwischenspeicher: Wohin will der User wechseln?
+      pendingModel: null,
       rows: [
         [
           {
@@ -917,9 +943,61 @@ export default {
       this.isOpenL = false;
     },
 
+    onModelSelect(event) {
+      const newlySelected = event.target.value
+      // Prüfen: weicht das vom alten Modell ab?
+      if (newlySelected !== this.oldModel) {
+        // Dann erst Warnmodal statt sofortigem Wechsel
+        this.pendingModel = newlySelected
+        // Select bleibt zunächst auf "altem" Wert stehen (rein optisch)
+        // => wir setzen es zurück:
+        event.target.value = this.oldModel
+
+        // Jetzt Modal öffnen
+        this.isWarningModalOpen = true
+      }
+    },
+
+    confirmChange() {
+      if (this.pendingModel) {
+        // 1) Store aktualisieren: das neue Modell
+        this.store.setModel(this.pendingModel)
+
+        // 2) Alle Zylinder-Properties zurücksetzen
+        //    - 'doorDesignation' und 'doorquantity' kannst du ggf. behalten, wenn erwünscht
+        //    - 'type', 'inside', 'outside', 'options', 'checked' zurück auf Standard
+        this.rows.forEach((row) => {
+          row.forEach((checkbox) => {
+            checkbox.type = ""
+            checkbox.inside = null
+            checkbox.outside = null
+            checkbox.options = {}
+            // Falls du isSchliessanlage neu berechnen willst (z.B. Store kann sich geändert haben):
+            checkbox.checked = !this.isSchliessanlage
+          })
+        })
+
+        // 3) Lokale Variablen
+        this.selectedModelLocal = this.pendingModel
+        this.oldModel = this.pendingModel
+        this.isWarningModalOpen = false
+        this.pendingModel = null
+      }
+    },
+
+    cancelChange() {
+      // User hat abgebrochen => bleibe beim alten Modell
+      this.pendingModel = null
+      // Modal zu
+      this.isWarningModalOpen = false
+    },
+
+
     mounted() {
       this.generateRandomAnlagenNummer();
       document.addEventListener("click", this.closeAllDropdowns);
+      this.selectedModelLocal = this.store.selectedModel
+      this.oldModel = this.store.selectedModel
     },
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
