@@ -51,9 +51,8 @@ $badge-width: 80px;
   ::v-deep .model-select {
     width: 300px;
   }
+  
 }
-
-
 
 // FLEX CONTAINER
 .flex-container {
@@ -273,4 +272,136 @@ $badge-width: 80px;
       font-size: 1.44rem;
     }
   }
+}
+
+
+.options-modal ::v-deep .u-modal-content {
+  background: #ffffff; /* Reines Weiß für einen cleanen Look */
+  border-radius: 12px;
+  padding: 20px; /* Etwas mehr Padding für Luft */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Leichter, weicher Schatten für Tiefe */
+}
+
+/* Modal Layout */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 8px;
+}
+
+/* Header Styling */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.close-button {
+  font-weight: 600;
+  color: #ffffff !important;
+  background: #dc2626 !important; /* Red Accent */
+  border-radius: 6px;
+  padding: 4px 8px;
+  box-shadow: none;
+}
+
+/* Hinweis-Text */
+h6 {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* Body Styling */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Kategorien Styling */
+.option-category {
+  background: #fafafa;
+  border: 1px solid #eee;
+  box-shadow: none;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 0; /* Entferne die Margin und arbeite mit Gap außerhalb */
+}
+
+.category-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+/* Radio-Group Styling */
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:hover {
+    border-color: #3b82f6;
+    background-color: #f0faff; /* Leichter Blauton als Hover */
+  }
+}
+
+/* Radio Button Anpassungen */
+.radio-button ::v-deep .u-radio__check {
+  border-color: #3b82f6 !important; /* sky-blue */
+  width: 18px;
+  height: 18px;
+}
+
+.radio-label {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  font-weight: 500;
+  color: #ffffff !important;
+  background-color: #f59e0b !important; /* amber */
+  border-radius: 6px;
+  padding: 6px 14px;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: #d97706 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Optional: etwas mehr Abstand zwischen Kategorien schaffen */
+.option-category + .option-category {
+  margin-top: 10px;
 }
