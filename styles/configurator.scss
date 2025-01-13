@@ -313,14 +313,12 @@ $badge-width: 80px;
   margin-left: 8px;
 
   i {
-    font-size: 1.2rem;
-    color: #888;
-    /* leicht graues Icon */
+    font-size: 1.7rem;
+    color: #438fc2;
   }
 
   &:hover i {
     color: #333;
-    /* dunkler beim Hover */
   }
 }
 
@@ -488,34 +486,23 @@ h6 {
   }
 }
 
-/* Optional: etwas mehr Abstand zwischen Kategorien schaffen */
 .option-category+.option-category {
   margin-top: 10px;
 }
 
-/* Beispiel: Moderne Warnungsmodal-Klasse */
 .warning-modal {
 
-  /* Damit wir das UModal-Content ansprechen können, 
-     falls deine UI-Library z.B. .u-modal-content generiert: */
+  /* Der Container, in dem dein UModal gerendert wird */
   ::v-deep .u-modal-content {
     background: #ffffff;
-    /* Weißer Container */
     border-radius: 12px;
-    /* Abgerundete Ecken */
     padding: 24px 28px;
-    /* Luft nach innen, etwas größer für "Luft" */
     max-width: 500px;
-    /* Begrenzte Breite, sonst wird's sehr breit */
     margin: 0 auto;
-    /* Zentrieren */
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    /* Weicher Schatten */
-
     display: flex;
     flex-direction: column;
     gap: 12px;
-    /* Abstand zwischen Header, Body und Footer */
   }
 
   /* Header-Bereich */
@@ -531,12 +518,10 @@ h6 {
       font-weight: 600;
       color: #333;
       margin: 0;
-    
     }
 
     .close-button {
-      background: #dc2626;
-      /* ein kräftiges Rot */
+      background: #dc2626; /* Ein kräftiges Rot */
       color: #ffffff !important;
       font-weight: 600;
       border-radius: 6px;
@@ -568,7 +553,6 @@ h6 {
     /* Buttons innen */
     .confirm-button {
       background: #ef4444;
-      /* Rot-Orange */
       color: #fff !important;
       border: none;
       border-radius: 6px;
@@ -587,7 +571,6 @@ h6 {
 
     .cancel-button {
       background: #f3f4f6;
-      /* Hellgrau */
       color: #374151;
       border: none;
       border-radius: 6px;
@@ -605,6 +588,7 @@ h6 {
     }
   }
 }
+
 
 /* Einfache Fade-Transition-Klassen (falls du <transition name="fade"> nutzt) */
 .fade-enter-active,

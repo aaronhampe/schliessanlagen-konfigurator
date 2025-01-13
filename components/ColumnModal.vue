@@ -1,56 +1,166 @@
+<!-- ColumnModal.vue -->
 <template>
-    <UModal class="modal" v-model="isOpenC">
-        <div class="p-4">
-            <div class="modal-flex-buttons-top pb-6">
-                <h2 class="modal-h2">Schlüssel benennen</h2>
-                <UButton color="red"  @click="closeModal" style="font-weight: 600; color:white;">X</UButton>
-            </div>
-            <label for="input" >Schlüsselbezeichnung:</label>
-            <UInput autofocus class="input pb-6 z-10" v-model="columnName" color="amber" />
-            <UButton class="button" style="color: white;" @click="closeModal" color="amber">Speichern</UButton>
+    <UModal class="column-modal" v-model="isOpenC">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Schlüssel benennen</h2>
+          <UButton class="close-button" color="red" @click="closeModal">X</UButton>
         </div>
+        <div class="modal-body">
+          <label for="input" class="modal-label">Schlüsselbezeichnung:</label>
+          <UInput
+            autofocus
+            class="modal-input"
+            v-model="columnName"
+            color="amber"
+            placeholder="z.B. Haustürschlüssel"
+          />
+        </div>
+        <div class="modal-footer">
+          <UButton
+            class="save-button"
+            style="color: #fff"
+            @click="closeModal"
+            color="amber"
+          >
+            Speichern
+          </UButton>
+        </div>
+      </div>
     </UModal>
-</template>
-
-<script>
-export default {
-    props: ['columnId'],
+  </template>
+  
+  <script>
+  export default {
+    name: "ColumnModal",
+    props: ["columnId"],
     data() {
-        return {
-            isOpenC: false,
-            columnName: '',
-        };
+      return {
+        isOpenC: false,
+        columnName: "",
+      };
     },
     methods: {
-        closeModal() {
-            // Hier können Sie die Logik hinzufügen, um den neuen Namen der Spalte zu speichern
-            this.$emit('update-column-name', this.columnName);
-            this.$emit('close-this-modal', this.isOpenC);
-        },
+      closeModal() {
+        // Hier z. B. das neue Spalten-Label speichern
+        this.$emit("update-column-name", this.columnName);
+        this.$emit("close-this-modal", this.isOpenC);
+      },
     },
-};
-</script>
-
-<style>
-
-
-@media(prefers-color-scheme: dark) {
-    .modal-h2 {
-      color: #ffffff;
+  };
+  </script>
+  
+  <style scoped>
+  /* 
+     Basis-Styles für dunkle Systeme: 
+     Verwendest du lieber ein helles Design, 
+     kannst du die Farben einfach anpassen.
+  */
+  @media (prefers-color-scheme: dark) {
+    .modal-title,
+    .modal-label {
+      color: #fff;
     }
-    label {
-        color: #ffffff;
-    }
-}
-
-.modal-h2 {
-  font-size: 1.4rem;
-}
-
-.modal-flex-buttons-top {
+  }
+  
+  /* Container */
+  .column-modal ::v-deep .u-modal-content {
+    background: #ffffff; /* oder #f9fafb für ein helleres Offwhite */
+    border-radius: 12px;
+    max-width: 480px; /* Modale etwas schmaler halten */
+    margin: 1.5rem auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+  }
+  
+  /* Inhalt */
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 20px;
+  }
+  
+  /* Header */
+  .modal-header {
     display: flex;
     justify-content: space-between;
-}
-
-
-</style>
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: #333; /* Für helle Themes */
+  }
+  
+  .close-button {
+    background-color: #dc2626 !important; /* rote Nuance */
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  
+  .close-button:hover {
+    background-color: #b91c1c !important; /* dunkleres Rot */
+  }
+  
+  /* Body */
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .modal-label {
+    font-size: 0.95rem;
+    color: #555; /* Für helle Themes */
+  }
+  
+  .modal-input ::v-deep .u-input__field {
+    border-color: #cbd5e1;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  /* Hover / Focus-Effekte am UInput-Feld */
+  .modal-input ::v-deep .u-input__field:hover {
+    border-color: #94a3b8;
+  }
+  
+  .modal-input ::v-deep .u-input__field:focus {
+    border-color: #f59e0b; /* Amber-Hover */
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  }
+  
+  /* Footer */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+  
+  .save-button {
+    background-color: #f59e0b !important; /* Amber-Farbe */
+    color: #fff !important;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.1s;
+  }
+  
+  .save-button:hover {
+    background-color: #d97706 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  </style>
+  
