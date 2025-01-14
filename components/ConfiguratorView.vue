@@ -71,13 +71,13 @@
             <!--Türbezeichnung-->
             <div class="door-designation" v-if="colIndex < 1">
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
-              <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="blue"
+              <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="sky"
                 size="sm" variant="outline" placeholder="z.B. Haupteingang" />
             </div>
             <!--Zylinderanzahl-->
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
-              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="blue" size="sm"
+              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm"
                 type="number" variant="outline" />
             </div>
 
