@@ -325,8 +325,8 @@ export default {
             doorDesignation: "",
             doorquantity: 1,
             type: "",
-            outside: null, // Changed from "" to null
-            inside: null, // Changed from "" to null
+            outside: "", 
+            inside: "", 
             options: {},
             checked: !this.isSchliessanlage,
             keyquantity: 1,
@@ -969,8 +969,8 @@ export default {
         this.rows.forEach((row) => {
           row.forEach((checkbox) => {
             checkbox.type = ""
-            checkbox.inside = null
-            checkbox.outside = null
+            checkbox.inside = ""
+            checkbox.outside = ""
             checkbox.options = {}
             // Falls du isSchliessanlage neu berechnen willst (z.B. Store kann sich geändert haben):
             checkbox.checked = !this.isSchliessanlage
