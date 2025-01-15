@@ -675,8 +675,8 @@ export default {
       "Halbzylinder",
     ],
   },
-  "DOM IX Twido": {
-    isSchliessanlage: true,
+  "DOM RN": {
+    isSchliessanlage: false,
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -867,8 +867,8 @@ export default {
       "Briefkastenschloss",
     ],
   },
-  "DOM RN": {
-    isSchliessanlage: false,
+  "DOM IX Twido": {
+    isSchliessanlage: true,
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
