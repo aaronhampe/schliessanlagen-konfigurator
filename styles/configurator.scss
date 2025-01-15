@@ -65,7 +65,7 @@ $badge-width: 80px;
 
       &:focus {
         border-color: #10a4ec;
-        box-shadow: 0 0 0 2px #10a4ec;
+        box-shadow: 0 0 0 1px #10a4ec;
       }
 
       option {
@@ -129,7 +129,7 @@ $badge-width: 80px;
 
         &:focus {
           border-color: #10a4ec;
-          box-shadow: 0 0 0 2px #10a4ec;
+          box-shadow: 0 0 0 1px #10a4ec;
         }
 
         option {
@@ -170,9 +170,13 @@ $badge-width: 80px;
         background-repeat: no-repeat;
         background-position: right 10px center;
 
+        &:hover {
+          border-color: #10a4ec;
+        }
+
         &:focus {
           border-color: #10a4ec;
-          box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+          box-shadow: 0 0 0 1px #10a4ec;
         }
       }
 
@@ -243,15 +247,16 @@ $badge-width: 80px;
       width: 33px;
       height: 20px;
       font-size: 12px;
-      border: 1px dotted lightblue;
+      border: 1px solid #ffffff;;
       border-radius: 4px;
+      
     }
 
     .key-name:focus,
     .key-quantity:focus {
       outline: none;
-      border-color: rgb(126, 126, 192);
-      box-shadow: 0 0 0 2px rgba(94, 94, 167, 0.5);
+      border-color: #10a4ec;;
+      box-shadow: 0 0 0 1px #10a4ec;;
     }
 
     .button-edit {
@@ -492,19 +497,32 @@ h6 {
   margin-top: 10px;
 }
 
-.warning-modal {
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
 
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.warning-modal {
   /* Der Container, in dem dein UModal gerendert wird */
   ::v-deep .u-modal-content {
     background: #ffffff;
-    border-radius: 12px;
-    padding: 24px 28px;
-    max-width: 500px;
+    border-radius: 10px;
+    padding: 24px;
+    max-width: 480px;
     margin: 0 auto;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+
+    /* Dezente Ein- und Ausblend-Transition (optional) */
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
   /* Header-Bereich */
@@ -512,36 +530,41 @@ h6 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
     padding: 10px;
 
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      color: #333;
+      color: #2d2d2d;
       margin: 0;
     }
 
     .close-button {
       background: #dc2626; /* Ein kräftiges Rot */
-      color: #ffffff !important;
+      color: #ffffff;
       font-weight: 600;
-      border-radius: 6px;
-      padding: 4px 10px;
       border: none;
+      outline: none;
+      border-radius: 5px;
+      padding: 6px 12px;
       cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
 
       &:hover {
         background: #b91c1c;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      &:active {
+        transform: scale(0.98);
       }
     }
   }
 
   /* Body-Bereich */
   .modal-body {
-    color: #444;
-    line-height: 1.4;
-    font-size: 0.95rem;
+    color: #4a4a4a;
+    font-size: 0.8rem;
     padding: 10px;
   }
 
@@ -552,22 +575,24 @@ h6 {
     gap: 12px;
     padding: 10px;
 
-    /* Buttons innen */
     .confirm-button {
       background: #ef4444;
       color: #fff !important;
       border: none;
-      border-radius: 6px;
-      font-weight: 500;
+      border-radius: 5px;
+      font-weight: 400;
       padding: 8px 16px;
       cursor: pointer;
-
       transition: background-color 0.2s, transform 0.1s;
+      padding: 10px;
 
       &:hover {
         background-color: #dc2626;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      }
+      &:active {
+        transform: scale(0.98);
       }
     }
 
@@ -575,30 +600,26 @@ h6 {
       background: #f3f4f6;
       color: #374151;
       border: none;
-      border-radius: 6px;
-      font-weight: 500;
+      border-radius: 5px;
+      font-weight: 400;
       padding: 8px 16px;
       cursor: pointer;
-
       transition: background-color 0.2s, transform 0.1s;
 
       &:hover {
         background-color: #e5e7eb;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
+      }
+      &:active {
+        transform: scale(0.98);
       }
     }
   }
 }
 
-
-/* Einfache Fade-Transition-Klassen (falls du <transition name="fade"> nutzt) */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.modal-flex-buttons-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

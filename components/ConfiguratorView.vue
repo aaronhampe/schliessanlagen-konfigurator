@@ -1,4 +1,5 @@
 <template>
+
   <!-- HEADING -->
   <div class="heading">
 
@@ -12,10 +13,8 @@
       </h1>
       <div class="info-icon" @mouseenter="hoverInfo = true" @mouseleave="hoverInfo = false">
         <i class="i-heroicons-information-circle" />
-        <!-- Tooltip mit Transition -->
         <transition name="fade">
           <div v-if="hoverInfo" class="tooltip-box">
-            <!-- kurzer Satz: Unterschied -->
             Bei einer Gleichschließung können alle Schlüssel alle Türen
             aufschließen, während bei einer Schließanlage die Schlüssel
             eine gezielte Zuweisung benötigen.
@@ -27,6 +26,7 @@
       <h2>Anlagennummer:</h2>
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
+
     <!-- Modellpräferenz -->
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
@@ -143,7 +143,7 @@
             v-if="rowIndex < 1" :class="isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
           " />
 
-          <input min=" 1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
+          <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
             v-if="rowIndex < 1" />
           <UButton class="button-edit" icon="i-heroicons-pencil" v-if="rowIndex < 1" @click="openModal(colIndex)"
             size="sm" color="sky" variant="solid" :trailing="false" />
@@ -158,6 +158,7 @@
           <UButton @click="duplicateCol(colIndex)" v-if="rowIndex == this.rows.length - 1" class="button-duplicate"
             icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false" />
         </div>
+
       </div>
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
@@ -214,32 +215,11 @@
         <UButton v-if="showLoadButton" class="button-default" @click="test" size="sm" color="amber" variant="solid"
           :trailing="false">Test
         </UButton>
-        <UModal v-model="isOpenL">
-          <div class="p-4">
-            <div class="modal-flex-buttons-top">
-              <h2 class="modal-h2">Anlage laden</h2>
-              <UButton color="red" @click="isOpenL = false">X</UButton>
-            </div>
-            <br />
-            <form @submit.prevent="handleSubmit">
-              <div class="form-group">
-                <label for="id">Anlagennummer:</label>
-                <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
-              </div>
-              <div class="form-group">
-                <label for="id">Passwort:</label>
-                <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
-              </div>
-              <br />
-              <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
-              </UButton>
-            </form>
-          </div>
-        </UModal>
       </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
       variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
+
     <!-- Neues Modal für Optionen -->
     <UModal v-for="(row, rowIndex) in rows" :key="'options-modal-' + rowIndex" v-model="isOptionsModalOpen[rowIndex]"
       class="options-modal">
@@ -280,6 +260,28 @@
       </div>
     </UModal>
   </div>
+  <UModal v-model="isOpenL">
+    <div class="p-4">
+      <div class="modal-flex-buttons-top">
+        <h2 class="modal-h2">Anlage laden</h2>
+        <UButton color="red" @click="isOpenL = false">X</UButton>
+      </div>
+      <br />
+      <form @submit.prevent="handleSubmit">
+        <div class="form-group">
+          <label for="id">Anlagennummer:</label>
+          <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
+        </div>
+        <div class="form-group">
+          <label for="id">Passwort:</label>
+          <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
+        </div>
+        <br />
+        <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
+        </UButton>
+      </form>
+    </div>
+  </UModal>
 </template>
 
 <script>
@@ -310,14 +312,9 @@ export default {
       isDropdownOpen: {},
       isOptionsModalOpen: {},
       hoverInfo: false,
-      // Lokale Kopie des Modells, das im Select angezeigt wird
       selectedModelLocal: '',
       oldModel: '',
-
-      // Modal-Flag
       isWarningModalOpen: false,
-
-      // Zwischenspeicher: Wohin will der User wechseln?
       pendingModel: null,
       rows: [
         [
@@ -372,12 +369,10 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-      // return this.$route.path.includes('/admin/');
       return true;
     },
   },
   watch: {
-    // whenever store.selectedModel changes from outside, keep local in sync:
     'store.selectedModel': {
       immediate: true,
       handler(newVal) {
@@ -402,23 +397,21 @@ export default {
       }
     },
 
-    // Ruft die Optionen für den ausgewählten Zylindertyp ab
+
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
         const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
         const optionsData = this.store.getOptionsForType(typeKey);
         if (Array.isArray(optionsData)) {
-          // Wenn Optionen ein Array sind, in eine Kategorie "Optionen" einordnen
           return { Optionen: optionsData };
         } else {
-          // Optionen nach Kategorien
           return optionsData;
         }
       }
       return {};
     },
 
-    // Gibt den Text der ausgewählten Optionen zurück
+
     getSelectedOptionsText(checkbox) {
       if (checkbox.options) {
         const optionsArray = [];
@@ -430,7 +423,7 @@ export default {
       return "";
     },
 
-    // Konvertiert das Optionen-Objekt in einen String
+
     optionsToString(options) {
       const optionsArray = [];
       for (const category in options) {
@@ -441,7 +434,7 @@ export default {
       return optionsArray.join(", ");
     },
 
-    // Konvertiert den Optionen-String zurück in ein Objekt
+
     stringToOptions(optionsString, availableOptions) {
       const optionsArray = optionsString.split(", ").filter(Boolean);
       const options = {};
@@ -454,17 +447,15 @@ export default {
         ) {
           options[category] = option;
         } else if (availableOptions.Optionen?.includes(optionPair)) {
-          // Falls Optionen nicht kategorisiert sind
           options.Optionen = optionPair;
         }
       });
       return options;
     },
 
-    // Schließt alle Dropdowns, wenn außerhalb geklickt wird
     closeAllDropdowns() {
       Object.keys(this.isDropdownOpen).forEach((key) => {
-        this.isDropdownOpen[key] = false; // Setzt alle Dropdowns auf geschlossen
+        this.isDropdownOpen[key] = false;
       });
     },
 
@@ -473,12 +464,12 @@ export default {
         this.$refs.dropdownContainer &&
         !this.$refs.dropdownContainer.contains(event.target)
       ) {
-        this.isDropdownOpen = false; // Schließt Dropdown bei Klick außerhalb
+        this.isDropdownOpen = false;
       }
     },
+
     changeModel() {
       this.store.setModel(this.selectedModel);
-      // Reset selections if needed
       this.rows.forEach((row) => {
         row.forEach((checkbox) => {
           checkbox.type = "";
@@ -495,11 +486,11 @@ export default {
         return sizes
           .filter((size) => size.outside === Number(checkbox.outside))
           .map((size) => size.inside)
-          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+          .filter((value, index, self) => self.indexOf(value) === index);
       } else {
         return sizes
           .map((size) => size.inside)
-          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+          .filter((value, index, self) => self.indexOf(value) === index);
       }
     },
 
@@ -509,17 +500,17 @@ export default {
         return sizes
           .filter((size) => size.inside === Number(checkbox.inside))
           .map((size) => size.outside)
-          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+          .filter((value, index, self) => self.indexOf(value) === index);
       } else {
         return sizes
           .map((size) => size.outside)
-          .filter((value, index, self) => self.indexOf(value) === index); // Einzigartige Werte
+          .filter((value, index, self) => self.indexOf(value) === index);
       }
     },
 
     getSizesForType(type) {
       if (this.store.selectedModel && type) {
-        const typeKey = type.replace(/\s*\(.*?\)/g, ""); // Entfernt optionale Klammern in Typnamen
+        const typeKey = type.replace(/\s*\(.*?\)/g, "");
         return this.store.getSizesForType(typeKey);
       }
       return [];
@@ -541,7 +532,7 @@ export default {
     },
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
-        const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, ""); // Entfernt optionale Klammern
+        const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
         return this.store.getOptionsForType(typeKey);
       }
       return [];
@@ -551,7 +542,6 @@ export default {
     },
 
     onTypeChange(checkbox) {
-      // Reset inside and outside sizes and options when the type changes
       if (!this.isSchliessanlage) {
         checkbox.checked = true;
       }
@@ -562,14 +552,12 @@ export default {
     },
 
     onInsideSizeChange(checkbox) {
-      // Prüfen, ob die Kombination gültig ist, ansonsten Außengröße zurücksetzen
       if (!this.isSizeCombinationValid(checkbox)) {
         checkbox.outside = "";
       }
     },
 
     onOutsideSizeChange(checkbox) {
-      // Prüfen, ob die Kombination gültig ist, ansonsten Innengröße zurücksetzen
       if (!this.isSizeCombinationValid(checkbox)) {
         checkbox.inside = "";
       }
@@ -630,11 +618,9 @@ export default {
     },
 
     toggleRadio(checkbox, categoryName, option) {
-      // Wenn der aktuelle Wert bereits ausgewählt ist, de-selektieren
       if (checkbox.options[categoryName] === option) {
         this.set(checkbox.options, categoryName, null);
       } else {
-        // Andernfalls die neue Option setzen
         this.set(checkbox.options, categoryName, option);
       }
     },
@@ -657,13 +643,11 @@ export default {
     },
 
     deleteCheckbox(colIndex) {
-      // Prüfe, ob colIndex == 0; falls ja, blockieren wir das Löschen
       if (colIndex === 0) {
         alert("Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden.");
         return;
       }
 
-      // sonst wie gehabt ...
       const hasMultipleColumns = this.rows.some((row) => row.length > 1);
       if (hasMultipleColumns || colIndex > 0) {
         this.rows.forEach((row) => row.splice(colIndex, 1));
@@ -675,7 +659,6 @@ export default {
 
     deleteRow(rowIndex) {
       if (this.rows.length > 1 || rowIndex > 0) {
-        // Entfernen nur blockieren, wenn es nur eine Zeile gibt und es die erste Zeile ist
         this.rows.splice(rowIndex, 1);
       } else {
         alert("Die letzte Zeile kann nicht entfernt werden.");
@@ -977,19 +960,13 @@ export default {
 
     confirmChange() {
       if (this.pendingModel) {
-        // 1) Store aktualisieren: das neue Modell
         this.store.setModel(this.pendingModel)
-
-        // 2) Alle Zylinder-Properties zurücksetzen
-        //    - 'doorDesignation' und 'doorquantity' kannst du ggf. behalten, wenn erwünscht
-        //    - 'type', 'inside', 'outside', 'options', 'checked' zurück auf Standard
         this.rows.forEach((row) => {
           row.forEach((checkbox) => {
             checkbox.type = ""
             checkbox.inside = ""
             checkbox.outside = ""
             checkbox.options = {}
-            // Falls du isSchliessanlage neu berechnen willst (z.B. Store kann sich geändert haben):
             checkbox.checked = !this.isSchliessanlage
           })
         })
@@ -1003,9 +980,7 @@ export default {
     },
 
     cancelChange() {
-      // User hat abgebrochen => bleibe beim alten Modell
       this.pendingModel = null
-      // Modal zu
       this.isWarningModalOpen = false
     },
 

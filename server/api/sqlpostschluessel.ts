@@ -29,11 +29,12 @@ export default defineEventHandler(async (event) => {
 
       for (const item of body) {
         await tx.$executeRaw`
-          INSERT INTO Schluessel (ID, KeyPOS, Bezeichnung, Anzahl) 
+          INSERT INTO Schluessel (ID, KeyPOS, Bezeichnung, Anzahl, Farbe) 
           VALUES (${id}, ${item.keyPos}, ${item.keyname}, ${item.keyquantity}) 
           ON DUPLICATE KEY UPDATE
           Bezeichnung = ${item.keyname},
           Anzahl = ${item.keyquantity};
+          Farbe = "";
         `;
       }
     });

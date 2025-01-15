@@ -141,7 +141,7 @@
   .save-button {
     background-color: #f59e0b !important; /* Amber-Farbe */
     color: #fff !important;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.6rem 1rem;
     border-radius: 6px;
     transition: background-color 0.2s, transform 0.1s;
