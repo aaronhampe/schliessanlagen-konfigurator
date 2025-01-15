@@ -35,6 +35,7 @@
           {{ model }}
         </option>
       </select>
+
     </div>
 
     <!-- Warnungs-Modal -->
@@ -77,8 +78,8 @@
             <!--Zylinderanzahl-->
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
-              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm"
-                type="number" variant="outline" />
+              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm" type="number"
+                variant="outline" />
             </div>
 
             <!--Zylindertyp-->
@@ -325,8 +326,8 @@ export default {
             doorDesignation: "",
             doorquantity: 1,
             type: "",
-            outside: "", 
-            inside: "", 
+            outside: "",
+            inside: "",
             options: {},
             checked: !this.isSchliessanlage,
             keyquantity: 1,
@@ -374,6 +375,16 @@ export default {
       // return this.$route.path.includes('/admin/');
       return true;
     },
+  },
+  watch: {
+    // whenever store.selectedModel changes from outside, keep local in sync:
+    'store.selectedModel': {
+      immediate: true,
+      handler(newVal) {
+        this.selectedModelLocal = newVal;
+        this.oldModel = newVal;
+      }
+    }
   },
   methods: {
     openOptionsModal(rowIndex) {
@@ -646,15 +657,21 @@ export default {
     },
 
     deleteCheckbox(colIndex) {
-      const hasMultipleColumns = this.rows.some((row) => row.length > 1);
+      // Prüfe, ob colIndex == 0; falls ja, blockieren wir das Löschen
+      if (colIndex === 0) {
+        alert("Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden.");
+        return;
+      }
 
+      // sonst wie gehabt ...
+      const hasMultipleColumns = this.rows.some((row) => row.length > 1);
       if (hasMultipleColumns || colIndex > 0) {
-        // Entfernen der Spalte nur erlauben, wenn es mehr als eine Spalte gibt oder nicht die erste Spalte ist
         this.rows.forEach((row) => row.splice(colIndex, 1));
       } else {
         alert("Die letzte Spalte kann nicht entfernt werden.");
       }
     },
+
 
     deleteRow(rowIndex) {
       if (this.rows.length > 1 || rowIndex > 0) {

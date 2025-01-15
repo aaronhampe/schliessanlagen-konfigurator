@@ -51,11 +51,7 @@
   </script>
   
   <style scoped>
-  /* 
-     Basis-Styles für dunkle Systeme: 
-     Verwendest du lieber ein helles Design, 
-     kannst du die Farben einfach anpassen.
-  */
+ 
   @media (prefers-color-scheme: dark) {
     .modal-title,
     .modal-label {
@@ -63,7 +59,6 @@
     }
   }
   
-  /* Container */
   .column-modal ::v-deep .u-modal-content {
     background: #ffffff; /* oder #f9fafb für ein helleres Offwhite */
     border-radius: 12px;
@@ -73,8 +68,7 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
     overflow: hidden;
   }
-  
-  /* Inhalt */
+
   .modal-content {
     display: flex;
     flex-direction: column;
@@ -82,7 +76,6 @@
     padding: 20px;
   }
   
-  /* Header */
   .modal-header {
     display: flex;
     justify-content: space-between;
@@ -114,7 +107,6 @@
     background-color: #b91c1c !important; /* dunkleres Rot */
   }
   
-  /* Body */
   .modal-body {
     display: flex;
     flex-direction: column;
@@ -131,7 +123,6 @@
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   
-  /* Hover / Focus-Effekte am UInput-Feld */
   .modal-input ::v-deep .u-input__field:hover {
     border-color: #94a3b8;
   }
@@ -141,7 +132,6 @@
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
   }
   
-  /* Footer */
   .modal-footer {
     display: flex;
     justify-content: flex-end;
