@@ -124,7 +124,7 @@ onMounted(async () => {
             priceDomRN += calculatePrice(item, 31.95, 3, 3);
             priceDomSigma += calculatePrice(item, 41.95, 3.2, 3.2);
             priceIseoR6 += calculatePrice(item, 45.95, 1.2, 1.2);
-            priceKeso8000 += calculatePrice(item, 111.90, 13, 13); //done
+            priceKeso8000 += calculatePrice(item, 111.90, 13, 13); 
             break;
           case "Halbzylinder":
             priceAbusTi14 += calculatePrice(item, 9.95, 1.8, 0);

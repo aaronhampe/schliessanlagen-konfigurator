@@ -37,7 +37,14 @@ $badge-width: 80px;
 
     input {
       width: 180px;
+      &:focus {
+        border-color: #10a4ec;
+        box-shadow: 0 0 0 1px #10a4ec;
+        outline: none !important;
+        box-shadow: none !important;
+      }
     }
+  
   }
 
   .model-container {
@@ -46,7 +53,7 @@ $badge-width: 80px;
     justify-content: center;
     gap: 10px;
     margin-top: 10px;
-    
+
     select {
       @include input-style;
       width: 220px;
@@ -66,6 +73,8 @@ $badge-width: 80px;
       &:focus {
         border-color: #10a4ec;
         box-shadow: 0 0 0 1px #10a4ec;
+        outline: none !important;
+        box-shadow: none !important;
       }
 
       option {
@@ -130,6 +139,7 @@ $badge-width: 80px;
         &:focus {
           border-color: #10a4ec;
           box-shadow: 0 0 0 1px #10a4ec;
+          outline: none !important;
         }
 
         option {
@@ -177,6 +187,7 @@ $badge-width: 80px;
         &:focus {
           border-color: #10a4ec;
           box-shadow: 0 0 0 1px #10a4ec;
+          outline: none !important;
         }
       }
 
@@ -247,16 +258,19 @@ $badge-width: 80px;
       width: 33px;
       height: 20px;
       font-size: 12px;
-      border: 1px solid #ffffff;;
+      border: 1px solid #ffffff;
+      ;
       border-radius: 4px;
-      
+
     }
 
     .key-name:focus,
     .key-quantity:focus {
       outline: none;
-      border-color: #10a4ec;;
-      box-shadow: 0 0 0 1px #10a4ec;;
+      border-color: #10a4ec;
+      ;
+      box-shadow: 0 0 0 1px #10a4ec;
+      ;
     }
 
     .button-edit {
@@ -508,6 +522,7 @@ h6 {
 }
 
 .warning-modal {
+
   /* Der Container, in dem dein UModal gerendert wird */
   ::v-deep .u-modal-content {
     background: #ffffff;
@@ -540,7 +555,8 @@ h6 {
     }
 
     .close-button {
-      background: #dc2626; /* Ein kräftiges Rot */
+      background: #dc2626;
+      /* Ein kräftiges Rot */
       color: #ffffff;
       font-weight: 600;
       border: none;
@@ -555,6 +571,7 @@ h6 {
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
+
       &:active {
         transform: scale(0.98);
       }
@@ -591,6 +608,7 @@ h6 {
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
       }
+
       &:active {
         transform: scale(0.98);
       }
@@ -611,6 +629,7 @@ h6 {
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
       }
+
       &:active {
         transform: scale(0.98);
       }
