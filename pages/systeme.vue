@@ -2,29 +2,35 @@
   <div class="systeme-page">
     <h2>Systemübersicht</h2>
     <div v-if="anlageNr">
-      <!--240742-->
       <p>
         Zuletzt erstellte Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
     </div>
-    <h2 class="heading">Folgende Systeme passen zu Ihren Anforderungen:</h2>
-    <div class="offer-container" v-if="positionData.length">
-      <div class="offer" v-for="(offer, index) in filteredOffers" :key="index">
-        <img :src="offer.image" :alt="offer.alt" class="offer-image" />
+
+    <!-- Haupt-Angebot: das im Konfigurator ausgewählte Modell -->
+    <div v-if="selectedModelOffer">
+      <h2>Angebot für Ihr ausgewähltes Modell</h2>
+      <div class="offer highlighted-offer">
+        <img
+          :src="selectedModelOffer.image"
+          :alt="selectedModelOffer.alt"
+          class="offer-image"
+        />
         <div class="offer-details">
-          <h3>{{ offer.title }}</h3>
+          <h3>{{ selectedModelOffer.title }}</h3>
           <div class="offer-price">
-            Gesamtpreis: <strong>{{ roundPrice(offer.price) }} €</strong>
+            Gesamtpreis:
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
           </div>
           <ul class="offer-features">
-            <li v-for="(feature, i) in offer.features" :key="i">
+            <li v-for="(feature, i) in selectedModelOffer.features" :key="i">
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
           <UButton
             icon="i-heroicons-shopping-cart-16-solid"
             class="select-system-button"
-            @click="addToCart(offer.title, offer.price)"
+            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)"
           >
             System auswählen
           </UButton>
@@ -32,260 +38,401 @@
       </div>
     </div>
 
-    <UButton class="back-button" @click="navigateBack"
-      >Zurück zum Konfigurator</UButton
-    >
+    <!-- Alternative Angebote, die laut Kompatibilität ebenfalls passen -->
+    <div v-if="alternativeOffers.length" style="margin-top: 30px;">
+      <h2>Weitere passende Angebote</h2>
+      <div class="offer-container">
+        <div
+          class="offer"
+          v-for="(offer, index) in alternativeOffers"
+          :key="offer.title"
+        >
+          <img :src="offer.image" :alt="offer.alt" class="offer-image" />
+          <div class="offer-details">
+            <h3>{{ offer.title }}</h3>
+            <div class="offer-price">
+              Gesamtpreis:
+              <strong>{{ roundPrice(offer.price) }} €</strong>
+            </div>
+            <ul class="offer-features">
+              <li v-for="(feature, i) in offer.features" :key="i">
+                <i class="icon-check"></i> {{ feature }}
+              </li>
+            </ul>
+            <UButton
+              icon="i-heroicons-shopping-cart-16-solid"
+              class="select-system-button"
+              @click="addToCart(offer.title, offer.price)"
+            >
+              System auswählen
+            </UButton>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <UButton class="back-button" @click="navigateBack">
+      Zurück zum Konfigurator
+    </UButton>
   </div>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useCylinderStore } from "@/stores/cylinderStores.js";
+import cylinderModels from "@/data/cylinderModels.js";
 
 const route = useRoute();
+const store = useCylinderStore();
+
 const isSchliessanlage = route.query.isSchliessanlage === "true";
 const anlageNr = route.query.anlageNr || "";
+
+// Zwischenspeicher für Positionsdaten
+const positionData = ref([]);
+
+// Hier sammeln wir alle fertigen "Angebots"-Objekte
+const offers = ref([]);
+
+/** 
+ * Der Name des in Pinia (store) ausgewählten Modells (vom Konfigurator),
+ * z.B. "ABUS EC550" etc.
+ */
+const selectedModel = computed(() => store.selectedModel);
+
+// Navigation zurück
 const navigateBack = () => {
   window.history.back();
 };
 
+// (Beispiel) In den Warenkorb
 const addToCart = (systemName, price) => {
   console.log(`System ausgewählt: ${systemName}, Preis: ${price}`);
-  // Add functionality to add system to cart
 };
 
-const positionData = ref([]);
-const offers = ref([]);
-
-var priceAbusEC550 = 0;
-var priceAbusEC660 = 0;
-var priceAbusEC880 = 0;
-var priceAbusTi14 = 0;
-var priceAbusA93 = 0;
-var priceAbusMagtec = 0;
-var priceDomTwido = 0;
-var priceDomRN = 0;
-var priceDomSigma = 0;
-var priceIseoR6 = 0;
-var priceKeso8000 = 0;
-
+// Rundungs-Helfer
 const roundPrice = (price) => {
   return price.toFixed(2);
 };
 
-const filteredOffers = computed(() => {
-  return offers.value.filter((offer) =>
-    isSchliessanlage
-      ? offer.suitableFor.includes("schliessanlage")
-      : offer.suitableFor.includes("gleichschliessung")
+/* 
+   Hier kommt die Logik, ob ein Modell sämtliche
+   konfigurierten Zylinder (inkl. Größen, Options) bedienen kann.
+   Du kannst sie zusätzlich zum reinen "Price-Calc" oder 
+   Switch-Case machen.
+*/
+function modelCanHandleAllZylinders(modelName, positionArray) {
+  for (const item of positionArray) {
+    if (!checkZylinderCompatibility(modelName, item)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function checkZylinderCompatibility(modelName, zylinderItem) {
+  const type = mapTypToModelKey(zylinderItem.Typ);
+
+  const cm = cylinderModels[modelName];
+  if (!cm || !cm[type] || !cm[type].sizes) return false;
+
+  // Prüfe, ob im "sizes" Array eine Inside/Outside-Kombination existiert,
+  // die zu SizeI / SizeA passt
+  const matchingSize = cm[type].sizes.find(
+    (sz) =>
+      Number(sz.inside) === Number(zylinderItem.SizeI) &&
+      Number(sz.outside) === Number(zylinderItem.SizeA)
   );
+  if (!matchingSize) return false;
+
+  // Falls wir Options (Sicherheitsfunktion etc.) prüfen wollen, wäre hier eine Stelle
+
+  return true;
+}
+
+// z.B. "Knaufzylinder (innen)" => "Knaufzylinder"
+function mapTypToModelKey(typ) {
+  if (typ === "Knaufzylinder (innen)") return "Knaufzylinder";
+  return typ;
+}
+
+// Die "klassische" Switch-Case-Preisberechnung:
+function onCalculatePrices(positionArr) {
+  // Variablen für jedes Modell
+  let priceAbusEC550 = 0;
+  let priceAbusEC660 = 0;
+  let priceAbusEC880 = 0;
+  let priceAbusTi14 = 0;
+  let priceAbusA93 = 0;
+  let priceAbusMagtec = 0;
+  let priceDomTwido = 0;
+  let priceDomRN = 0;
+  let priceDomSigma = 0;
+  let priceIseoR6 = 0;
+  let priceKeso8000 = 0;
+
+  // Hilfsfunktion (Beispiel)
+  const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
+    let p = basePrice;
+    // Höchst vereinfacht:
+    p += ((parseInt(item.SizeA) - 30) / 5) * sizeFactorA;
+    if (item.SizeI) {
+      p += ((parseInt(item.SizeI) - 30) / 5) * sizeFactorI;
+    }
+    return p * parseInt(item.Anzahl || 1);
+  };
+
+  // Durchgehen aller positionen
+  positionArr.forEach((item) => {
+    switch (item.Typ) {
+      case "Doppelzylinder":
+        priceAbusTi14 += calculatePrice(item, 11.75, 1.62, 1.62);
+        priceAbusA93 += calculatePrice(item, 13.95, 2.4, 2.7);
+        priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1);
+        priceAbusEC660 += calculatePrice(item, 28.95, 3.4, 3.4);
+        priceAbusEC880 += calculatePrice(item, 52.95, 3.5, 3.5);
+        priceAbusMagtec += calculatePrice(item, 42.95, 2.5, 2.5);
+        priceDomTwido += calculatePrice(item, 73.95, 3, 3);
+        priceDomRN += calculatePrice(item, 20.95, 1.9, 2.0);
+        priceDomSigma += calculatePrice(item, 43.95, 2.3, 2.2);
+        priceIseoR6 += calculatePrice(item, 31.95, 1, 1);
+        priceKeso8000 += calculatePrice(item, 110, 6, 6);
+        break;
+
+      case "Knaufzylinder (innen)":
+        priceAbusA93 += calculatePrice(item, 28.86, 1.8, 1.8);
+        priceAbusEC550 += calculatePrice(item, 30.40, 2.5, 2.5);
+        priceAbusEC660 += calculatePrice(item, 40.95, 3, 3);
+        priceAbusEC880 += calculatePrice(item, 47.95, 1.5, 1.5);
+        priceAbusMagtec += calculatePrice(item, 65.95, 3, 3);
+        priceDomTwido += calculatePrice(item, 71.95, 3, 3);
+        priceDomRN += calculatePrice(item, 31.95, 3, 3);
+        priceDomSigma += calculatePrice(item, 41.95, 3.2, 3.2);
+        priceIseoR6 += calculatePrice(item, 45.95, 1.2, 1.2);
+        priceKeso8000 += calculatePrice(item, 111.90, 13, 13);
+        break;
+
+      case "Halbzylinder":
+        priceAbusTi14 += calculatePrice(item, 9.95, 1.8, 0);
+        priceAbusA93 += calculatePrice(item, 10, 1.8, 0);
+        priceAbusEC550 += calculatePrice(item, 14.65, 2.1, 0);
+        priceAbusEC660 += calculatePrice(item, 20, 3.0, 0);
+        priceAbusEC880 += calculatePrice(item, 18, 2.5, 0);
+        priceAbusMagtec += calculatePrice(item, 16, 2, 2);
+        priceDomTwido += calculatePrice(item, 20, 1.6, 1.8);
+        priceDomRN += calculatePrice(item, 21, 1.4, 1.6);
+        priceDomSigma += calculatePrice(item, 22, 2.0, 2.0);
+        priceIseoR6 += calculatePrice(item, 18, 1.6, 1.9);
+        priceKeso8000 += calculatePrice(item, 25, 2.4, 1.9);
+        break;
+
+      // ggf. Vorhangschloss, Außenzylinder etc.
+    }
+  });
+
+  // Baue nun ein Array zurück:
+  return {
+    "ABUS TI14": priceAbusTi14,
+    "ABUS A93": priceAbusA93,
+    "ABUS EC550": priceAbusEC550,
+    "ABUS EC660": priceAbusEC660,
+    "ABUS EC880": priceAbusEC880,
+    "ABUS Magtec": priceAbusMagtec,
+    "DOM IX Twido": priceDomTwido,
+    "DOM RN": priceDomRN,
+    "DOM RS Sigma": priceDomSigma,
+    "ISEO R6": priceIseoR6,
+    "KESO 8000": priceKeso8000,
+  };
+}
+
+// =========== Computed: Hauptangebot =============
+const selectedModelOffer = computed(() => {
+  return offers.value.find((o) => o.title === selectedModel.value);
 });
 
-const calculatePrice = (item, basePrice, sizeFactorA, sizeFactorI) => {
-  let price = basePrice;
-  price += ((parseInt(item.SizeA) - 30) / 5) * sizeFactorA;
-  if (item.SizeI) {
-    price += ((parseInt(item.SizeI) - 30) / 5) * sizeFactorI;
-  }
-  return price * parseInt(item.Anzahl);
-};
+// =========== Computed: Alternativen ==============
+const alternativeOffers = computed(() => {
+  // z.B. "schliessanlage" oder "gleichschliessung"
+  const neededFlag = isSchliessanlage ? "schliessanlage" : "gleichschliessung";
 
+  return offers.value.filter((o) => {
+    // 1) Anderes Modell
+    if (o.title === selectedModel.value) return false;
+    // 2) Muss 'canHandleAll' sein
+    if (!o.canHandleAll) return false;
+    // 3) Muss denselben isSchliessanlage-Flag abdecken
+    if (!o.suitableFor.includes(neededFlag)) return false;
+
+    return true;
+  });
+});
+
+// onMounted => Positionen laden => Switch-Case => offers aufbauen
 onMounted(async () => {
-  if (anlageNr) {
-    try {
-      const positionResponse = await $fetch(`/api/sqlgetposition`, {
-        method: "POST",
-        body: { ID: anlageNr },
-      });
-      positionData.value = positionResponse.queryresult || [];
+  if (!anlageNr) return;
+  try {
+    // 1) Positionen laden
+    const positionResponse = await $fetch("/api/sqlgetposition", {
+      method: "POST",
+      body: { ID: anlageNr },
+    });
+    positionData.value = positionResponse.queryresult || [];
 
-      positionResponse.queryresult.forEach((item) => {
-        switch (item.Typ) {
-          case "Doppelzylinder":
-            priceAbusTi14 += calculatePrice(item, 11.75, 1.62, 1.62); 
-            priceAbusA93 += calculatePrice(item, 13.95, 2.4, 2.7); 
-            priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1); 
-            priceAbusEC660 += calculatePrice(item, 28.95, 3.4, 3.4); 
-            priceAbusEC880 += calculatePrice(item, 52.95, 3.5, 3.5); 
-            priceAbusMagtec += calculatePrice(item, 42.95, 2.5, 2.5); 
-            priceDomTwido += calculatePrice(item, 73.95, 3, 3); 
-            priceDomRN += calculatePrice(item, 20.95, 1.9, 2.0); 
-            priceDomSigma += calculatePrice(item, 43.95, 2.3, 2.2); 
-            priceIseoR6 += calculatePrice(item, 31.95, 1, 1); 
-            priceKeso8000 += calculatePrice(item, 110, 6, 6); 
-            break;
-          case "Knaufzylinder (innen)":
-            priceAbusA93 += calculatePrice(item, 28.86, 1.8, 1.8);
-            priceAbusEC550 += calculatePrice(item, 30.40, 2.5, 2.5);
-            priceAbusEC660 += calculatePrice(item, 40.95, 3, 3);
-            priceAbusEC880 += calculatePrice(item, 47.95, 1.5, 1.5);
-            priceAbusMagtec += calculatePrice(item, 65.95, 3, 3);
-            priceDomTwido += calculatePrice(item, 71.95, 3, 3);
-            priceDomRN += calculatePrice(item, 31.95, 3, 3);
-            priceDomSigma += calculatePrice(item, 41.95, 3.2, 3.2);
-            priceIseoR6 += calculatePrice(item, 45.95, 1.2, 1.2);
-            priceKeso8000 += calculatePrice(item, 111.90, 13, 13); 
-            break;
-          case "Halbzylinder":
-            priceAbusTi14 += calculatePrice(item, 9.95, 1.8, 0);
-            priceAbusA93 += calculatePrice(item, 10, 1.8, 0);
-            priceAbusEC550 += calculatePrice(item, 14.65, 2.1, 0);
-            priceAbusEC660 += calculatePrice(item, 20, 3.0, 0);
-            priceAbusEC880 += calculatePrice(item, 18, 2.5, 0);
-            priceAbusMagtec += calculatePrice(item, 16, 2, 2);
-            priceDomTwido += calculatePrice(item, 20, 1.6, 1.8);
-            priceDomRN += calculatePrice(item, 21, 1.4, 1.6);
-            priceDomSigma += calculatePrice(item, 22, 2.0, 2.0);
-            priceIseoR6 += calculatePrice(item, 18, 1.6, 1.9);
-            priceKeso8000 += calculatePrice(item, 25, 2.4, 1.9);
-            break;
-        }
-      });
+    // 2) Switch-Case-Preisberechnung
+    const priceMap = onCalculatePrices(positionData.value);
 
-      //Zylinder Modelle
+    // 3) Für jedes Modell checken wir: canHandleAllZylinders
+    // und bauen ein "offer"-Objekt mit Bild, Features und co.
+    const canAbusEC550 = modelCanHandleAllZylinders("ABUS EC550", positionData.value);
+    const canAbusEC660 = modelCanHandleAllZylinders("ABUS EC660", positionData.value);
+    const canAbusEC880 = modelCanHandleAllZylinders("ABUS EC880", positionData.value);
+    const canAbusTi14 = modelCanHandleAllZylinders("ABUS Ti14", positionData.value);
+    const canAbusA93 = modelCanHandleAllZylinders("ABUS A93", positionData.value);
+    const canAbusMagtec = modelCanHandleAllZylinders("ABUS Magtec", positionData.value);
+    const canDomTwido = modelCanHandleAllZylinders("DOM IX Twido", positionData.value);
+    const canDomRN = modelCanHandleAllZylinders("DOM RN", positionData.value);
+    const canDomSigma = modelCanHandleAllZylinders("DOM RS Sigma", positionData.value);
+    const canIseoR6 = modelCanHandleAllZylinders("ISEO R6", positionData.value);
+    const canKeso8000 = modelCanHandleAllZylinders("KESO 8000", positionData.value);
 
-      offers.value = [
-        {
-          image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
-          alt: "ABUS TI14",
-          title: "ABUS TI14",
-          price: priceAbusTi14,
-          features: [
-            "Robuste Konstruktion",
-            "Einfache Installation",
-            "Lange Lebensdauer",
-          ],
-          suitableFor: ["gleichschliessung"], // Für beide Konfigurationen geeignet
-        },
-
-        {
-          image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
-          alt: "ABUS A93",
-          title: "ABUS A93",
-          price: priceAbusA93,
-          features: ["Kein Picking", "Verstärkter Kern", "Mehrschlüsseloption"],
-          suitableFor: ["gleichschliessung"],
-        },
-
-        {
-          image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
-          alt: "ABUS EC550",
-          title: "ABUS EC550",
-          price: priceAbusEC550,
-          features: [
-            "Zuverlässiger Basisschutz",
-            "Anti-Pick und Bohrschutz",
-            "Für Wohnhäusern",
-          ],
-          suitableFor: ["gleichschliessung"], 
-        },
-
-        {
-          image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
-          alt: "ABUS EC660",
-          title: "ABUS EC660",
-          price: priceAbusEC660,
-          features: [
-            "Sicherheitsstufe 2",
-            "Bohrschutz",
-            "Mehrfachverriegelung",
-          ],
-          suitableFor: ["gleichschliessung"], 
-        },
-
-        {
-          image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
-          alt: "ABUS EC880",
-          title: "ABUS EC880",
-          price: priceAbusEC880,
-          features: [
-            "Bohr- und Ziehschutz",
-            "Wendeschlüssel",
-            "Geschäftsgebäude",
-          ],
-          suitableFor: ["gleichschliessung"], 
-        },
-
-        {
-          image:
-            "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
-          alt: "ABUS Magtec",
-          title: "ABUS Magtec",
-          price: priceAbusMagtec,
-          features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
-          suitableFor: ["schliessanlage", "gleichschliessung"], 
-        },
-
-        {
-          image:
-            "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
-          alt: "DOM IX Twido",
-          title: "DOM IX Twido",
-          price: priceDomTwido,
-          features: [
-            "Hoher Kopierschutz",
-            "Modulare Bauweise",
-            "Komplexe Schließanlagen",
-          ],
-          suitableFor: ["schliessanlage", "gleichschliessung"],
-        },
-
-        {
-          image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
-          alt: "DOM RN",
-          title: "DOM RN",
-          price: priceDomRN,
-          features: [
-            "Manipulationsschutz",
-            "Langlebige Materialien",
-            "Privat & Gewerblich",
-          ],
-          suitableFor: ["gleichschliessung"], 
-        },
-
-        {
-          image: "/images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
-          alt: "DOM RS Sigma",
-          title: "DOM RS Sigma",
-          price: priceDomSigma,
-          features: [
-            "Sicherheitsstufe 2",
-            "Aufbohrschutz",
-            "Patentierter Schlüssel",
-          ],
-          suitableFor: ["schliessanlage", "gleichschliessung"], 
-        },
-
-        {
-          image: "/images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
-          alt: "ISEO R6",
-          title: "ISEO R6",
-          price: priceIseoR6,
-          features: [
-            "Sicherheitsstufe 2",
-            "Patentschutz",
-            "Langlebiger Zylinder",
-          ],
-          suitableFor: ["gleichschliessung"], // Für Gleichschließung geeignet
-        },
-
-        {
-          image:
-            "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
-          alt: "KESO 8000",
-          title: "KESO 8000",
-          price: priceKeso8000,
-          features: [
-            "Sicherheitsstufe 3",
-            "Zertifizierte Sicherheit",
-            "Schlagschutz",
-          ],
-          suitableFor: ["schliessanlage", "gleichschliessung"], // Für beide geeignet
-        },
-      ];
-    } catch (error) {
-      console.error("Fehler beim Laden der Konfigurationsdaten:", error);
-    }
+    // 4) Baue das "offers"-Array wie früher
+    offers.value = [
+      {
+        image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
+        alt: "ABUS TI14",
+        title: "ABUS Ti14",
+        price: priceMap["ABUS TI14"],
+        features: ["Robuste Konstruktion", "Einfache Installation", "Lange Lebensdauer"],
+        canHandleAll: canAbusTi14,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
+        alt: "ABUS A93",
+        title: "ABUS A93",
+        price: priceMap["ABUS A93"],
+        features: ["Kein Picking", "Verstärkter Kern", "Mehrschlüsseloption"],
+        canHandleAll: canAbusA93,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
+        alt: "ABUS EC550",
+        title: "ABUS EC550",
+        price: priceMap["ABUS EC550"],
+        features: [
+          "Zuverlässiger Basisschutz",
+          "Anti-Pick und Bohrschutz",
+          "Für Wohnhäuser",
+        ],
+        canHandleAll: canAbusEC550,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
+        alt: "ABUS EC660",
+        title: "ABUS EC660",
+        price: priceMap["ABUS EC660"],
+        features: [
+          "Sicherheitsstufe 2",
+          "Bohrschutz",
+          "Mehrfachverriegelung",
+        ],
+        canHandleAll: canAbusEC660,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
+        alt: "ABUS EC880",
+        title: "ABUS EC880",
+        price: priceMap["ABUS EC880"],
+        features: [
+          "Bohr- und Ziehschutz",
+          "Wendeschlüssel",
+          "Geschäftsgebäude",
+        ],
+        canHandleAll: canAbusEC880,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "ABUS Magtec",
+        title: "ABUS Magtec",
+        price: priceMap["ABUS Magtec"],
+        features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
+        canHandleAll: canAbusMagtec,
+        suitableFor: ["schliessanlage", "gleichschliessung"],
+      },
+      {
+        image: "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "DOM IX Twido",
+        title: "DOM IX Twido",
+        price: priceMap["DOM IX Twido"],
+        features: [
+          "Hoher Kopierschutz",
+          "Modulare Bauweise",
+          "Komplexe Schließanlagen",
+        ],
+        canHandleAll: canDomTwido,
+        suitableFor: ["schliessanlage", "gleichschliessung"],
+      },
+      {
+        image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "DOM RN",
+        title: "DOM RN",
+        price: priceMap["DOM RN"],
+        features: [
+          "Manipulationsschutz",
+          "Langlebige Materialien",
+          "Privat & Gewerblich",
+        ],
+        canHandleAll: canDomRN,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
+        alt: "DOM RS Sigma",
+        title: "DOM RS Sigma",
+        price: priceMap["DOM RS Sigma"],
+        features: [
+          "Sicherheitsstufe 2",
+          "Aufbohrschutz",
+          "Patentierter Schlüssel",
+        ],
+        canHandleAll: canDomSigma,
+        suitableFor: ["schliessanlage", "gleichschliessung"],
+      },
+      {
+        image: "/images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "ISEO R6",
+        title: "ISEO R6",
+        price: priceMap["ISEO R6"],
+        features: [
+          "Sicherheitsstufe 2",
+          "Patentschutz",
+          "Langlebiger Zylinder",
+        ],
+        canHandleAll: canIseoR6,
+        suitableFor: ["gleichschliessung"],
+      },
+      {
+        image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "KESO 8000",
+        title: "KESO 8000",
+        price: priceMap["KESO 8000"],
+        features: [
+          "Sicherheitsstufe 3",
+          "Zertifizierte Sicherheit",
+          "Schlagschutz",
+        ],
+        canHandleAll: canKeso8000,
+        suitableFor: ["schliessanlage", "gleichschliessung"],
+      },
+    ];
+  } catch (error) {
+    console.error("Fehler beim Laden der Konfigurationsdaten:", error);
   }
 });
 </script>
@@ -321,7 +468,6 @@ onMounted(async () => {
   overflow: hidden;
   transition: transform 0.3s ease; /* Hover effect */
 }
-
 .offer:hover {
   transform: translateY(-5px); /* Lift tile on hover */
 }
@@ -384,27 +530,8 @@ onMounted(async () => {
   margin-top: 20px;
 }
 
-.select-system-button {
-  background-color: #007bff;
-  color: white;
-  margin-top: 10px;
-  width: auto;
-}
-
-.select-system-button:hover {
-  background-color: #0c5baf;
-  transition: 300ms;
-}
-
-@media (max-width: 1024px) {
-  .offer {
-    flex: 1 1 calc(50% - 20px);
-  }
-}
-
-@media (max-width: 768px) {
-  .offer {
-    flex: 1 1 100%;
-  }
+.highlighted-offer {
+  border: 2px solid #007bff;
+  background: #e7f1ff;
 }
 </style>
