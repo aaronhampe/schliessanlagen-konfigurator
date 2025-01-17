@@ -1,8 +1,5 @@
 <template>
-
-  <!-- HEADING -->
   <div class="heading">
-
     <div class="first-flex">
       <h1>
         {{
@@ -27,7 +24,7 @@
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
 
-    <!-- Modellpräferenz -->
+    
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
@@ -38,7 +35,6 @@
 
     </div>
 
-    <!-- Warnungs-Modal -->
     <UModal v-model="isWarningModalOpen" class="warning-modal">
       <div class="modal-header">
         <h2>Achtung!</h2>
@@ -53,7 +49,6 @@
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
     </UModal>
-
   </div>
 
   <div class="flex-container">
@@ -61,7 +56,6 @@
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
           <div class="door-row" v-if="colIndex < 1">
-            <!--Position-->
             <div>
               <h3 v-if="rowIndex < 1 && colIndex < 1">Pos.</h3>
               <UBadge class="u-badge" v-if="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
@@ -69,20 +63,19 @@
                 {{ rowIndex + 1 }}
               </UBadge>
             </div>
-            <!--Türbezeichnung-->
+            
             <div class="door-designation" v-if="colIndex < 1">
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
               <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="sky"
                 size="sm" variant="outline" placeholder="z.B. Haupteingang" />
             </div>
-            <!--Zylinderanzahl-->
+         
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
               <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm" type="number"
                 variant="outline" />
             </div>
 
-            <!--Zylindertyp-->
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
               <select v-model="checkbox.type" @change="onTypeChange(checkbox)" class="cylinder-type">
