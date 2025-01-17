@@ -128,9 +128,10 @@ export default {
   },
   "ABUS Magtec 1500": {
     isSchliessanlage: true,
+    image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
-        { inside: 50, outside: 30 },
+        { inside: 30, outside: 30 },
       ],
       options: {
         Material: ["Nickel", "Bronze", "Brass"],
@@ -167,9 +168,10 @@ export default {
   },
   "ABUS Magtec 2500": {
     isSchliessanlage: true,
+    image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
-        { inside: 50, outside: 30 },
+        { inside: 30, outside: 30 },
       ],
       options: {
         Material: ["Nickel", "Bronze", "Brass"],
@@ -206,6 +208,7 @@ export default {
   },
   "ABUS EC550": {
     isSchliessanlage: false,
+    image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -398,6 +401,7 @@ export default {
   },
   "ABUS EC660": {
     isSchliessanlage: false,
+    image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -483,9 +487,10 @@ export default {
   },
   "ABUS EC880": {
     isSchliessanlage: false,
+    image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
-        { inside: 50, outside: 30 },
+        { inside: 30, outside: 30 },
       ],
       options: {
         Material: ["Nickel", "Bronze", "Brass"],
@@ -522,9 +527,10 @@ export default {
   },
   "ABUS A93": {
     isSchliessanlage: false,
+    image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
-        { inside: 50, outside: 30 },
+        { inside: 30, outside: 30 },
       ],
       options: {
         Material: ["Nickel", "Bronze", "Brass"],
@@ -638,9 +644,10 @@ export default {
   },
   "ABUS TI14": {
     isSchliessanlage: false,
+    image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
-        { inside: 50, outside: 30 },
+        { inside: 30, outside: 30 },
       ],
       options: {
         Material: ["Nickel", "Bronze", "Brass"],
@@ -677,6 +684,7 @@ export default {
   },
   "DOM RN": {
     isSchliessanlage: false,
+    image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -869,6 +877,7 @@ export default {
   },
   "DOM IX Twido": {
     isSchliessanlage: true,
+    image: "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -1061,6 +1070,7 @@ export default {
   },
   "DOM RS Sigma": {
     isSchliessanlage: true,
+    image: "/images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -1253,6 +1263,7 @@ export default {
   },
   "KESO 8000 Omega": {
     isSchliessanlage: true,
+    image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
@@ -1445,6 +1456,7 @@ export default {
   },
   "ISEO R6": {
     isSchliessanlage: false,
+    image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
       sizes: [
         { inside: 30, outside: 30 },
