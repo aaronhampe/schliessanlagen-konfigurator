@@ -11,11 +11,7 @@
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell</h2>
       <div class="offer highlighted-offer">
-        <img
-          :src="selectedModelOffer.image"
-          :alt="selectedModelOffer.alt"
-          class="offer-image"
-        />
+        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
           <div class="offer-price">
@@ -27,11 +23,8 @@
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton
-            icon="i-heroicons-shopping-cart-16-solid"
-            class="select-system-button"
-            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)"
-          >
+          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)">
             System auswählen
           </UButton>
         </div>
@@ -42,11 +35,7 @@
     <div v-if="alternativeOffers.length" style="margin-top: 30px;">
       <h2>Weitere passende Angebote</h2>
       <div class="offer-container">
-        <div
-          class="offer"
-          v-for="(offer, index) in alternativeOffers"
-          :key="offer.title"
-        >
+        <div class="offer" v-for="(offer, index) in alternativeOffers" :key="offer.title">
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
@@ -59,11 +48,8 @@
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-            <UButton
-              icon="i-heroicons-shopping-cart-16-solid"
-              class="select-system-button"
-              @click="addToCart(offer.title, offer.price)"
-            >
+            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+              @click="addToCart(offer.title, offer.price)">
               System auswählen
             </UButton>
           </div>
@@ -165,7 +151,8 @@ function onCalculatePrices(positionArr) {
   let priceAbusEC880 = 0;
   let priceAbusTi14 = 0;
   let priceAbusA93 = 0;
-  let priceAbusMagtec = 0;
+  let priceAbusMagtec1500 = 0;
+  let priceAbusMagtec2500 = 0;
   let priceDomTwido = 0;
   let priceDomRN = 0;
   let priceDomSigma = 0;
@@ -192,7 +179,8 @@ function onCalculatePrices(positionArr) {
         priceAbusEC550 += calculatePrice(item, 18.85, 2.1, 2.1);
         priceAbusEC660 += calculatePrice(item, 28.95, 3.4, 3.4);
         priceAbusEC880 += calculatePrice(item, 52.95, 3.5, 3.5);
-        priceAbusMagtec += calculatePrice(item, 42.95, 2.5, 2.5);
+        priceAbusMagtec1500 += calculatePrice(item, 42.95, 2.5, 2.5);
+        priceAbusMagtec2500 += calculatePrice(item, 42.95, 2.5, 2.5);
         priceDomTwido += calculatePrice(item, 73.95, 3, 3);
         priceDomRN += calculatePrice(item, 20.95, 1.9, 2.0);
         priceDomSigma += calculatePrice(item, 43.95, 2.3, 2.2);
@@ -205,7 +193,8 @@ function onCalculatePrices(positionArr) {
         priceAbusEC550 += calculatePrice(item, 30.40, 2.5, 2.5);
         priceAbusEC660 += calculatePrice(item, 40.95, 3, 3);
         priceAbusEC880 += calculatePrice(item, 47.95, 1.5, 1.5);
-        priceAbusMagtec += calculatePrice(item, 65.95, 3, 3);
+        priceAbusMagtec1500 += calculatePrice(item, 65.95, 3, 3);
+        priceAbusMagtec2500 += calculatePrice(item, 65.95, 3, 3);
         priceDomTwido += calculatePrice(item, 71.95, 3, 3);
         priceDomRN += calculatePrice(item, 31.95, 3, 3);
         priceDomSigma += calculatePrice(item, 41.95, 3.2, 3.2);
@@ -219,7 +208,8 @@ function onCalculatePrices(positionArr) {
         priceAbusEC550 += calculatePrice(item, 14.65, 2.1, 0);
         priceAbusEC660 += calculatePrice(item, 20, 3.0, 0);
         priceAbusEC880 += calculatePrice(item, 18, 2.5, 0);
-        priceAbusMagtec += calculatePrice(item, 16, 2, 2);
+        priceAbusMagtec1500 += calculatePrice(item, 16, 2, 2);
+        priceAbusMagtec2500 += calculatePrice(item, 16, 2, 2);
         priceDomTwido += calculatePrice(item, 20, 1.6, 1.8);
         priceDomRN += calculatePrice(item, 21, 1.4, 1.6);
         priceDomSigma += calculatePrice(item, 22, 2.0, 2.0);
@@ -238,7 +228,8 @@ function onCalculatePrices(positionArr) {
     "ABUS EC550": priceAbusEC550,
     "ABUS EC660": priceAbusEC660,
     "ABUS EC880": priceAbusEC880,
-    "ABUS Magtec": priceAbusMagtec,
+    "ABUS Magtec 1500": priceAbusMagtec1500,
+    "ABUS Magtec 2500": priceAbusMagtec2500,
     "DOM IX Twido": priceDomTwido,
     "DOM RN": priceDomRN,
     "DOM RS Sigma": priceDomSigma,
@@ -290,7 +281,8 @@ onMounted(async () => {
     const canAbusEC880 = modelCanHandleAllZylinders("ABUS EC880", positionData.value);
     const canAbusTi14 = modelCanHandleAllZylinders("ABUS Ti14", positionData.value);
     const canAbusA93 = modelCanHandleAllZylinders("ABUS A93", positionData.value);
-    const canAbusMagtec = modelCanHandleAllZylinders("ABUS Magtec", positionData.value);
+    const canAbusMagtec1500 = modelCanHandleAllZylinders("ABUS Magtec 1500", positionData.value);
+    const canAbusMagtec2500 = modelCanHandleAllZylinders("ABUS Magtec 2500", positionData.value);
     const canDomTwido = modelCanHandleAllZylinders("DOM IX Twido", positionData.value);
     const canDomRN = modelCanHandleAllZylinders("DOM RN", positionData.value);
     const canDomSigma = modelCanHandleAllZylinders("DOM RS Sigma", positionData.value);
@@ -358,11 +350,20 @@ onMounted(async () => {
       },
       {
         image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
-        alt: "ABUS Magtec",
-        title: "ABUS Magtec",
-        price: priceMap["ABUS Magtec"],
+        alt: "ABUS Magtec 1500",
+        title: "ABUS Magtec 1500",
+        price: priceMap["ABUS Magtec 1500"],
         features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
-        canHandleAll: canAbusMagtec,
+        canHandleAll: canAbusMagtec1500,
+        suitableFor: ["schliessanlage", "gleichschliessung"],
+      },
+      {
+        image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
+        alt: "ABUS Magtec 2500",
+        title: "ABUS Magtec 2500",
+        price: priceMap["ABUS Magtec 2500"],
+        features: ["Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"],
+        canHandleAll: canAbusMagtec2500,
         suitableFor: ["schliessanlage", "gleichschliessung"],
       },
       {
@@ -371,9 +372,7 @@ onMounted(async () => {
         title: "DOM IX Twido",
         price: priceMap["DOM IX Twido"],
         features: [
-          "Hoher Kopierschutz",
-          "Modulare Bauweise",
-          "Komplexe Schließanlagen",
+          "Sicherheitsstufe 1", "Wendeschlüssel", "Bohrschutz"
         ],
         canHandleAll: canDomTwido,
         suitableFor: ["schliessanlage", "gleichschliessung"],
@@ -461,15 +460,21 @@ onMounted(async () => {
   margin-top: 20px;
   border-radius: 10px;
   width: 280px;
-  background: #f8f9fa; /* Lighter background */
-  border: 1px solid #ddd; /* Add a border */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background: #f8f9fa;
+  /* Lighter background */
+  border: 1px solid #ddd;
+  /* Add a border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Soft shadow */
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease; /* Hover effect */
+  transition: transform 0.3s ease;
+  /* Hover effect */
 }
+
 .offer:hover {
-  transform: translateY(-5px); /* Lift tile on hover */
+  transform: translateY(-5px);
+  /* Lift tile on hover */
 }
 
 .offer-image {
@@ -499,7 +504,8 @@ onMounted(async () => {
 }
 
 .offer-features i {
-  color: #28a745; /* Checkmark color */
+  color: #28a745;
+  /* Checkmark color */
   margin-right: 8px;
 }
 
@@ -507,7 +513,8 @@ onMounted(async () => {
   background-color: #007bff;
   color: white;
   margin-top: 10px;
-  width: 100%; /* Full width button */
+  width: 100%;
+  /* Full width button */
 }
 
 .select-system-button:hover {
