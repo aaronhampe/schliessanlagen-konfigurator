@@ -412,7 +412,6 @@ $color-sky: #3b82f6;
 
       .close-button {
         background-color: #dc2626 !important;
-        /* rote Nuance */
         color: #fff !important;
         font-weight: 600;
         border-radius: 6px;
@@ -442,7 +441,6 @@ $color-sky: #3b82f6;
       font-weight: 400;
     }
 
-    // Option-Item für Checkboxen
     .option-item {
       display: flex;
       gap: 8px;
@@ -453,14 +451,11 @@ $color-sky: #3b82f6;
         display: flex;
         align-items: center;
         gap: 8px;
-
-        /* "Karten"-Rahmen */
         border: 1px solid #ddd;
         border-radius: 6px;
         padding: 8px 12px;
         cursor: pointer;
 
-        /* Sanfte Animationen */
         transition:
           background-color 0.2s ease,
           border-color 0.2s ease,
@@ -472,12 +467,6 @@ $color-sky: #3b82f6;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
-        /* Hier könntest du bei Bedarf auch 
-           die Größe des eigentlichen Checkbox-Häkchens anpassen. 
-           Das hängt davon ab, wie "UCheckbox" intern aufgebaut ist.
-           Oft gibt es Klassen wie `.u-checkbox__check` oder `.u-checkbox__content`.
-           Du kannst das ggf. per ::v-deep ansprechen, falls nötig.
-        */
         ::v-deep .u-checkbox__check {
           width: 20px;
           height: 20px;
