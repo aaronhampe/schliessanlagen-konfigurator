@@ -24,7 +24,7 @@
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
 
-    
+
     <div class="model-container">
       <h3>Modellpräferenz:</h3>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
@@ -63,13 +63,13 @@
                 {{ rowIndex + 1 }}
               </UBadge>
             </div>
-            
+
             <div class="door-designation" v-if="colIndex < 1">
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
               <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="sky"
                 size="sm" variant="outline" placeholder="z.B. Haupteingang" />
             </div>
-         
+
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
               <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm" type="number"
@@ -110,7 +110,6 @@
             <!--Optionen-->
             <div class="options">
               <h3 v-if="rowIndex < 1">Optionen</h3>
-              <!-- Anstatt Dropdown ein Button der ein Modal öffnet -->
               <UButton @click="openOptionsModal(rowIndex)" variant="solid" size="sm" color="sky" class="dropdown-button"
                 icon="i-heroicons-cog">
                 {{ getSelectedOptionsText(checkbox) || "..." }}
@@ -223,25 +222,14 @@
             X
           </UButton>
         </div>
-        <h6>
-          Bitte wählen Sie die gewünschten Optionen für den Zylinder aus.
-        </h6>
-        <h6>Keine Optionen = Standard</h6>
-
-        <div class="modal-body">
-          <!-- Hier wird nur der erste Eintrag pro row betrachtet -->
+        <h6>Bitte wählen Sie die gewünschten Optionen aus.</h6>
+        <div>
           <div v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
-            <div v-for="(categoryOptions, categoryName) in getAllOptionsForType(
-          checkbox
-        )" :key="categoryName" class="option-category">
-              <h4 class="category-title">{{ categoryName }}</h4>
-              <div class="radio-group">
-                <label v-for="option in categoryOptions" :key="option" class="radio-item">
-                  <URadio color="sky" class="radio-button" :name="'option-' + categoryName + '-' + rowIndex"
-                    :value="option" v-model="checkbox.options[categoryName]" />
-                  <span class="radio-label">{{ option }}</span>
-                </label>
-              </div>
+            <div v-for="option in store.getOptionsForType(checkbox.type)" :key="option" class="option-item">
+              <label>
+                <UCheckbox color="sky" :value="option" v-model="checkbox.optionsSelected" class="option-checkbox" />
+                &nbsp{{ option }}
+              </label>
             </div>
           </div>
         </div>
@@ -252,6 +240,7 @@
         </div>
       </div>
     </UModal>
+
   </div>
   <UModal v-model="isOpenL">
     <div class="p-4">
@@ -279,7 +268,6 @@
 
 <script>
 import ColumnModal from "./ColumnModal.vue";
-import zylindermodelle from "../data/cylinder.js";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 
 export default {
@@ -319,6 +307,7 @@ export default {
             outside: "",
             inside: "",
             options: {},
+            optionsSelected: [],
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
@@ -406,16 +395,12 @@ export default {
 
 
     getSelectedOptionsText(checkbox) {
-      if (checkbox.options) {
-        const optionsArray = [];
-        for (const category in checkbox.options) {
-          optionsArray.push(checkbox.options[category]);
-        }
-        return optionsArray.join(", ");
+      if (checkbox.optionsSelected && checkbox.optionsSelected.length) {
+        // Zeige die Werte als Komma-getrennte Liste an
+        return checkbox.optionsSelected.join(", ")
       }
-      return "";
+      return ""
     },
-
 
     optionsToString(options) {
       const optionsArray = [];
@@ -469,6 +454,7 @@ export default {
           checkbox.inside = "";
           checkbox.outside = "";
           checkbox.options = "";
+          checkbox.optionsSelected = [];
         });
       });
     },
@@ -541,6 +527,7 @@ export default {
       checkbox.inside = "";
       checkbox.outside = "";
       checkbox.options = {};
+      checkbox.optionsSelected = [];
 
     },
 
@@ -768,9 +755,12 @@ export default {
               Typ: row[0].type || "",
               SizeA: row[0].outside || "",
               SizeI: row[0].inside || "",
-              Option: this.optionsToString(row[0].options) || "",
+              // Statt 'this.optionsToString(row[0].options)'
+              // nimmst du jetzt das Array row[0].optionsSelected
+              Option: (row[0].optionsSelected || []).join(", "),
             }))
-          );
+          )
+
 
           const queryresultposition = await $fetch(
             "/api/sqlpostposition?ID=" + this.anlageNr,
@@ -853,12 +843,10 @@ export default {
         this.company = queryresultanlage.queryresult[0].Firma || "";
         this.typ = queryresultanlage.queryresult[0].Typ || "";
 
-        //Modell lädt nicht richtig
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
       }
 
-      // Positionsdaten
       const queryresultposition = await $fetch("/api/sqlgetposition", {
         method: "post",
         body: { ID: this.id },
@@ -877,20 +865,19 @@ export default {
       }
 
       queryresultposition.queryresult.forEach((item) => {
-        const zeile = item.POS - 1; // Annahme: POSZylinder beginnt bei 1
-        this.rows[zeile][0].doorDesignation = item.Bezeichnung;
-        this.rows[zeile][0].doorquantity = item.Anzahl || 1;
-        this.rows[zeile][0].type = item.Typ || "";
-        this.rows[zeile][0].outside = item.SizeA || "";
-        this.rows[zeile][0].inside = item.SizeI || "";
-        const availableOptions = this.getAllOptionsForType(this.rows[zeile][0]);
-        this.rows[zeile][0].options = this.stringToOptions(
-          item.Option || "",
-          availableOptions
-        );
-      });
+        const zeile = item.POS - 1
+        this.rows[zeile][0].doorDesignation = item.Bezeichnung
+        this.rows[zeile][0].doorquantity = item.Anzahl || 1
+        this.rows[zeile][0].type = item.Typ || ""
+        this.rows[zeile][0].outside = item.SizeA || ""
+        this.rows[zeile][0].inside = item.SizeI || ""
 
-      // Schlüsseldaten
+        const loadedString = item.Option || ""
+        this.rows[zeile][0].optionsSelected = loadedString
+          .split(",")
+          .map(s => s.trim())
+          .filter(Boolean)
+      })
 
       const queryresultschluessel = await $fetch("/api/sqlgetschluessel", {
         method: "post",
@@ -906,12 +893,10 @@ export default {
       }
 
       queryresultschluessel.queryresult.forEach((item) => {
-        const spalte = item.KeyPOS - 1; // Annahme: POSSchluessel beginnt bei 1
+        const spalte = item.KeyPOS - 1; 
         this.rows[0][spalte].keyname = item.Bezeichnung;
         this.rows[0][spalte].keyquantity = item.Anzahl;
       });
-
-      // Matrix
 
       const queryresultmatrix = await $fetch("/api/sqlgetmatrix", {
         method: "post",
@@ -926,49 +911,40 @@ export default {
       );
 
       queryresultmatrix.queryresult.forEach((item) => {
-        const zeile = item.POSZylinder - 1; // Annahme: POSZylinder beginnt bei 1
-        const spalte = item.POSSchluessel - 1; // Annahme: POSSchluessel beginnt bei 1
+        const zeile = item.POSZylinder - 1; 
+        const spalte = item.POSSchluessel - 1; 
         this.rows[zeile][spalte].checked = item.Berechtigung;
       });
-
-      //console.log(JSON.stringify(queryresultmatrix, null,2 ));
-
       this.isOpenL = false;
     },
 
     onModelSelect(event) {
       const newlySelected = event.target.value
-      // Prüfen: weicht das vom alten Modell ab?
       if (newlySelected !== this.oldModel) {
-        // Dann erst Warnmodal statt sofortigem Wechsel
         this.pendingModel = newlySelected
-        // Select bleibt zunächst auf "altem" Wert stehen (rein optisch)
-        // => wir setzen es zurück:
         event.target.value = this.oldModel
-
-        // Jetzt Modal öffnen
         this.isWarningModalOpen = true
       }
     },
 
     confirmChange() {
       if (this.pendingModel) {
-        this.store.setModel(this.pendingModel)
+        this.store.setModel(this.pendingModel);
         this.rows.forEach((row) => {
           row.forEach((checkbox) => {
-            checkbox.type = ""
-            checkbox.inside = ""
-            checkbox.outside = ""
-            checkbox.options = {}
-            checkbox.checked = !this.isSchliessanlage
-          })
-        })
+            checkbox.type = "";
+            checkbox.inside = "";
+            checkbox.outside = "";
+            checkbox.options = {};          // Falls noch vorhanden
+            checkbox.optionsSelected = [];  // <<--- NEU: Array leeren!
+            checkbox.checked = !this.isSchliessanlage;
+          });
+        });
 
-        // 3) Lokale Variablen
-        this.selectedModelLocal = this.pendingModel
-        this.oldModel = this.pendingModel
-        this.isWarningModalOpen = false
-        this.pendingModel = null
+        this.selectedModelLocal = this.pendingModel;
+        this.oldModel = this.pendingModel;
+        this.isWarningModalOpen = false;
+        this.pendingModel = null;
       }
     },
 

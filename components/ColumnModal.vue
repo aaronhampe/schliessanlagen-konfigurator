@@ -3,7 +3,7 @@
     <UModal class="column-modal" v-model="isOpenC">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title">Schlüssel benennen</h2>
+          <h6 class="modal-title">Schlüssel benennen</h6>
           <UButton class="close-button" color="red" @click="closeModal">X</UButton>
         </div>
         <div class="modal-body">
@@ -53,9 +53,18 @@
   <style scoped>
  
   @media (prefers-color-scheme: dark) {
-    .modal-title,
+    h6 {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+  
     .modal-label {
-      color: #fff;
+      margin: 0;
+       color: #666;
+       font-size: 0.9rem;
+       font-weight: 400;
     }
   }
   
