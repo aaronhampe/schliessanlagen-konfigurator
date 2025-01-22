@@ -88,19 +88,19 @@
 
             <div class="sizes">
               <div>
-                <h3 v-if="rowIndex < 1">Innen</h3>
-                <select class="inside" v-model.number="checkbox.inside" @change="onInsideSizeChange(checkbox)">
+                <h3 v-if="rowIndex < 1">Außen</h3>
+                <select class="outside" v-model.number="checkbox.outside" @change="onOutsideSizeChange(checkbox)">
                   <option value="">...</option>
-                  <option v-for="size in getAvailableInsideSizes(checkbox)" :key="size" :value="size">
+                  <option v-for="size in getAvailableOutsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
               </div>
               <div>
-                <h3 v-if="rowIndex < 1">Außen</h3>
-                <select class="outside" v-model.number="checkbox.outside" @change="onOutsideSizeChange(checkbox)">
+                <h3 v-if="rowIndex < 1">Innen</h3>
+                <select class="inside" v-model.number="checkbox.inside" @change="onInsideSizeChange(checkbox)">
                   <option value="">...</option>
-                  <option v-for="size in getAvailableOutsideSizes(checkbox)" :key="size" :value="size">
+                  <option v-for="size in getAvailableInsideSizes(checkbox)" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
@@ -893,7 +893,7 @@ export default {
       }
 
       queryresultschluessel.queryresult.forEach((item) => {
-        const spalte = item.KeyPOS - 1; 
+        const spalte = item.KeyPOS - 1;
         this.rows[0][spalte].keyname = item.Bezeichnung;
         this.rows[0][spalte].keyquantity = item.Anzahl;
       });
@@ -911,8 +911,8 @@ export default {
       );
 
       queryresultmatrix.queryresult.forEach((item) => {
-        const zeile = item.POSZylinder - 1; 
-        const spalte = item.POSSchluessel - 1; 
+        const zeile = item.POSZylinder - 1;
+        const spalte = item.POSSchluessel - 1;
         this.rows[zeile][spalte].checked = item.Berechtigung;
       });
       this.isOpenL = false;

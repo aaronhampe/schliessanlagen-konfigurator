@@ -292,6 +292,12 @@ $color-sky: #0ea5e9;
       border: 1px solid lightgray;
       border-radius: 8px;
 
+      &:focus {
+        outline: none;
+        border-color: $color-sky;
+        box-shadow: 0 0 0 1px $color-sky;
+      }
+
       &.default-margin {
         margin-top: -20.8em;
       }
