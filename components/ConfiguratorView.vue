@@ -580,20 +580,25 @@ export default {
     addRow() {
       const numCheckboxes = this.rows[0].length;
       const newRow = [];
+
       for (let i = 0; i < numCheckboxes; i++) {
-        if (!this.isSchliessanlage) {
-          newRow.push({
-            checked: true,
-            doorquantity: 1,
-            position: this.rows.length + 1,
-          });
-        } else
-          newRow.push({
-            checked: false,
-            doorquantity: 1,
-            position: this.rows.length + 1,
-          });
+        newRow.push({
+          position: this.rows.length + 1,
+          doorDesignation: "",
+          doorquantity: 1,
+          type: "",
+          outside: "",
+          inside: "",
+          options: {},
+          optionsSelected: [],
+          // Bei Schließanlage standardmäßig false, sonst true:
+          checked: !this.isSchliessanlage,
+          // Schlüssel-spezifische Felder:
+          keyquantity: 1,
+          keyname: "Schlüssel " + (i + 1),
+        });
       }
+
       this.rows.push(newRow);
     },
 
