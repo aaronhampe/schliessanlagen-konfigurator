@@ -591,9 +591,7 @@ export default {
           inside: "",
           options: {},
           optionsSelected: [],
-          // Bei Schließanlage standardmäßig false, sonst true:
           checked: !this.isSchliessanlage,
-          // Schlüssel-spezifische Felder:
           keyquantity: 1,
           keyname: "Schlüssel " + (i + 1),
         });
@@ -760,8 +758,6 @@ export default {
               Typ: row[0].type || "",
               SizeA: row[0].outside || "",
               SizeI: row[0].inside || "",
-              // Statt 'this.optionsToString(row[0].options)'
-              // nimmst du jetzt das Array row[0].optionsSelected
               Option: (row[0].optionsSelected || []).join(", "),
             }))
           )
