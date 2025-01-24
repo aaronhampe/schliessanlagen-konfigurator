@@ -1,5 +1,5 @@
 export default {
-    isSchliessanlage: false,
+    isSchliessanlage: true,
     image: "/images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
     Doppelzylinder: {
         sizes: [

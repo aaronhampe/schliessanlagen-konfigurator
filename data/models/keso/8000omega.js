@@ -1,5 +1,5 @@
 export default {
-    isSchliessanlage: false,
+    isSchliessanlage: true,
     image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
     Doppelzylinder: {
         sizes: [
