@@ -284,7 +284,5 @@ export default {
     "Doppelzylinder",
     "Knaufzylinder (innen)",
     "Halbzylinder",
-    "Vorhangschloss 50mm",
-    "Vorhangschloss 80mm",
   ],
 }
