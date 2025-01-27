@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <!-- Alternative Angebote, die laut Kompatibilität ebenfalls passen -->
+    <!-- Alternative Angebote, die ebenfalls passen -->
     <div v-if="alternativeOffers.length" style="margin-top: 30px;">
       <h2>Weitere passende Angebote</h2>
       <div class="offer-container">
@@ -85,26 +85,27 @@ import { useRoute } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import cylinderModels from "@/data/cylinderModels.js";
+import { mapOptionToUpchargeKey, mapTypToModelKey } from "@/data/utils/optionMapping.js";
 
 // Router-Parameter
 const route = useRoute();
 const anlageNr = route.query.anlageNr || "";
 
-// Schließanlage Boolean aus Route
+// Schließanlage-Boolean aus Route
 const isSchliessanlage = route.query.isSchliessanlage === "true";
 
-// Pinia-Store
+// Pinia-Store (für aktuelle Auswahl)
 const store = useCylinderStore();
 
-// Das im Konfigurator gewählte Modell:
+// Das im Konfigurator gewählte Modell (z.B. "DOM IX Twido")
 const selectedModel = computed(() => store.selectedModel);
 
-// Navigation zurück
+// Navigation zurück (Button "Zurück zum Konfigurator")
 const navigateBack = () => {
   window.history.back();
 };
 
-// In den Warenkorb (Beispiel)
+// "In den Warenkorb" - Platzhalter-Funktion
 const addToCart = (systemName, price) => {
   console.log(`System ausgewählt: ${systemName}, Preis: ${price}`);
 };
@@ -112,15 +113,17 @@ const addToCart = (systemName, price) => {
 // Rundungs-Helfer
 const roundPrice = (price) => price.toFixed(2);
 
-// Positionen, die der User im Konfigurator angelegt hat:
+// Hier landen die Positionsdaten aus der DB (z.B. /api/sqlgetposition)
 const positionData = ref([]);
 
-// Daraus bauen wir später unsere "offers" zusammen
+// Gesamtliste an Offers (= Hauptmodell + Alternativen)
 const offers = ref([]);
 
-// --------------------------------------------
-// Hilfsfunktionen für die Modell-Kompatibilität
-// --------------------------------------------
+/**
+ * Prüft, ob das Modell alle gewünschten Zylinder (inkl. Größen) abbilden kann.
+ * Falls es eine Option gibt, die das Modell gar nicht unterstützt, könntest du das
+ * hier ebenfalls prüfen. Hier beschränken wir uns auf Typ + Größen.
+ */
 function modelCanHandleAllZylinders(modelName, positionArray) {
   const modelConfig = cylinderModels[modelName];
   if (!modelConfig) return false;
@@ -133,189 +136,150 @@ function modelCanHandleAllZylinders(modelName, positionArray) {
   return true;
 }
 
+/**
+ * Prüft für eine einzelne Tür/Position (z.B. { Typ, SizeA, SizeI, ...}),
+ * ob das Modell (modelName) diese Konfiguration anbietet.
+ * - Typ => "Doppelzylinder", "Knaufzylinder (innen)", ...
+ * - inside/outside => Muss in .sizes enthalten sein
+ */
 function checkZylinderCompatibility(modelName, zylinderItem) {
   const modelConfig = cylinderModels[modelName];
   if (!modelConfig) return false;
 
-  // Zylindertyp anpassen (Knaufzylinder (innen) => Knaufzylinder)
+  // "Knaufzylinder (innen)" => "Knaufzylinder"
   const typeKey = mapTypToModelKey(zylinderItem.Typ);
-
-  // Falls das Modell diesen Typ gar nicht hat => kein Match
-  if (!modelConfig[typeKey] || !modelConfig[typeKey].sizes) {
-    return false;
+  if (!modelConfig[typeKey]) {
+    return false; // Modell kennt den Typ gar nicht
   }
 
-  // Prüfe Inside/Outside
+  // Hat dieses Modell + Typ die passende Size?
   const foundMatch = modelConfig[typeKey].sizes.find(
     (sz) =>
       Number(sz.inside) === Number(zylinderItem.SizeI) &&
       Number(sz.outside) === Number(zylinderItem.SizeA)
   );
-  if (!foundMatch) return false;
+  if (!foundMatch) {
+    return false; // Größenpaar nicht gefunden
+  }
 
-  // Ggf. Options prüfen - hier weglassen oder hinzunehmen
   return true;
 }
 
-// Mapped "Knaufzylinder (innen)" => "Knaufzylinder", etc.
-function mapTypToModelKey(typ) {
-  if (typ === "Knaufzylinder (innen)") return "Knaufzylinder";
-  return typ;
-}
+/**
+ * Berechnet den Gesamtpreis eines Modells für alle angelegten Positionen.
+ * - Liest .sizes und .optionUpcharges aus "cylinderModels[modelName]".
+ * - Prüft für jede Position, ob ein passender size-Eintrag existiert.
+ * - Summiert den Basispreis + Optionsaufschläge * (Anzahl).
+ */
+function calculatePriceForModel(modelName, positionArr) {
+  if (!modelName || modelName === "Kein bestimmtes Modell") {
+    return 0;
+  }
+  const modelConfig = cylinderModels[modelName];
+  if (!modelConfig) {
+    return 0; // optional: fallback
+  }
 
-// --------------------------------------------
-// Preiskalkulation (Switch-Case, wie gehabt)
-// --------------------------------------------
-function calculateModelPrices(positionArr) {
-  // Du kannst auch ein Objekt initialisieren und am Ende zurückgeben:
-  const priceMap = {};
-
-  // Hier Beispiel wie bisher:
-  let priceAbusEC550 = 0;
-  let priceAbusEC660 = 0;
-  let priceAbusEC880 = 0;
-  let priceAbusTi14 = 0;
-  let priceAbusA93 = 0;
-  let priceAbusMagtec1500 = 0;
-  let priceAbusMagtec2500 = 0;
-  let priceDomTwido = 0;
-  let priceDomRN = 0;
-  let priceDomSigma = 0;
-  let priceIseoR6 = 0;
-  let priceKeso8000 = 0;
-
-  // Beispiel-Helfer
-  const calcPrice = (item, base, factorA, factorI) => {
-    let p = base;
-    p += ((parseInt(item.SizeA) - 30) / 5) * factorA;
-    if (item.SizeI) {
-      p += ((parseInt(item.SizeI) - 30) / 5) * factorI;
-    }
-    return p * parseInt(item.Anzahl || 1);
-  };
+  let totalPrice = 0;
 
   positionArr.forEach((item) => {
-    switch (item.Typ) {
-      case "Doppelzylinder":
-        priceAbusTi14 += calcPrice(item, 11.75, 1.62, 1.62);
-        priceAbusA93 += calcPrice(item, 13.95, 2.4, 2.7);
-        priceAbusEC550 += calcPrice(item, 18.85, 2.1, 2.1);
-        priceAbusEC660 += calcPrice(item, 28.95, 3.4, 3.4);
-        priceAbusEC880 += calcPrice(item, 52.95, 3.5, 3.5);
-        priceAbusMagtec1500 += calcPrice(item, 42.95, 2.5, 2.5);
-        priceAbusMagtec2500 += calcPrice(item, 42.95, 2.5, 2.5);
-        priceDomTwido += calcPrice(item, 73.95, 3, 3);
-        priceDomRN += calcPrice(item, 20.95, 1.9, 2.0);
-        priceDomSigma += calcPrice(item, 43.95, 2.3, 2.2);
-        priceIseoR6 += calcPrice(item, 31.95, 1, 1);
-        priceKeso8000 += calcPrice(item, 110, 6, 6);
-        break;
-      case "Knaufzylinder (innen)":
-        priceAbusA93 += calcPrice(item, 28.86, 1.8, 1.8);
-        priceAbusEC550 += calcPrice(item, 30.40, 2.5, 2.5);
-        priceAbusEC660 += calcPrice(item, 40.95, 3, 3);
-        priceAbusEC880 += calcPrice(item, 47.95, 1.5, 1.5);
-        priceAbusMagtec1500 += calcPrice(item, 65.95, 3, 3);
-        priceAbusMagtec2500 += calcPrice(item, 65.95, 3, 3);
-        priceDomTwido += calcPrice(item, 71.95, 3, 3);
-        priceDomRN += calcPrice(item, 31.95, 3, 3);
-        priceDomSigma += calcPrice(item, 41.95, 3.2, 3.2);
-        priceIseoR6 += calcPrice(item, 45.95, 1.2, 1.2);
-        priceKeso8000 += calcPrice(item, 111.90, 13, 13);
-        break;
-      case "Halbzylinder":
-        priceAbusTi14 += calcPrice(item, 9.95, 1.8, 0);
-        priceAbusA93 += calcPrice(item, 10, 1.8, 0);
-        priceAbusEC550 += calcPrice(item, 14.65, 2.1, 0);
-        priceAbusEC660 += calcPrice(item, 20, 3.0, 0);
-        priceAbusEC880 += calcPrice(item, 18, 2.5, 0);
-        priceAbusMagtec1500 += calcPrice(item, 16, 2, 2);
-        priceAbusMagtec2500 += calcPrice(item, 16, 2, 2);
-        priceDomTwido += calcPrice(item, 20, 1.6, 1.8);
-        priceDomRN += calcPrice(item, 21, 1.4, 1.6);
-        priceDomSigma += calcPrice(item, 22, 2.0, 2.0);
-        priceIseoR6 += calcPrice(item, 18, 1.6, 1.9);
-        priceKeso8000 += calcPrice(item, 25, 2.4, 1.9);
-        break;
+    const typeKey = mapTypToModelKey(item.Typ);
+    // Falls Typ vom Modell nicht abgedeckt wird => skip
+    if (!modelConfig[typeKey]) {
+      return;
     }
+
+    // Passende Size suchen
+    const sizeMatch = modelConfig[typeKey].sizes.find(
+      (sz) =>
+        Number(sz.outside) === Number(item.SizeA) &&
+        Number(sz.inside) === Number(item.SizeI)
+    );
+    if (!sizeMatch) {
+      return;
+    }
+
+    // Basispreis
+    let priceForThisDoor = sizeMatch.price || 0;
+
+    // Aus der DB: CSV-String "Option" => "Not- & Gefahrenfunktion, Freilauf, ..."
+    const selectedOptions = (item.Option || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter((o) => o);
+
+    // Option-Aufschläge (am Typ-Level oder Model-Level hinterlegt)
+    // => z.B. modelConfig.Doppelzylinder.optionUpcharges oder
+    //    modelConfig.optionUpcharges
+    const upchargeObj =
+      modelConfig[typeKey]?.optionUpcharges || modelConfig.optionUpcharges || {};
+
+    // Jede Option => passendes Mapping => addiere Aufpreis
+    selectedOptions.forEach((opt) => {
+      const mappedKey = mapOptionToUpchargeKey(opt);
+      if (mappedKey && upchargeObj[mappedKey]) {
+        priceForThisDoor += upchargeObj[mappedKey];
+      }
+    });
+
+    // Anzahl = "Anzahl" Spalte aus der DB (z.B. Türmenge)
+    const qty = Number(item.Anzahl) || 1;
+    totalPrice += priceForThisDoor * qty;
   });
 
-  // In einem Objekt speichern (Key = Modellname)
-  priceMap["ABUS Ti14"] = priceAbusTi14;
-  priceMap["ABUS A93"] = priceAbusA93;
-  priceMap["ABUS EC550"] = priceAbusEC550;
-  priceMap["ABUS EC660"] = priceAbusEC660;
-  priceMap["ABUS EC880"] = priceAbusEC880;
-  priceMap["ABUS Magtec 1500"] = priceAbusMagtec1500;
-  priceMap["ABUS Magtec 2500"] = priceAbusMagtec2500;
-  priceMap["DOM IX Twido"] = priceDomTwido;
-  priceMap["DOM RN"] = priceDomRN;
-  priceMap["DOM RS Sigma"] = priceDomSigma;
-  priceMap["ISEO R6"] = priceIseoR6;
-  priceMap["KESO 8000"] = priceKeso8000;
-
-  return priceMap;
+  return totalPrice;
 }
 
-// --------------------------------------------
-// Hauptangebot & Alternativen
-// --------------------------------------------
+// Hauptmodell (was der User gewählt hat)
 const selectedModelOffer = computed(() => {
   return offers.value.find((o) => o.title === selectedModel.value);
 });
 
+// Alternativen
 const alternativeOffers = computed(() => {
   return offers.value.filter((o) => {
-    // nicht das Hauptmodell
     if (o.title === selectedModel.value) return false;
-    // muss canHandleAll sein
     if (!o.canHandleAll) return false;
-    // muss denselben isSchliessanlage-Wert haben
     if (o.isSchliessanlage !== isSchliessanlage) return false;
     return true;
   });
 });
 
-// --------------------------------------------
-// onMounted: Laden, Rechnen, Aufbauen
-// --------------------------------------------
-// ...
-
 onMounted(async () => {
   if (!anlageNr) return;
 
   try {
-    // 1) positionData laden
+    // 1) Positionen aus DB laden
     const positionResponse = await $fetch("/api/sqlgetposition", {
       method: "POST",
       body: { ID: anlageNr },
     });
     positionData.value = positionResponse.queryresult || [];
 
-    // 2) PriceMap via Switch-Case
-    const priceMap = calculateModelPrices(positionData.value);
-
-    // 3) Filtere "Kein bestimmtes Modell" direkt beim Durchlauf aus.
-    //    So erscheint es gar nicht erst in `offers`.
+    // 2) Baue Offers
     const allModelNames = Object.keys(cylinderModels).filter(
       (modelName) => modelName !== "Kein bestimmtes Modell"
     );
 
-    // Für jedes Modell in cylinderModels => Erzeuge ein "Offer"-Objekt
     const tempOffers = allModelNames.map((modelName) => {
-      const modelConfig = cylinderModels[modelName];
-      const canHandleAll = modelCanHandleAllZylinders(modelName, positionData.value);
-      const price = priceMap[modelName] || 0;
+      const modelCfg = cylinderModels[modelName];
+      // Kann das Modell alle Zylinder abbilden?
+      const canHandleAll = modelCanHandleAllZylinders(
+        modelName,
+        positionData.value
+      );
+      // Berechne Preis
+      const price = calculatePriceForModel(modelName, positionData.value);
 
       return {
         title: modelName,
         price,
         canHandleAll,
-        // Wichtig: Wir übernehmen den isSchliessanlage-Wert
-        isSchliessanlage: modelConfig.isSchliessanlage ?? false,
-        image: modelConfig.image || "/images/dummy.png",
-        alt: modelConfig.alt || modelName,
-        features: modelConfig.features || [],
+        isSchliessanlage: modelCfg.isSchliessanlage ?? false,
+        image: modelCfg.image || "/images/dummy.png",
+        alt: modelName,
+        // Falls du "features" in ixtwido.js etc. definierst:
+        features: modelCfg.features || [],
       };
     });
 
@@ -324,7 +288,6 @@ onMounted(async () => {
     console.error("Fehler beim Laden der Konfigurationsdaten:", error);
   }
 });
-
 </script>
 
 <style scoped>
@@ -398,7 +361,6 @@ onMounted(async () => {
   margin-top: 10px;
   width: 100%;
 }
-
 .select-system-button:hover {
   background-color: #0056b3;
   transition: 300ms;

@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   // Daten, die an WooCommerce-API gesendet werden (Artikel- und Adressdaten)
   const payload = {
     product_id: body.product_id,
-    anlage_nummer: body.Anlagennummer,
+    anlage_nummer: body.Anlage,
     price: body.price,
     quantity: body.quantity,
     billing_first_name: body.billing_first_name,

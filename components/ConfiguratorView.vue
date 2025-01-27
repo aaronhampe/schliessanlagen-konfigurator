@@ -693,6 +693,7 @@ export default {
             product_id: 25012,
             price: 50,
             quantity: 1,
+            Anlage: this.anlageNr,
             billing_first_name: "Frank",
             billing_last_name: "Bose",
             billing_address_1: "Walsroder Straße 24-26",
