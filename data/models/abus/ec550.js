@@ -2,6 +2,7 @@ export default {
   isSchliessanlage: false,
   image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
   keyPrice: 4.31,
+
   ////////////////////////////////////////////////////////////////////////
   // DOPPELZYLINDER
   ////////////////////////////////////////////////////////////////////////
@@ -9,7 +10,7 @@ export default {
     sizes: [
       { outside: 28, inside: 34, price: 19.80 },
       { outside: 28, inside: 39, price: 24.20 },
-      
+
       { outside: 30, inside: 30, price: 19.79 },
       { outside: 30, inside: 35, price: 22.00 },
       { outside: 30, inside: 40, price: 24.20 },

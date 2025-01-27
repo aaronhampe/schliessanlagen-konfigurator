@@ -11,11 +11,7 @@
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell</h2>
       <div class="offer highlighted-offer">
-        <img
-          :src="selectedModelOffer.image"
-          :alt="selectedModelOffer.alt"
-          class="offer-image"
-        />
+        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
           <div class="offer-price">
@@ -23,18 +19,12 @@
             <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
           </div>
           <ul class="offer-features">
-            <li
-              v-for="(feature, i) in selectedModelOffer.features || []"
-              :key="i"
-            >
+            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton
-            icon="i-heroicons-shopping-cart-16-solid"
-            class="select-system-button"
-            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)"
-          >
+          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)">
             System auswählen
           </UButton>
         </div>
@@ -45,11 +35,7 @@
     <div v-if="alternativeOffers.length" style="margin-top: 30px;">
       <h2>Weitere passende Angebote</h2>
       <div class="offer-container">
-        <div
-          class="offer"
-          v-for="(offer, index) in alternativeOffers"
-          :key="offer.title"
-        >
+        <div class="offer" v-for="(offer, index) in alternativeOffers" :key="offer.title">
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
@@ -62,11 +48,8 @@
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-            <UButton
-              icon="i-heroicons-shopping-cart-16-solid"
-              class="select-system-button"
-              @click="addToCart(offer.title, offer.price)"
-            >
+            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+              @click="addToCart(offer.title, offer.price)">
               System auswählen
             </UButton>
           </div>
@@ -166,30 +149,24 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
 }
 
 /**
- * Berechnet den Gesamtpreis eines Modells für alle angelegten Positionen.
- * - Liest .sizes und .optionUpcharges aus "cylinderModels[modelName]".
- * - Prüft für jede Position, ob ein passender size-Eintrag existiert.
- * - Summiert den Basispreis + Optionsaufschläge * (Anzahl).
+ * @param {String} modelName 
+ * @param {Array} positionArr - Zylinder (DB: sqlgetposition)
+ * @param {Number} totalKeys - Summierte Schlüssel (aus sqlgetschluessel)
  */
-function calculatePriceForModel(modelName, positionArr) {
-  if (!modelName || modelName === "Kein bestimmtes Modell") {
-    return 0;
-  }
+function calculatePriceForModel(modelName, positionArr, totalKeys = 0) {
+  if (!modelName || modelName === "Kein bestimmtes Modell") return 0;
   const modelConfig = cylinderModels[modelName];
-  if (!modelConfig) {
-    return 0; // optional: fallback
-  }
+  if (!modelConfig) return 0;
 
   let totalPrice = 0;
 
+  // 1) ZYLINDER-Preis
   positionArr.forEach((item) => {
     const typeKey = mapTypToModelKey(item.Typ);
-    // Falls Typ vom Modell nicht abgedeckt wird => skip
     if (!modelConfig[typeKey]) {
       return;
     }
-
-    // Passende Size suchen
+    // Finde die Size
     const sizeMatch = modelConfig[typeKey].sizes.find(
       (sz) =>
         Number(sz.outside) === Number(item.SizeA) &&
@@ -199,22 +176,18 @@ function calculatePriceForModel(modelName, positionArr) {
       return;
     }
 
-    // Basispreis
     let priceForThisDoor = sizeMatch.price || 0;
 
-    // Aus der DB: CSV-String "Option" => "Not- & Gefahrenfunktion, Freilauf, ..."
+    // 2) Optionen (N&G, bohrschutz, etc.)
+    const upchargeObj =
+      modelConfig[typeKey].optionUpcharges ||
+      modelConfig.optionUpcharges ||
+      {};
     const selectedOptions = (item.Option || "")
       .split(",")
       .map((s) => s.trim())
       .filter((o) => o);
 
-    // Option-Aufschläge (am Typ-Level oder Model-Level hinterlegt)
-    // => z.B. modelConfig.Doppelzylinder.optionUpcharges oder
-    //    modelConfig.optionUpcharges
-    const upchargeObj =
-      modelConfig[typeKey]?.optionUpcharges || modelConfig.optionUpcharges || {};
-
-    // Jede Option => passendes Mapping => addiere Aufpreis
     selectedOptions.forEach((opt) => {
       const mappedKey = mapOptionToUpchargeKey(opt);
       if (mappedKey && upchargeObj[mappedKey]) {
@@ -222,13 +195,20 @@ function calculatePriceForModel(modelName, positionArr) {
       }
     });
 
-    // Anzahl = "Anzahl" Spalte aus der DB (z.B. Türmenge)
-    const qty = Number(item.Anzahl) || 1;
-    totalPrice += priceForThisDoor * qty;
+    // 3) Menge/Türanzahl
+    const doorCount = Number(item.Anzahl) || 1;
+    totalPrice += priceForThisDoor * doorCount;
   });
+
+  // 4) SCHLÜSSEL-Preis => keyPrice * totalKeys
+  const globalKeyPrice = modelConfig.keyPrice || 0;
+  // Falls du je Zylindertyp unterscheiden willst,
+  // müsstest du es anders aufteilen. Hier: EINFACH global.
+  totalPrice += globalKeyPrice * totalKeys;
 
   return totalPrice;
 }
+
 
 // Hauptmodell (was der User gewählt hat)
 const selectedModelOffer = computed(() => {
@@ -245,41 +225,61 @@ const alternativeOffers = computed(() => {
   });
 });
 
+// Neues Ref für die globale Schlüssel-Summe
+const totalGlobalKeys = ref(0);
+
 onMounted(async () => {
   if (!anlageNr) return;
 
   try {
-    // 1) Positionen aus DB laden
+    // 1) POSITIONEN laden
     const positionResponse = await $fetch("/api/sqlgetposition", {
       method: "POST",
       body: { ID: anlageNr },
     });
     positionData.value = positionResponse.queryresult || [];
 
-    // 2) Baue Offers
+    // 2) SCHLUESSEL laden
+    const schluesselResponse = await $fetch("/api/sqlgetschluessel", {
+      method: "POST",
+      body: { ID: anlageNr },
+    });
+    const schluesselData = schluesselResponse.queryresult || [];
+
+    // Summiere "Anzahl" aller Schlüssel-Einträge
+    // Bsp: keyPos=1 => Anzahl=5, keyPos=2 => Anzahl=1, ...
+    let sumKeys = 0;
+    schluesselData.forEach((entry) => {
+      sumKeys += Number(entry.Anzahl) || 0;
+    });
+    totalGlobalKeys.value = sumKeys;
+
+    // 3) Angebote/Offers aufbauen
+    // (wie vorher)
     const allModelNames = Object.keys(cylinderModels).filter(
       (modelName) => modelName !== "Kein bestimmtes Modell"
     );
 
     const tempOffers = allModelNames.map((modelName) => {
-      const modelCfg = cylinderModels[modelName];
-      // Kann das Modell alle Zylinder abbilden?
       const canHandleAll = modelCanHandleAllZylinders(
         modelName,
         positionData.value
       );
-      // Berechne Preis
-      const price = calculatePriceForModel(modelName, positionData.value);
+      // -> NEU: Übergib totalGlobalKeys an "calculatePriceForModel"
+      const price = calculatePriceForModel(
+        modelName,
+        positionData.value,
+        totalGlobalKeys.value
+      );
 
       return {
         title: modelName,
         price,
         canHandleAll,
-        isSchliessanlage: modelCfg.isSchliessanlage ?? false,
-        image: modelCfg.image || "/images/dummy.png",
+        isSchliessanlage: cylinderModels[modelName].isSchliessanlage ?? false,
+        image: cylinderModels[modelName].image || "/images/dummy.png",
         alt: modelName,
-        // Falls du "features" in ixtwido.js etc. definierst:
-        features: modelCfg.features || [],
+        features: cylinderModels[modelName].features || [],
       };
     });
 
@@ -288,6 +288,7 @@ onMounted(async () => {
     console.error("Fehler beim Laden der Konfigurationsdaten:", error);
   }
 });
+
 </script>
 
 <style scoped>
@@ -320,6 +321,7 @@ onMounted(async () => {
   overflow: hidden;
   transition: transform 0.3s ease;
 }
+
 .offer:hover {
   transform: translateY(-5px);
 }
@@ -361,6 +363,7 @@ onMounted(async () => {
   margin-top: 10px;
   width: 100%;
 }
+
 .select-system-button:hover {
   background-color: #0056b3;
   transition: 300ms;

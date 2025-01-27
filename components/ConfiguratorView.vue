@@ -751,8 +751,8 @@ export default {
 
         if (queryresultanlage) {
           // Schritt 2: Positionen speichern
-          const RowObject = this.rows.flatMap((row, rowIndex) =>
-            row.map((col, colIndex) => ({
+          const RowObject = this.rows.map((row, rowIndex) => {
+            return {
               POS: rowIndex + 1,
               Bezeichnung: row[0].doorDesignation || "",
               Anzahl: row[0].doorquantity || "",
@@ -760,8 +760,8 @@ export default {
               SizeA: row[0].outside || "",
               SizeI: row[0].inside || "",
               Option: (row[0].optionsSelected || []).join(", "),
-            }))
-          )
+            };
+          });
 
 
           const queryresultposition = await $fetch(
@@ -773,15 +773,11 @@ export default {
           );
 
           // Schritt 3: Schlüssel speichern
-          const KeyNameObject = this.rows
-            .filter((_, rowIndex) => rowIndex === 0)
-            .flatMap((row) =>
-              row.map((col, colIndex) => ({
-                keyPos: colIndex + 1,
-                keyname: col.keyname,
-                keyquantity: col.keyquantity || 1,
-              }))
-            );
+          const KeyNameObject = this.rows[0].map((col, colIndex) => ({
+            keyPos: colIndex + 1,
+            keyname: col.keyname,
+            keyquantity: col.keyquantity || 1,
+          }));
 
           const queryresultschluessel = await $fetch(
             "/api/sqlpostschluessel?ID=" + this.anlageNr,
