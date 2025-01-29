@@ -75,6 +75,7 @@ import { mapOptionToUpchargeKey, mapTypToModelKey } from "@/data/utils/optionMap
 
 // Router-Parameter
 const route = useRoute();
+const router = useRouter();
 const anlageNr = route.query.anlageNr || "";
 
 // Schließanlage-Boolean aus Route
@@ -88,7 +89,12 @@ const selectedModel = computed(() => store.selectedModel);
 
 // Navigation zurück (Button "Zurück zum Konfigurator")
 const navigateBack = () => {
-  window.history.back();
+  router.push({
+    name: "index",
+    query: {
+      anlageNr: anlageNr
+    }
+  });
 };
 
 

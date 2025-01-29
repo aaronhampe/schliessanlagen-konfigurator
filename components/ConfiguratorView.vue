@@ -361,6 +361,15 @@ export default {
         this.selectedModelLocal = newVal;
         this.oldModel = newVal;
       }
+    },
+    '$route.query.anlageNr': {
+      handler(newVal) {
+        if (newVal) {
+          this.id = newVal;
+          this.loadInstallation();
+        }
+      },
+      immediate: false
     }
   },
   methods: {
@@ -955,8 +964,14 @@ export default {
     mounted() {
       this.generateRandomAnlagenNummer();
       document.addEventListener("click", this.closeAllDropdowns);
-      this.selectedModelLocal = this.store.selectedModel
-      this.oldModel = this.store.selectedModel
+      this.selectedModelLocal = this.store.selectedModel;
+      this.oldModel = this.store.selectedModel;
+
+      if (this.$route.query.anlageNr) {
+        this.id = this.$route.query.anlageNr;
+        this.loadInstallation();
+      }
+
     },
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
