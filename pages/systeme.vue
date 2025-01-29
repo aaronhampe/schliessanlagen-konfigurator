@@ -24,9 +24,11 @@
             </li>
           </ul>
           <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price)">
+            @click="addToCart(selectedModelOffer.title, selectedModelOffer.price, selectedModelOffer.productID)">
             System auswählen
           </UButton>
+
+
         </div>
       </div>
     </div>
@@ -49,9 +51,10 @@
               </li>
             </ul>
             <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-              @click="addToCart(offer.title, offer.price)">
+              @click="addToCart(offer.title, offer.price, offer.productID)">
               System auswählen
             </UButton>
+
           </div>
         </div>
       </div>
@@ -88,10 +91,6 @@ const navigateBack = () => {
   window.history.back();
 };
 
-// "In den Warenkorb" - Platzhalter-Funktion
-const addToCart = (systemName, price) => {
-  console.log(`System ausgewählt: ${systemName}, Preis: ${price}`);
-};
 
 // Rundungs-Helfer
 const roundPrice = (price) => price.toFixed(2);
@@ -228,60 +227,91 @@ const alternativeOffers = computed(() => {
 // Neues Ref für die globale Schlüssel-Summe
 const totalGlobalKeys = ref(0);
 
+function addToCart(systemName, price, productID) {
+  // 1) fetch an den /api/wc-cart-add-item
+  fetch("/api/wc-cart-add-item", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      product_id: productID,
+      price,
+      quantity: 1,
+      Anlage: anlageNr,
+    }),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success) {
+        console.log("Result:", result);
+        // cart_url und cart_key sind in result.data
+        const cartUrl = result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
+        const cartKey = result.data.cart_key;
+
+        const finalUrl = cartKey
+          ? `${cartUrl}?cocart-load-cart=${cartKey}`
+          : cartUrl;
+
+        window.location.href = finalUrl;
+      }
+    })
+
+    .catch((error) => {
+      console.log("Es gab einen Fehler bei der Anfrage:", error);
+    });
+}
+
+
 onMounted(async () => {
   if (!anlageNr) return;
 
   try {
-    // 1) POSITIONEN laden
     const positionResponse = await $fetch("/api/sqlgetposition", {
       method: "POST",
       body: { ID: anlageNr },
     });
     positionData.value = positionResponse.queryresult || [];
 
-    // 2) SCHLUESSEL laden
     const schluesselResponse = await $fetch("/api/sqlgetschluessel", {
       method: "POST",
       body: { ID: anlageNr },
     });
     const schluesselData = schluesselResponse.queryresult || [];
 
-    // Summiere "Anzahl" aller Schlüssel-Einträge
-    // Bsp: keyPos=1 => Anzahl=5, keyPos=2 => Anzahl=1, ...
     let sumKeys = 0;
     schluesselData.forEach((entry) => {
       sumKeys += Number(entry.Anzahl) || 0;
     });
     totalGlobalKeys.value = sumKeys;
 
-    // 3) Angebote/Offers aufbauen
-    // (wie vorher)
     const allModelNames = Object.keys(cylinderModels).filter(
       (modelName) => modelName !== "Kein bestimmtes Modell"
     );
 
     const tempOffers = allModelNames.map((modelName) => {
-      const canHandleAll = modelCanHandleAllZylinders(
-        modelName,
-        positionData.value
-      );
-      // -> NEU: Übergib totalGlobalKeys an "calculatePriceForModel"
+      const modelConfig = cylinderModels[modelName];
+      const canHandleAll = modelCanHandleAllZylinders(modelName, positionData.value);
       const price = calculatePriceForModel(
         modelName,
         positionData.value,
         totalGlobalKeys.value
       );
 
+      const productID = modelConfig.productID || null;
+
       return {
         title: modelName,
         price,
+        productID,
         canHandleAll,
-        isSchliessanlage: cylinderModels[modelName].isSchliessanlage ?? false,
-        image: cylinderModels[modelName].image || "/images/dummy.png",
+        isSchliessanlage: modelConfig.isSchliessanlage ?? false,
+        image: modelConfig.image || "/images/dummy.png",
         alt: modelName,
-        features: cylinderModels[modelName].features || [],
+        features: modelConfig.features || [],
       };
     });
+
 
     offers.value = tempOffers;
   } catch (error) {
@@ -291,6 +321,6 @@ onMounted(async () => {
 
 </script>
 
-<style scoped>
-@import "./styles/systems.scss";
+<style>
+@import "@/styles/systems.scss";
 </style>

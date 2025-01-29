@@ -310,6 +310,7 @@ export default {
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
+            keycolor: ""
           },
         ],
       ],
@@ -964,6 +965,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "./styles/configurator.scss";
 </style>
