@@ -382,12 +382,12 @@ $color-sky: #0ea5e9;
   *   (modernes Design mit Overlay, zentriertem Layout etc.)
   ***********************************************************/
 .options-modal {
-  ::v-deep .u-modal-overlay {
+  :deep(.u-modal-overlay)  {
     background: rgba(0, 0, 0, 0.5);
   }
 
   // Modal Content
-  ::v-deep .u-modal-content {
+  :deep(.u-modal-content)  {
     background: #ffffff;
     border-radius: 12px;
     padding: 20px;
@@ -473,7 +473,7 @@ $color-sky: #0ea5e9;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
-        ::v-deep .u-checkbox__check {
+        :deep(.u-checkbox__check)  {
           width: 20px;
           height: 20px;
         }
@@ -486,7 +486,8 @@ $color-sky: #0ea5e9;
       gap: 12px;
 
       .save-button {
-        background-color: #f59e0b !important; /* Amber-Farbe */
+        background-color: #f59e0b !important;
+        /* Amber-Farbe */
         color: #fff !important;
         font-weight: 600;
         padding: 0.6rem 1rem;
@@ -511,8 +512,8 @@ $color-sky: #0ea5e9;
   *                     WARNING MODAL
   ***********************************************************/
 .warning-modal {
-  ::v-deep .u-modal-content {
-    background: #ffffff;
+  :deep(.u-modal-content)  {
+    background: #831414;
     border-radius: 10px;
     padding: 24px;
     max-width: 480px;

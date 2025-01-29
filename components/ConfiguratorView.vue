@@ -279,7 +279,6 @@ export default {
     return {
       anlageNr: "",
       object: "",
-      selectedModel: "",
       id: "",
       password: "",
       email: "",
