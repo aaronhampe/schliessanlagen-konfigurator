@@ -155,50 +155,12 @@
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="button-default" @click="navigateToSysteme" size="sm" color="amber" variant="solid">
+        <UButton class="button-default" @click="saveInstallation" size="sm" color="amber" variant="solid">
           Zur Systemübersicht
         </UButton>
-        <UButton class="button-default" icon="i-heroicons-arrow-left-start-on-rectangle-16-solid" @click="isOpen = true"
-          size="sm" color="amber" variant="solid" :trailing="false">Angebot anfordern
-        </UButton>
 
-        <UModal v-model="isOpen">
-          <div class="p-4">
-            <div class="modal-flex-buttons-top">
-              <h2 class="modal-h2">Angebot anfordern</h2>
-              <UButton color="red" @click="isOpen = false" style="font-weight: 600; color: white">X
-              </UButton>
-            </div>
-            <br />
-            <form @submit.prevent="handleSubmit">
-              <div class="form-group">
-                <label for="object">Anlagenname:</label>
-                <UInput color="amber" id="object" v-model="object" type="text" placeholder="z.B. Mustermann Schließung"
-                  required />
-              </div>
-              <div class="form-group">
-                <label for="email">E-Mail-Adresse:</label>
-                <UInput color="amber" id="email" v-model="email" type="email" required />
-              </div>
-              <div class="form-group">
-                <label for="name">Name:</label>
-                <UInput color="amber" id="name" v-model="name" type="text" required />
-              </div>
-              <div class="form-group">
-                <label for="phone">Telefonnummer:</label>
-                <UInput color="amber" id="phone" v-model="phone" type="tel" required />
-              </div>
-              <div class="form-group">
-                <label for="company">Firma:</label>
-                <UInput color="amber" id="company" v-model="company" type="tel" placeholder="Optional" />
-              </div>
-              <br />
-              <UButton @click="saveInstallation" style="color: white" type="submit" color="amber" variant="solid">
-                Speichern und abschicken
-              </UButton>
-            </form>
-          </div>
-        </UModal>
+
+
       </div>
       <div class="buttons" style="margin-top: 20px">
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
@@ -727,6 +689,7 @@ export default {
     },
 
     async saveInstallation() {
+      // 1) PRÜFUNG: Jedes row[0] (Tür) => Type, Außen, Innen nicht leer
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
         const { type, outside, inside } = this.rows[rowIndex][0];
         if (!type) {
@@ -762,105 +725,91 @@ export default {
           }
         }
       }
-      const form = document.querySelector("form");
-      if (form.checkValidity()) {
-        let antwort;
-        if (this.anlageNr === "") {
-          do {
-            this.generateRandomAnlagenNummer();
-            const response = await $fetch(
-              "/api/sqltestanlage?ID=" + this.anlageNr,
-              {
-                method: "post",
-              }
-            );
-            antwort = response.message;
-          } while (antwort === "Anlagennummer existiert.");
-        }
 
-        // Schritt 1: Anlage in der Datenbank speichern
-        const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
+      // Falls du den alten HTML-Formular-Check nicht mehr nutzt, 
+      // brauchst du hier nichts weiter. Direkt DB-Speicherung:
+
+      // 3) Falls anlageNr noch leer => generiere
+      if (this.anlageNr === "") {
+        let antwort;
+        do {
+          this.generateRandomAnlagenNummer();
+          const response = await $fetch("/api/sqltestanlage?ID=" + this.anlageNr, {
+            method: "post",
+          });
+          antwort = response.message;
+        } while (antwort === "Anlagennummer existiert.");
+      }
+
+      // 4) Anlage in der DB speichern
+      const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
+        method: "post",
+        body: {
+          ID: this.anlageNr,
+          Objekt: this.object,
+          Name: this.name,
+          EMail: this.email,
+          Telefon: this.phone,
+          Firma: this.company,
+          Typ: this.typ,
+          Modell: this.store.selectedModel,
+        },
+      });
+
+      if (queryresultanlage) {
+        // 5) Positionen speichern
+        const RowObject = this.rows.map((row, rowIndex) => ({
+          POS: rowIndex + 1,
+          Bezeichnung: row[0].doorDesignation || "",
+          Anzahl: row[0].doorquantity || "",
+          Typ: row[0].type || "",
+          SizeA: row[0].outside || "",
+          SizeI: row[0].inside || "",
+          Option: (row[0].optionsSelected || []).join(", "),
+        }));
+
+        const queryresultposition = await $fetch("/api/sqlpostposition?ID=" + this.anlageNr, {
           method: "post",
-          body: {
-            ID: this.anlageNr,
-            Objekt: this.object,
-            Name: this.name,
-            EMail: this.email,
-            Telefon: this.phone,
-            Firma: this.company,
-            Typ: this.typ,
-            Modell: this.store.selectedModel,
-          },
+          body: RowObject,
         });
 
-        if (queryresultanlage) {
-          // Schritt 2: Positionen speichern
-          const RowObject = this.rows.map((row, rowIndex) => {
-            return {
-              POS: rowIndex + 1,
-              Bezeichnung: row[0].doorDesignation || "",
-              Anzahl: row[0].doorquantity || "",
-              Typ: row[0].type || "",
-              SizeA: row[0].outside || "",
-              SizeI: row[0].inside || "",
-              Option: (row[0].optionsSelected || []).join(", "),
-            };
-          });
+        // 6) Schlüssel speichern
+        const KeyNameObject = this.rows[0].map((col, colIndex) => ({
+          keyPos: colIndex + 1,
+          keyname: col.keyname,
+          keyquantity: col.keyquantity || 1,
+        }));
 
+        const queryresultschluessel = await $fetch("/api/sqlpostschluessel?ID=" + this.anlageNr, {
+          method: "post",
+          body: KeyNameObject,
+        });
 
-          const queryresultposition = await $fetch(
-            "/api/sqlpostposition?ID=" + this.anlageNr,
-            {
-              method: "post",
-              body: RowObject,
-            }
-          );
+        // 7) Matrix speichern
+        const Matrix = this.rows.flatMap((row, rowIndex) =>
+          row.map((col, colIndex) => ({
+            position: rowIndex + 1,
+            keynr: colIndex + 1,
+            checked: col.checked || false,
+          }))
+        );
 
-          // Schritt 3: Schlüssel speichern
-          const KeyNameObject = this.rows[0].map((col, colIndex) => ({
-            keyPos: colIndex + 1,
-            keyname: col.keyname,
-            keyquantity: col.keyquantity || 1,
-          }));
+        const queryresultmatrix = await $fetch("/api/sqlpostmatrix?ID=" + this.anlageNr, {
+          method: "post",
+          body: Matrix,
+        });
 
-          const queryresultschluessel = await $fetch(
-            "/api/sqlpostschluessel?ID=" + this.anlageNr,
-            {
-              method: "post",
-              body: KeyNameObject,
-            }
-          );
-
-          // Schritt 4: Matrix speichern
-          const Matrix = this.rows.flatMap((row, rowIndex) =>
-            row.map((col, colIndex) => ({
-              position: rowIndex + 1,
-              keynr: colIndex + 1,
-              checked: col.checked || false,
-            }))
-          );
-
-          const queryresultmatrix = await $fetch(
-            "/api/sqlpostmatrix?ID=" + this.anlageNr,
-            {
-              method: "post",
-              body: Matrix,
-            }
-          );
-
-          // Schritt 5: Navigiere zur systeme.vue Seite mit der Anlagennummer
-          this.$router.push({
-            name: "systeme",
-            query: {
-              anlageNr: this.anlageNr,
-              isSchliessanlage: this.isSchliessanlage,
-            },
-          });
-        }
-      } else {
-        form.reportValidity();
+        // 8) Weiterleitung zur systeme.vue
+        this.$router.push({
+          name: "systeme",
+          query: {
+            anlageNr: this.anlageNr,
+            isSchliessanlage: this.isSchliessanlage,
+          },
+        });
       }
     },
+
 
     async loadInstallation() {
       this.rows.length = 1;
