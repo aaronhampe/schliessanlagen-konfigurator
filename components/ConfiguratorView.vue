@@ -727,6 +727,41 @@ export default {
     },
 
     async saveInstallation() {
+      for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+        const { type, outside, inside } = this.rows[rowIndex][0];
+        if (!type) {
+          alert(`Bitte Zylinder-Typ in Zeile ${rowIndex + 1} wählen.`);
+          return;
+        }
+        if (!outside) {
+          alert(`Bitte Außenmaß in Zeile ${rowIndex + 1} wählen.`);
+          return;
+        }
+        if (!inside) {
+          alert(`Bitte Innenmaß in Zeile ${rowIndex + 1} wählen.`);
+          return;
+        }
+      }
+
+      // 2) PRÜFUNG (nur bei isSchliessanlage): Pro Spalte >= 1 angehakt
+      if (this.isSchliessanlage) {
+        // Anzahl Spalten = this.rows[0].length
+        const colCount = this.rows[0].length;
+        // Jede Spalte => check ob mind. eine row => .checked = true
+        for (let c = 0; c < colCount; c++) {
+          let foundAtLeastOne = false;
+          for (let r = 0; r < this.rows.length; r++) {
+            if (this.rows[r][c].checked) {
+              foundAtLeastOne = true;
+              break;
+            }
+          }
+          if (!foundAtLeastOne) {
+            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            return;
+          }
+        }
+      }
       const form = document.querySelector("form");
       if (form.checkValidity()) {
         let antwort;

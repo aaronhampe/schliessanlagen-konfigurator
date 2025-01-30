@@ -46,10 +46,10 @@ $color-sky: #0ea5e9;
 .heading {
   @include flex-center;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 1em !important;
 
   h1 {
-    font-size: 1.8em;
+    font-size: 30px;
   }
 
   .first-flex {
