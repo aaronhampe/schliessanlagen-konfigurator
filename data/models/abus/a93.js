@@ -127,7 +127,7 @@ export default {
       { outside: 70, inside: 85 },
       { outside: 70, inside: 90 }
     ],
-    options: [],
+    options: ["Not- & Gefahrenfunktion"],
   },
   Knaufzylinder: {
     sizes: [
