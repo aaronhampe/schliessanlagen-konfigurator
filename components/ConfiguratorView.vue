@@ -369,7 +369,7 @@ export default {
           this.loadInstallation();
         }
       },
-      immediate: false
+      immediate: true
     }
   },
   methods: {

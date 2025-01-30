@@ -10,6 +10,7 @@ export default {
       { outside: 28, inside: 40 },
       { outside: 28, inside: 45 },
 
+      { outside: 30, inside: 30 },
       { outside: 30, inside: 35 },
       { outside: 30, inside: 40 },
       { outside: 30, inside: 50 },
