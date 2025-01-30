@@ -156,7 +156,7 @@
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
         <UButton class="button-default" @click="saveInstallation" size="sm" color="amber" variant="solid">
-          Zur Systemübersicht
+          Weiter zu den Angeboten
         </UButton>
 
 
@@ -166,9 +166,7 @@
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        <UButton v-if="showLoadButton" class="button-default" @click="test" size="sm" color="amber" variant="solid"
-          :trailing="false">Test
-        </UButton>
+        
       </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
@@ -313,7 +311,7 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-      return true;
+       return this.$route.path.includes('/admin/');
     },
   },
   watch: {
