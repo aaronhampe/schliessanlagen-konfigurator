@@ -16,7 +16,7 @@ import keso8000omega from './models/keso/8000omega.js'
 export default {
   "Kein bestimmtes Modell": alloptions,
  // "ABUS A93": abusa93,
- // "ABUS TI14": abusti14,
+  "ABUS TI14": abusti14,
   "ABUS EC550": abusec550,
   "ABUS EC660": abusec660,
   "ABUS EC880": abusec880,
