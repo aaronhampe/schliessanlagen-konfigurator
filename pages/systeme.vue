@@ -12,7 +12,7 @@ const isSchliessanlage = route.query.isSchliessanlage === "true";
 const store = useCylinderStore();
 const selectedModel = computed(() => store.selectedModel);
 const positionData = ref([]);
-const matrix = ref([]);            
+const matrix = ref([]);
 const totalGlobalKeys = ref(0);
 const offers = ref([]);
 
@@ -32,6 +32,24 @@ const navigateBack = () => {
 function roundPrice(price) {
   return price.toFixed(2);
 }
+
+function openSummary(offer) {
+  selectedOffer.value = offer;
+  hasAcceptedWiderruf.value = false;
+  isSummaryModalOpen.value = true;
+}
+
+function confirmPurchase() {
+  // Nur wenn angehakt
+  if (!hasAcceptedWiderruf.value) return;
+
+  const offer = selectedOffer.value;
+  if (!offer) return;
+
+  addToCart(offer.title, offer.price, offer.productID);
+}
+
+
 
 function modelCanHandleAllZylinders(modelName, positionArray) {
   const modelConfig = cylinderModels[modelName];
@@ -192,7 +210,7 @@ function addToCart(systemName, price, productID) {
         const cartUrl = result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
         const cartKey = result.data.cart_key;
         const finalUrl = cartKey ? `${cartUrl}?cocart-load-cart=${cartKey}` : cartUrl;
-        window.location.href = finalUrl;
+        window.open(finalUrl, "_blank");
       }
     })
     .catch((err) => {
@@ -251,7 +269,7 @@ onMounted(async () => {
         productID: modelConfig.productID || null,
         canHandleAll,
         isSchliessanlage: !!modelConfig.isSchliessanlage,
-        image: modelConfig.image || "/images/dummy.png",
+        image: modelConfig.image,
         alt: modelName,
         features: modelConfig.features || [],
       };
@@ -289,11 +307,8 @@ onMounted(async () => {
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="addToCart(
-      selectedModelOffer.title,
-      selectedModelOffer.price,
-      selectedModelOffer.productID
-    )">
+          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+            @click="openSummary(selectedModelOffer)">
             System auswählen
           </UButton>
         </div>
@@ -317,8 +332,7 @@ onMounted(async () => {
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-              @click="addToCart(offer.title, offer.price, offer.productID)">
+            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
               System auswählen
             </UButton>
           </div>
@@ -330,8 +344,93 @@ onMounted(async () => {
       Zurück zum Konfigurator
     </UButton>
   </div>
+
+  <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header-info">
+          <h2>
+            {{ selectedOffer.title || "Ausgewähltes Modell" }}
+            -
+            {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
+          </h2>
+
+          <div class="offer-image-container">
+            <img :src="selectedOffer.image"
+              :alt="selectedOffer.value?.alt || selectedOffer.value?.title || 'Zylinder-Modell'" />
+          </div>
+        </div>
+        <UButton color="red" class="close-button" @click="isSummaryModalOpen = false">
+          X
+        </UButton>
+      </div>
+
+      <div class="content-wrapper">
+        <h3 class="config-heading">Zylinderübersicht</h3>
+        <table class="zylinder-table">
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Typ</th>
+              <th>Außen / Innen</th>
+              <th>Anzahl</th>
+              <th>Optionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="pos in positionData" :key="pos.POS">
+              <td>{{ pos.POS }}</td>
+              <td>{{ pos.Typ }}</td>
+              <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
+              <td>{{ pos.Anzahl }}</td>
+              <td>{{ pos.Option }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="keys-info">
+          Gesamtanzahl Schlüssel:
+          <strong>{{ totalGlobalKeys }}</strong>
+        </p>
+      </div>
+
+      <div class="price-and-widerruf">
+        <h2>Widerruf:</h2>
+        <div class="widerruf-section">
+          <label class="widerruf-label">
+            <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
+            <span>Ich stimme der Widerrufsbelehrung zu.</span>
+            <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
+              <i class="i-heroicons-information-circle" />
+              <transition name="fade">
+                <div v-if="hoverWiderruf" class="tooltip-box">
+                  Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung von Waren,
+                  die nicht vorgefertigt sind und für deren Herstellung eine individuelle
+                  Auswahl oder Bestimmung durch den Verbraucher maßgeblich ist oder
+                  die eindeutig auf die persönlichen Bedürfnisse des Verbrauchers
+                  zugeschnitten sind.
+                </div>
+              </transition>
+            </div>
+          </label>
+        </div>
+        <div class="offer-price">
+          Gesamtpreis:
+          <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <UButton :disabled="!hasAcceptedWiderruf" color="amber" variant="solid" @click="confirmPurchase">
+          Angebot kaufen
+        </UButton>
+      </div>
+    </div>
+  </UModal>
+
+
 </template>
 
-<style>
+<style scoped>
 @import "@/styles/systems.scss";
 </style>

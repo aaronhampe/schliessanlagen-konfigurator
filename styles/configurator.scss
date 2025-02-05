@@ -98,6 +98,7 @@ $color-sky: #0ea5e9;
 
     input {
       width: 180px;
+      border-radius: 6px;
 
       &:focus {
         border-color: $color-sky;
