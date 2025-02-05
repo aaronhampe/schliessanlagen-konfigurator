@@ -82,7 +82,7 @@ export default {
             //////////////////
             { outside: 70, inside: 70, price: 110.20 },
         ],
-        options: [],
+        options: ["Not- & Gefahrenfunktion"],
     },
     Knaufzylinder: {
         sizes: [

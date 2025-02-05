@@ -26,15 +26,24 @@
 
 
     <div class="model-container">
+      <h2> 1: </h2>
       <h3>Modellpräferenz:</h3>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
+      <div class="toggle-gleichschliessung" >
+      <label class="flex align-center gap-2">
+        <h2> 2: </h2>
+        <span>Gleichschließung:</span>
+        <UToggle color="sky"  v-model="overrideToGleichschliessung" :disabled="!store.isSchliessanlage" />
+      </label>
+    </div>
 
     </div>
 
+    
     <UModal v-model="isWarningModalOpen" class="warning-modal">
       <div class="modal-header">
         <h2>Achtung!</h2>
@@ -166,7 +175,7 @@
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        
+
       </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
@@ -256,6 +265,7 @@ export default {
       oldModel: '',
       isWarningModalOpen: false,
       pendingModel: null,
+      overrideToGleichschliessung: false,
       rows: [
         [
           {
@@ -282,10 +292,22 @@ export default {
       return useCylinderStore();
     },
     isSchliessanlage() {
-      return this.store.isSchliessanlage;
+      // falls override aktiv ist => return false
+      if (this.overrideToGleichschliessung) {
+        return false
+      }
+      // sonst den Wert aus dem Store
+      return this.store.isSchliessanlage
     },
     modelOptions() {
       return Object.keys(zylindermodelle);
+    },
+    effectiveIsSchliessanlage() {
+      if (this.overrideToGleichschliessung) {
+        return false;
+      } else {
+        return this.store.isSchliessanlage;
+      }
     },
     selectedModel: {
       get() {
@@ -311,7 +333,7 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-       return this.$route.path.includes('/admin/');
+      return this.$route.path.includes('/admin/');
     },
   },
   watch: {
