@@ -1,6 +1,9 @@
 export default {
     isSchliessanlage: false,
     image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
+    keyPrice: 7.95,
+    productID: 28478,
+
     Doppelzylinder: {
         sizes: [
 
@@ -126,7 +129,7 @@ export default {
             { outside: 40, inside: 60, price: 75.55 },
             { outside: 40, inside: 65, price: 79.75 },
             { outside: 40, inside: 70, price: 82.90 },
-            { outside: 40, inside: 80, price: 82.90  },
+            { outside: 40, inside: 80, price: 82.90 },
             { outside: 40, inside: 85 },
             { outside: 40, inside: 90 },
             { outside: 40, inside: 95 },
