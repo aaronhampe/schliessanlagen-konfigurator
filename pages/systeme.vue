@@ -8,18 +8,20 @@ import { mapOptionToUpchargeKey, mapTypToModelKey } from "@/data/utils/optionMap
 const route = useRoute();
 const router = useRouter();
 const anlageNr = route.query.anlageNr || "";
-// Aus URL lesen -> kann "true" oder "false" sein
 const isSchliessanlage = route.query.isSchliessanlage === "true";
-
 const store = useCylinderStore();
 const selectedModel = computed(() => store.selectedModel);
-
 const positionData = ref([]);
-const matrix = ref([]);            // <--- NEU
+const matrix = ref([]);            
 const totalGlobalKeys = ref(0);
 const offers = ref([]);
 
-// Für "Zurück"-Button
+const isSummaryModalOpen = ref(false);
+const selectedOffer = ref(null);
+const hasAcceptedWiderruf = ref(false);
+const hoverWiderruf = ref(false);
+
+
 const navigateBack = () => {
   router.push({
     name: "index",
@@ -31,7 +33,6 @@ function roundPrice(price) {
   return price.toFixed(2);
 }
 
-// Prüfe, ob dieses Modell alle Zylinder (Typ+Größe) kann
 function modelCanHandleAllZylinders(modelName, positionArray) {
   const modelConfig = cylinderModels[modelName];
   if (!modelConfig) return false;
@@ -49,11 +50,10 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
   if (!modelConfig) return false;
 
   const typeKey = mapTypToModelKey(zylinderItem.Typ);
-  // 1) Typ checken
   if (!modelConfig[typeKey]) {
     return false;
   }
-  // 2) Größe checken
+
   const foundSize = modelConfig[typeKey].sizes.find(
     (sz) =>
       Number(sz.inside) === Number(zylinderItem.SizeI) &&
@@ -63,24 +63,18 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
     return false;
   }
 
-  // 3) OPTIONS checken
-  //    Hole das Array ALLER möglichen Options:
   const validOptions = modelConfig[typeKey].options || [];
-  //    Auseinanderparsen
   const selectedOptions = (zylinderItem.Option || "")
     .split(",")
     .map((s) => s.trim())
     .filter((o) => o);
 
-  //    Prüfe jede ausgewählte Option, ob sie im "validOptions"-Array steht
   for (const opt of selectedOptions) {
     if (!validOptions.includes(opt)) {
-      // => Das Modell kennt diese Option nicht
       return false;
     }
   }
 
-  // Wenn wir hier ankommen, ist Typ/Größe/Optionen alle kompatibel
   return true;
 }
 

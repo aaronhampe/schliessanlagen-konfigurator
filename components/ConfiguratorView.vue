@@ -38,7 +38,7 @@
       <div class="toggle-gleichschliessung">
         <label class="flex align-center gap-2">
           <span>Gleichschließung</span>
-          <UToggle v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
+          <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
         </label>
       </div>
     </div>
