@@ -114,6 +114,10 @@ $color-sky: #0ea5e9;
     gap: 10px;
     margin-top: 10px;
 
+    h2, h3, span {
+      font-size: 16px;
+    }
+
     select {
       @include input-style;
       width: 220px;

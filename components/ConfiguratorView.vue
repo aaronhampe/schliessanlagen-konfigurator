@@ -19,11 +19,11 @@
         </transition>
       </div>
     </div>
+
     <div class="system-number">
       <h2>Anlagennummer:</h2>
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
     </div>
-
 
     <div class="model-container">
       <h2> 1: </h2>
@@ -33,30 +33,34 @@
           {{ model }}
         </option>
       </select>
-      <div class="toggle-gleichschliessung" >
-      <label class="flex align-center gap-2">
-        <h2> 2: </h2>
-        <span>Gleichschließung:</span>
-        <UToggle color="sky"  v-model="overrideToGleichschliessung" :disabled="!store.isSchliessanlage" />
-      </label>
+
+      <!-- Toggle für Gleichschließung -->
+      <div class="toggle-gleichschliessung">
+        <label class="flex align-center gap-2">
+          <span>Gleichschließung</span>
+          <UToggle v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
+        </label>
+      </div>
     </div>
 
-    </div>
 
-    
     <UModal v-model="isWarningModalOpen" class="warning-modal">
+
       <div class="modal-header">
         <h2>Achtung!</h2>
         <button class="close-button" @click="isWarningModalOpen = false">X</button>
       </div>
+
       <div class="modal-body">
         <p>Beim Wechsel des Modells können alle eingegebenen Daten verloren gehen.</p>
         <p>Möchten Sie den Modellwechsel wirklich durchführen?</p>
       </div>
+
       <div class="modal-footer">
         <button class="confirm-button" @click="confirmChange">Ja, ändern</button>
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
+
     </UModal>
   </div>
 
@@ -299,15 +303,48 @@ export default {
       // sonst den Wert aus dem Store
       return this.store.isSchliessanlage
     },
+
     modelOptions() {
       return Object.keys(zylindermodelle);
     },
-    effectiveIsSchliessanlage() {
-      if (this.overrideToGleichschliessung) {
-        return false;
-      } else {
-        return this.store.isSchliessanlage;
+
+    finalGleichschliessungState: {
+      get() {
+        // 1) Falls im Store gar keine Schließanlage gesetzt => immer Gleichschließung
+        if (!this.store.isSchliessanlage) {
+          return true;
+        }
+
+        // 2) Falls das Modell z.B. ABUS Ec 550 => immer Gleichschließung
+        const model = this.store.currentModel || "";
+        if (model === "ABUS Ec 550") {
+          return true;
+        }
+
+        // 3) sonst: nutze den (vom Nutzer) toggelbaren Wert
+        return this.overrideToGleichschliessung;
+      },
+      set(val) {
+        this.overrideToGleichschliessung = val;
+      },
+    },
+
+    disableGleichToggle() {
+      if (!this.store.isSchliessanlage) {
+        // => schon Gleichschließung => nichts zu toggeln
+        return true;
       }
+      if (this.store.currentModel === "ABUS Ec 550") {
+        // => immer Gleichschließung => nichts zu toggeln
+        return true;
+      }
+      return false;
+    },
+
+    effectiveIsSchliessanlage() {
+      // Wir wollen: Schließanlage == NICHT Gleichschließung
+      // Also:
+      return !this.finalGleichschliessungState;
     },
     selectedModel: {
       get() {
