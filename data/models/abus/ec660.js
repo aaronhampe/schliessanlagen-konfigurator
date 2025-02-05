@@ -61,7 +61,7 @@ export default {
       { outside: 55, inside: 60, price: 71.35 },
       { outside: 55, inside: 65, price: 77.65 },
     ],
-    options: [],
+    options: ["Not- & Gefahrenfunktion"],
   },
 
   ////////////////////////////////////////////////////////////////////////
