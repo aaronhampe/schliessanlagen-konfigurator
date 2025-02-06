@@ -25,6 +25,6 @@ export default {
   // "DOM RN": domrn,
   "DOM IX Twido": domixtwido,
   // "DOM RS Sigma": domrssigma,
-  // "ISEO R6": iseor6,
+  "ISEO R6": iseor6,
   // "KESO 8000 Ω": keso8000omega,
 };

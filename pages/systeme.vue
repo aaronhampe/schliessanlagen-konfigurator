@@ -164,6 +164,16 @@ const selectedModelOffer = computed(() => {
   return offers.value.find((o) => o.title === selectedModel.value);
 });
 
+
+function matrixCheck(zylinderPos, keyPos) {
+  const found = matrix.value.find(
+    (item) =>
+      item.POSZylinder === zylinderPos && item.POSSchluessel === keyPos
+  );
+  return found && (found.Berechtigung === true || found.Berechtigung === 1);
+}
+
+
 // Hier filtern wir die "alternativen Angebote" heraus.
 // Neue Logik => wenn isSchliessanlage===true und allAreChecked===true,
 // dann dürfen wir auch "o.isSchliessanlage === false" anzeigen.
@@ -287,7 +297,7 @@ onMounted(async () => {
     <h2>Systemübersicht</h2>
     <div v-if="anlageNr">
       <p>
-         Anlagennummer: <strong>{{ anlageNr }}</strong>
+        Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
     </div>
 
@@ -365,8 +375,10 @@ onMounted(async () => {
         </UButton>
       </div>
 
+      <!-- Teil deines Modals -->
       <div class="content-wrapper">
         <h3 class="config-heading">Zylinderübersicht</h3>
+
         <table class="zylinder-table">
           <thead>
             <tr>
@@ -375,6 +387,10 @@ onMounted(async () => {
               <th>Außen / Innen</th>
               <th>Anzahl</th>
               <th>Optionen</th>
+              <!-- Dynamische Spalten: Jeder Schlüssel -->
+              <th v-for="keyItem in schluesselData" :key="keyItem.KeyPOS">
+                {{ keyItem.Bezeichnung }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -384,15 +400,21 @@ onMounted(async () => {
               <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
               <td>{{ pos.Anzahl }}</td>
               <td>{{ pos.Option }}</td>
+
+              <!-- Prüfen, ob jeder Schlüssel diesen Zylinder öffnet -->
+              <td v-for="keyItem in schluesselData" :key="keyItem.KeyPOS" style="text-align: center;">
+                <span v-if="matrixCheck(pos.POS, keyItem.KeyPOS)">✓</span>
+                <span v-else>-</span>
+              </td>
             </tr>
           </tbody>
         </table>
 
         <p class="keys-info">
-          Gesamtanzahl Schlüssel:
-          <strong>{{ totalGlobalKeys }}</strong>
+          Gesamtanzahl Schlüssel: <strong>{{ totalGlobalKeys }}</strong>
         </p>
       </div>
+
 
       <div class="price-and-widerruf">
         <h2>Widerruf:</h2>
