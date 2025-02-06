@@ -287,7 +287,7 @@ onMounted(async () => {
     <h2>Systemübersicht</h2>
     <div v-if="anlageNr">
       <p>
-        Zuletzt erstellte Anlagennummer: <strong>{{ anlageNr }}</strong>
+         Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
     </div>
 

@@ -1,6 +1,9 @@
 export default {
   isSchliessanlage: false,
   image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
+  keyPrice: 4.10,
+  productID: 28482,
+
   Doppelzylinder: {
     sizes: [
 
