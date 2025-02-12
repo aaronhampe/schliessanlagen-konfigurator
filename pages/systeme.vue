@@ -15,6 +15,7 @@ const positionData = ref([]);
 const matrix = ref([]);
 const totalGlobalKeys = ref(0);
 const offers = ref([]);
+const schluesselData = ref([]);
 
 const isSummaryModalOpen = ref(false);
 const selectedOffer = ref(null);
@@ -173,6 +174,18 @@ function matrixCheck(zylinderPos, keyPos) {
   return found && (found.Berechtigung === true || found.Berechtigung === 1);
 }
 
+function getCylindersForKey(keyPos) {
+  const result = positionData.value
+    .filter((pos) => matrixCheck(pos.POS, keyPos))
+    .map((pos) => {
+      if (pos.Bezeichnung && pos.Bezeichnung.trim() !== "") {
+        return pos.Bezeichnung;
+      } else {
+        return `Tür ${pos.POS}`;
+      }
+    });
+  return result.join(", ");
+}
 
 // Hier filtern wir die "alternativen Angebote" heraus.
 // Neue Logik => wenn isSchliessanlage===true und allAreChecked===true,
@@ -240,14 +253,15 @@ onMounted(async () => {
     });
     positionData.value = positionResponse.queryresult || [];
 
-    // 2) Schlüssel
+    // 2) Schlüssel:
     const schluesselResponse = await $fetch("/api/sqlgetschluessel", {
       method: "POST",
       body: { ID: anlageNr },
     });
-    const schluesselData = schluesselResponse.queryresult || [];
+    schluesselData.value = schluesselResponse.queryresult || [];
+
     let sumKeys = 0;
-    schluesselData.forEach((entry) => {
+    schluesselData.value.forEach((entry) => {
       sumKeys += Number(entry.Anzahl) || 0;
     });
     totalGlobalKeys.value = sumKeys;
@@ -383,29 +397,28 @@ onMounted(async () => {
           <thead>
             <tr>
               <th>Pos.</th>
+              <th>Bezeichnung</th>
               <th>Typ</th>
               <th>Außen / Innen</th>
               <th>Anzahl</th>
               <th>Optionen</th>
-              <!-- Dynamische Spalten: Jeder Schlüssel -->
-              <th v-for="keyItem in schluesselData" :key="keyItem.KeyPOS">
-                {{ keyItem.Bezeichnung }}
-              </th>
+
             </tr>
           </thead>
           <tbody>
             <tr v-for="pos in positionData" :key="pos.POS">
               <td>{{ pos.POS }}</td>
+              <td>
+                {{ pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+      ? pos.Bezeichnung
+      : "Tür " + pos.POS
+                }}
+              </td>
               <td>{{ pos.Typ }}</td>
               <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
               <td>{{ pos.Anzahl }}</td>
               <td>{{ pos.Option }}</td>
 
-              <!-- Prüfen, ob jeder Schlüssel diesen Zylinder öffnet -->
-              <td v-for="keyItem in schluesselData" :key="keyItem.KeyPOS" style="text-align: center;">
-                <span v-if="matrixCheck(pos.POS, keyItem.KeyPOS)">✓</span>
-                <span v-else>-</span>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -413,6 +426,20 @@ onMounted(async () => {
         <p class="keys-info">
           Gesamtanzahl Schlüssel: <strong>{{ totalGlobalKeys }}</strong>
         </p>
+
+        <h3 class="config-heading">Schlüsselübersicht</h3>
+        <ul class="keys-list">
+          <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
+            <strong>
+              {{ keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+      ? keyItem.Bezeichnung
+      : "Schlüssel " + keyItem.KeyPOS
+              }}
+            </strong>
+            schließt:
+            <span>{{ getCylindersForKey(keyItem.KeyPOS) }}</span>
+          </li>
+        </ul>
       </div>
 
 
