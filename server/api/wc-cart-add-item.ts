@@ -14,6 +14,8 @@ export default defineEventHandler(async (event) => {
     anlage_nummer: body.Anlage,
     price: body.price,
     quantity: body.quantity,
+    config_text: body.config_text, 
+    widerruf_accepted: body.widerruf_accepted,
     billing_first_name: body.billing_first_name,
     billing_last_name: body.billing_last_name,
     billing_address_1: body.billing_address_1,

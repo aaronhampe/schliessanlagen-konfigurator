@@ -97,7 +97,45 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
   return true;
 }
 
+function generateConfigurationText() {
+  let lines = [];
 
+  // 1) Zylinder-Daten
+  lines.push("<br>");
+  positionData.value.forEach((pos) => {
+    const name = pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+      ? pos.Bezeichnung
+      : `Tür ${pos.POS}`;
+    const type = pos.Typ || "Unbekannter Typ";
+    const sizes = `${pos.SizeA} / ${pos.SizeI}`;
+    const anzahl = pos.Anzahl || 1;
+    const option = pos.Option || "";
+    lines.push(`-<b> ${name}</b> (Typ: ${type}, Größe: ${sizes}, Anzahl: ${anzahl}, Optionen: ${option} )<br>`);
+  });
+
+  // 2) Schlüssel-Daten
+  lines.push("<br>");
+  lines.push("");
+  schluesselData.value.forEach((keyItem) => {
+    const keyName = keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+      ? keyItem.Bezeichnung
+      : `Schlüssel ${keyItem.KeyPOS}`;
+
+    // Welche Zylinder schließt dieser Schlüssel?
+    const cylinders = getCylindersForKey(keyItem.KeyPOS);
+    lines.push(`-<b> ${keyName}</b> schließt: ${cylinders}<br>`);
+  });
+
+  // 3) Widerruf
+  lines.push("<br>");
+  lines.push(`Widerruf akzeptiert? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`);
+
+  // 4) Gesamt-Anzahl Schlüssel
+  lines.push(`<br> Schlüssel: ${totalGlobalKeys.value}`);
+
+  // Am Ende in einen String umwandeln
+  return lines.join("\n");
+}
 
 // Summenpreis berechnen (Zylinder + Optionen + Schlüssel)
 function calculatePriceForModel(modelName, positionArr, totalKeys = 0) {
@@ -215,6 +253,9 @@ const alternativeOffers = computed(() => {
 
 // In den Warenkorb legen (gleich geblieben)
 function addToCart(systemName, price, productID) {
+
+  const fullConfiguration = generateConfigurationText();
+
   fetch("/api/wc-cart-add-item", {
     method: "POST",
     headers: {
@@ -225,6 +266,8 @@ function addToCart(systemName, price, productID) {
       price,
       quantity: 1,
       Anlage: anlageNr,
+      config_text: fullConfiguration,
+      widerruf_accepted: true,
     }),
   })
     .then((r) => r.json())
