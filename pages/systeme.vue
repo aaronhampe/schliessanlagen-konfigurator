@@ -110,7 +110,7 @@ function generateConfigurationText() {
     const sizes = `${pos.SizeA} / ${pos.SizeI}`;
     const anzahl = pos.Anzahl || 1;
     const option = pos.Option || "";
-    lines.push(`-<b> ${name}</b> (Typ: ${type}, Größe: ${sizes}, Anzahl: ${anzahl}, Optionen: ${option} )<br>`);
+    lines.push(`-<b> ${name}</b> (Typ: ${type}, Größe: ${sizes}, Anzahl: ${anzahl}, Optionen: ${option})<br>`);
   });
 
   // 2) Schlüssel-Daten
@@ -128,10 +128,10 @@ function generateConfigurationText() {
 
   // 3) Widerruf
   lines.push("<br>");
-  lines.push(`Widerruf akzeptiert? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`);
+  lines.push(`<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`);
 
   // 4) Gesamt-Anzahl Schlüssel
-  lines.push(`<br> Schlüssel: ${totalGlobalKeys.value}`);
+  lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
 
   // Am Ende in einen String umwandeln
   return lines.join("\n");
