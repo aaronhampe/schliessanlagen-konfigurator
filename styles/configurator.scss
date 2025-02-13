@@ -99,6 +99,7 @@ $color-sky: #0ea5e9;
     input {
       width: 180px;
       border-radius: 6px;
+      font-size: 0.95rem;
 
       &:focus {
         border-color: $color-sky;
@@ -222,7 +223,7 @@ $color-sky: #0ea5e9;
 
       .inside,
       .outside {
-        width: 100px;
+        width: 80px;
         height: 32px;
         border: 1px solid $color-sky;
         border-radius: 6px;
