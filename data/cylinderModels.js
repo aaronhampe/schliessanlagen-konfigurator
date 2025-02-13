@@ -21,7 +21,7 @@ export default {
   "ABUS EC660": abusec660,
   "ABUS EC880": abusec880,
   "ABUS MagTec 1500": abusmagtec1500,
-  // "ABUS MagTec 2500": abusmagtec2500,
+  "ABUS MagTec 2500": abusmagtec2500,
   // "DOM RN": domrn,
   "DOM IX Twido": domixtwido,
   // "DOM RS Sigma": domrssigma,

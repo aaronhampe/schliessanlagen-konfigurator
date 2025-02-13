@@ -157,7 +157,7 @@ export default {
     Knaufzylinder: {
         sizes: [
             { outside: 30, inside: 30 },
-            { outside: 30, inside: 35,   },
+            { outside: 30, inside: 35, },
             { outside: 30, inside: 40 },
             { outside: 30, inside: 50 },
             { outside: 30, inside: 55 },
