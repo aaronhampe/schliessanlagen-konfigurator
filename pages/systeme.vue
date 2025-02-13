@@ -50,8 +50,6 @@ function confirmPurchase() {
   addToCart(offer.title, offer.price, offer.productID);
 }
 
-
-
 function modelCanHandleAllZylinders(modelName, positionArray) {
   const modelConfig = cylinderModels[modelName];
   if (!modelConfig) return false;
