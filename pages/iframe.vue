@@ -137,7 +137,7 @@
     border: 1px solid #ddd;
     padding: 20px;
     text-align: center;
-    margin: 0 20%;
+    margin: 10% 20%;
     h2 {
         font-size: 2.5rem;
         margin-bottom: 10px;
