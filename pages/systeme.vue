@@ -23,6 +23,7 @@ const hasAcceptedWiderruf = ref(false);
 const hasMeasuredCorrectly = ref(false);
 const hasAcceptedLieferzeiten = ref(false);
 const hoverWiderruf = ref(false);
+const hoverLieferzeit = ref(false);
 
 
 const navigateBack = () => {
@@ -493,8 +494,11 @@ onMounted(async () => {
 
 
       <div class="price-and-widerruf">
-        <h2>Widerruf:</h2>
-        <div class="widerruf-section">
+        <h2>Wichtige Hinweise:</h2>
+
+        <!-- Block für alle Pflicht-Checks -->
+        <div class="required-checks">
+          <!-- Widerruf -->
           <label class="widerruf-label">
             <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
             <span>Ich stimme der Widerrufsbelehrung zu.</span>
@@ -511,16 +515,44 @@ onMounted(async () => {
               </transition>
             </div>
           </label>
+
+          <!-- Zylinder gemessen -->
+          <label class="widerruf-label" style="margin-top: 10px;">
+            <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
+            <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
+          </label>
+
+          <!-- Lieferzeiten -->
+          <label class="widerruf-label" style="margin-top: 10px;">
+            <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
+            <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
+
+            <!-- Hier der Info-Icon-Bereich -->
+            <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
+              @click.stop>
+              <i class="i-heroicons-information-circle" />
+              <transition name="fade">
+                <div v-if="hoverLieferzeit" class="tooltip-box">
+                  Je nach Schließung kann die Lieferzeit variieren.
+                  Einfache Gleichschließungen benötigen 2 Werktage
+                  bis zu einer Woche Lieferzeit. Komplexe Schließanlagen
+                  können bis zu 4 Wochen Lieferzeit benötigen.
+                </div>
+              </transition>
+            </div>
+          </label>
         </div>
-        <div class="offer-price">
+
+        <!-- Zusammenfassung / Preis -->
+        <div class="offer-price" style="margin-top: 20px;">
           Gesamtpreis:
           <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
         </div>
       </div>
 
-
+      <!-- Footer mit Button -->
       <div class="modal-footer">
-        <UButton :disabled="!hasAcceptedWiderruf" color="amber" variant="solid" @click="confirmPurchase">
+        <UButton :disabled="!allRequiredChecked" color="amber" variant="solid" @click="confirmPurchase">
           Angebot kaufen
         </UButton>
       </div>
