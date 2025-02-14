@@ -24,7 +24,7 @@ export default {
   "ABUS MagTec 2500": abusmagtec2500,
   // "DOM RN": domrn,
   "DOM IX Twido": domixtwido,
-  // "DOM RS Sigma": domrssigma,
+  "DOM RS Sigma": domrssigma,
   "ISEO R6": iseor6,
   // "KESO 8000 Ω": keso8000omega,
 };
