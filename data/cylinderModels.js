@@ -22,9 +22,9 @@ export default {
   "ABUS EC880": abusec880,
   "ABUS MagTec 1500": abusmagtec1500,
   "ABUS MagTec 2500": abusmagtec2500,
-  // "DOM RN": domrn,
+  "DOM RN": domrn,
   "DOM IX Twido": domixtwido,
   "DOM RS Sigma": domrssigma,
   "ISEO R6": iseor6,
-  // "KESO 8000 Ω": keso8000omega,
+  "KESO 8000 Ω": keso8000omega,
 };

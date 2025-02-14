@@ -20,6 +20,8 @@ const schluesselData = ref([]);
 const isSummaryModalOpen = ref(false);
 const selectedOffer = ref(null);
 const hasAcceptedWiderruf = ref(false);
+const hasMeasuredCorrectly = ref(false);
+const hasAcceptedLieferzeiten = ref(false);
 const hoverWiderruf = ref(false);
 
 
@@ -94,6 +96,12 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
 
   return true;
 }
+
+const allRequiredChecked = computed(() => {
+  return hasAcceptedWiderruf.value
+    && hasMeasuredCorrectly.value
+    && hasAcceptedLieferzeiten.value;
+});
 
 function generateConfigurationText() {
   let lines = [];
@@ -509,6 +517,7 @@ onMounted(async () => {
           <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
         </div>
       </div>
+
 
       <div class="modal-footer">
         <UButton :disabled="!hasAcceptedWiderruf" color="amber" variant="solid" @click="confirmPurchase">
