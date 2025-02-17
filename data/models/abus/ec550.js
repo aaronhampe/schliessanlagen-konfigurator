@@ -5,7 +5,7 @@ export default {
   productID: 28336,
   features: [
     "Bewährte Technik für Standardanwendungen",
-    "Not- und Gefahrenfunktion optional",
+    "Inklusive Not- und Gefahrenfunktion",
     "Lieferbar als Knauf- und Doppelzylinder"
   ],
   infoText: `Steigern Sie die Sicherheit Ihrer Haus- und Wohnungstüren mit dem ABUS EC550, der mit einem praktischen Wendeschlüssel geliefert wird.

@@ -458,43 +458,39 @@ onMounted(async () => {
     class="summary-modal modern-design"
   >
     <div class="modal-content">
+      <!-- Header / Title -->
       <div class="modal-header">
-        <div class="header-info">
+        <div class="header-title">
           <h2>
             {{ selectedOffer.title || "Ausgewähltes Modell" }}
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-
-          <div class="offer-image-container">
-            <img
-              :src="selectedOffer.image"
-              :alt="
-                selectedOffer.value?.alt ||
-                selectedOffer.value?.title ||
-                'Zylinder-Modell'
-              "
-            />
-          </div>
+          <UButton
+            color="red"
+            class="close-button"
+            @click="isSummaryModalOpen = false"
+          >
+            X
+          </UButton>
         </div>
-        <UButton
-          color="red"
-          class="close-button"
-          @click="isSummaryModalOpen = false"
-        >
-          X
-        </UButton>
       </div>
 
-      <div class="model-info-text">
-        <p style="white-space: pre-wrap">
-          {{ selectedOffer.infoText }}
-        </p>
+      <!-- Flex-Container: Bild & Info-Text -->
+      <div class="model-overview-card">
+        <div class="model-image-section">
+          <img :src="selectedOffer.image" alt="Zylinder-Modell" />
+        </div>
+        <div class="model-info-section">
+          <p class="model-info-text" style="white-space: pre-wrap">
+            {{ selectedOffer.infoText }}
+          </p>
+        </div>
       </div>
-      <!-- Teil deines Modals -->
+
+      <!-- Zylinder- und Schlüsselübersicht -->
       <div class="content-wrapper">
         <h3 class="config-heading">Zylinderübersicht</h3>
-
         <table class="zylinder-table">
           <thead>
             <tr>
@@ -528,7 +524,7 @@ onMounted(async () => {
           Gesamtanzahl Schlüssel: <strong>{{ totalGlobalKeys }}</strong>
         </p>
 
-        <h3 class="config-heading"><br /><br />Schlüsselübersicht</h3>
+        <h3 class="config-heading">Schlüsselübersicht</h3>
         <ul class="keys-list">
           <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
             <strong>
@@ -544,10 +540,9 @@ onMounted(async () => {
         </ul>
       </div>
 
+      <!-- Widerruf / Checkboxen / Preis -->
       <div class="price-and-widerruf">
         <h2>Wichtige Hinweise:</h2>
-
-        <!-- Block für alle Pflicht-Checks -->
         <div class="required-checks">
           <!-- Widerruf -->
           <label class="widerruf-label">
@@ -561,11 +556,7 @@ onMounted(async () => {
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverWiderruf" class="tooltip-box">
-                  Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung
-                  von Waren, die nicht vorgefertigt sind und für deren
-                  Herstellung eine individuelle Auswahl oder Bestimmung durch
-                  den Verbraucher maßgeblich ist oder die eindeutig auf die
-                  persönlichen Bedürfnisse des Verbrauchers zugeschnitten sind.
+                  Das Widerrufsrecht besteht nicht bei Verträgen ...
                 </div>
               </transition>
             </div>
@@ -581,8 +572,6 @@ onMounted(async () => {
           <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
             <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
-
-            <!-- Hier der Info-Icon-Bereich -->
             <div
               class="info-icon"
               @mouseenter="hoverLieferzeit = true"
@@ -592,24 +581,21 @@ onMounted(async () => {
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverLieferzeit" class="tooltip-box">
-                  Je nach Schließung kann die Lieferzeit variieren. Einfache
-                  Gleichschließungen benötigen 2 Werktage bis zu einer Woche
-                  Lieferzeit. Komplexe Schließanlagen können bis zu 4 Wochen
-                  Lieferzeit benötigen.
+                  Je nach Schließung kann die Lieferzeit variieren ...
                 </div>
               </transition>
             </div>
           </label>
         </div>
 
-        <!-- Zusammenfassung / Preis -->
+        <!-- Preis -->
         <div class="offer-price" style="margin-top: 20px">
           Gesamtpreis:
           <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
         </div>
       </div>
 
-      <!-- Footer mit Button -->
+      <!-- Footer + Kauf-Button -->
       <div class="modal-footer">
         <UButton
           :disabled="!allRequiredChecked"

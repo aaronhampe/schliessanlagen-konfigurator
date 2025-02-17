@@ -49,13 +49,19 @@
 }
 
 .offer-features {
-  list-style-type: disc;   /* Bullet points */
-  padding-left: 1.5rem;    /* Einrückung für die Bullets */
+  list-style-type: disc;
+  /* Bullet points */
+  color: #2e2e2e;
+  /* Grauer Text */
+  padding-left: 1.5rem;
+  /* Einrückung für die Bullets */
   margin: 10px 0;
-  
+
   li {
-    font-size: 0.9rem;     /* etwas kleinere Schrift */
-    margin-bottom: 4px;    /* minimaler Abstand zwischen Punkten */
+    font-size: 0.9rem;
+    /* etwas kleinere Schrift */
+    margin-bottom: 4px;
+    /* minimaler Abstand zwischen Punkten */
   }
 
   i {
@@ -64,147 +70,115 @@
   }
 }
 
-.model-info-text p {
-  font-size: 1rem; /* optional: leicht kleinere Schrift */
-  line-height: 1.4;
-  margin: 0px 500px 0 0;
-}
-
-.select-system-button {
-  background-color: #007bff;
-  color: white;
-  margin-top: 10px;
-  width: 100%;
-}
-
-.select-system-button:hover {
-  background-color: #0056b3;
-  transition: 300ms;
-}
-
-.offer h3 {
-  margin-bottom: 10px;
-}
-
-.offer div {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.back-button {
-  background-color: #ffcc00;
-  color: #fff;
-  margin-top: 20px;
-}
-
-.highlighted-offer {
-  border: 2px solid #007bff;
-  background: #e7f1ff;
-}
-
 .summary-modal.modern-design {
-  
-  max-width: 600px !important;
-  margin: 0 auto;
-
   .modal-content {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px 24px;
+    background: #fff;
+    border-radius: 6px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
-  /* HEADER */
+  /* Header-Bereich */
   .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .header-info {
+    .header-title {
       display: flex;
       align-items: center;
-      gap: 20px;
+      justify-content: space-between;
+      background-color: #263238;
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: 6px 6px 0 0;
 
       h2 {
         margin: 0;
         font-size: 1.4rem;
       }
 
-      .offer-image-container {
-        width: 80px;
-        height: 80px;
-
-        img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-        }
+      .close-button {
+        font-size: 0.9rem;
+        padding: 6px 12px;
       }
-    }
-
-    .close-button {
-      /* Du kannst hier noch eigene Styles hinzufügen, z.B.: */
-      font-weight: bold;
-      padding: 6px 12px;
     }
   }
 
-  /* INHALT */
-  .content-wrapper {
-    .config-heading {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-      font-weight: 600;
+  /* Flex-Container Card für Bild + Infotext */
+  .model-overview-card {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 20px;
+    /* etwas Rand zum Seitenrand */
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    .model-image-section {
+      flex: 0 0 auto;
+      max-width: 200px;
+
+      img {
+        max-width: 100%;
+        border-radius: 4px;
+        display: block;
+      }
     }
+
+    .model-info-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      .model-info-text {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin: 0;
+        color: #333;
+      }
+    }
+  }
+
+  /* content-wrapper => restlicher Inhalt */
+  .content-wrapper {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
     .zylinder-table {
       width: 100%;
       border-collapse: collapse;
 
       thead {
-        background-color: #f8f8f8;
+        background-color: #eee;
       }
 
       th,
       td {
-        padding: 8px 12px;
-        border: 1px solid #ddd;
+        border: 1px solid #ccc;
+        padding: 6px 8px;
+        text-align: left;
       }
     }
 
     .keys-info {
-      margin: 15px 0 0;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
   }
 
-  /* PREIS & WIDERRUF */
+  /* Price & Widerruf */
   .price-and-widerruf {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    margin: 0 20px 20px;
 
-    @media (min-width: 600px) {
-    
-      justify-content: space-between;
-      align-items: start;
+    h2 {
+      margin-bottom: 10px;
     }
 
-    .offer-price {
-      font-size: 1.1rem;
-
-      strong {
-        margin-left: 5px;
-      }
-    }
-
-    .widerruf-section {
+    .required-checks {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .widerruf-label {
@@ -212,13 +186,8 @@
       align-items: center;
       gap: 8px;
 
-      span {
-        font-size: 0.95rem;
-      }
-
       .info-icon {
         position: relative;
-        color: #888;
         cursor: pointer;
 
         .tooltip-box {
@@ -226,28 +195,36 @@
           top: 120%;
           left: 50%;
           transform: translateX(-50%);
-          background-color: #f5f5f5;
-          border: 1px solid #ddd;
+          background: #fff;
+          border: 1px solid #ccc;
           border-radius: 4px;
-          padding: 8px 10px;
-          width: 250px;
+          padding: 8px 12px;
+          width: 200px;
           font-size: 0.85rem;
-          color: #333;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-          z-index: 999;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+      }
+    }
+
+    .offer-price {
+      margin-top: 16px;
+      font-size: 1.1rem;
+
+      strong {
+        margin-left: 5px;
       }
     }
   }
 
-  /* FOOTER */
+  /* Footer mit Button */
   .modal-footer {
     display: flex;
-    justify-content: start;
+    justify-content: flex-end;
+    padding: 20px;
     gap: 10px;
 
     button {
-      min-width: 140px;
+      min-width: 120px;
     }
   }
 }
