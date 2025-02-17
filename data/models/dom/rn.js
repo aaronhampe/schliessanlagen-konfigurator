@@ -3,6 +3,8 @@ export default {
     image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 3.16,
     productID: 28717,
+    useCase: "privat", 
+    securityLevel: 6, 
     features: [
         "Optional: Not- & Gefahrenfunktion",
         "Optional: Seewasserbeständige Ausführung",

@@ -3,6 +3,8 @@ export default {
     image: "/images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 8.77,
     productID: 28679,
+    useCase: "privat & gewerblich", 
+    securityLevel: 7, 
     features: [
         "Magnettechnologie im Schlüssel und Zylinder",
         "Individuelle Schließberechtigungen",

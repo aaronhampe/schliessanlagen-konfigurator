@@ -3,6 +3,8 @@ export default {
     image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 7.30,
     productID: 28724,
+    useCase: "gewerblich", 
+    securityLevel: 10, 
     features: [
         "Sicherungskarte enthalten",
         "Wendeschlüssel-Profilzylinder mit Prioritätsfunktion",

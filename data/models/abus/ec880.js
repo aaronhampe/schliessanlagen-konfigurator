@@ -3,6 +3,8 @@ export default {
     image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
     keyPrice: 7.95,
     productID: 28478,
+    useCase: "privat", 
+    securityLevel: 7, 
     features: [
         "Modulare Bauweise des Zylinders",
         "Inklusive Not- und Gefahrenfunktion",

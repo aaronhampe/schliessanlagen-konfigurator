@@ -3,6 +3,8 @@ export default {
     image: "/images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 8.35,
     productID: 28348,
+    useCase: "gewerblich", 
+    securityLevel: 10, 
     features: [
         "Hochsicherheitszylinder für extreme Sicherheit", 
         "Flexibles und anpassbares Schließsystem",

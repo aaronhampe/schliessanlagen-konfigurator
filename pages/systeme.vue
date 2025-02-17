@@ -274,10 +274,46 @@ const sortedAlternativeOffers = computed(() => {
     sorted.sort((a, b) => a.price - b.price);
   } else if (selectedSort.value === "priceDesc") {
     sorted.sort((a, b) => b.price - a.price);
+  } else if (selectedSort.value === "useCasePrivat") {
+    sorted.sort((a, b) => compareUseCase(a, b, "privat"));
+  } else if (selectedSort.value === "useCaseGewerblich") {
+    sorted.sort((a, b) => compareUseCase(a, b, "gewerblich"));
+  }
+  else if (selectedSort.value === "securityAsc") {
+    sorted.sort((a, b) => a.securityLevel - b.securityLevel);
+  } else if (selectedSort.value === "securityDesc") {
+    sorted.sort((a, b) => b.securityLevel - a.securityLevel);
   }
 
   return sorted;
 });
+
+function compareUseCase(a, b, focus) {
+
+  const rankPrivat = {
+    privat: 0,
+    "privat & gewerblich": 1,
+    gewerblich: 2,
+  };
+  const rankGewerblich = {
+    gewerblich: 0,
+    "privat & gewerblich": 1,
+    privat: 2,
+  };
+
+  // Wähle Rangtabelle je nach Fokus
+  const rank = focus === "privat" ? rankPrivat : rankGewerblich;
+
+  const rA = rank[a.useCase] ?? 999; // Fallback, falls useCase fehlt
+  const rB = rank[b.useCase] ?? 999;
+
+  // Zuerst nach Rang
+  const diff = rA - rB;
+  if (diff !== 0) return diff;
+
+  // Falls Rang gleich => fallback: Preis aufsteigend
+  return a.price - b.price;
+}
 
 // In den Warenkorb legen (gleich geblieben)
 function addToCart(systemName, price, productID) {
@@ -371,8 +407,10 @@ onMounted(async () => {
         isSchliessanlage: !!modelConfig.isSchliessanlage,
         image: modelConfig.image,
         alt: modelName,
+        useCase: modelConfig.useCase || "",
         features: modelConfig.features || [],
         infoText: modelConfig.infoText || "",
+        securityLevel: modelConfig.securityLevel || 1,
       };
     });
 
@@ -393,10 +431,16 @@ onMounted(async () => {
 
       <div class="filters-container">
         <label class="filter-label"> Sortieren nach: </label>
+        <!-- Sortier-Select -->
         <select v-model="selectedSort" class="filter-select">
           <option value="none">Keine Sortierung</option>
           <option value="priceAsc">Preis (aufsteigend)</option>
           <option value="priceDesc">Preis (absteigend)</option>
+          <option value="useCasePrivat">Privat </option>
+          <option value="useCaseGewerblich">Gewerblich </option>
+          <!-- NEU: -->
+          <option value="securityAsc">Sicherheit (aufsteigend)</option>
+          <option value="securityDesc">Sicherheit (absteigend)</option>
         </select>
       </div>
     </div>
@@ -414,7 +458,11 @@ onMounted(async () => {
           <h3>{{ selectedModelOffer.title }}</h3>
 
           <div class="offer-type-info">
-            {{ offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
+            {{
+              selectedModelOffer.isSchliessanlage
+                ? "Schließanlage"
+                : "Gleichschließung"
+            }}
           </div>
           <ul class="offer-features">
             <li
@@ -424,6 +472,21 @@ onMounted(async () => {
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
+          <div
+            class="use-case-badge"
+            :class="`use-case-${selectedModelOffer.useCase}`"
+          >
+            Empfohlen für:
+            <strong>
+              {{
+                selectedModelOffer.useCase === "privat"
+                  ? "Privat"
+                  : selectedModelOffer.useCase === "gewerblich"
+                  ? "Gewerblich"
+                  : "Privat & Gewerblich"
+              }}
+            </strong>
+          </div>
           <div class="offer-price">
             Gesamtpreis:
             <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
@@ -461,6 +524,18 @@ onMounted(async () => {
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
+            <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
+              Unsere Empfehlung: <br />
+              <strong>
+                {{
+                  offer.useCase === "privat"
+                    ? "Privat"
+                    : offer.useCase === "gewerblich"
+                    ? "Gewerblich"
+                    : "Privat & Gewerblich"
+                }}
+              </strong>
+            </div>
             <div class="offer-price">
               Gesamtpreis:
               <strong class="price">{{ roundPrice(offer.price) }}€</strong>

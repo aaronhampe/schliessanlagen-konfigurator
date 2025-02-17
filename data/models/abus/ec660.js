@@ -3,7 +3,8 @@ export default {
   image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
   keyPrice: 5.00,
   productID: 28344,
-
+  useCase: "privat", 
+  securityLevel: 6, 
   features: [
     "Mit Sicherungskarte und Anbohrschutz",
     "Inklusive Not- und Gefahrenfunktion",

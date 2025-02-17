@@ -3,6 +3,8 @@ export default {
   image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
   keyPrice: 2.31,
   productID: 28487,
+  useCase: "privat", 
+  securityLevel: 3, 
   features: [
     "Entspricht DIN EN 1303, ISO 9001:2015",
     "Inklusive Not- und Gefahrenfunktion",

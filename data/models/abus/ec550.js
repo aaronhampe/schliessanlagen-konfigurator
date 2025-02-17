@@ -3,6 +3,8 @@ export default {
   image: "/images/abus-ec550-doppelzylinder-logo-500x500.png",
   keyPrice: 4.31,
   productID: 28336,
+  useCase: "privat", 
+  securityLevel: 5, 
   features: [
     "Anbohrschutz durch gehärtete Stahlstifte",
     "Inklusive Not- und Gefahrenfunktion",

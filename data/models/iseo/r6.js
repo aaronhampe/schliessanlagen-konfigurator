@@ -3,6 +3,8 @@ export default {
     image: "/images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 4.10,
     productID: 28498,
+    useCase: "privat", 
+    securityLevel: 6, 
     features: [
         "Wendeschlüssel-Profilzylinder",
         "Inklusive Not- und Gefahrenfunktion",

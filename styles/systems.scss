@@ -62,6 +62,40 @@
     color:#414141;
   }
 }
+.use-case-badge {
+  display: inline-block;
+  margin: 6px 0;           /* etwas Abstand */
+  padding: 4px 8px;        /* rundum innenabstand */
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 4px;       /* abgerundete Ecken */
+  color: #fff;              /* weiße Schrift */
+  background-color: #6c757d; /* Default-Fall, falls kein passender Case? */
+}
+
+/* Für privat */
+.use-case-privat {
+  background-color: #51c4d3; /* oder ein helles Türkis */
+  color: #fff;
+}
+
+/* Für gewerblich */
+.use-case-gewerblich {
+  background-color: #f9a825; /* Gelb/Orange */
+  color: #222;
+}
+
+/* Für privat & gewerblich */
+.use-case-privat\ \&\ gewerblich {
+  /* Da deine Daten
+     evtl. 'privat & gewerblich' enthalten,
+     musst du den 
+     Selektor escapen
+  */
+  background-color: #7e57c2; /* Lila z.B. */
+  color: #fff;
+}
+
 
 .offer-features {
   list-style-type: disc;
