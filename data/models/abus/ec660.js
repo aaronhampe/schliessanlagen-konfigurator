@@ -3,7 +3,16 @@ export default {
   image: "/images/abus-ec660-doppelzylinder-logo-500x500.png",
   keyPrice: 5.00,
   productID: 28344,
-  
+
+  features: [
+    "Mit Sicherungskarte und Anbohrschutz",
+    "Inklusive Not- und Gefahrenfunktion",
+    "Zertifiziert nach DIN EN 1303 und DIN EN 18252"
+  ],
+  infoText: `Nur gegen Vorlage der Sicherungskarte fertigen ABUS und lizenzierte Partner Original-Schlüssel, Schlösser und Türzylinder für Sie an.
+
+Im Innern des EC660 sorgen gehärtete Stahlstifte nach SKG**-Vorgaben dafür, dass dieser Türzylinder durch einen Aufbruchversuch nicht oder nur sehr schwer manipuliert werden kann.`,
+
   ////////////////////////////////////////////////////////////////////////
   // DOPPELZYLINDER
   ////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,14 @@ export default {
     image: "/images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 4.10,
     productID: 28498,
+    features: [
+        "Wendeschlüssel-Profilzylinder",
+        "Inklusive Not- und Gefahrenfunktion",
+        "Schließzylinder aus hochfester Messinglegierung",
+      ],
+      infoText: `Der ISEO Schließzylinder R6 mit frei kopierbaren Schlüsseln ist ein Wendeschlüsselsystem der Einstiegsklasse. Er ist sowohl in verschiedenschließenden als auch in gleichschließenden Varianten erhältlich.
+
+Der R6 verfügt ab einer Länge von 30-30 auf jeder Schließseite über 6 Codierstifte aus verschleißfestem Spezialmessing. Im Profilzylinder sind sowohl ein Bohrschutz als auch ein Pickingschutz integriert. Das Zylindergehäuse ist standardmäßig matt vernickelt oder aus Messing gefertigt. Die Schlüssel bestehen aus vernickeltem Messing.`,
 
     Doppelzylinder: {
         sizes: [

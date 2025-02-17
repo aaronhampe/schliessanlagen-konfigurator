@@ -3,6 +3,12 @@ export default {
     image: "/images/abus-ec880-doppelzylinder-logo-500x500.png",
     keyPrice: 7.95,
     productID: 28478,
+    features: [
+        "Modulare Bauweise des Zylinders",
+        "Inklusive Not- und Gefahrenfunktion",
+        "Geprüft nach DIN EN 1303, DIN 18252; ISO 9001:2015",
+    ],
+    infoText: `Der Schließzylinder EC880 ist modular aufgebaut und lässt sich daher in der Länge individuell anpassen. Diese Flexibilität ist besonders nützlich, wenn Sie beispielsweise eine Tür ersetzen müssen und die Maße des Türzylinders entsprechend angepasst werden müssen. Für jedes Familienmitglied gibt es eine Schlüsselkappe in der Lieblingsfarbe, um Verwechslungen zu vermeiden. Unser EC880 Türzylinder ist mit einer Sicherungskarte ausgestattet, die erforderlich ist, um Originalschlüssel bei Ihrem Fachhändler nachmachen zu lassen. Die Not- und Gefahrenfunktion bietet zusätzliche Sicherheit, insbesondere wenn jemand Unterstützung benötigt oder Sie sicherstellen möchten, dass alles in Ordnung ist. Wenn der Schlüssel von innen steckt, kann die Tür von außen mit einem zweiten Schlüssel problemlos geöffnet werden. Zudem können Sie den Türzylinder EC880 gleichschließend zu unseren Panzerriegeln, Türzusatzschlössern und den Titalium-Vorhängeschlössern 480TI bestellen, sodass Sie Ihr Zuhause mit nur einem Schlüssel sichern können, anstatt mehrere Schlüssel zu benötigen.`,
 
     Doppelzylinder: {
         sizes: [

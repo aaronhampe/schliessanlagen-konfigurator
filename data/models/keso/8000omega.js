@@ -3,6 +3,16 @@ export default {
     image: "/images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 7.30,
     productID: 28724,
+    features: [
+        "Sicherungskarte enthalten",
+        "Wendeschlüssel-Profilzylinder mit Prioritätsfunktion",
+        "Zertifiziert nach DIN 18252 und DIN EN 1303:2015-08",
+    ],
+    infoText: `Mit KESO 8000 Omega² präsentieren wir Ihnen die Spitze der Sicherheitstechnologie. Diese innovative Schließanlage vereint mechanische Präzision mit modernster Mechatronik und bietet Ihnen ein Höchstmaß an Schutz für Ihre Werte und Räumlichkeiten.
+
+Das Herzstück dieses Systems ist der aktive Kopierschutz Omega², der unautorisierte Schlüsselkopien nahezu unmöglich macht. Mit einer Patentlaufzeit bis 2034 und einem funktionalen Designschutz bis 2044 bietet KESO 8000 Omega² einen langfristigen Investitionsschutz und sichert Ihre Sicherheit über Jahre hinweg.
+
+Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache Anpassung der Zylinderlängen direkt vor Ort, während zahlreiche technische Raffinessen das System für vielfältigste Anwendungsbereiche optimieren.`,
 
     Doppelzylinder: {
         optionUpcharges: {

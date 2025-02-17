@@ -3,6 +3,14 @@ export default {
   image: "/images/abus-a93-doppelzylinder-logo-500x500.png",
   keyPrice: 4.10,
   productID: 28482,
+  features: [
+    "Anbohrschutz durch gehärtete Stahlstifte",
+    "Inklusive Not- und Gefahrenfunktion",
+    "Zertifiziert nach DIN EN 1303 und DIN EN 18252",
+  ],
+  infoText: `Steigern Sie die Sicherheit Ihrer Haus- und Wohnungstüren mit diesem Türzylinder, der mit einem praktischen Wendeschlüssel geliefert wird. 
+
+Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsversuche schützen. Dieser Zylinder ist mit einem SKG**-Anbohrschutz ausgestattet und bietet durch seine acht Schließelemente in zwei unabhängigen Stiftreihen besonders hohen Schutz. Zusätzlich verfügt er über eine Not- und Gefahrenfunktion, die es ermöglicht, die Tür beidseitig zu schließen, selbst wenn ein Schlüssel auf einer Seite steckt.`,
 
   Doppelzylinder: {
     sizes: [
@@ -222,7 +230,7 @@ export default {
       { outside: 65, inside: 30, price: 38.33 },
       { outside: 65, inside: 35, price: 39.92 },
       { outside: 65, inside: 40, price: 51.39 },
-      { outside: 65, inside: 45, price: 54.09 },  
+      { outside: 65, inside: 45, price: 54.09 },
       { outside: 65, inside: 50, price: 56.77 },
       { outside: 65, inside: 55, price: 59.47 },
       { outside: 65, inside: 60, price: 62.16 },
@@ -232,7 +240,7 @@ export default {
       { outside: 70, inside: 35, price: 51.39 },
       { outside: 70, inside: 40, price: 54.09 },
       { outside: 70, inside: 45, price: 56.77 },
-      { outside: 70, inside: 50, price: 59.47 },  
+      { outside: 70, inside: 50, price: 59.47 },
       { outside: 70, inside: 55, price: 62.16 },
       { outside: 70, inside: 60, price: 64.86 },
       { outside: 70, inside: 70, price: 70.25 },

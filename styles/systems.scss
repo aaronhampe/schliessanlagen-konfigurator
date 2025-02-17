@@ -1,6 +1,10 @@
 .systeme-page {
   margin: 50px;
   font-size: 18px;
+  .back-button {
+    margin-top: 20px;
+    background-color: #f59e0b !important;
+  }
 }
 
 .heading {
@@ -10,7 +14,7 @@
 
 .offer-container {
   display: flex;
-  justify-content: start;
+  justify-content: start; 
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;

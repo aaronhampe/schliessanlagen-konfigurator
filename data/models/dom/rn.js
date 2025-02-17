@@ -3,6 +3,14 @@ export default {
     image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 3.16,
     productID: 28717,
+    features: [
+        "Optional: Not- & Gefahrenfunktion",
+        "Optional: Seewasserbeständige Ausführung",
+        "EN 1303:2015 Klassifikation",
+    ],
+    infoText: `Der DOM RN(T) Profilzylinder ist eine hochwertige Lösung für den Schutz von Türen in privaten und gewerblichen Gebäuden.
+
+    Entwickelt nach den strengen Sicherheitsanforderungen, bietet dieser Zylinder ein hohes Maß an Einbruchschutz und Komfort. Mit seiner robusten Konstruktion und präzisen Schließtechnik sorgt er dafür, dass unbefugter Zutritt effektiv verhindert wird.`,
 
     ////////////////////////////////////////////////////////////////////////
     // DOPPELZYLINDER
