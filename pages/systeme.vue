@@ -390,11 +390,10 @@ onMounted(async () => {
         />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
-          <div class="offer-price">
-            Gesamtpreis:
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
-          </div>
 
+          <div class="offer-type-info">
+            {{ offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
+          </div>
           <ul class="offer-features">
             <li
               v-for="(feature, i) in selectedModelOffer.features || []"
@@ -403,6 +402,10 @@ onMounted(async () => {
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
+          <div class="offer-price">
+            Gesamtpreis:
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
+          </div>
           <UButton
             icon="i-heroicons-shopping-cart-16-solid"
             class="select-system-button"
@@ -426,15 +429,20 @@ onMounted(async () => {
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
-            <div class="offer-price">
-              Gesamtpreis:
-              <strong>{{ roundPrice(offer.price) }} €</strong>
+            <div class="offer-type-info">
+              {{
+                offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+              }}
             </div>
             <ul class="offer-features">
               <li v-for="(feature, i) in offer.features || []" :key="i">
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
+            <div class="offer-price">
+              Gesamtpreis:
+              <strong>{{ roundPrice(offer.price) }} €</strong>
+            </div>
             <UButton
               icon="i-heroicons-shopping-cart-16-solid"
               class="select-system-button"

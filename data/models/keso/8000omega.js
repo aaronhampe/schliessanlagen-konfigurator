@@ -18,6 +18,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         optionUpcharges: {
             notGefahr: 20,
             bohrschutz: 20,
+            modular: 20,
             seewasser: 20,
             freilauf: 20,
         },
@@ -236,6 +237,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         options: [
             "Not- & Gefahrenfunktion",
             "Erhöhter Bohrschutz",
+            "Modulare Bauweise",
             "Seewasserfest",
             "Freilauf",
         ],
@@ -244,6 +246,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         optionUpcharges: {
             notGefahr: 20,
             bohrschutz: 20,
+            modular: 20,
             seewasser: 20,
             freilauf: 20,
         },
@@ -409,6 +412,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         ],
         options: [
             "Erhöhter Bohrschutz",
+            "Modulare Bauweise",
             "Seewasserfest",
         ],
     },
@@ -416,6 +420,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         optionUpcharges: {
             notGefahr: 20,
             bohrschutz: 20,
+            modular: 20,
             seewasser: 20,
             freilauf: 20,
         },
@@ -438,6 +443,7 @@ Das innovative Modularsystem mit Insert-Technologie ermöglicht eine einfache An
         options: [
             "Erhöhter Bohrschutz",
             "Seewasserfest",
+            "Modulare Bauweise",
         ],
     },
     Vorhangschloss: {

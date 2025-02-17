@@ -4,7 +4,7 @@ export default {
     keyPrice: 7.67,
     productID: 28709,
     features: [
-        "Hochsicherheitszylinder für extreme Sicherheit", 
+        "Hochsicherheitszylinder für extreme Sicherheit",
         "Flexibles und anpassbares Schließsystem",
         "Zertifiziert nach DIN EN 1303",
     ],
@@ -16,6 +16,10 @@ export default {
     Doppelzylinder: {
         optionUpcharges: {
             notGefahr: 3.15,
+            modular: 15.23,
+            bohrschutz: 14.18,
+            seewasser: 9.45,
+            freilauf: 9.45,
         },
         sizes: [
             ///////
@@ -155,6 +159,10 @@ export default {
         ],
         options: [
             "Not- & Gefahrenfunktion",
+            "Erhöhter Bohrschutz",
+            "Modulare Bauweise",
+            "Seewasserfest",
+            "Freilauf",
         ],
     },
 
@@ -162,6 +170,13 @@ export default {
     // KNAUFZYLINDER (innen)
     ////////////////////////////////////////////////////////////////////////
     Knaufzylinder: {
+        optionUpcharges: {
+            notGefahr: 3.15,
+            modular: 15.23,
+            bohrschutz: 14.18,
+            seewasser: 9.45,
+            freilauf: 9.45,
+        },
         sizes: [
             { outside: 30, inside: 30, price: 23.05 },
             { outside: 30, inside: 35, price: 26.20 },
@@ -296,13 +311,24 @@ export default {
             { outside: 80, inside: 80, price: 75.50 },
             ////////////////////////////////////////////
         ],
-        options: [],
+        options: [
+            "Erhöhter Bohrschutz",
+            "Modulare Bauweise",
+            "Seewasserfest",
+        ],
     },
 
     ////////////////////////////////////////////////////////////////////////
     // HALBZYLINDER
     ////////////////////////////////////////////////////////////////////////
     Halbzylinder: {
+        optionUpcharges: {
+            notGefahr: 3.15,
+            modular: 15.23,
+            bohrschutz: 14.18,
+            seewasser: 9.45,
+            freilauf: 9.45,
+        },
         sizes: [
             { inside: 10, outside: 30, price: 35.65 },
             { inside: 10, outside: 35, price: 38.80 },
@@ -314,7 +340,11 @@ export default {
             { inside: 10, outside: 65, price: 58.75 },
             { inside: 10, outside: 70, price: 58.75 },
         ],
-        options: [],
+        options: ["Not- & Gefahrenfunktion",
+            "Erhöhter Bohrschutz",
+            "Modulare Bauweise",
+            "Seewasserfest",
+            "Freilauf",],
     },
 
     ////////////////////////////////////////////////////////////////////////
