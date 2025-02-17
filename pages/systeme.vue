@@ -3,7 +3,10 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import cylinderModels from "@/data/cylinderModels.js";
-import { mapOptionToUpchargeKey, mapTypToModelKey } from "@/data/utils/optionMapping.js";
+import {
+  mapOptionToUpchargeKey,
+  mapTypToModelKey,
+} from "@/data/utils/optionMapping.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -24,7 +27,6 @@ const hasMeasuredCorrectly = ref(false);
 const hasAcceptedLieferzeiten = ref(false);
 const hoverWiderruf = ref(false);
 const hoverLieferzeit = ref(false);
-
 
 const navigateBack = () => {
   router.push({
@@ -99,9 +101,11 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
 }
 
 const allRequiredChecked = computed(() => {
-  return hasAcceptedWiderruf.value
-    && hasMeasuredCorrectly.value
-    && hasAcceptedLieferzeiten.value;
+  return (
+    hasAcceptedWiderruf.value &&
+    hasMeasuredCorrectly.value &&
+    hasAcceptedLieferzeiten.value
+  );
 });
 
 function generateConfigurationText() {
@@ -110,23 +114,27 @@ function generateConfigurationText() {
   // 1) Zylinder-Daten
   lines.push("<br>");
   positionData.value.forEach((pos) => {
-    const name = pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-      ? pos.Bezeichnung
-      : `Tür ${pos.POS}`;
+    const name =
+      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+        ? pos.Bezeichnung
+        : `Tür ${pos.POS}`;
     const type = pos.Typ || "Unbekannter Typ";
     const sizes = `${pos.SizeA} / ${pos.SizeI}`;
     const anzahl = pos.Anzahl || 1;
     const option = pos.Option || "";
-    lines.push(`-<b> ${name}</b> (Typ: ${type}, Größe: ${sizes}, Anzahl: ${anzahl}, Optionen: ${option})<br>`);
+    lines.push(
+      `-<b> ${name}</b> (Typ: ${type}, Größe: ${sizes}, Anzahl: ${anzahl}, Optionen: ${option})<br>`
+    );
   });
 
   // 2) Schlüssel-Daten
   lines.push("<br>");
   lines.push("");
   schluesselData.value.forEach((keyItem) => {
-    const keyName = keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-      ? keyItem.Bezeichnung
-      : `Schlüssel ${keyItem.KeyPOS}`;
+    const keyName =
+      keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+        ? keyItem.Bezeichnung
+        : `Schlüssel ${keyItem.KeyPOS}`;
 
     // Welche Zylinder schließt dieser Schlüssel?
     const cylinders = getCylindersForKey(keyItem.KeyPOS);
@@ -135,7 +143,9 @@ function generateConfigurationText() {
 
   // 3) Widerruf
   lines.push("<br>");
-  lines.push(`<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`);
+  lines.push(
+    `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
+  );
 
   // 4) Gesamt-Anzahl Schlüssel
   lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
@@ -210,11 +220,9 @@ const selectedModelOffer = computed(() => {
   return offers.value.find((o) => o.title === selectedModel.value);
 });
 
-
 function matrixCheck(zylinderPos, keyPos) {
   const found = matrix.value.find(
-    (item) =>
-      item.POSZylinder === zylinderPos && item.POSSchluessel === keyPos
+    (item) => item.POSZylinder === zylinderPos && item.POSSchluessel === keyPos
   );
   return found && (found.Berechtigung === true || found.Berechtigung === 1);
 }
@@ -260,7 +268,6 @@ const alternativeOffers = computed(() => {
 
 // In den Warenkorb legen (gleich geblieben)
 function addToCart(systemName, price, productID) {
-
   const fullConfiguration = generateConfigurationText();
 
   fetch("/api/wc-cart-add-item", {
@@ -280,9 +287,12 @@ function addToCart(systemName, price, productID) {
     .then((r) => r.json())
     .then((result) => {
       if (result.success) {
-        const cartUrl = result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
+        const cartUrl =
+          result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
         const cartKey = result.data.cart_key;
-        const finalUrl = cartKey ? `${cartUrl}?cocart-load-cart=${cartKey}` : cartUrl;
+        const finalUrl = cartKey
+          ? `${cartUrl}?cocart-load-cart=${cartKey}`
+          : cartUrl;
         window.open(finalUrl, "_blank");
       }
     })
@@ -330,7 +340,10 @@ onMounted(async () => {
 
     const tempOffers = allModelNames.map((modelName) => {
       const modelConfig = cylinderModels[modelName];
-      const canHandleAll = modelCanHandleAllZylinders(modelName, positionData.value);
+      const canHandleAll = modelCanHandleAllZylinders(
+        modelName,
+        positionData.value
+      );
       const price = calculatePriceForModel(
         modelName,
         positionData.value,
@@ -346,6 +359,7 @@ onMounted(async () => {
         image: modelConfig.image,
         alt: modelName,
         features: modelConfig.features || [],
+        infoText: modelConfig.infoText || "",
       };
     });
 
@@ -369,20 +383,31 @@ onMounted(async () => {
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell</h2>
       <div class="offer highlighted-offer">
-        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+        <img
+          :src="selectedModelOffer.image"
+          :alt="selectedModelOffer.alt"
+          class="offer-image"
+        />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
           <div class="offer-price">
             Gesamtpreis:
             <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
           </div>
+
           <ul class="offer-features">
-            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+            <li
+              v-for="(feature, i) in selectedModelOffer.features || []"
+              :key="i"
+            >
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="openSummary(selectedModelOffer)">
+          <UButton
+            icon="i-heroicons-shopping-cart-16-solid"
+            class="select-system-button"
+            @click="openSummary(selectedModelOffer)"
+          >
             System auswählen
           </UButton>
         </div>
@@ -390,10 +415,14 @@ onMounted(async () => {
     </div>
 
     <!-- Alternative Angebote -->
-    <div v-if="alternativeOffers.length" style="margin-top: 30px;">
+    <div v-if="alternativeOffers.length" style="margin-top: 30px">
       <h2>Weitere passende Angebote</h2>
       <div class="offer-container">
-        <div class="offer" v-for="(offer, index) in alternativeOffers" :key="offer.title">
+        <div
+          class="offer"
+          v-for="(offer, index) in alternativeOffers"
+          :key="offer.title"
+        >
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
@@ -406,7 +435,11 @@ onMounted(async () => {
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+            <UButton
+              icon="i-heroicons-shopping-cart-16-solid"
+              class="select-system-button"
+              @click="openSummary(offer)"
+            >
               System auswählen
             </UButton>
           </div>
@@ -419,7 +452,11 @@ onMounted(async () => {
     </UButton>
   </div>
 
-  <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isSummaryModalOpen"
+    class="summary-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-info">
@@ -430,15 +467,30 @@ onMounted(async () => {
           </h2>
 
           <div class="offer-image-container">
-            <img :src="selectedOffer.image"
-              :alt="selectedOffer.value?.alt || selectedOffer.value?.title || 'Zylinder-Modell'" />
+            <img
+              :src="selectedOffer.image"
+              :alt="
+                selectedOffer.value?.alt ||
+                selectedOffer.value?.title ||
+                'Zylinder-Modell'
+              "
+            />
           </div>
         </div>
-        <UButton color="red" class="close-button" @click="isSummaryModalOpen = false">
+        <UButton
+          color="red"
+          class="close-button"
+          @click="isSummaryModalOpen = false"
+        >
           X
         </UButton>
       </div>
 
+      <div class="model-info-text">
+        <p style="white-space: pre-wrap">
+          {{ selectedOffer.infoText }}
+        </p>
+      </div>
       <!-- Teil deines Modals -->
       <div class="content-wrapper">
         <h3 class="config-heading">Zylinderübersicht</h3>
@@ -452,23 +504,22 @@ onMounted(async () => {
               <th>Außen / Innen</th>
               <th>Anzahl</th>
               <th>Optionen</th>
-
             </tr>
           </thead>
           <tbody>
             <tr v-for="pos in positionData" :key="pos.POS">
               <td>{{ pos.POS }}</td>
               <td>
-                {{ pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-      ? pos.Bezeichnung
-      : "Tür " + pos.POS
+                {{
+                  pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+                    ? pos.Bezeichnung
+                    : "Tür " + pos.POS
                 }}
               </td>
               <td>{{ pos.Typ }}</td>
               <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
               <td>{{ pos.Anzahl }}</td>
               <td>{{ pos.Option }}</td>
-
             </tr>
           </tbody>
         </table>
@@ -477,13 +528,14 @@ onMounted(async () => {
           Gesamtanzahl Schlüssel: <strong>{{ totalGlobalKeys }}</strong>
         </p>
 
-        <h3 class="config-heading">Schlüsselübersicht</h3>
+        <h3 class="config-heading"><br /><br />Schlüsselübersicht</h3>
         <ul class="keys-list">
           <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
             <strong>
-              {{ keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-      ? keyItem.Bezeichnung
-      : "Schlüssel " + keyItem.KeyPOS
+              {{
+                keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+                  ? keyItem.Bezeichnung
+                  : "Schlüssel " + keyItem.KeyPOS
               }}
             </strong>
             schließt:
@@ -491,7 +543,6 @@ onMounted(async () => {
           </li>
         </ul>
       </div>
-
 
       <div class="price-and-widerruf">
         <h2>Wichtige Hinweise:</h2>
@@ -502,41 +553,49 @@ onMounted(async () => {
           <label class="widerruf-label">
             <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
             <span>Ich stimme der Widerrufsbelehrung zu.</span>
-            <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
+            <div
+              class="info-icon"
+              @mouseenter="hoverWiderruf = true"
+              @mouseleave="hoverWiderruf = false"
+            >
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverWiderruf" class="tooltip-box">
-                  Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung von Waren,
-                  die nicht vorgefertigt sind und für deren Herstellung eine individuelle
-                  Auswahl oder Bestimmung durch den Verbraucher maßgeblich ist oder
-                  die eindeutig auf die persönlichen Bedürfnisse des Verbrauchers
-                  zugeschnitten sind.
+                  Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung
+                  von Waren, die nicht vorgefertigt sind und für deren
+                  Herstellung eine individuelle Auswahl oder Bestimmung durch
+                  den Verbraucher maßgeblich ist oder die eindeutig auf die
+                  persönlichen Bedürfnisse des Verbrauchers zugeschnitten sind.
                 </div>
               </transition>
             </div>
           </label>
 
           <!-- Zylinder gemessen -->
-          <label class="widerruf-label" style="margin-top: 10px;">
+          <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
             <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
           </label>
 
           <!-- Lieferzeiten -->
-          <label class="widerruf-label" style="margin-top: 10px;">
+          <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
             <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
 
             <!-- Hier der Info-Icon-Bereich -->
-            <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
-              @click.stop>
+            <div
+              class="info-icon"
+              @mouseenter="hoverLieferzeit = true"
+              @mouseleave="hoverLieferzeit = false"
+              @click.stop
+            >
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverLieferzeit" class="tooltip-box">
-                  Je nach Schließung kann die Lieferzeit variieren.
-                  Einfache Gleichschließungen benötigen 2 Werktage
-                  bis zu einer Woche Lieferzeit. Komplexe Schließanlagen
-                  können bis zu 4 Wochen Lieferzeit benötigen.
+                  Je nach Schließung kann die Lieferzeit variieren. Einfache
+                  Gleichschließungen benötigen 2 Werktage bis zu einer Woche
+                  Lieferzeit. Komplexe Schließanlagen können bis zu 4 Wochen
+                  Lieferzeit benötigen.
                 </div>
               </transition>
             </div>
@@ -544,7 +603,7 @@ onMounted(async () => {
         </div>
 
         <!-- Zusammenfassung / Preis -->
-        <div class="offer-price" style="margin-top: 20px;">
+        <div class="offer-price" style="margin-top: 20px">
           Gesamtpreis:
           <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
         </div>
@@ -552,14 +611,17 @@ onMounted(async () => {
 
       <!-- Footer mit Button -->
       <div class="modal-footer">
-        <UButton :disabled="!allRequiredChecked" color="amber" variant="solid" @click="confirmPurchase">
+        <UButton
+          :disabled="!allRequiredChecked"
+          color="amber"
+          variant="solid"
+          @click="confirmPurchase"
+        >
           Angebot kaufen
         </UButton>
       </div>
     </div>
   </UModal>
-
-
 </template>
 
 <style scoped>

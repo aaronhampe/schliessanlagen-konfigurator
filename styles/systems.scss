@@ -49,18 +49,25 @@
 }
 
 .offer-features {
-  list-style: none;
-  padding: 0;
+  list-style-type: disc;   /* Bullet points */
+  padding-left: 1.5rem;    /* Einrückung für die Bullets */
+  margin: 10px 0;
+  
+  li {
+    font-size: 0.9rem;     /* etwas kleinere Schrift */
+    margin-bottom: 4px;    /* minimaler Abstand zwischen Punkten */
+  }
+
+  i {
+    color: #28a745;
+    margin-right: 8px;
+  }
 }
 
-.offer-features li {
-  display: flex;
-  align-items: center;
-}
-
-.offer-features i {
-  color: #28a745;
-  margin-right: 8px;
+.model-info-text p {
+  font-size: 1rem; /* optional: leicht kleinere Schrift */
+  line-height: 1.4;
+  margin: 0px 500px 0 0;
 }
 
 .select-system-button {
