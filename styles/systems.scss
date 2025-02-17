@@ -54,9 +54,13 @@
 }
 
 .offer-price {
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 10px;
   color: #343a40;
+  .price {
+    font-size: 18px;
+    color:#414141;
+  }
 }
 
 .offer-features {
@@ -80,6 +84,40 @@
     margin-right: 8px;
   }
 }
+
+/* Container, falls du mehrere Filter nebeneinander platzieren willst */
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+/* Das Label für den Filtertitel */
+.filter-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Das Select-Feld selbst */
+.filter-select {
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  transition: box-shadow 0.2s ease;
+
+  /* Entferne Standard-Outline in manchen Browsern */
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+  }
+}
+
 
 .summary-modal.modern-design {
   .modal-content {

@@ -19,6 +19,7 @@ const matrix = ref([]);
 const totalGlobalKeys = ref(0);
 const offers = ref([]);
 const schluesselData = ref([]);
+const selectedSort = ref("priceAsc");
 
 const isSummaryModalOpen = ref(false);
 const selectedOffer = ref(null);
@@ -266,6 +267,18 @@ const alternativeOffers = computed(() => {
   });
 });
 
+const sortedAlternativeOffers = computed(() => {
+  const sorted = [...alternativeOffers.value];
+
+  if (selectedSort.value === "priceAsc") {
+    sorted.sort((a, b) => a.price - b.price);
+  } else if (selectedSort.value === "priceDesc") {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+
+  return sorted;
+});
+
 // In den Warenkorb legen (gleich geblieben)
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
@@ -377,6 +390,15 @@ onMounted(async () => {
       <p>
         Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
+
+      <div class="filters-container">
+        <label class="filter-label"> Sortieren nach: </label>
+        <select v-model="selectedSort" class="filter-select">
+          <option value="none">Keine Sortierung</option>
+          <option value="priceAsc">Preis (aufsteigend)</option>
+          <option value="priceDesc">Preis (absteigend)</option>
+        </select>
+      </div>
     </div>
 
     <!-- Haupt-Angebot -->
@@ -423,7 +445,7 @@ onMounted(async () => {
       <div class="offer-container">
         <div
           class="offer"
-          v-for="(offer, index) in alternativeOffers"
+          v-for="(offer, index) in sortedAlternativeOffers"
           :key="offer.title"
         >
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
@@ -441,7 +463,7 @@ onMounted(async () => {
             </ul>
             <div class="offer-price">
               Gesamtpreis:
-              <strong>{{ roundPrice(offer.price) }} €</strong>
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong>
             </div>
             <UButton
               icon="i-heroicons-shopping-cart-16-solid"
