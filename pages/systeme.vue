@@ -438,7 +438,6 @@ onMounted(async () => {
           <option value="priceDesc">Preis (absteigend)</option>
           <option value="useCasePrivat">Privat </option>
           <option value="useCaseGewerblich">Gewerblich </option>
-          <!-- NEU: -->
           <option value="securityAsc">Sicherheit (aufsteigend)</option>
           <option value="securityDesc">Sicherheit (absteigend)</option>
         </select>

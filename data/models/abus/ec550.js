@@ -37,6 +37,7 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 30, inside: 110, price: 59.48 },
       { outside: 30, inside: 120, price: 63.89 },
 
+      { outside: 35, inside: 30, price: 22.00 },
       { outside: 35, inside: 35, price: 24.20 },
       { outside: 35, inside: 40, price: 27.51 },
       { outside: 35, inside: 45, price: 29.72 },
@@ -46,6 +47,8 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 35, inside: 65, price: 39.64 },
       { outside: 35, inside: 70, price: 44.05 },
 
+      { outside: 40, inside: 30, price: 24.20 },
+      { outside: 40, inside: 35, price: 27.51 },
       { outside: 40, inside: 40, price: 28.30 },
       { outside: 40, inside: 45, price: 31.92 },
       { outside: 40, inside: 50, price: 35.23 },
@@ -54,6 +57,9 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 40, inside: 65, price: 44.05 },
       { outside: 40, inside: 70, price: 44.05 },
 
+      { outside: 45, inside: 30, price: 27.51 },
+      { outside: 45, inside: 35, price: 28.30 },
+      { outside: 45, inside: 40, price: 31.92 },
       { outside: 45, inside: 45, price: 35.23 },
       { outside: 45, inside: 50, price: 37.43 },
       { outside: 45, inside: 55, price: 39.64 },
@@ -61,12 +67,21 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 45, inside: 65, price: 49.56 },
       { outside: 45, inside: 70, price: 49.56 },
 
+      { outside: 50, inside: 30, price: 28.30 },
+      { outside: 50, inside: 35, price: 31.92 },
+      { outside: 50, inside: 40, price: 35.23 },
+      { outside: 50, inside: 45, price: 37.43 },
       { outside: 50, inside: 50, price: 39.64 },
       { outside: 50, inside: 55, price: 44.04 },
       { outside: 50, inside: 60, price: 44.04 },
       { outside: 50, inside: 65, price: 49.56 },
 
-      { outside: 55, inside: 55, price: 49.56 },
+      { outside: 55, inside: 30, price: 28.30 },
+      { outside: 55, inside: 35, price: 31.92 },
+      { outside: 55, inside: 40, price: 35.23 },
+      { outside: 55, inside: 45, price: 37.43 },
+      { outside: 55, inside: 50, price: 39.64},
+      { outside: 55, inside: 55, price: 44.04 },
       { outside: 55, inside: 60, price: 49.56 },
       { outside: 55, inside: 65, price: 55.07 },
 
