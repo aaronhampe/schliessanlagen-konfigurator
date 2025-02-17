@@ -10,7 +10,7 @@ export default {
   ],
   infoText: `Steigern Sie die Sicherheit Ihrer Haus- und Wohnungstüren mit dem ABUS EC550, der mit einem praktischen Wendeschlüssel geliefert wird.
 
-Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsversuche schützen. Dieser Zylinder ist mit einem SKG**-Anbohrschutz ausgestattet und bietet durch seine acht Schließelemente in zwei unabhängigen Stiftreihen besonders hohen Schutz. Zusätzlich verfügt er über eine Not- und Gefahrenfunktion, die es ermöglicht, die Tür beidseitig zu schließen, selbst wenn ein Schlüssel auf einer Seite steckt.`,
+Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsversuche schützen. Dieser Zylinder ist mit einem SKG**-Anbohrschutz ausgestattet und bietet durch seine acht Schließelemente in zwei unabhängigen Stiftreihen besonders hohen Schutz. Zusätzlich verfügt er über eine Not- und Gefahrenfunktion, die es ermöglicht, die Tür beidseitig zu schließen, selbst wenn ein Schlüssel auf einer Seite steckt. Der ABUS EC550 ist in verschiedenen Größen erhältlich und kann als Knauf- oder Doppelzylinder bestellt werden. Auf Wunsch können Sie auch eine Sicherungskarte für den Schlüsselnachbestellungsservice erhalten.`,
 
   ////////////////////////////////////////////////////////////////////////
   // DOPPELZYLINDER
