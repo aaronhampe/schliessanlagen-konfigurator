@@ -87,11 +87,6 @@
 
 /* Für privat & gewerblich */
 .use-case-privat\ \&\ gewerblich {
-  /* Da deine Daten
-     evtl. 'privat & gewerblich' enthalten,
-     musst du den 
-     Selektor escapen
-  */
   background-color: #7e57c2; /* Lila z.B. */
   color: #fff;
 }
@@ -99,11 +94,8 @@
 
 .offer-features {
   list-style-type: disc;
-  /* Bullet points */
   color: #2e2e2e;
-  /* Grauer Text */
   padding-left: 1.5rem;
-  /* Einrückung für die Bullets */
   margin: 10px 0;
 
   li {
