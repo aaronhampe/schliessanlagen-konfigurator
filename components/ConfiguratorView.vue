@@ -27,7 +27,7 @@
 
     <div class="model-container">
       <h2> 1: </h2>
-      <h3>Modellpräferenz:</h3>
+      <h3>Modellauswahl:</h3>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}

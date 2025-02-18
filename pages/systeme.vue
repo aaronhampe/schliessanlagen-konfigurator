@@ -278,8 +278,7 @@ const sortedAlternativeOffers = computed(() => {
     sorted.sort((a, b) => compareUseCase(a, b, "privat"));
   } else if (selectedSort.value === "useCaseGewerblich") {
     sorted.sort((a, b) => compareUseCase(a, b, "gewerblich"));
-  }
-  else if (selectedSort.value === "securityAsc") {
+  } else if (selectedSort.value === "securityAsc") {
     sorted.sort((a, b) => a.securityLevel - b.securityLevel);
   } else if (selectedSort.value === "securityDesc") {
     sorted.sort((a, b) => b.securityLevel - a.securityLevel);
@@ -289,7 +288,6 @@ const sortedAlternativeOffers = computed(() => {
 });
 
 function compareUseCase(a, b, focus) {
-
   const rankPrivat = {
     privat: 0,
     "privat & gewerblich": 1,
@@ -436,8 +434,8 @@ onMounted(async () => {
           <option value="none">Keine Sortierung</option>
           <option value="priceAsc">Preis (aufsteigend)</option>
           <option value="priceDesc">Preis (absteigend)</option>
-          <option value="useCasePrivat">Privat </option>
-          <option value="useCaseGewerblich">Gewerblich </option>
+          <option value="useCasePrivat">Privat</option>
+          <option value="useCaseGewerblich">Gewerblich</option>
           <option value="securityAsc">Sicherheit (aufsteigend)</option>
           <option value="securityDesc">Sicherheit (absteigend)</option>
         </select>
@@ -446,7 +444,7 @@ onMounted(async () => {
 
     <!-- Haupt-Angebot -->
     <div v-if="selectedModelOffer">
-      <h2>Angebot für Ihr ausgewähltes Modell</h2>
+      <h2>Angebot für Ihr ausgewähltes Modell:</h2>
       <div class="offer highlighted-offer">
         <img
           :src="selectedModelOffer.image"
@@ -503,7 +501,13 @@ onMounted(async () => {
 
     <!-- Alternative Angebote -->
     <div v-if="alternativeOffers.length" style="margin-top: 30px">
-      <h2>Weitere passende Angebote</h2>
+      <h2>
+        {{
+          selectedModel === "Kein bestimmtes Modell"
+            ? "Angebote für Sie:"
+            : "Weitere passende Angebote:"
+        }}
+      </h2>
       <div class="offer-container">
         <div
           class="offer"
