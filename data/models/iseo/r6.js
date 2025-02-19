@@ -32,6 +32,7 @@ Der R6 verfügt ab einer Länge von 30-30 auf jeder Schließseite über 6 Codier
             { outside: 30, inside: 75, price: 39.94 },
             { outside: 30, inside: 80, price: 39.94 },
             ////////
+            { outside: 35, inside: 30, price: 33.63 },
             { outside: 35, inside: 35, price: 34.68 },
             { outside: 35, inside: 40, price: 35.73 },
             { outside: 35, inside: 45, price: 35.73 },
@@ -42,6 +43,8 @@ Der R6 verfügt ab einer Länge von 30-30 auf jeder Schließseite über 6 Codier
             { outside: 35, inside: 70, price: 39.94 },
             { outside: 35, inside: 75, price: 39.94 },
             ////////
+            { outside: 40, inside: 30, price: 33.63 },
+            { outside: 40, inside: 35, price: 34.68 },
             { outside: 40, inside: 40, price: 35.73 },
             { outside: 40, inside: 45, price: 36.78 },
             { outside: 40, inside: 50, price: 37.84 },
@@ -50,16 +53,28 @@ Der R6 verfügt ab einer Länge von 30-30 auf jeder Schließseite über 6 Codier
             { outside: 40, inside: 65, price: 39.94 },
             { outside: 40, inside: 70, price: 39.94 },
             ////////
+            { outside: 45, inside: 30, price: 34.68 },
+            { outside: 45, inside: 35, price: 35.73 },
+            { outside: 45, inside: 40, price: 36.78 },
             { outside: 45, inside: 45, price: 37.84 },
             { outside: 45, inside: 50, price: 37.84 },
             { outside: 45, inside: 55, price: 38.89 },
             { outside: 45, inside: 60, price: 39.94 },
             { outside: 45, inside: 65, price: 39.94 },
             ////////
+            { outside: 50, inside: 30, price: 34.68 },
+            { outside: 50, inside: 35, price: 35.73 },
+            { outside: 50, inside: 40, price: 36.78 },
+            { outside: 50, inside: 45, price: 37.84 },
             { outside: 50, inside: 50, price: 38.89 },
             { outside: 50, inside: 55, price: 39.94 },
             { outside: 50, inside: 60, price: 39.94 },
             ////////
+            { outside: 55, inside: 30, price: 34.68 },
+            { outside: 55, inside: 35, price: 35.73 },
+            { outside: 55, inside: 40, price: 36.78 },
+            { outside: 55, inside: 45, price: 37.84 },
+            { outside: 55, inside: 50, price: 38.89 },
             { outside: 55, inside: 55, price: 39.94 },
             ////////
         ],
