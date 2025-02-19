@@ -80,12 +80,30 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 55, inside: 35, price: 31.92 },
       { outside: 55, inside: 40, price: 35.23 },
       { outside: 55, inside: 45, price: 37.43 },
-      { outside: 55, inside: 50, price: 39.64},
+      { outside: 55, inside: 50, price: 39.64 },
       { outside: 55, inside: 55, price: 44.04 },
       { outside: 55, inside: 60, price: 49.56 },
       { outside: 55, inside: 65, price: 55.07 },
 
+      { outside: 60, inside: 30, price: 28.30 },
+      { outside: 60, inside: 35, price: 31.92 },
+      { outside: 60, inside: 40, price: 35.23 },
+      { outside: 60, inside: 45, price: 37.43 },
+      { outside: 60, inside: 50, price: 39.64 },
+      { outside: 60, inside: 55, price: 44.04 },
       { outside: 60, inside: 60, price: 49.56 },
+
+      { outside: 70, inside: 30, price: 49.56 },
+
+      { outside: 80, inside: 30, price: 49.56 },
+
+      { outside: 90, inside: 30, price: 49.56 },
+
+      { outside: 100, inside: 30, price: 49.56 },
+
+      { outside: 110, inside: 30, price: 49.56 },
+      
+      { outside: 120, inside: 30, price: 49.56 },
     ],
     options: ["Not- & Gefahrenfunktion"],
   },
