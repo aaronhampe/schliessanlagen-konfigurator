@@ -1,6 +1,7 @@
 .systeme-page {
   margin: 50px;
   font-size: 18px;
+
   .back-button {
     margin-top: 20px;
     background-color: #f59e0b !important;
@@ -14,7 +15,7 @@
 
 .offer-container {
   display: flex;
-  justify-content: start; 
+  justify-content: start;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
@@ -57,37 +58,47 @@
   font-size: 16px;
   margin-bottom: 10px;
   color: #343a40;
+
   .price {
     font-size: 18px;
-    color:#414141;
+    color: #414141;
   }
 }
+
 .use-case-badge {
   display: inline-block;
-  margin: 6px 0;           /* etwas Abstand */
-  padding: 4px 8px;        /* rundum innenabstand */
+  margin: 6px 0;
+  /* etwas Abstand */
+  padding: 4px 8px;
+  /* rundum innenabstand */
   font-size: 0.85rem;
   font-weight: 600;
-  border-radius: 4px;       /* abgerundete Ecken */
-  color: #fff;              /* weiße Schrift */
-  background-color: #6c757d; /* Default-Fall, falls kein passender Case? */
+  border-radius: 4px;
+  /* abgerundete Ecken */
+  color: #fff;
+  /* weiße Schrift */
+  background-color: #6c757d;
+  /* Default-Fall, falls kein passender Case? */
 }
 
 /* Für privat */
 .use-case-privat {
-  background-color: #51c4d3; /* oder ein helles Türkis */
+  background-color: #51c4d3;
+  /* oder ein helles Türkis */
   color: #fff;
 }
 
 /* Für gewerblich */
 .use-case-gewerblich {
-  background-color: #f9a825; /* Gelb/Orange */
+  background-color: #f9a825;
+  /* Gelb/Orange */
   color: #222;
 }
 
 /* Für privat & gewerblich */
 .use-case-privat\ \&\ gewerblich {
-  background-color: #7e57c2; /* Lila z.B. */
+  background-color: #7e57c2;
+  /* Lila z.B. */
   color: #fff;
 }
 
@@ -154,7 +165,7 @@
     flex-direction: column;
     gap: 20px;
 
-  
+
     overflow-y: auto;
   }
 
@@ -271,6 +282,7 @@
 
         .tooltip-box {
           position: absolute;
+          z-index: 1000;
           top: 120%;
           left: 50%;
           transform: translateX(-50%);
@@ -278,10 +290,11 @@
           border: 1px solid #ccc;
           border-radius: 4px;
           padding: 8px 12px;
-          width: 200px;
+          width: 300px;
           font-size: 0.85rem;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
       }
     }
 

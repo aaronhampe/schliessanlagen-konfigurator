@@ -685,13 +685,6 @@ onMounted(async () => {
               </transition>
             </div>
           </label>
-
-          <!-- Zylinder gemessen -->
-          <label class="widerruf-label" style="margin-top: 10px">
-            <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
-            <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
-          </label>
-
           <!-- Lieferzeiten -->
           <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
@@ -705,14 +698,21 @@ onMounted(async () => {
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverLieferzeit" class="tooltip-box">
-                  Je nach Schließung kann die Lieferzeit variieren. Einfache
-                  Gleichschließungen benötigen 2 Werktage bis zu einer Woche
-                  Lieferzeit. Komplexe Schließanlagen können bis zu 4 Wochen
-                  Lieferzeit benötigen.
+                  Die Lieferzeit richtet sich nach der Art Ihrer Schließung.
+                  Während einfache Gleichschließungen meist innerhalb von 2
+                  Werktagen bis zu einer Woche geliefert werden, können
+                  komplexere Schließanlagen mit vielen Optionen bis zu 4 Wochen
+                  in Anspruch nehmen.
                 </div>
               </transition>
             </div>
           </label>
+           <!-- Zylinder gemessen -->
+           <label class="widerruf-label" style="margin-top: 10px">
+            <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
+            <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
+          </label>
+
         </div>
 
         <!-- Preis -->
