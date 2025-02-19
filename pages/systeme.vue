@@ -147,6 +147,16 @@ function generateConfigurationText() {
   lines.push(
     `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
   );
+  lines.push(
+    `<br><b>Zylinder korrekt gemessen</b>? ${
+      hasMeasuredCorrectly.value ? "Ja" : "Nein"
+    }`
+  );
+  lines.push(
+    `<br><b>Lieferzeiten akzeptiert</b>? ${
+      hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
+    }`
+  );
 
   // 4) Gesamt-Anzahl Schlüssel
   lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
@@ -329,6 +339,8 @@ function addToCart(systemName, price, productID) {
       Anlage: anlageNr,
       config_text: fullConfiguration,
       widerruf_accepted: true,
+      measured_correctly: true,
+      lieferzeiten_accepted: true,
     }),
   })
     .then((r) => r.json())
@@ -664,7 +676,11 @@ onMounted(async () => {
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverWiderruf" class="tooltip-box">
-                  Das Widerrufsrecht besteht nicht bei Verträgen ...
+                  Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung
+                  von Waren, die nicht vorgefertigt sind und für deren
+                  Herstellung eine individuelle Auswahl oder Bestimmung durch
+                  den Verbraucher maßgeblich ist oder die eindeutig auf die
+                  persönlichen Bedürfnisse des Verbrauchers zugeschnitten sind.
                 </div>
               </transition>
             </div>
@@ -689,7 +705,10 @@ onMounted(async () => {
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverLieferzeit" class="tooltip-box">
-                  Je nach Schließung kann die Lieferzeit variieren ...
+                  Je nach Schließung kann die Lieferzeit variieren. Einfache
+                  Gleichschließungen benötigen 2 Werktage bis zu einer Woche
+                  Lieferzeit. Komplexe Schließanlagen können bis zu 4 Wochen
+                  Lieferzeit benötigen.
                 </div>
               </transition>
             </div>
