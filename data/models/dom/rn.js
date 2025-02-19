@@ -221,15 +221,14 @@ Entwickelt nach den strengen Sicherheitsanforderungen, bietet dieser Zylinder ei
     Halbzylinder: {
         sizes: [
             ////////
-            { inside: 10, outside: 30, price: 17.84 },
-            { inside: 10, outside: 35, price: 22.05 },
-            { inside: 10, outside: 40, price: 22.05 },
-            { inside: 10, outside: 45, price: 25.21 },
-            { inside: 10, outside: 50, price: 25.21 },
-            { inside: 10, outside: 55, price: 29.42 },
-            { inside: 10, outside: 60, price: 29.42 },
-            { inside: 10, outside: 65, price: 32.57 },
-            { inside: 10, outside: 70, price: 32.57 },
+            { outside: 30, inside: 10, price: 17.84 },
+            { outside: 35, inside: 10, price: 22.05 },
+            { outside: 40, inside: 10, price: 22.05 },
+            { outside: 45, inside: 10, price: 25.21 },
+            { outside: 50, inside: 10, price: 25.21 },
+            { outside: 55, inside: 10, price: 29.42 },
+            { outside: 60, inside: 10, price: 32.57 },
+            { outside: 70, inside: 10, price: 32.57 },
             ////////
         ],
         options: [

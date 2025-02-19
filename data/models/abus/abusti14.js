@@ -46,7 +46,7 @@ export default {
 
   Halbzylinder: {
     sizes: [
-      { outside: 10, inside: 30, price: 12.57 },
+      { outside: 30, inside: 10, price: 12.57 },
     ],
   },
 

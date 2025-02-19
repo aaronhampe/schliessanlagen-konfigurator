@@ -190,13 +190,13 @@ Im Innern des EC660 sorgen gehärtete Stahlstifte nach SKG**-Vorgaben dafür, da
   ////////////////////////////////////////////////////////////////////////
   Halbzylinder: {
     sizes: [
-      { outside: 10, inside: 30, price: 24.1 },
-      { outside: 10, inside: 35, price: 31.45 },
-      { outside: 10, inside: 40, price: 30.4 },
-      { outside: 10, inside: 45, price: 33.55 },
-      { outside: 10, inside: 50, price: 35.65 },
-      { outside: 10, inside: 60, price: 41.95 },
-      { outside: 10, inside: 70, price: 47.2 },
+      { outside: 30, inside: 10, price: 24.1 },
+      { outside: 35, inside: 10, price: 31.45 },
+      { outside: 40, inside: 10, price: 30.4 },
+      { outside: 45, inside: 10, price: 33.55 },
+      { outside: 50, inside: 10, price: 35.65 },
+      { outside: 60, inside: 10, price: 41.95 },
+      { outside: 70, inside: 10, price: 47.2 },
     ],
     options: [],
   },

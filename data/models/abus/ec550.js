@@ -201,13 +201,13 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
   ////////////////////////////////////////////////////////////////////////
   Halbzylinder: {
     sizes: [
-      { outside: 10, inside: 30, price: 14.65 },
-      { outside: 10, inside: 35, price: 17.80 },
-      { outside: 10, inside: 40, price: 19.90 },
-      { outside: 10, inside: 45, price: 22.00 },
-      { outside: 10, inside: 50, price: 24.10 },
-      { outside: 10, inside: 60, price: 29.35 },
-      { outside: 10, inside: 70, price: 33.55 },
+      { outside: 30, inside: 10, price: 14.65 },
+      { outside: 35, inside: 10, price: 17.80 },
+      { outside: 40, inside: 10, price: 19.90 },
+      { outside: 45, inside: 10, price: 22.00 },
+      { outside: 50, inside: 10, price: 24.10 },
+      { outside: 60, inside: 10, price: 29.35 },
+      { outside: 70, inside: 10, price: 33.55 },
     ],
     options: [],
   },
