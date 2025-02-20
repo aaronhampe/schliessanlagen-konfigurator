@@ -323,8 +323,7 @@ export default {
     },
     computed: {
         showLoadButton() {
-            //return this.$route.path.includes('/admin/');
-            return true;
+            return this.$route.path.includes('/admin/');
         },
     },
     methods: {
