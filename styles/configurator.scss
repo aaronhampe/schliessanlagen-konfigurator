@@ -116,7 +116,9 @@ $color-sky: #0ea5e9;
     gap: 10px;
     margin-top: 10px;
 
-    h2, h3, span {
+    h2,
+    h3,
+    span {
       font-size: 16px;
     }
 
@@ -375,10 +377,10 @@ $color-sky: #0ea5e9;
     }
 
     .modal-h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
       margin: 0;
-      color: #666;
-      font-size: 0.9rem;
-      font-weight: 400;
+      color: #333;
     }
   }
 }
@@ -387,12 +389,12 @@ $color-sky: #0ea5e9;
   *                     OPTIONS MODAL
   ***********************************************************/
 .options-modal {
-  :deep(.u-modal-overlay)  {
+  :deep(.u-modal-overlay) {
     background: rgba(0, 0, 0, 0.5);
   }
 
   // Modal Content
-  :deep(.u-modal-content)  {
+  :deep(.u-modal-content) {
     background: #ffffff;
     border-radius: 12px;
     padding: 20px;
@@ -478,7 +480,7 @@ $color-sky: #0ea5e9;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
-        :deep(.u-checkbox__check)  {
+        :deep(.u-checkbox__check) {
           width: 20px;
           height: 20px;
         }
@@ -517,7 +519,7 @@ $color-sky: #0ea5e9;
   *                     WARNING MODAL
   ***********************************************************/
 .warning-modal {
-  :deep(.u-modal-content)  {
+  :deep(.u-modal-content) {
     background: #831414;
     border-radius: 10px;
     padding: 24px;
