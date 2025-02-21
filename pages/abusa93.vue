@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="button-page">
         <button class="btn btn--primary" @click="goToConfigurator">
             Jetzt konfigurieren

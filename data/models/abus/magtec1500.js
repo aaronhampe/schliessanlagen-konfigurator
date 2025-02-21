@@ -255,25 +255,9 @@ export default {
             "Not- & Gefahrenfunktion",
         ],
     },
-    Vorhangschloss: {
-        types: {
-            "50mm": {
-                options: []
-            },
-            "80mm": {
-                options: []
-            },
-        },
-    },
-    Briefkastenschloss: {
-        options: {
-            Art: ["Surface", "Mortise"],
-            Material: ["Nickel", "Bronze"],
-        },
-    },
     availableTypes: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",
         "Halbzylinder",
-    ],
+      ],
 }
