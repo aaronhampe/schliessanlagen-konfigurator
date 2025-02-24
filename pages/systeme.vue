@@ -453,6 +453,9 @@ onMounted(async () => {
         </select>
       </div>
     </div>
+    <UButton class="back-button" @click="navigateBack" style="margin: 10px 10px 10px 0px">
+      Zurück zum Konfigurator
+    </UButton>
 
     <!-- Haupt-Angebot -->
     <div v-if="selectedModelOffer">
