@@ -30,6 +30,18 @@ export default defineNuxtConfig({
       },
     },
   },
+  hooks: {
+    'pages:extend'(pages) {
+      const configPage = pages.find(page => page.path === '/')
+      if (configPage) {
+        pages.push({
+          name: 'admin',
+          path: '/admin',
+          file: configPage.file
+        })
+      }
+    }
+  },
 
   compatibilityDate: '2024-10-15'
 })
