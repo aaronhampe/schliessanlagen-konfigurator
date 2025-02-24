@@ -371,7 +371,7 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-      return this.$route.path.includes('/admin/');
+      return this.$route.path.includes('/admin');
     },
   },
   watch: {
