@@ -39,8 +39,13 @@ export default defineNuxtConfig({
     routeRules: {
       '/_nuxt/**': { cors: true }
     }
-  }
-,
+  },
+
+  build: {
+    // Aktiviert die Generierung von manifest.json
+    manifest: true
+  },
+
   hooks: {
     'pages:extend'(pages) {
       const configPage = pages.find(page => page.path === '/')
