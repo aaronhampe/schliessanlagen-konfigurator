@@ -33,10 +33,13 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    prerender: {
+      routes: ['/'] // Stellt sicher, dass statische Dateien generiert werden
+    },
     routeRules: {
-      '/_nuxt/**': { cors: true } // CORS für Nuxt-Assets aktivieren
+      '/_nuxt/**': { cors: true }
     }
-  },
+  }
 
   hooks: {
     'pages:extend'(pages) {
