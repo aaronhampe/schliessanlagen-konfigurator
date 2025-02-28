@@ -40,7 +40,7 @@ export default defineNuxtConfig({
       '/_nuxt/**': { cors: true }
     }
   }
-
+,
   hooks: {
     'pages:extend'(pages) {
       const configPage = pages.find(page => page.path === '/')
