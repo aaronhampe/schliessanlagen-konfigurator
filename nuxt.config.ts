@@ -1,11 +1,11 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.js
 export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@pinia/nuxt'],
   devtools: { enabled: false },
   
   app: { 
-    baseURL: '/', // Stellt sicher, dass URLs absolut sind
-    cdnURL: 'https://konfigurator.secutimetec.de/' // Erzwingt absolute URLs für Assets
+    baseURL: '/', 
+    cdnURL: 'https://konfigurator.secutimetec.de/' 
   },
 
   runtimeConfig: {
@@ -37,13 +37,9 @@ export default defineNuxtConfig({
       routes: ['/'] // Stellt sicher, dass statische Dateien generiert werden
     },
     routeRules: {
-      '/_nuxt/**': { cors: true }
+      '/_nuxt/**': { cors: true },
+      '/**': { cors: true } // CORS für alle Routen aktivieren
     }
-  },
-
-  build: {
-    // Aktiviert die Generierung von manifest.json
-    manifest: true
   },
 
   hooks: {
