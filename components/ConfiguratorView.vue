@@ -244,6 +244,7 @@
 import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 
+
 export default {
   components: {
     ColumnModal,
@@ -1023,5 +1024,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./styles/configurator.scss";
+@import "/styles/configurator.scss";
 </style>
