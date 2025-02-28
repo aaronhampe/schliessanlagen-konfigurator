@@ -32,6 +32,12 @@ export default defineNuxtConfig({
     },
   },
 
+  nitro: {
+    routeRules: {
+      '/_nuxt/**': { cors: true } // CORS für Nuxt-Assets aktivieren
+    }
+  },
+
   hooks: {
     'pages:extend'(pages) {
       const configPage = pages.find(page => page.path === '/')
