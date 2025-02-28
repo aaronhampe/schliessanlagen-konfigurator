@@ -10,6 +10,7 @@ export default defineEventHandler((event) => {
     if (getMethod(event) === "OPTIONS") {
       event.node.res.statusCode = 204; // No Content
       return "";
+      //bla
     }
   });
   
