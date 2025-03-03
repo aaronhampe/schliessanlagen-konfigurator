@@ -332,6 +332,7 @@ function addToCart(systemName, price, productID) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials:"include",
     body: JSON.stringify({
       product_id: productID,
       price,
