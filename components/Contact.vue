@@ -47,7 +47,7 @@ async function submit(form) {
 	let success = false;
 
 	try {
-		await $fetch('http://localhost:3000/api/contact', {
+		await $fetch('http://localhost:3000./api/contact', {
 			method: 'POST',
 			body: form,
 		});

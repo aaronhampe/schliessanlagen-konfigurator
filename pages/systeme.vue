@@ -327,7 +327,7 @@ function compareUseCase(a, b, focus) {
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  fetch("/api/wc-cart-add-item", {
+  fetch("./api/wc-cart-add-item", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -366,14 +366,14 @@ onMounted(async () => {
 
   try {
     // 1) Positionen (Zylinder)
-    const positionResponse = await $fetch("/api/sqlgetposition", {
+    const positionResponse = await $fetch("./api/sqlgetposition", {
       method: "POST",
       body: { ID: anlageNr },
     });
     positionData.value = positionResponse.queryresult || [];
 
     // 2) Schlüssel:
-    const schluesselResponse = await $fetch("/api/sqlgetschluessel", {
+    const schluesselResponse = await $fetch("./api/sqlgetschluessel", {
       method: "POST",
       body: { ID: anlageNr },
     });
@@ -386,7 +386,7 @@ onMounted(async () => {
     totalGlobalKeys.value = sumKeys;
 
     // 3) Matrix (NEU!)
-    const matrixResponse = await $fetch("/api/sqlgetmatrix", {
+    const matrixResponse = await $fetch("./api/sqlgetmatrix", {
       method: "POST",
       body: { ID: anlageNr },
     });

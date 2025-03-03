@@ -645,7 +645,7 @@ function generateRandomAnlagenNummer() {
 async function test() {
   console.log("test");
   try {
-    const response = await fetch("/api/wc-cart-add-item", {
+    const response = await fetch("./api/wc-cart-add-item", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -683,7 +683,7 @@ async function saveInstallation() {
       do {
         generateRandomAnlagenNummer();
         const response = await $fetch<{ message: string }>(
-          "/api/sqltestanlage?ID=" + anlageNr.value,
+          "./api/sqltestanlage?ID=" + anlageNr.value,
           {
             method: "post",
           }
@@ -693,7 +693,7 @@ async function saveInstallation() {
     }
 
     // Schritt 1: Anlage in der Datenbank speichern
-    const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
+    const queryresultanlage = await $fetch("./api/sqlpostanlageneu", {
       method: "post",
       body: {
         ID: anlageNr.value,
@@ -717,7 +717,7 @@ async function saveInstallation() {
         Option: row[0].options || "",
       }));
 
-      await $fetch("/api/sqlpostposition?ID=" + anlageNr.value, {
+      await $fetch("./api/sqlpostposition?ID=" + anlageNr.value, {
         method: "post",
         body: RowObject,
       });
@@ -729,7 +729,7 @@ async function saveInstallation() {
         keyquantity: col.keyquantity || 1,
       }));
 
-      await $fetch("/api/sqlpostschluessel?ID=" + anlageNr.value, {
+      await $fetch("./api/sqlpostschluessel?ID=" + anlageNr.value, {
         method: "post",
         body: KeyNameObject,
       });
@@ -743,7 +743,7 @@ async function saveInstallation() {
         }))
       );
 
-      await $fetch("/api/sqlpostmatrix?ID=" + anlageNr.value, {
+      await $fetch("./api/sqlpostmatrix?ID=" + anlageNr.value, {
         method: "post",
         body: Matrix,
       });
@@ -799,7 +799,7 @@ async function loadInstallation() {
       Telefon: string;
       Firma: string;
     }>;
-  }>("/api/sqlgetanlage", {
+  }>("./api/sqlgetanlage", {
     method: "post",
     body: { ID: id.value },
   });
@@ -828,7 +828,7 @@ async function loadInstallation() {
       SizeI: string;
       Option: string;
     }>;
-  }>("/api/sqlgetposition", {
+  }>("./api/sqlgetposition", {
     method: "post",
     body: { ID: id.value },
   });
@@ -868,7 +868,7 @@ async function loadInstallation() {
       Bezeichnung: string;
       Anzahl: number;
     }>;
-  }>("/api/sqlgetschluessel", {
+  }>("./api/sqlgetschluessel", {
     method: "post",
     body: { ID: id.value },
   });
@@ -894,7 +894,7 @@ async function loadInstallation() {
       POSSchluessel: number;
       Berechtigung: boolean;
     }>;
-  }>("/api/sqlgetmatrix", {
+  }>("./api/sqlgetmatrix", {
     method: "post",
     body: { ID: id.value },
   });
