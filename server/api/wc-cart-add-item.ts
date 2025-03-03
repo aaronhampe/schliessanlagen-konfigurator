@@ -4,6 +4,7 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
   // Hole die POST-Daten aus der Anfrage
   const body = await readBody(event);
+  const cookies = document.cookie;
 
   // WooCommerce-API-Endpunkt
   const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
@@ -32,9 +33,9 @@ export default defineEventHandler(async (event) => {
       body: payload,
       headers: {
         'Content-Type': 'application/json',
-        // Falls WooCommerce eine Authentifizierung benötigt, z.B. mit Basic Auth:
-        // Authorization: 'Basic ' + btoa('consumer_key:consumer_secret')
-      }
+        'Cookie': cookies // WICHTIG: Session weitergeben!
+      },
+      credentials: 'include'
     });
 console.log(response);
     // WooCommerce API-Antwort zurückgeben
