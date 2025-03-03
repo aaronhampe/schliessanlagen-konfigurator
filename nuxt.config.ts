@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   
   app: { 
-    baseURL: '/', 
-    cdnURL: 'https://konfigurator.secutimetec.de/' 
+    baseURL: '/konfiguratorapp/', 
+    cdnURL: 'https://www.stt-shop.de/konfiguratorapp/' 
   },
 
   runtimeConfig: {
