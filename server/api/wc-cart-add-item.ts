@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
       body: payload,
       headers: {
         'Content-Type': 'application/json',
-        ...(cookies ? { 'Cookie': cookies } : {}) // Cookies nur setzen, wenn vorhanden
+        'Cookie': cookies
       },
       credentials: 'include' // Wichtig für Session-Cookies
     });
