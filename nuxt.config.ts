@@ -22,7 +22,7 @@ export default defineNuxtConfig({
 
   vite: {
     server: {
-      host: true, // Erlaubt externe Zugriffe
+      host: true, // Erlaubte externe Zugriffe
       strictPort: false,
       proxy: {
         '/api': {
