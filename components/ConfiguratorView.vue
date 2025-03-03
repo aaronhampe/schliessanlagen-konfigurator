@@ -714,7 +714,7 @@ export default {
     async test() {
       console.log("test");
       try {
-        const response = await fetch("/api/wc-cart-add-item", {
+        const response = await fetch("./api/wc-cart-add-item", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -793,7 +793,7 @@ export default {
         let antwort;
         do {
           this.generateRandomAnlagenNummer();
-          const response = await $fetch("/api/sqltestanlage?ID=" + this.anlageNr, {
+          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
             method: "post",
           });
           antwort = response.message;
@@ -801,7 +801,7 @@ export default {
       }
 
       // 4) Anlage in der DB speichern
-      const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
+      const queryresultanlage = await $fetch("./api/sqlpostanlageneu", {
         method: "post",
         body: {
           ID: this.anlageNr,
@@ -827,7 +827,7 @@ export default {
           Option: (row[0].optionsSelected || []).join(", "),
         }));
 
-        const queryresultposition = await $fetch("/api/sqlpostposition?ID=" + this.anlageNr, {
+        const queryresultposition = await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
           method: "post",
           body: RowObject,
         });
@@ -839,7 +839,7 @@ export default {
           keyquantity: col.keyquantity || 1,
         }));
 
-        const queryresultschluessel = await $fetch("/api/sqlpostschluessel?ID=" + this.anlageNr, {
+        const queryresultschluessel = await $fetch("./api/sqlpostschluessel?ID=" + this.anlageNr, {
           method: "post",
           body: KeyNameObject,
         });
@@ -853,7 +853,7 @@ export default {
           }))
         );
 
-        const queryresultmatrix = await $fetch("/api/sqlpostmatrix?ID=" + this.anlageNr, {
+        const queryresultmatrix = await $fetch("./api/sqlpostmatrix?ID=" + this.anlageNr, {
           method: "post",
           body: Matrix,
         });
@@ -875,7 +875,7 @@ export default {
       this.rows[0].length = 1;
 
       // Daten für die Anlage
-      const queryresultanlage = await $fetch("/api/sqlgetanlage", {
+      const queryresultanlage = await $fetch("./api/sqlgetanlage", {
         method: "post",
         body: { ID: this.id },
       });
@@ -897,7 +897,7 @@ export default {
         this.store.setModel(loadedModel);
       }
 
-      const queryresultposition = await $fetch("/api/sqlgetposition", {
+      const queryresultposition = await $fetch("./api/sqlgetposition", {
         method: "post",
         body: { ID: this.id },
       });
@@ -929,7 +929,7 @@ export default {
           .filter(Boolean)
       })
 
-      const queryresultschluessel = await $fetch("/api/sqlgetschluessel", {
+      const queryresultschluessel = await $fetch("./api/sqlgetschluessel", {
         method: "post",
         body: { ID: this.id },
       });
@@ -948,7 +948,7 @@ export default {
         this.rows[0][spalte].keyquantity = item.Anzahl;
       });
 
-      const queryresultmatrix = await $fetch("/api/sqlgetmatrix", {
+      const queryresultmatrix = await $fetch("./api/sqlgetmatrix", {
         method: "post",
         body: { ID: this.id },
       });
