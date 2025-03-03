@@ -349,10 +349,10 @@ function addToCart(systemName, price, productID) {
       if (result.success) {
         const cartUrl =
           result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
-        const cartKey = result.data.cart_key;
-        const finalUrl = cartKey
-          ? `${cartUrl}?cocart-load-cart=${cartKey}`
-          : cartUrl;
+        //const cartKey = result.data.cart_key;
+        //const finalUrl = cartKey
+        //  ? `${cartUrl}?cocart-load-cart=${cartKey}`
+        //  : cartUrl;
         window.open(finalUrl, "_blank");
       }
     })
