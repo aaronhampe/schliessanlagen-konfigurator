@@ -4,7 +4,7 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
   // Hole die POST-Daten aus der Anfrage
   const body = await readBody(event);
-  const cookies = document.cookie;
+  
 
   // WooCommerce-API-Endpunkt
   const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
