@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
     // 🛒 WooCommerce-API-Endpunkt
-    const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
+    const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/cocart/v2/add_to_cart';
 
     // 🍪 Cookies auslesen
     const cookies = getHeader(event, 'cookie') || '';
