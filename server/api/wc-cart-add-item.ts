@@ -1,14 +1,18 @@
-// server/api/add-to-cart.ts
-import { defineEventHandler, readBody } from 'h3';
+import { defineEventHandler, readBody, getHeader } from 'h3';
 
 export default defineEventHandler(async (event) => {
   // Hole die POST-Daten aus der Anfrage
   const body = await readBody(event);
-  
 
   // WooCommerce-API-Endpunkt
   const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
-  const cookies = typeof document !== 'undefined' ? document.cookie : '';
+
+  // 🔥 Cookies aus der Anfrage auslesen
+  const cookies = getHeader(event, 'cookie') || '';
+
+  // Debug: Cookies im Server-Log anzeigen
+  console.log('🔍 Empfangene Cookies:', cookies);
+
   // Daten, die an WooCommerce-API gesendet werden (Artikel- und Adressdaten)
   const payload = {
     product_id: body.product_id,
@@ -37,19 +41,24 @@ export default defineEventHandler(async (event) => {
       },
       credentials: 'include' // Wichtig für Session-Cookies
     });
-console.log(response);
+
+    // Debug: API-Antwort in Server-Konsole anzeigen
+    console.log('✅ WooCommerce API Response:', response);
+
     // WooCommerce API-Antwort zurückgeben
     return {
       success: true,
       message: 'Produkt erfolgreich hinzugefügt',
-      data: response
+      data: response,
+      cookies: cookies // Zum Debuggen an den Client zurückgeben
     };
-  } catch (error) {
-    // Fehlerbehandlung
+  } catch (error: any) {
+    console.error('❌ Fehler beim Hinzufügen:', error);
+
     return {
       success: false,
       message: 'Fehler beim Hinzufügen des Produkts',
-      error: error
+      error: error.data || error.message || error
     };
   }
 });
