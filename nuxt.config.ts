@@ -21,6 +21,17 @@ export default defineNuxtConfig({
   css: ['@/scss/main.scss'],
 
   vite: {
+    server: {
+      host: true, // Erlaubt externe Zugriffe
+      strictPort: false,
+      proxy: {
+        '/api': {
+          target: 'https://www.stt-shop.de',
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
     css: {
       preprocessorOptions: {
         scss: {
