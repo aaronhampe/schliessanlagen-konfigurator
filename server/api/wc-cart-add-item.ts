@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
     // 🛒 CoCart-API-Endpunkt (Beispiel-URL)
-    const cocartApiUrl = 'https://www.stt-shop.de/wp-json/cocart/v2/add-item';
+    const cocartApiUrl = 'https://www.stt-shop.de/wp-json/cocart/v2/cart/add-item';
 
     // 🍪 Cookies auslesen
     const cookies = getHeader(event, 'cookie') || '';
