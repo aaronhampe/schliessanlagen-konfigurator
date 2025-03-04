@@ -5,65 +5,62 @@ export default defineEventHandler(async (event) => {
     // 🔥 POST-Daten auslesen
     const body = await readBody(event);
 
-    // 🛒 CoCart-API-Endpunkt (Beispiel-URL)
-    const cocartApiUrl = 'https://www.stt-shop.de/wp-json/cocart/v2/cart/add-item';
+    // 🛒 WooCommerce-API-Endpunkt
+    const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
 
     // 🍪 Cookies auslesen
     const cookies = getHeader(event, 'cookie') || '';
     console.log('🔍 Empfangene Cookies:', cookies);
 
-    // 📦 Request-Payload für CoCart
+    // 📦 Request-Payload
     const payload = {
-      product_id: body.product_id, // Produkt-ID
-      quantity: body.quantity || 1, // Menge (Standard: 1)
-      variation_id: body.variation_id || 0, // Variations-ID (falls zutreffend)
-      cart_item_data: {
-        config_text: body.config_text, // Benutzerdefinierte Daten
-        widerruf_accepted: body.widerruf_accepted, // Widerrufsrecht akzeptiert
-      },
-      billing_info: { // Rechnungsinformationen (falls benötigt)
-        first_name: body.billing_first_name,
-        last_name: body.billing_last_name,
-        address_1: body.billing_address_1,
-        city: body.billing_city,
-        postcode: body.billing_postcode,
-        country: body.billing_country,
-        email: body.billing_email,
-      },
+      product_id: body.product_id,
+      anlage_nummer: body.Anlage,
+      price: body.price,
+      quantity: body.quantity,
+      config_text: body.config_text,
+      widerruf_accepted: body.widerruf_accepted,
+      billing_first_name: body.billing_first_name,
+      billing_last_name: body.billing_last_name,
+      billing_address_1: body.billing_address_1,
+      billing_city: body.billing_city,
+      billing_postcode: body.billing_postcode,
+      billing_country: body.billing_country,
+      billing_email: body.billing_email
     };
 
     // 🔍 Debugging: Request-Daten ausgeben
-    console.log('📤 Sende folgende Daten an CoCart:', JSON.stringify(payload, null, 2));
+    console.log('📤 Sende folgende Daten an WooCommerce:', JSON.stringify(payload, null, 2));
 
-    // 📨 Anfrage an CoCart senden
-    const response = await $fetch(cocartApiUrl, {
+    // 📨 Anfrage an WooCommerce senden
+    const response = await $fetch(woocommerceApiUrl, {
       method: 'POST',
       body: payload,
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': cookies, // Cookies für die Session-Übermittlung
+        
       },
-      credentials: 'include', // Wichtig für Session-Cookies
+      credentials: 'include' // Wichtig für Session-Cookies
     });
 
     // ✅ Debug: API-Antwort anzeigen
-    console.log('✅ CoCart API Response:', response);
+    console.log('✅ WooCommerce API Response:', response);
 
     // 🎉 Erfolgreiche Antwort zurückgeben
     return {
       success: true,
-      message: 'Produkt erfolgreich zum Warenkorb hinzugefügt',
+      message: 'Produkt erfolgreich hinzugefügt',
       data: response,
-      cookies: cookies, // Zur Prüfung an den Client zurückgeben
+      cookies: cookies // Zur Prüfung an den Client zurückgeben
     };
   } catch (error: any) {
     // ❌ Fehlerbehandlung
-    console.error('❌ Fehler beim Hinzufügen zum Warenkorb:', error);
+    console.error('❌ Fehler beim Hinzufügen:', error);
 
     return {
       success: false,
-      message: 'Fehler beim Hinzufügen des Produkts zum Warenkorb',
-      error: error?.data || error?.message || 'Unbekannter Fehler',
+      message: 'Fehler beim Hinzufügen des Produkts',
+      error: error?.data || error?.message || 'Unbekannter Fehler'
     };
   }
 });

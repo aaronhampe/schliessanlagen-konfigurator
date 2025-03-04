@@ -327,56 +327,37 @@ function compareUseCase(a, b, focus) {
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  const apiUrl = "https://www.stt-shop.de/wp-json/cocart/v2/cart/add-item";
-
-  const payload = {
-    id: productID, // Geändert von `product_id` zu `id`
-    quantity: 1,
-    price: price,
-    cart_item_data: {
+  fetch("./api/wc-cart-add-item", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials:"include",
+    body: JSON.stringify({
+      product_id: productID,
+      price,
+      quantity: 1,
+      Anlage: anlageNr,
       config_text: fullConfiguration,
       widerruf_accepted: true,
       measured_correctly: true,
       lieferzeiten_accepted: true,
-      system_name: systemName,
-    },
-  };
-
-  console.log("Sende Payload an CoCart:", JSON.stringify(payload, null, 2));
-
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Cookie": document.cookie, // Aktuelle Cookies senden
-    },
-    credentials: "include",
-    body: JSON.stringify(payload),
+    }),
   })
-    .then((response) => {
-      console.log("API Response Status:", response.status);
-      if (!response.ok) {
-        return response.json().then((err) => {
-          throw new Error(`API Error: ${err.message || "Unknown error"}`);
-        });
-      }
-      return response.json();
-    })
+    .then((r) => r.json())
     .then((result) => {
-      console.log("API Response Data:", result);
       if (result.success) {
-        const cartUrl = result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
-        const cartKey = result.data.cart_key;
-        const finalUrl = cartKey
-          ? `${cartUrl}?cocart-load-cart=${cartKey}`
-          : cartUrl;
+        const cartUrl =
+          result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
+          const cartKey = result.data.cart_key;
+          const finalUrl = cartKey
+            ? `${cartUrl}?cocart-load-cart=${cartKey}`
+            : cartUrl;
         window.open(finalUrl, "_blank");
-      } else {
-        console.error("Fehler beim Hinzufügen zum Warenkorb:", result.message);
       }
     })
-    .catch((error) => {
-      console.error("Fehler beim Hinzufügen zum Warenkorb:", error);
+    .catch((err) => {
+      console.log("Fehler beim Hinzufügen zum Warenkorb:", err);
     });
 }
 
