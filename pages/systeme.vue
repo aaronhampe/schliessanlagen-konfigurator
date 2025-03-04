@@ -325,50 +325,51 @@ function compareUseCase(a, b, focus) {
 
 // In den Warenkorb legen (gleich geblieben)
 function addToCart(systemName, price, productID) {
-  // Generiere die Konfigurationsbeschreibung
   const fullConfiguration = generateConfigurationText();
 
-  // API-Endpunkt für CoCart
-  const apiUrl = "./api/wc-cart-add-item"; // Stelle sicher, dass dies auf deinen CoCart-Endpunkt zeigt
+  const apiUrl = "https://www.stt-shop.de/wp-json/cocart/v2/add-item";
 
-  // Payload für CoCart
   const payload = {
-    product_id: productID, // Produkt-ID
-    quantity: 1, // Menge
-    price: price, // Preis
+    product_id: productID,
+    quantity: 1,
+    price: price,
     cart_item_data: {
-      config_text: fullConfiguration, // Benutzerdefinierte Konfiguration
-      widerruf_accepted: true, // Widerrufsrecht akzeptiert
-      measured_correctly: true, // Korrekt gemessen
-      lieferzeiten_accepted: true, // Lieferzeiten akzeptiert
-      system_name: systemName, // Systemname (falls benötigt)
+      config_text: fullConfiguration,
+      widerruf_accepted: true,
+      measured_correctly: true,
+      lieferzeiten_accepted: true,
+      system_name: systemName,
     },
   };
 
-  // Anfrage an die CoCart-API senden
+  console.log("Sende Payload an CoCart:", JSON.stringify(payload, null, 2));
+
   fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Cookie": document.cookie, // Aktuelle Cookies senden
     },
-    credentials: "include", // Cookies für die Session-Übermittlung
+    credentials: "include",
     body: JSON.stringify(payload),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      console.log("API Response Status:", response.status);
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(`API Error: ${err.message || "Unknown error"}`);
+        });
+      }
+      return response.json();
+    })
     .then((result) => {
+      console.log("API Response Data:", result);
       if (result.success) {
-        // URL des Warenkorbs
         const cartUrl = result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
-
-        // Cart-Key (falls vorhanden)
         const cartKey = result.data.cart_key;
-
-        // Finale URL mit Cart-Key (falls benötigt)
         const finalUrl = cartKey
           ? `${cartUrl}?cocart-load-cart=${cartKey}`
           : cartUrl;
-
-        // Öffne den Warenkorb in einem neuen Tab
         window.open(finalUrl, "_blank");
       } else {
         console.error("Fehler beim Hinzufügen zum Warenkorb:", result.message);
