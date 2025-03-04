@@ -330,7 +330,7 @@ function addToCart(systemName, price, productID) {
   const apiUrl = "https://www.stt-shop.de/wp-json/cocart/v2/cart/add-item";
 
   const payload = {
-    product_id: productID,
+    id: productID, // Geändert von `product_id` zu `id`
     quantity: 1,
     price: price,
     cart_item_data: {
