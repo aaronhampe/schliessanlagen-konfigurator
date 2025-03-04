@@ -327,7 +327,7 @@ function compareUseCase(a, b, focus) {
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  const apiUrl = "https://www.stt-shop.de/wp-json/cocart/v2/add-item";
+  const apiUrl = "https://www.stt-shop.de/wp-json/cocart/v2/cart/add-item";
 
   const payload = {
     product_id: productID,
