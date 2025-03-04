@@ -8,9 +8,7 @@ export default defineEventHandler(async (event) => {
     // 🛒 WooCommerce-API-Endpunkt
     const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
 
-    // 🍪 Cookies auslesen
-    const cookies = getHeader(event, 'cookie') || '';
-    console.log('🔍 Empfangene Cookies:', cookies);
+    
 
     // 📦 Request-Payload
     const payload = {
@@ -38,9 +36,9 @@ export default defineEventHandler(async (event) => {
       body: payload,
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': cookies
+        
       },
-      credentials: 'include' // Wichtig für Session-Cookies
+      
     });
 
     // ✅ Debug: API-Antwort anzeigen
@@ -51,7 +49,7 @@ export default defineEventHandler(async (event) => {
       success: true,
       message: 'Produkt erfolgreich hinzugefügt',
       data: response,
-      cookies: cookies // Zur Prüfung an den Client zurückgeben
+      
     };
   } catch (error: any) {
     // ❌ Fehlerbehandlung
