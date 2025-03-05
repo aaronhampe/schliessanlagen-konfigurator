@@ -1023,7 +1023,7 @@ export default {
       document.removeEventListener("click", this.closeAllDropdowns);
     },
     testaddproduct(){
-      const apiUrl = 'https://yourshop.com/wp-json/custom/v1/addproducttest';
+      const apiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/addproducttest';
 const loading = ref(false);
 
 const addProductToCart = async () => {
