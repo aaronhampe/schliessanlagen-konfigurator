@@ -1022,30 +1022,26 @@ export default {
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
     },
-    testaddproduct(){
-      const apiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/addproducttest';
-const loading = ref(false);
+    async testaddproduct(){
+      
+     
+    
 
-const addProductToCart = async () => {
-  loading.value = true;
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
+    const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',  // Wichtiger Header
+      },
+      body: JSON.stringify({}), // Hier keine Daten, wie du es möchtest
     });
-    const data = await response.json();
-    console.log('Erfolgreich hinzugefügt:', data);
-  } catch (error) {
-    console.error('Fehler beim Hinzufügen:', error);
-  } finally {
-    loading.value = false;
-  }
-};
+
+    const data = await response.json(); // Antwort als JSON parsen
+    console.log(data);  // Daten anzeigen
+
+     },
+     
     }
-  },
-};
+  };
 </script>
 
 <style lang="scss">
