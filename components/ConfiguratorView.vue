@@ -181,7 +181,7 @@
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
         <UButton v-if="showLoadButton" class="button-default" 
-          @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Test
+          @click="testaddproduct" size="sm" color="amber" variant="solid" :trailing="false">Test
         </UButton>
 
       </div>
