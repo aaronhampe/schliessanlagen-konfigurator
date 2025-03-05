@@ -180,6 +180,9 @@
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
+        <UButton v-if="showLoadButton" class="button-default" 
+          @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton>
 
       </div>
     </div>
@@ -1019,6 +1022,28 @@ export default {
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
     },
+    testaddproduct(){
+      const apiUrl = 'https://yourshop.com/wp-json/custom/v1/addproducttest';
+const loading = ref(false);
+
+const addProductToCart = async () => {
+  loading.value = true;
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    console.log('Erfolgreich hinzugefügt:', data);
+  } catch (error) {
+    console.error('Fehler beim Hinzufügen:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+    }
   },
 };
 </script>
