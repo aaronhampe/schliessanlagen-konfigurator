@@ -1027,19 +1027,25 @@ export default {
      
     
 
-    const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',  // Wichtiger Header
-      },
-      body: JSON.stringify({}), // Hier keine Daten, wie du es möchtest
-    });
+      const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
+  method: "POST",
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({}), // No data sent as per your request
+});
 
-    const data = await response.json(); // Antwort als JSON parsen
-    console.log(data);  // Daten anzeigen
+if (!response.ok) {
+  console.error('Request failed with status:', response.status);
+} else {
+  try {
+    const data = await response.json(); // Try parsing the response as JSON
+    console.log(data);  // Log the data
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+  }
+},
 
-     },
-     
     }
   };
 </script>
