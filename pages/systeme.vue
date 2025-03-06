@@ -329,6 +329,7 @@ function addToCart(systemName, price, productID) {
 
   fetch("./api/wc-cart-add-item", {
     method: "POST",
+    //
     headers: {
       "Content-Type": "application/json",
     },
