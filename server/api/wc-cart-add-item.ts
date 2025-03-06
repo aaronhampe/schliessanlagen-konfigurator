@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       headers: {
         'Content-Type': 'application/json',
         
-      },
+      }
     });
 
     // ✅ Debug: API-Antwort anzeigen
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
       success: true,
       message: 'Produkt erfolgreich hinzugefügt',
       data: response,
-      cookies: cookies // Zur Prüfung an den Client zurückgeben
+      
     };
   } catch (error: any) {
     // ❌ Fehlerbehandlung
