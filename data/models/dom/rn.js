@@ -1,6 +1,6 @@
 export default {
     isSchliessanlage: false,
-    image: "/images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
+    image: "./images/dom-rn-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 3.16,
     productID: 28717,
     useCase: "privat", 
