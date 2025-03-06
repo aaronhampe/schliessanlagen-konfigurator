@@ -343,10 +343,7 @@ function addToCart(systemName, price, productID) {
 
   })
     
-    
-    
-       
-        window.open(https://www.stt-shop.de/warenkorb/, "_blank");
+  window.open(https://www.stt-shop.de/warenkorb/, "_blank");
       
     
     
