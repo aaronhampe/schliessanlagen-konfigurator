@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       headers: {
         'Content-Type': 'application/json',
         
-      }
+      },
     });
 
     // ✅ Debug: API-Antwort anzeigen
