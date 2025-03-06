@@ -334,19 +334,8 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },    
     body:JSON.stringify({
-      product_id: productID,
-      anlage_nummer: anlageNr,
-      price: price,
-      quantity: 1,
-      config_text: fullConfiguration,
-      widerruf_accepted: true,
-      billing_first_name: 'Name',
-      billing_last_name: 'Name',
-      billing_address_1: 'Adresse',
-      billing_city: 'Stadt',
-      billing_postcode: 'PLZ',
-      billing_country: 'Country',
-      billing_email: 'EMail'
+      product_id: productID
+   
     }),
 
   })
