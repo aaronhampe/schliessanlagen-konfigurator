@@ -730,7 +730,7 @@ onMounted(async () => {
       <div class="modal-footer">
         <UButton
           :disabled="!allRequiredChecked"
-          color="amber"
+          color="blue"
           variant="solid"
           @click="confirmPurchase"
         >
