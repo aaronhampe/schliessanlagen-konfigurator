@@ -22,7 +22,6 @@
     "@pinia/nuxt": "^0.5.5",
     "@prisma/client": "^5.14.0",
     "axios": "^1.7.7",
-    "cors": "^2.8.5",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.11",
     "pinia": "^2.2.6",

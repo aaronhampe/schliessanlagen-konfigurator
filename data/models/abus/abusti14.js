@@ -1,6 +1,6 @@
 export default {
   isSchliessanlage: false,
-  image: "/images/abus-ti14-doppelzylinder-logo-500x500.png",
+  image: "./images/abus-ti14-doppelzylinder-logo-500x500.png",
   keyPrice: 2.31,
   productID: 28487,
   useCase: "privat", 
