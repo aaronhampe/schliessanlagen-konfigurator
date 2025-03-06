@@ -180,11 +180,7 @@
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        <UButton v-if="showLoadButton" class="button-default" @click="testaddproduct" size="sm" color="amber"
-          variant="solid" :trailing="false">Test
-        </UButton>
-
-      </div>
+        </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
       variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
@@ -1021,31 +1017,8 @@ export default {
     },
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
-    },
-    async testaddproduct() {
-
-
-
-
-      const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}), // No data sent as per your request
-      });
-
-      if (!response.ok) {
-        console.error('Request failed with status:', response.status);
-      } else {
-        try {
-          const data = await response.json(); // Try parsing the response as JSON
-          console.log(data);  // Log the data
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-        }
-      }
     }
+    
   }
 };
 </script>
