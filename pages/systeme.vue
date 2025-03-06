@@ -334,8 +334,10 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },    
     body:JSON.stringify({
-      product_id: productID
-   
+      product_id: productID,
+      quantity: 1,
+      config_text: fullConfiguration,
+      widerruf_accepted: true,
     }),
 
   })
