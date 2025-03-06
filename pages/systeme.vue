@@ -345,13 +345,8 @@ function addToCart(systemName, price, productID) {
     
     
     
-        const cartUrl =
-          result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
-         // const cartKey = result.data.cart_key;
-         const finalUrl = cartKey
-            ? `${cartUrl}?cocart-load-cart=${cartKey}`
-            : cartUrl;
-        window.open(finalUrl, "_blank");
+       
+        window.open(https://www.stt-shop.de/warenkorb/, "_blank");
       
     
     
