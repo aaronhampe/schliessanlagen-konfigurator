@@ -33,7 +33,8 @@ export default defineEventHandler(async (event) => {
     const response = await $fetch(woocommerceApiUrl, {
       method: 'POST',
       credentials: "include", // Cookies mitsenden,
-      body: payload,
+      body: JSON.stringify({}),
+      //body: payload,
       headers: {
         'Content-Type': 'application/json',
         
