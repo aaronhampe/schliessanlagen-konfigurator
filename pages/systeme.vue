@@ -334,12 +334,7 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },    
     body: {
-      product_id: productID,
-      anlage_nummer: anlageNr,
-      price: price,
-      quantity: 1,
-      config_text: fullConfiguration,
-      widerruf_accepted: true,
+      product_id: productID
     },
 
   })
