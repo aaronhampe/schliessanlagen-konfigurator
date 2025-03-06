@@ -1027,7 +1027,7 @@ export default {
 
 
 
-      const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
+      const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
