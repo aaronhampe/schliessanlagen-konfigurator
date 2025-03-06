@@ -324,30 +324,36 @@ function compareUseCase(a, b, focus) {
 }
 
 // In den Warenkorb legen (gleich geblieben)
-function addToCart(systemName, price, productID) {
+async function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
-  
 
-  fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },    
-    body:JSON.stringify({
-      product_id: productID,
-      price: price,
-      quantity: 1,
-      config_text: fullConfiguration,
-      widerruf_accepted: true,
-    }),
-//////////
-  })
-    
-  window.open(https://www.stt-shop.de/warenkorb/, "_blank");
-      
-    
-    
+  try {
+    const response = await fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        product_id: productID,
+        price: price,
+        quantity: 1,
+        config_text: fullConfiguration,
+        widerruf_accepted: true,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to add to cart: ${response.statusText}`);
+    }
+
+    // Open cart only after item is successfully added
+    window.open("https://www.stt-shop.de/warenkorb/", "_blank");
+
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
 }
+
 
 // onMounted => Positionen, Schlüssel, Matrix laden
 onMounted(async () => {
