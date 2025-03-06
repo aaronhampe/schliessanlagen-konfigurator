@@ -327,7 +327,7 @@ function compareUseCase(a, b, focus) {
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  $fetch("./api/wc-cart-add-item", {
+  fetch("./api/wc-cart-add-item", {
     method: "POST",
     //
     headers: {
