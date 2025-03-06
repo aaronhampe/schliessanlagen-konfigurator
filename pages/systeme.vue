@@ -327,15 +327,23 @@ function compareUseCase(a, b, focus) {
 function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  fetch("https://www.stt-shop.de/wp-json/custom/v1/add_to_cart", {
+  $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
     method: "POST",
     //
     headers: {
       "Content-Type": "application/json",
     },
     
-   body: JSON.stringify({}), // No data sent as per your request,
-  
+    body: JSON.stringify({
+      product_id: productID,
+      price,
+      quantity: 1,
+      Anlage: anlageNr,
+      config_text: fullConfiguration,
+      widerruf_accepted: true,
+      measured_correctly: true,
+      lieferzeiten_accepted: true,
+    }),
   })
     .then((r) => r.json())
     .then((result) => {
