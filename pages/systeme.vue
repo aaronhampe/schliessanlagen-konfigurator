@@ -340,7 +340,7 @@ function addToCart(systemName, price, productID) {
       config_text: fullConfiguration,
       widerruf_accepted: true,
     }),
-
+/////////////////////////////////////////////
   })
     
   window.open(https://www.stt-shop.de/warenkorb/, "_blank");
