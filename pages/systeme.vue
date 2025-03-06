@@ -342,9 +342,9 @@ function addToCart(systemName, price, productID) {
     }),
 
   })
-    .then((r) => r.json())
-    .then((result) => {
-      if (result.success) {
+    
+    
+    
         const cartUrl =
           result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
          // const cartKey = result.data.cart_key;
@@ -352,11 +352,9 @@ function addToCart(systemName, price, productID) {
             ? `${cartUrl}?cocart-load-cart=${cartKey}`
             : cartUrl;
         window.open(finalUrl, "_blank");
-      }
-    })
-    .catch((err) => {
-      console.log("Fehler beim Hinzufügen zum Warenkorb:", err);
-    });
+      
+    
+    
 }
 
 // onMounted => Positionen, Schlüssel, Matrix laden
