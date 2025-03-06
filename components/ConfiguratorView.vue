@@ -251,7 +251,7 @@ const sendHeight = () => {
 
 onMounted(sendHeight);
 onUpdated(sendHeight);
-
+setInterval(sendHeight, 500);
 
 
 export default {
