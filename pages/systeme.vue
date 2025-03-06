@@ -334,16 +334,7 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },
     
-    body: JSON.stringify({
-      product_id: productID,
-      price,
-      quantity: 1,
-      Anlage: anlageNr,
-      config_text: fullConfiguration,
-      widerruf_accepted: true,
-      measured_correctly: true,
-      lieferzeiten_accepted: true,
-    }),
+    body: JSON.stringify({}),
   })
     .then((r) => r.json())
     .then((result) => {
