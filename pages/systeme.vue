@@ -333,13 +333,13 @@ function addToCart(systemName, price, productID) {
       quantity: 1,
       config_text: fullConfiguration,
       widerruf_accepted: true,
-      billing_first_name: body.billing_first_name,
-      billing_last_name: body.billing_last_name,
-      billing_address_1: body.billing_address_1,
-      billing_city: body.billing_city,
-      billing_postcode: body.billing_postcode,
-      billing_country: body.billing_country,
-      billing_email: body.billing_email
+      billing_first_name: billing_first_name,
+      billing_last_name: billing_last_name,
+      billing_address_1: billing_address_1,
+      billing_city: billing_city,
+      billing_postcode: billing_postcode,
+      billing_country: billing_country,
+      billing_email: billing_email
     };
 
   $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
@@ -348,7 +348,7 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },    
     body: payload,
-    
+
   })
     .then((r) => r.json())
     .then((result) => {
