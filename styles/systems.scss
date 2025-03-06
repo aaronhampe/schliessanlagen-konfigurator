@@ -1,10 +1,21 @@
+$primary-color: #333333;
+$input-width: 80px;
+$badge-width: 80px;
+
+// Farben (kannst du nach Belieben erweitern oder anpassen)
+$color-amber: #f59e0b;
+$color-red: #dc2626;
+$color-sky: #0ea5e9;
+
 .systeme-page {
   margin: 50px;
   font-size: 18px;
 
   .back-button {
     margin-top: 20px;
-    background-color: #f59e0b !important;
+    border: 2px solid $color-amber;
+    background-color: white;
+    color: $primary-color;
   }
 }
 

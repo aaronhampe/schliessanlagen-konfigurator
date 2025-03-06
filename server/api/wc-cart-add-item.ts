@@ -1,54 +1,66 @@
-// server/api/add-to-cart.ts
-import { defineEventHandler, readBody } from 'h3';
+import { defineEventHandler, readBody, getHeader } from 'h3';
 
 export default defineEventHandler(async (event) => {
-  // Hole die POST-Daten aus der Anfrage
-  const body = await readBody(event);
-
-  // WooCommerce-API-Endpunkt
-  const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
-
-  // Daten, die an WooCommerce-API gesendet werden (Artikel- und Adressdaten)
-  const payload = {
-    product_id: body.product_id,
-    anlage_nummer: body.Anlage,
-    price: body.price,
-    quantity: body.quantity,
-    config_text: body.config_text, 
-    widerruf_accepted: body.widerruf_accepted,
-    billing_first_name: body.billing_first_name,
-    billing_last_name: body.billing_last_name,
-    billing_address_1: body.billing_address_1,
-    billing_city: body.billing_city,
-    billing_postcode: body.billing_postcode,
-    billing_country: body.billing_country,
-    billing_email: body.billing_email
-  };
-
   try {
-    // Anfrage an WooCommerce-API senden
+    // 🔥 POST-Daten auslesen
+    const body = await readBody(event);
+
+    // 🛒 WooCommerce-API-Endpunkt
+    const woocommerceApiUrl = 'https://www.stt-shop.de/wp-json/custom/v1/add_to_cart';
+
+    // 🍪 Cookies auslesen
+    const cookies = getHeader(event, 'cookie') || '';
+    console.log('🔍 Empfangene Cookies:', cookies);
+
+    // 📦 Request-Payload
+    const payload = {
+      product_id: body.product_id,
+      anlage_nummer: body.Anlage,
+      price: body.price,
+      quantity: body.quantity,
+      config_text: body.config_text,
+      widerruf_accepted: body.widerruf_accepted,
+      billing_first_name: body.billing_first_name,
+      billing_last_name: body.billing_last_name,
+      billing_address_1: body.billing_address_1,
+      billing_city: body.billing_city,
+      billing_postcode: body.billing_postcode,
+      billing_country: body.billing_country,
+      billing_email: body.billing_email
+    };
+
+    // 🔍 Debugging: Request-Daten ausgeben
+    console.log('📤 Sende folgende Daten an WooCommerce:', JSON.stringify(payload, null, 2));
+
+    // 📨 Anfrage an WooCommerce senden
     const response = await $fetch(woocommerceApiUrl, {
       method: 'POST',
       body: payload,
       headers: {
         'Content-Type': 'application/json',
-        // Falls WooCommerce eine Authentifizierung benötigt, z.B. mit Basic Auth:
-        // Authorization: 'Basic ' + btoa('consumer_key:consumer_secret')
-      }
+        
+      },
+      credentials: 'include' // Wichtig für Session-Cookies
     });
-console.log(response);
-    // WooCommerce API-Antwort zurückgeben
+
+    // ✅ Debug: API-Antwort anzeigen
+    console.log('✅ WooCommerce API Response:', response);
+
+    // 🎉 Erfolgreiche Antwort zurückgeben
     return {
       success: true,
       message: 'Produkt erfolgreich hinzugefügt',
-      data: response
+      data: response,
+      cookies: cookies // Zur Prüfung an den Client zurückgeben
     };
-  } catch (error) {
-    // Fehlerbehandlung
+  } catch (error: any) {
+    // ❌ Fehlerbehandlung
+    console.error('❌ Fehler beim Hinzufügen:', error);
+
     return {
       success: false,
       message: 'Fehler beim Hinzufügen des Produkts',
-      error: error
+      error: error?.data || error?.message || 'Unbekannter Fehler'
     };
   }
 });

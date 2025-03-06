@@ -180,6 +180,9 @@
         <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
+        <UButton v-if="showLoadButton" class="button-default" 
+          @click="testaddproduct" size="sm" color="amber" variant="solid" :trailing="false">Test
+        </UButton>
 
       </div>
     </div>
@@ -243,6 +246,7 @@
 <script>
 import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
+
 
 export default {
   components: {
@@ -713,7 +717,7 @@ export default {
     async test() {
       console.log("test");
       try {
-        const response = await fetch("/api/wc-cart-add-item", {
+        const response = await fetch("./api/wc-cart-add-item", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -792,7 +796,7 @@ export default {
         let antwort;
         do {
           this.generateRandomAnlagenNummer();
-          const response = await $fetch("/api/sqltestanlage?ID=" + this.anlageNr, {
+          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
             method: "post",
           });
           antwort = response.message;
@@ -800,7 +804,7 @@ export default {
       }
 
       // 4) Anlage in der DB speichern
-      const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
+      const queryresultanlage = await $fetch("./api/sqlpostanlageneu", {
         method: "post",
         body: {
           ID: this.anlageNr,
@@ -826,7 +830,7 @@ export default {
           Option: (row[0].optionsSelected || []).join(", "),
         }));
 
-        const queryresultposition = await $fetch("/api/sqlpostposition?ID=" + this.anlageNr, {
+        const queryresultposition = await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
           method: "post",
           body: RowObject,
         });
@@ -838,7 +842,7 @@ export default {
           keyquantity: col.keyquantity || 1,
         }));
 
-        const queryresultschluessel = await $fetch("/api/sqlpostschluessel?ID=" + this.anlageNr, {
+        const queryresultschluessel = await $fetch("./api/sqlpostschluessel?ID=" + this.anlageNr, {
           method: "post",
           body: KeyNameObject,
         });
@@ -852,7 +856,7 @@ export default {
           }))
         );
 
-        const queryresultmatrix = await $fetch("/api/sqlpostmatrix?ID=" + this.anlageNr, {
+        const queryresultmatrix = await $fetch("./api/sqlpostmatrix?ID=" + this.anlageNr, {
           method: "post",
           body: Matrix,
         });
@@ -874,7 +878,7 @@ export default {
       this.rows[0].length = 1;
 
       // Daten für die Anlage
-      const queryresultanlage = await $fetch("/api/sqlgetanlage", {
+      const queryresultanlage = await $fetch("./api/sqlgetanlage", {
         method: "post",
         body: { ID: this.id },
       });
@@ -896,7 +900,7 @@ export default {
         this.store.setModel(loadedModel);
       }
 
-      const queryresultposition = await $fetch("/api/sqlgetposition", {
+      const queryresultposition = await $fetch("./api/sqlgetposition", {
         method: "post",
         body: { ID: this.id },
       });
@@ -928,7 +932,7 @@ export default {
           .filter(Boolean)
       })
 
-      const queryresultschluessel = await $fetch("/api/sqlgetschluessel", {
+      const queryresultschluessel = await $fetch("./api/sqlgetschluessel", {
         method: "post",
         body: { ID: this.id },
       });
@@ -947,7 +951,7 @@ export default {
         this.rows[0][spalte].keyquantity = item.Anzahl;
       });
 
-      const queryresultmatrix = await $fetch("/api/sqlgetmatrix", {
+      const queryresultmatrix = await $fetch("./api/sqlgetmatrix", {
         method: "post",
         body: { ID: this.id },
       });
@@ -1018,10 +1022,34 @@ export default {
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
     },
+    async testaddproduct(){
+      
+     
+    
+
+      const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
+  method: "POST",
+  headers: {
+    'Content-Type': 'application/json',
   },
-};
+  body: JSON.stringify({}), // No data sent as per your request
+});
+
+if (!response.ok) {
+  console.error('Request failed with status:', response.status);
+} else {
+  try {
+    const data = await response.json(); // Try parsing the response as JSON
+    console.log(data);  // Log the data
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+  }
+},
+
+    }
+  };
 </script>
 
 <style lang="scss">
-@import "./styles/configurator.scss";
+@import "/styles/configurator.scss";
 </style>
