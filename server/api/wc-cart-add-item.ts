@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     console.log('📤 Sende folgende Daten an WooCommerce:', JSON.stringify(payload, null, 2));
 
     // 📨 Anfrage an WooCommerce senden
-    const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/addproducttest', {
+    const response = await $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
