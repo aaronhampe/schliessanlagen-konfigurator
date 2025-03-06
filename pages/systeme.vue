@@ -333,7 +333,7 @@ function addToCart(systemName, price, productID) {
       "Content-Type": "application/json",
     },    
     body: JSON.stringify({
-      product_id: product_id,
+      product_id: productID,
       anlage_nummer: anlageNr,
       price: price,
       quantity: 1,
