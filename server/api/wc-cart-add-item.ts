@@ -32,6 +32,7 @@ export default defineEventHandler(async (event) => {
     // 📨 Anfrage an WooCommerce senden
     const response = await $fetch(woocommerceApiUrl, {
       method: 'POST',
+      credentials: "include", // Cookies mitsenden,
       body: payload,
       headers: {
         'Content-Type': 'application/json',
