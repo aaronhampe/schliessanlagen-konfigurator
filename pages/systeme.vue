@@ -335,6 +335,7 @@ function addToCart(systemName, price, productID) {
     },    
     body:JSON.stringify({
       product_id: productID,
+      price: price,
       quantity: 1,
       config_text: fullConfiguration,
       widerruf_accepted: true,
