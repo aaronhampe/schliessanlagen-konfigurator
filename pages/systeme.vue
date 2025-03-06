@@ -330,6 +330,7 @@ async function addToCart(systemName, price, productID) {
   try {
     const response = await fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
       method: "POST",
+      credentials: "include", 
       headers: {
         "Content-Type": "application/json",
       },
