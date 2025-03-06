@@ -342,7 +342,7 @@ function addToCart(systemName, price, productID) {
       billing_email: 'EMail'
     };
 
-  $fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
+  fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
