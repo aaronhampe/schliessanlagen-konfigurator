@@ -599,7 +599,7 @@ export default {
         name: "systeme",
         query: {
           anlageNr: this.anlageNr,
-          isSchliessanlage: this.isSchliessanlage,
+          isSchliessanlage: this.store.isSchliessanlage,
         },
       });
     },
@@ -872,7 +872,7 @@ export default {
           name: "systeme",
           query: {
             anlageNr: this.anlageNr,
-            isSchliessanlage: this.isSchliessanlage,
+            isSchliessanlage: this.store.isSchliessanlage,
           },
         });
       }
