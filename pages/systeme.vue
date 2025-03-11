@@ -415,6 +415,7 @@ onMounted(async () => {
         features: modelConfig.features || [],
         infoText: modelConfig.infoText || "",
         securityLevel: modelConfig.securityLevel || 1,
+        deliveryTime: modelConfig.deliveryTime || "Lieferzeit nicht definiert",
       };
     });
 
@@ -483,9 +484,13 @@ onMounted(async () => {
     }}
             </strong>
           </div>
+          <div class="offer-delivery">
+            <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
+          </div>
           <div class="offer-price">
-            Gesamtpreis: 
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl. Versand</span>
+            Gesamtpreis:
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl.
+              Versand</span>
           </div>
           <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
             @click="openSummary(selectedModelOffer)">
@@ -531,9 +536,13 @@ onMounted(async () => {
     }}
               </strong>
             </div>
+            <div class="offer-delivery">
+              <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
+            </div>
             <div class="offer-price">
               Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl. Versand</span>
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl.
+                Versand</span>
             </div>
             <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
               System auswählen

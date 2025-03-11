@@ -3,14 +3,15 @@ export default {
     image: "./images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
     keyPrice: 7.67,
     productID: 28709,
-    useCase: "privat & gewerblich", 
-    securityLevel: 8, 
+    useCase: "privat & gewerblich",
+    securityLevel: 8,
     features: [
         "Hochsicherheitszylinder für extreme Sicherheit",
         "Flexibles und anpassbares Schließsystem",
         "Zertifiziert nach DIN EN 1303",
     ],
     infoText: `Der DOM RS Sigma ist ein zuverlässiger und kosteneffizienter Profilzylinder, der optimalen Schutz und einfache Handhabung kombiniert. Entwickelt für den Einsatz in privaten und gewerblichen Gebäuden, bietet der DOM RS Sigma bewährte Sicherheitstechnologie und hohen Einbruchschutz. Besonders geeignet für Schließanlagen, ermöglicht dieser Zylinder eine flexible und sichere Zutrittskontrolle für verschiedene Nutzergruppen.`,
+    deliveryTime: "Eine Woche",
 
     ////////////////////////////////////////////////////////////////////////
     // DOPPELZYLINDER

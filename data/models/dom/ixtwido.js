@@ -3,15 +3,16 @@ export default {
     image: "./images/dom-ix-twido-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 8.35,
     productID: 28348,
-    useCase: "gewerblich", 
-    securityLevel: 10, 
+    useCase: "gewerblich",
+    securityLevel: 10,
     features: [
-        "Hochsicherheitszylinder für extreme Sicherheit", 
+        "Hochsicherheitszylinder für extreme Sicherheit",
         "Flexibles und anpassbares Schließsystem",
         "Inklusive Not- und Gefahrenfunktion",
 
     ],
     infoText: `Der DOM IX Twido bietet höchste Sicherheit und vielseitige Einsatzmöglichkeiten, optimal für Mehrfamilienhäuser, Betriebsgebäude oder Sicherheitsliebhaber. Mit seiner 360°-Freilauffunktion (333FRL) und der optionalen Abschließmöglichkeit (333T) bietet er Flexibilität und Sicherheit. Er lässt sich nahtlos in alle DOM-Schließsysteme integrieren und ist optional in einer seewasserbeständigen Ausführung erhältlich. Das verlängerte Schlüsselblatt sorgt für hervorragendes Handling, auch bei Sicherheitsbeschlägen. Im Lieferumfang ist eine Sicherungskarte enthalten, und durch die modulare Bauweise sowie den ClipTag kann der IX Twido mit elektronischen Systemen kombiniert werden. Optimaler Abreiß- und Ziehschutz sowie diverse Sicherheitsfeatures machen ihn zur idealen Wahl für anspruchsvolle Sicherheitsbedürfnisse.`,
+    deliveryTime: "Eine Woche",
 
     ////////////////////////////////////////////////////////////////////////
     // DOPPELZYLINDER

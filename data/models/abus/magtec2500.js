@@ -11,7 +11,11 @@ export default {
         "Zertifiziert nach DIN 18252 und DIN EN 1303",
     ],
     infoText: `Das Magtec-Schließsystem von ABUS erfüllt höchste Sicherheitsansprüche, wie das unabhängige SKG-Prüfinstitut mit der Sicherheitsklasse SKG*** bestätigt. Die fortschrittliche Magnettechnologie im Zylinder und am Schlüssel bietet einen besonders zuverlässigen Schutz gegen illegale Schlüsselkopien und Manipulationen des Schließsystems. Dazu zählen Methoden wie Picking sowie gewaltsames Aufbrechen durch Aufbohren oder Herausziehen des Zylinderkerns. Mit Magtec sind Sie hinsichtlich Türsicherheit zukunftssicher.`,
+    deliveryTime: "2-3 Werktage",
 
+    ////////////////////////////////////////////////////////////////////////
+    // DOPPELZYLINDER
+    ////////////////////////////////////////////////////////////////////////
     Doppelzylinder: {
         sizes: [
             ///////

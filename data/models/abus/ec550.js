@@ -3,8 +3,8 @@ export default {
   image: "./images/abus-ec550-doppelzylinder-logo-500x500.png",
   keyPrice: 4.31,
   productID: 28336,
-  useCase: "privat", 
-  securityLevel: 5, 
+  useCase: "privat",
+  securityLevel: 5,
   features: [
     "Anbohrschutz durch gehärtete Stahlstifte",
     "Inklusive Not- und Gefahrenfunktion",
@@ -12,7 +12,8 @@ export default {
   ],
   infoText: `Steigern Sie die Sicherheit Ihrer Haus- und Wohnungstüren mit diesem Türzylinder, der mit einem praktischen Wendeschlüssel geliefert wird. 
 
-Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsversuche schützen. Dieser Zylinder ist mit einem SKG**-Anbohrschutz ausgestattet und bietet durch seine acht Schließelemente in zwei unabhängigen Stiftreihen besonders hohen Schutz. Zusätzlich verfügt er über eine Not- und Gefahrenfunktion, die es ermöglicht, die Tür beidseitig zu schließen, selbst wenn ein Schlüssel auf einer Seite steckt.`,
+  Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsversuche schützen. Dieser Zylinder ist mit einem SKG**-Anbohrschutz ausgestattet und bietet durch seine acht Schließelemente in zwei unabhängigen Stiftreihen besonders hohen Schutz. Zusätzlich verfügt er über eine Not- und Gefahrenfunktion, die es ermöglicht, die Tür beidseitig zu schließen, selbst wenn ein Schlüssel auf einer Seite steckt.`,
+  deliveryTime: "2-3 Werktage",
 
   ////////////////////////////////////////////////////////////////////////
   // DOPPELZYLINDER
@@ -102,7 +103,7 @@ Ein zuverlässiger Türzylinder muss Ihre Türen jederzeit gegen Manipulationsve
       { outside: 100, inside: 30, price: 49.56 },
 
       { outside: 110, inside: 30, price: 49.56 },
-      
+
       { outside: 120, inside: 30, price: 49.56 },
     ],
     options: ["Not- & Gefahrenfunktion"],

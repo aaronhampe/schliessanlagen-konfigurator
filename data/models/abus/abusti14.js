@@ -3,15 +3,19 @@ export default {
   image: "./images/abus-ti14-doppelzylinder-logo-500x500.png",
   keyPrice: 2.31,
   productID: 28487,
-  useCase: "privat", 
-  securityLevel: 3, 
+  useCase: "privat",
+  securityLevel: 3,
   features: [
     "Entspricht DIN EN 1303, ISO 9001:2015",
     "Inklusive Not- und Gefahrenfunktion",
     "Zylinderkörper aus TITALIUM Spezialaluminium",
   ],
   infoText: `Der ABUS TI14 Profilzylinder bietet einen preiswerten Einstieg in die Welt von ABUS, ohne dabei auf Komfort zu verzichten. Für die Nachbestellung von Schlüsseln und Zylindern bei uns erhalten Sie einen Codeschlüssel mit einer individuellen Code-Nummer, die es Ihnen ermöglicht, weitere Schlüssel und Zylinder ganz unkompliziert bei uns nachzubestellen. Schlüsseldienste können nach Muster in der Regel Schlüssel anfertigen.`,
+  deliveryTime: "2-3 Werktage",
 
+  ////////////////////////////////////////////////////////////////////////
+  // DOPPELZYLINDER
+  ////////////////////////////////////////////////////////////////////////
   Doppelzylinder: {
     sizes: [
       { outside: 28, inside: 34, price: 13.63 },

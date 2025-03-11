@@ -65,6 +65,19 @@ $color-sky: #0ea5e9;
   padding: 15px;
 }
 
+.offer-delivery {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2a2a2a;
+  background-color: #eef5ff;
+  border: 1px solid #cce0ff;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
 .offer-price {
   font-size: 16px;
   margin-bottom: 10px;
