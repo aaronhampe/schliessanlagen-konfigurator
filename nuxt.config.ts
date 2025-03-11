@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     MAILPASSWORD: process.env.MAILPASSWORD,
     CONTACTMAIL: process.env.CONTACTMAIL,
   },
-
+//
   pages: true,
 
   css: ['@/scss/main.scss'],
