@@ -264,12 +264,13 @@ export default {
       anlageNr: "",
       object: "",
       id: "",
-      password: "",
+      password: "testPW",
       email: "",
       name: "",
       phone: "",
       company: "",
       typ: "",
+      protect: 0,
       modalStates: {},
       isOpen: false,
       isOpenL: false,
@@ -821,6 +822,8 @@ export default {
           Firma: this.company,
           Typ: this.typ,
           Modell: this.store.selectedModel,
+          protect: this.protect,
+          Password: this.password
         },
       });
 
@@ -904,6 +907,8 @@ export default {
 
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
+        this.protect = queryresultanlage.queryresult[0].protect || "";
+        this.Password = queryresultanlage.queryresult[0].Password || "";
       }
 
       const queryresultposition = await $fetch("./api/sqlgetposition", {

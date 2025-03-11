@@ -15,12 +15,15 @@ export default defineEventHandler(async (event) => {
     const Firma = body.Firma 
     const Typ = body.Typ
     const Modell = body.Modell
+    const protect = body.protect
+    const Password = body.Password
 
-    console.log("Speichere folgende Daten:", { ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell });
+
+    console.log("Speichere folgende Daten:", { ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell, protect, Password });
 
     const queryresult = await prisma.$queryRaw`
-    INSERT INTO  Anlage (ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell)
-    VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Telefon}, ${Firma}, ${Typ}, ${Modell} )
+    INSERT INTO  Anlage (ID, Objekt, Name, EMail, Telefon, Firma, Typ, Modell, protect, Password)
+    VALUES (${ID}, ${Objekt}, ${Name}, ${EMail}, ${Telefon}, ${Firma}, ${Typ}, ${Modell}, ${protect}, ${Password} )
     ON DUPLICATE KEY UPDATE
     Objekt = VALUES(Objekt),
     Name = VALUES(Name),
@@ -28,7 +31,9 @@ export default defineEventHandler(async (event) => {
     Telefon = VALUES(Telefon),
     Firma = VALUES(Firma),
     Typ = VALUES(Typ),
-    Modell = VALUES(Modell);
+    Modell = VALUES(Modell),
+    protect = VALUES(protect),
+    Password = VALUES(Password);
     ;`;
 
   return {
