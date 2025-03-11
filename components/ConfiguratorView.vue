@@ -762,7 +762,7 @@ export default {
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
         const { type, outside, inside } = this.rows[rowIndex][0];
         if (!type) {
-          alert(`Bitte Zylinder-Typ in Zeile ${rowIndex + 1} wählen.`);//
+          alert(`Bitte Zylinder-Typ in Zeile ${rowIndex + 1} wählen.`);
           return;
         }
         if (!outside) {
