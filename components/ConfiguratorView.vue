@@ -244,14 +244,25 @@ import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import { onMounted, onUpdated } from "vue";
 
+let intervalId;
+
 const sendHeight = () => {
-  const height = document.body.scrollHeight;
-  window.parent.postMessage({ height }, "*");
+  if (typeof window !== "undefined") { // Prüft, ob es im Browser läuft
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ height }, "*");
+  }
 };
 
-onMounted(sendHeight);
-onUpdated(sendHeight);
-setInterval(sendHeight, 500);
+onMounted(() => {
+  sendHeight(); // Beim Laden direkt die Höhe senden
+
+  // Alle 500ms die Höhe aktualisieren (nur im Browser)
+  intervalId = setInterval(sendHeight, 500);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(intervalId); // Intervall beim Verlassen der Seite beenden
+});
 
 
 export default {
