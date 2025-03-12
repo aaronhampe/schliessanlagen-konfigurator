@@ -42,7 +42,7 @@ export default defineNuxtConfig({
       },
     },
   },
-
+//
   nitro: {
     prerender: {
       routes: ['/'] // Stellt sicher, dass statische Dateien generiert werden
