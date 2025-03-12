@@ -247,21 +247,19 @@ import { onMounted, onUpdated } from "vue";
 let intervalId;
 
 const sendHeight = () => {
-  if (typeof window !== "undefined") { // Prüft, ob es im Browser läuft
-    const height = document.documentElement.scrollHeight;
-    window.parent.postMessage({ height }, "*");
+  if (typeof window !== "undefined") {
+    const height = document.body.scrollHeight; // Nutze body.scrollHeight für die beste Messung
+    window.parent.postMessage({ type: "resize", height }, "*");
   }
 };
 
 onMounted(() => {
-  sendHeight(); // Beim Laden direkt die Höhe senden
-
-  // Alle 500ms die Höhe aktualisieren (nur im Browser)
-  intervalId = setInterval(sendHeight, 500);
+  sendHeight(); // Direkt Höhe senden
+  intervalId = setInterval(sendHeight, 500); // Alle 500ms die Höhe aktualisieren
 });
 
 onBeforeUnmount(() => {
-  clearInterval(intervalId); // Intervall beim Verlassen der Seite beenden
+  clearInterval(intervalId); // Intervall beenden
 });
 
 
