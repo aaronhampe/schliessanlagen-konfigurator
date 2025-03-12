@@ -6,6 +6,26 @@
   <br />
 </template>
 
+<script>
+export default {
+  mounted() {
+    this.sendHeight(); // Direkt Höhe senden
+    this.intervalId = setInterval(this.sendHeight, 500); // Alle 500ms die Höhe senden
+  },
+  beforeUnmount() {
+    clearInterval(this.intervalId); // Intervall beenden
+  },
+  methods: {
+    sendHeight() {
+      if (typeof window !== "undefined") {
+        const height = document.body.scrollHeight; // Nutze body.scrollHeight für korrekte Höhe
+        window.parent.postMessage({ type: "resize", height }, "*");
+      }
+    }
+  }
+};
+</script>
+
 <style lang="scss">
 * {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
