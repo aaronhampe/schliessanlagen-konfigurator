@@ -244,14 +244,14 @@ import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import { onMounted, onUpdated } from "vue";
 
-//const sendHeight = () => {
-//  const height = document.body.scrollHeight;
-//  window.parent.postMessage({ height }, "*");
-//};
+const sendHeight = () => {
+  const height = document.body.scrollHeight;
+  window.parent.postMessage({ height }, "*");
+};
 
-//onMounted(sendHeight);
-//onUpdated(sendHeight);
-//setInterval(sendHeight, 500);
+onMounted(sendHeight);
+onUpdated(sendHeight);
+setInterval(sendHeight, 500);
 
 
 export default {
