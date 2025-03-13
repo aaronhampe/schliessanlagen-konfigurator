@@ -148,13 +148,11 @@ function generateConfigurationText() {
     `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
   );
   lines.push(
-    `<br><b>Zylinder korrekt gemessen</b>? ${
-      hasMeasuredCorrectly.value ? "Ja" : "Nein"
+    `<br><b>Zylinder korrekt gemessen</b>? ${hasMeasuredCorrectly.value ? "Ja" : "Nein"
     }`
   );
   lines.push(
-    `<br><b>Lieferzeiten akzeptiert</b>? ${
-      hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
+    `<br><b>Lieferzeiten akzeptiert</b>? ${hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
     }`
   );
 
@@ -324,43 +322,37 @@ function compareUseCase(a, b, focus) {
 }
 
 // In den Warenkorb legen (gleich geblieben)
-function addToCart(systemName, price, productID) {
+async function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
 
-  fetch("./api/wc-cart-add-item", {
-    method: "POST",
-    //
-    headers: {
-      "Content-Type": "application/json",
-    },
-    
-    body: JSON.stringify({
-      product_id: productID,
-      price,
-      quantity: 1,
-      Anlage: anlageNr,
-      config_text: fullConfiguration,
-      widerruf_accepted: true,
-      measured_correctly: true,
-      lieferzeiten_accepted: true,
-    }),
-  })
-    .then((r) => r.json())
-    .then((result) => {
-      if (result.success) {
-        const cartUrl =
-          result.data.cart_url || "https://www.stt-shop.de/warenkorb/";
-         // const cartKey = result.data.cart_key;
-         //const finalUrl = cartKey
-         //   ? `${cartUrl}?cocart-load-cart=${cartKey}`
-         //   : cartUrl;
-        window.open(finalUrl, "_blank");
-      }
-    })
-    .catch((err) => {
-      console.log("Fehler beim Hinzufügen zum Warenkorb:", err);
+  try {
+    const response = await fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        product_id: productID,
+        price: price,
+        quantity: 1,
+        config_text: fullConfiguration,
+        widerruf_accepted: true,
+      }),
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to add to cart: ${response.statusText}`);
+    }
+
+    // Open cart only after item is successfully added
+    window.open("https://www.stt-shop.de/warenkorb/", "_blank");
+
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
 }
+
 
 // onMounted => Positionen, Schlüssel, Matrix laden
 onMounted(async () => {
@@ -423,6 +415,7 @@ onMounted(async () => {
         features: modelConfig.features || [],
         infoText: modelConfig.infoText || "",
         securityLevel: modelConfig.securityLevel || 1,
+        deliveryTime: modelConfig.deliveryTime || "Lieferzeit nicht definiert",
       };
     });
 
@@ -463,53 +456,44 @@ onMounted(async () => {
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell:</h2>
       <div class="offer highlighted-offer">
-        <img
-          :src="selectedModelOffer.image"
-          :alt="selectedModelOffer.alt"
-          class="offer-image"
-        />
+        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
 
           <div class="offer-type-info">
             {{
-              selectedModelOffer.isSchliessanlage
-                ? "Schließanlage"
-                : "Gleichschließung"
-            }}
+      selectedModelOffer.isSchliessanlage
+        ? "Schließanlage"
+        : "Gleichschließung"
+    }}
           </div>
           <ul class="offer-features">
-            <li
-              v-for="(feature, i) in selectedModelOffer.features || []"
-              :key="i"
-            >
+            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <div
-            class="use-case-badge"
-            :class="`use-case-${selectedModelOffer.useCase}`"
-          >
+          <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
             Empfohlen für:
             <strong>
               {{
-                selectedModelOffer.useCase === "privat"
-                  ? "Privat"
-                  : selectedModelOffer.useCase === "gewerblich"
-                  ? "Gewerblich"
-                  : "Privat & Gewerblich"
-              }}
+      selectedModelOffer.useCase === "privat"
+        ? "Privat"
+        : selectedModelOffer.useCase === "gewerblich"
+          ? "Gewerblich"
+          : "Privat & Gewerblich"
+    }}
             </strong>
+          </div>
+          <div class="offer-delivery">
+            <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
           </div>
           <div class="offer-price">
             Gesamtpreis:
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl.
+              Versand</span>
           </div>
-          <UButton
-            icon="i-heroicons-shopping-cart-16-solid"
-            class="select-system-button"
-            @click="openSummary(selectedModelOffer)"
-          >
+          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+            @click="openSummary(selectedModelOffer)">
             System auswählen
           </UButton>
         </div>
@@ -520,24 +504,20 @@ onMounted(async () => {
     <div v-if="alternativeOffers.length" style="margin-top: 30px">
       <h2>
         {{
-          selectedModel === "Kein bestimmtes Modell"
-            ? "Angebote für Sie:"
-            : "Weitere passende Angebote:"
-        }}
+      selectedModel === "Kein bestimmtes Modell"
+        ? "Angebote für Sie:"
+        : "Weitere passende Angebote:"
+    }}
       </h2>
       <div class="offer-container">
-        <div
-          class="offer"
-          v-for="(offer, index) in sortedAlternativeOffers"
-          :key="offer.title"
-        >
+        <div class="offer" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
             <div class="offer-type-info">
               {{
-                offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-              }}
+      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+    }}
             </div>
             <ul class="offer-features">
               <li v-for="(feature, i) in offer.features || []" :key="i">
@@ -548,23 +528,23 @@ onMounted(async () => {
               Unsere Empfehlung: <br />
               <strong>
                 {{
-                  offer.useCase === "privat"
-                    ? "Privat"
-                    : offer.useCase === "gewerblich"
-                    ? "Gewerblich"
-                    : "Privat & Gewerblich"
-                }}
+      offer.useCase === "privat"
+        ? "Privat"
+        : offer.useCase === "gewerblich"
+          ? "Gewerblich"
+          : "Privat & Gewerblich"
+    }}
               </strong>
+            </div>
+            <div class="offer-delivery">
+              <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
             </div>
             <div class="offer-price">
               Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong>
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl.
+                Versand</span>
             </div>
-            <UButton
-              icon="i-heroicons-shopping-cart-16-solid"
-              class="select-system-button"
-              @click="openSummary(offer)"
-            >
+            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
               System auswählen
             </UButton>
           </div>
@@ -577,11 +557,7 @@ onMounted(async () => {
     </UButton>
   </div>
 
-  <UModal
-    :fullscreen="true"
-    v-model="isSummaryModalOpen"
-    class="summary-modal modern-design"
-  >
+  <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
     <div class="modal-content">
       <!-- Header / Title -->
       <div class="modal-header">
@@ -591,11 +567,7 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton
-            color="red"
-            class="close-button"
-            @click="isSummaryModalOpen = false"
-          >
+          <UButton color="red" class="close-button" @click="isSummaryModalOpen = false">
             X
           </UButton>
         </div>
@@ -632,10 +604,10 @@ onMounted(async () => {
               <td>{{ pos.POS }}</td>
               <td>
                 {{
-                  pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-                    ? pos.Bezeichnung
-                    : "Tür " + pos.POS
-                }}
+      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+        ? pos.Bezeichnung
+        : "Tür " + pos.POS
+    }}
               </td>
               <td>{{ pos.Typ }}</td>
               <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
@@ -654,10 +626,10 @@ onMounted(async () => {
           <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
             <strong>
               {{
-                keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-                  ? keyItem.Bezeichnung
-                  : "Schlüssel " + keyItem.KeyPOS
-              }}
+      keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+        ? keyItem.Bezeichnung
+        : "Schlüssel " + keyItem.KeyPOS
+    }}
             </strong>
             schließt:
             <span>{{ getCylindersForKey(keyItem.KeyPOS) }}</span>
@@ -673,11 +645,7 @@ onMounted(async () => {
           <label class="widerruf-label">
             <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
             <span>Ich stimme der Widerrufsbelehrung zu.</span>
-            <div
-              class="info-icon"
-              @mouseenter="hoverWiderruf = true"
-              @mouseleave="hoverWiderruf = false"
-            >
+            <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverWiderruf" class="tooltip-box">
@@ -694,12 +662,8 @@ onMounted(async () => {
           <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
             <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
-            <div
-              class="info-icon"
-              @mouseenter="hoverLieferzeit = true"
-              @mouseleave="hoverLieferzeit = false"
-              @click.stop
-            >
+            <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
+              @click.stop>
               <i class="i-heroicons-information-circle" />
               <transition name="fade">
                 <div v-if="hoverLieferzeit" class="tooltip-box">
@@ -712,8 +676,8 @@ onMounted(async () => {
               </transition>
             </div>
           </label>
-           <!-- Zylinder gemessen -->
-           <label class="widerruf-label" style="margin-top: 10px">
+          <!-- Zylinder gemessen -->
+          <label class="widerruf-label" style="margin-top: 10px">
             <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
             <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
           </label>
@@ -723,18 +687,13 @@ onMounted(async () => {
         <!-- Preis -->
         <div class="offer-price" style="margin-top: 20px">
           Gesamtpreis:
-          <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong>
+          <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br>inkl.Versand</span>
         </div>
       </div>
 
       <!-- Footer + Kauf-Button -->
       <div class="modal-footer">
-        <UButton
-          :disabled="!allRequiredChecked"
-          color="blue"
-          variant="solid"
-          @click="confirmPurchase"
-        >
+        <UButton :disabled="!allRequiredChecked" color="blue" variant="solid" @click="confirmPurchase">
           Angebot kaufen
         </UButton>
       </div>

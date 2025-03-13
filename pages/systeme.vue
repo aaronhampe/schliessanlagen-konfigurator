@@ -453,104 +453,103 @@ onMounted(async () => {
     </UButton>
 
     <!-- Haupt-Angebot -->
-    <div v-if="selectedModelOffer">
-      <h2>Angebot für Ihr ausgewähltes Modell:</h2>
-      <div class="offer highlighted-offer">
-        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
-        <div class="offer-details">
-          <h3>{{ selectedModelOffer.title }}</h3>
-
-          <div class="offer-type-info">
-            {{
-      selectedModelOffer.isSchliessanlage
-        ? "Schließanlage"
-        : "Gleichschließung"
-    }}
-          </div>
-          <ul class="offer-features">
-            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
-              <i class="icon-check"></i> {{ feature }}
-            </li>
-          </ul>
-          <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
-            Empfohlen für:
-            <strong>
-              {{
-      selectedModelOffer.useCase === "privat"
-        ? "Privat"
-        : selectedModelOffer.useCase === "gewerblich"
-          ? "Gewerblich"
-          : "Privat & Gewerblich"
-    }}
-            </strong>
-          </div>
-          <div class="offer-delivery">
-            <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
-          </div>
-          <div class="offer-price">
-            Gesamtpreis:
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl.
-              Versand</span>
-          </div>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="openSummary(selectedModelOffer)">
-            System auswählen
-          </UButton>
-        </div>
-      </div>
-    </div>
-
-    <!-- Alternative Angebote -->
-    <div v-if="alternativeOffers.length" style="margin-top: 30px">
-      <h2>
+   <!-- Haupt-Angebot -->
+<div v-if="selectedModelOffer">
+  <h2>Angebot für Ihr ausgewähltes Modell:</h2>
+  <div class="offer highlighted-offer offer-row">
+    <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+    <div class="offer-details">
+      <h3>{{ selectedModelOffer.title }}</h3>
+      <div class="offer-type-info">
         {{
+          selectedModelOffer.isSchliessanlage
+            ? "Schließanlage"
+            : "Gleichschließung"
+        }}
+      </div>
+      <ul class="offer-features">
+        <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+          <i class="icon-check"></i> {{ feature }}
+        </li>
+      </ul>
+      <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
+        Empfohlen für:
+        <strong>
+          {{
+            selectedModelOffer.useCase === "privat"
+              ? "Privat"
+              : selectedModelOffer.useCase === "gewerblich"
+                ? "Gewerblich"
+                : "Privat & Gewerblich"
+          }}
+        </strong>
+      </div>
+      <div class="offer-delivery">
+        <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
+      </div>
+      <div class="offer-price">
+        Gesamtpreis:
+        <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl. Versand</span>
+      </div>
+      <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+        @click="openSummary(selectedModelOffer)">
+        System auswählen
+      </UButton>
+    </div>
+  </div>
+</div>
+
+<!-- Alternative Angebote -->
+<div v-if="alternativeOffers.length" style="margin-top: 30px">
+  <h2>
+    {{
       selectedModel === "Kein bestimmtes Modell"
         ? "Angebote für Sie:"
         : "Weitere passende Angebote:"
     }}
-      </h2>
-      <div class="offer-container">
-        <div class="offer" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
-          <img :src="offer.image" :alt="offer.alt" class="offer-image" />
-          <div class="offer-details">
-            <h3>{{ offer.title }}</h3>
-            <div class="offer-type-info">
-              {{
-      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-    }}
-            </div>
-            <ul class="offer-features">
-              <li v-for="(feature, i) in offer.features || []" :key="i">
-                <i class="icon-check"></i> {{ feature }}
-              </li>
-            </ul>
-            <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
-              Unsere Empfehlung: <br />
-              <strong>
-                {{
-      offer.useCase === "privat"
-        ? "Privat"
-        : offer.useCase === "gewerblich"
-          ? "Gewerblich"
-          : "Privat & Gewerblich"
-    }}
-              </strong>
-            </div>
-            <div class="offer-delivery">
-              <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
-            </div>
-            <div class="offer-price">
-              Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl.
-                Versand</span>
-            </div>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
-              System auswählen
-            </UButton>
-          </div>
+  </h2>
+  <div class="offer-container">
+    <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
+      <img :src="offer.image" :alt="offer.alt" class="offer-image" />
+      <div class="offer-details">
+        <h3>{{ offer.title }}</h3>
+        <div class="offer-type-info">
+          {{
+            offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+          }}
         </div>
+        <ul class="offer-features">
+          <li v-for="(feature, i) in offer.features || []" :key="i">
+            <i class="icon-check"></i> {{ feature }}
+          </li>
+        </ul>
+        <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
+          Unsere Empfehlung: <br />
+          <strong>
+            {{
+              offer.useCase === "privat"
+                ? "Privat"
+                : offer.useCase === "gewerblich"
+                  ? "Gewerblich"
+                  : "Privat & Gewerblich"
+            }}
+          </strong>
+        </div>
+        <div class="offer-delivery">
+          <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
+        </div>
+        <div class="offer-price">
+          Gesamtpreis:
+          <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl. Versand</span>
+        </div>
+        <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+          System auswählen
+        </UButton>
       </div>
     </div>
+  </div>
+</div>
+
 
     <UButton class="back-button" @click="navigateBack">
       Zurück zum Konfigurator
