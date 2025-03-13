@@ -169,7 +169,7 @@
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="button-default" @click="saveInstallation" size="sm" color="amber" variant="solid">
+        <UButton class="button-default" @click="buttonweitersysteme" size="sm" color="amber" variant="solid">
           Weiter zu den Angeboten
         </UButton>
 
@@ -177,8 +177,11 @@
 
       </div>
       <div class="buttons" style="margin-top: 20px">
-        <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
+        <UButton class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
           @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
+        </UButton>
+        <UButton class="button-default" icon="i-heroicons-cloud-arrow-up-16-solid"
+          @click="isOpenS = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage speichern
         </UButton>
         </div>
     </div>
@@ -237,6 +240,28 @@
       </form>
     </div>
   </UModal>
+  <UModal v-model="isOpenS">
+    <div class="p-4">
+      <div class="modal-flex-buttons-top">
+        <h2 class="modal-h2">Anlage speichern</h2>
+        <UButton color="red" @click="isOpenS = false">X</UButton>
+      </div>
+      <br />
+      <form @submit.prevent="handleSubmit">
+        <div class="form-group">
+          <label for="email">EMail:</label>
+          <UInput color="amber" id="email" v-model="email" min="1" type="email" required />
+        </div>speichern
+        <div class="form-group">
+          <label for="id">Passwort:</label>
+          <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
+        </div>
+        <br />
+        <UButton @click="buttonspeichern" type="submit" color="amber" variant="solid">Speichern
+        </UButton>
+      </form>
+    </div>
+  </UModal>
 </template>
 
 <script>
@@ -254,7 +279,7 @@ export default {
       anlageNr: "",
       object: "",
       id: "",
-      password: "testPW",
+      password: "",
       email: "",
       name: "",
       phone: "",
@@ -264,6 +289,7 @@ export default {
       modalStates: {},
       isOpen: false,
       isOpenL: false,
+      isOpenS: false,
       isDropdownOpen: {},
       isOptionsModalOpen: {},
       hoverInfo: false,
@@ -400,6 +426,7 @@ export default {
     closeOptionsModal(rowIndex) {
       this.isOptionsModalOpen[rowIndex] = false;
     },
+
 
     toggleDropdown(rowIndex) {
       if (!this.isDropdownOpen[rowIndex]) {
@@ -860,17 +887,32 @@ export default {
           body: Matrix,
         });
 
-        // 8) Weiterleitung zur systeme.vue
-        this.$router.push({
+       
+      }
+    },
+    weiterleitung_systeme(){
+     // 8) Weiterleitung zur systeme.vue
+     this.$router.push({
           name: "systeme",
           query: {
             anlageNr: this.anlageNr,
             isSchliessanlage: this.store.isSchliessanlage,
           },
         });
-      }
     },
 
+    buttonweitersysteme(){
+      this.saveInstallation();
+      this.weiterleitung_systeme();
+
+    },    
+    buttonspeichern(){
+      this.saveInstallation();
+      this.sendmailoffice();
+      this.sendmailkunde();
+      this.isOpenS=false;
+
+    },    
 
     async loadInstallation() {
       this.rows.length = 1;
@@ -898,7 +940,7 @@ export default {
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
         this.protect = queryresultanlage.queryresult[0].protect || "";
-        this.Password = queryresultanlage.queryresult[0].Password || "";
+        this.password = queryresultanlage.queryresult[0].Password || "";
       }
 
       const queryresultposition = await $fetch("./api/sqlgetposition", {
@@ -1022,7 +1064,33 @@ export default {
     },
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
-    }
+    },
+    
+    async sendmailoffice(){
+		  const mailresult = await $fetch('./api/mail', {
+			method: 'POST',
+			body: {
+			        name: '',
+			        to: 'office@secutimetec.de',
+			        subject: 'Test',
+			        html: 'dies ist ein test',
+		        }
+		  });
+    },
+    async sendmailkunde(){
+		  const mailresult = await $fetch('./api/mail', {
+			method: 'POST',
+			body: {
+			        name: '',
+			        to: this.email,
+			        subject: 'Test',
+			        html: 'dies ist ein test',
+		        }
+		  });
+    }, 
+    
+		
+
     
   }
 };
