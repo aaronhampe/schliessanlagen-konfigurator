@@ -1169,8 +1169,8 @@ export default {
       });
     },
 
-    buttonweitersysteme() {
-      this.saveInstallation();
+    async buttonweitersysteme() {
+      await this.saveInstallation();
       this.weiterleitung_systeme();
     },
     buttonladen() {
