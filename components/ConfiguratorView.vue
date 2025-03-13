@@ -1179,7 +1179,7 @@ export default {
 
     async buttonspeichern() {
       await this.saveInstallation();
-      //this.sendmailoffice();
+      await this.sendmailoffice();
       await this.sendmailkunde();
       this.isOpenS = false;
     },
