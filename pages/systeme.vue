@@ -452,7 +452,6 @@ onMounted(async () => {
       Zurück zum Konfigurator
     </UButton>
 
-    <!-- Haupt-Angebot -->
    <!-- Haupt-Angebot -->
 <div v-if="selectedModelOffer">
   <h2>Angebot für Ihr ausgewähltes Modell:</h2>
@@ -702,4 +701,6 @@ onMounted(async () => {
 
 <style scoped>
 @import "@/styles/systems.scss";
+
+
 </style>
