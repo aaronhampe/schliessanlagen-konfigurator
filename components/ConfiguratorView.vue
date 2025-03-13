@@ -251,9 +251,9 @@
         <div class="form-group">
           <label for="email">EMail:</label>
           <UInput color="amber" id="email" v-model="email" min="1" type="email" required />
-        </div>speichern
-        <div class="form-group">
-          <label for="id">Passwort:</label>
+        </div>
+        <div v-show="false" class="form-group">
+          <label  for="id">Passwort:</label>
           <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
         </div>
         <br />
