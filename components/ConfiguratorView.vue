@@ -1177,10 +1177,10 @@ export default {
       this.checkpassword();
     },
 
-    buttonspeichern() {
-      this.saveInstallation();
+    async buttonspeichern() {
+      await this.saveInstallation();
       //this.sendmailoffice();
-      this.sendmailkunde();
+      await this.sendmailkunde();
       this.isOpenS = false;
     },
 
