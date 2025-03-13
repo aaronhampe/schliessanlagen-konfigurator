@@ -420,12 +420,17 @@
     </UModal>
   </div>
   <UModal v-model="isOpenL">
-    <div class="p-4">
-      <div class="modal-flex-buttons-top">
+    <div class="p-4 modal-container">
+      <div class="modal-header">
         <h2 class="modal-h2">Anlage laden</h2>
-        <UButton color="red" @click="isOpenL = false">X</UButton>
+        <UButton color="red" @click="isOpenL = false" class="close-button"
+          >X</UButton
+        >
       </div>
-      <br />
+      <p class="modal-info">
+        Bitte geben Sie die Anlagennummer und Ihr Passwort ein, um Ihre
+        gespeicherte Konfiguration zu laden.
+      </p>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="id">Anlagennummer:</label>
@@ -455,12 +460,12 @@
             <span>Das eingegebene Passwort ist falsch!</span>
           </div>
         </transition>
-        <br />
         <UButton
           @click="buttonladen"
           type="submit"
           color="amber"
           variant="solid"
+          class="modal-button"
         >
           Laden
         </UButton>
@@ -469,15 +474,20 @@
   </UModal>
 
   <UModal v-model="isOpenS">
-    <div class="p-4">
-      <div class="modal-flex-buttons-top">
+    <div class="p-4 modal-container">
+      <div class="modal-header">
         <h2 class="modal-h2">Anlage speichern</h2>
-        <UButton color="red" @click="isOpenS = false">X</UButton>
+        <UButton color="red" @click="isOpenS = false" class="close-button"
+          >X</UButton
+        >
       </div>
-      <br />
+      <p class="modal-info">
+        Bitte überprüfen Sie Ihre Angaben und geben Sie Ihre E-Mail-Adresse ein. Eine Bestätigungsmail wird Ihnen
+        zugeschickt.
+      </p>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
-          <label for="email">EMail:</label>
+          <label for="email">E-Mail:</label>
           <UInput
             color="amber"
             id="email"
@@ -487,24 +497,14 @@
             required
           />
         </div>
-        <div v-show="false" class="form-group">
-          <label for="id">Passwort:</label>
-          <UInput
-            color="amber"
-            id="password"
-            v-model="password"
-            min="1"
-            type="password"
-            required
-          />
-        </div>
-        <br />
         <UButton
           @click="buttonspeichern"
           type="submit"
           color="amber"
           variant="solid"
-          >Speichern
+          class="modal-button"
+        >
+          Speichern
         </UButton>
       </form>
     </div>

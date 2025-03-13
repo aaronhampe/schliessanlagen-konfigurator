@@ -637,6 +637,61 @@ $color-sky: #0ea5e9;
   align-items: center;
 }
 
+.modal-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.modal-h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+
+.close-button {
+  background-color: #dc2626 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 6px;
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: darken($color-red, 5%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.modal-info {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
 .password-warning {
   display: flex;
   align-items: center;
@@ -654,17 +709,18 @@ $color-sky: #0ea5e9;
   font-size: 1.2rem;
 }
 
-/* Fade Transition */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.modal-button {
+  width: 100%;
+  margin-top: 1rem;
 }
 
-.modal-h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-  color: #333;
+/* Fade Transition für den Fehlertext */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
