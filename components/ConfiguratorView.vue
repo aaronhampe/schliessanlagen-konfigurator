@@ -1353,13 +1353,20 @@ export default {
     },
 
     async sendmailoffice() {
+      let message = "";
+      message =
+        "Anlagennummer: " +
+        this.anlageNr +
+        "<br>" +
+        "Passwort: " +
+        this.password;
       const mailresult = await $fetch("./api/mail", {
         method: "POST",
         body: {
           name: "",
           to: "office@secutimetec.de",
-          subject: "Test",
-          html: "dies ist ein test",
+          subject: "stt-shop  ---  Ihre gespeicherte Konfiguration",
+          html: message,
         },
       });
     },
