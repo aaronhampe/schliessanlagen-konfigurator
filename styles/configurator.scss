@@ -636,3 +636,35 @@ $color-sky: #0ea5e9;
   justify-content: space-between;
   align-items: center;
 }
+
+.password-warning {
+  display: flex;
+  align-items: center;
+  background-color: #fdecea;
+  color: #b71c1c;
+  border: 1px solid #f5c6cb;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.password-warning i {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+/* Fade Transition */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.modal-h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
