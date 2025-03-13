@@ -235,8 +235,9 @@
           <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
         </div>
         <br />
-        <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
+        <UButton @click="buttonladen" type="submit" color="amber" variant="solid">Laden
         </UButton>
+        <label v-show=passwordwarning >     Passwort falsch</label>
       </form>
     </div>
   </UModal>
@@ -287,6 +288,7 @@ export default {
       typ: "",
       protect: 0,
       modalStates: {},
+      passwordwarning: false,
       isOpen: false,
       isOpenL: false,
       isOpenS: false,
@@ -913,6 +915,11 @@ export default {
       this.weiterleitung_systeme();
 
     },    
+    buttonladen(){
+      this.checkpassword();
+
+    },
+    
     buttonspeichern(){
       this.saveInstallation();
       //this.sendmailoffice();
@@ -921,6 +928,29 @@ export default {
 
     },    
 
+    
+    async checkpassword(){
+      let passworddb = '';
+      const resultcheckpassword = await $fetch("./api/sqlgetanlage", {
+        method: "post",
+        body: { ID: this.id },
+      });
+      passworddb= resultcheckpassword.queryresult[0].Password || "";
+      if (this.password === passworddb) 
+       {this.passwordwarning=false;
+        this.loadInstallation();
+        this.isOpenL=false;
+       } 
+       else
+       {this.passwordwarning=true}
+
+      //console.log('DatenbankPASS: ' + passworddb);
+      //console.log('PASSFormular: ' + this.password);
+
+      
+
+    },
+    
     async loadInstallation() {
       this.rows.length = 1;
       this.rows[0].length = 1;
@@ -947,9 +977,9 @@ export default {
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
         this.protect = queryresultanlage.queryresult[0].protect || "";
-        this.password = queryresultanlage.queryresult[0].Password || "";
+      //  this.password = queryresultanlage.queryresult[0].Password || "";
       }
-
+      
       const queryresultposition = await $fetch("./api/sqlgetposition", {
         method: "post",
         body: { ID: this.id },
@@ -1085,13 +1115,15 @@ export default {
 		  });
     },
     async sendmailkunde(){
-		  const mailresult = await $fetch('./api/mail', {
+		  let message = '';
+      message = 'Anlagennummer: ' + this.anlageNr + '<br>' + 'Passwort: ' + this.password;
+      const mailresult = await $fetch('./api/mail', {
 			method: 'POST',
 			body: {
 			        name: '',
 			        to: this.email,
-			        subject: 'Test',
-			        html: 'dies ist ein test',
+			        subject: 'stt-shop  ---  Ihre gespeicherte Konfiguration',
+			        html: message,
 		        }
 		  });
     }, 
