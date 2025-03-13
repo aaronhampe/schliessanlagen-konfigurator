@@ -736,6 +736,13 @@ export default {
     generateRandomAnlagenNummer() {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
       this.anlageNr = randomNum.toString();
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let password = "";
+      for (let i = 0; i < 6; i++) {
+         password += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+      this.password = password;
+      console.log(this.password);
     },
 
     async test() {
@@ -908,7 +915,7 @@ export default {
     },    
     buttonspeichern(){
       this.saveInstallation();
-      this.sendmailoffice();
+      //this.sendmailoffice();
       this.sendmailkunde();
       this.isOpenS=false;
 
