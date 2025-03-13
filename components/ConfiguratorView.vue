@@ -232,7 +232,7 @@
         </div>
         <div class="form-group">
           <label for="id">Passwort:</label>
-          <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
+          <UInput color="amber" id="passwordinput" v-model="passwordinput" min="1" type="password" required />
         </div>
         <br />
         <UButton @click="buttonladen" type="submit" color="amber" variant="solid">Laden
@@ -288,6 +288,7 @@ export default {
       typ: "",
       protect: 0,
       modalStates: {},
+      passwordinput:'',
       passwordwarning: false,
       isOpen: false,
       isOpenL: false,
@@ -930,13 +931,13 @@ export default {
 
     
     async checkpassword(){
-      let passworddb = '';
+      
       const resultcheckpassword = await $fetch("./api/sqlgetanlage", {
         method: "post",
         body: { ID: this.id },
       });
-      passworddb= resultcheckpassword.queryresult[0].Password || "";
-      if (this.password === passworddb) 
+      this.password= resultcheckpassword.queryresult[0].Password || "";
+      if (this.password === this.passwordinput) 
        {this.passwordwarning=false;
         this.loadInstallation();
         this.isOpenL=false;
@@ -944,8 +945,8 @@ export default {
        else
        {this.passwordwarning=true}
 
-      //console.log('DatenbankPASS: ' + passworddb);
-      //console.log('PASSFormular: ' + this.password);
+      //console.log('DatenbankPASS: ' + this.password);
+      //console.log('PASSFormular: ' + this.passwordinput);
 
       
 
@@ -977,7 +978,7 @@ export default {
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
         this.protect = queryresultanlage.queryresult[0].protect || "";
-      //  this.password = queryresultanlage.queryresult[0].Password || "";
+        this.password = queryresultanlage.queryresult[0].Password || "";
       }
       
       const queryresultposition = await $fetch("./api/sqlgetposition", {
