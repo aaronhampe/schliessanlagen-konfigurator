@@ -8,13 +8,17 @@
             : "Konfigurator für eine Gleichschließung"
         }}
       </h1>
-      <div class="info-icon" @mouseenter="hoverInfo = true" @mouseleave="hoverInfo = false">
+      <div
+        class="info-icon"
+        @mouseenter="hoverInfo = true"
+        @mouseleave="hoverInfo = false"
+      >
         <i class="i-heroicons-information-circle" />
         <transition name="fade">
           <div v-if="hoverInfo" class="tooltip-box">
             Bei einer Gleichschließung können alle Schlüssel alle Türen
-            aufschließen, während bei einer Schließanlage die Schlüssel
-            eine gezielte Zuweisung benötigen.
+            aufschließen, während bei einer Schließanlage die Schlüssel eine
+            gezielte Zuweisung benötigen.
           </div>
         </transition>
       </div>
@@ -22,14 +26,23 @@
 
     <div class="system-number">
       <h2>Anlagennummer:</h2>
-      <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
+      <input
+        type="text"
+        readonly
+        v-model="anlageNr"
+        placeholder="Anlagenummer"
+      />
     </div>
 
     <div class="model-container">
-      <h2> 1: </h2>
+      <h2>1:</h2>
       <h3>Modellauswahl:</h3>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
-        <option v-for="model in store.availableModels" :key="model" :value="model">
+        <option
+          v-for="model in store.availableModels"
+          :key="model"
+          :value="model"
+        >
           {{ model }}
         </option>
       </select>
@@ -37,64 +50,105 @@
       <!-- Toggle für Gleichschließung -->
       <div class="toggle-gleichschliessung">
         <label class="flex align-center gap-2">
-          <h2> 2: </h2>
+          <h2>2:</h2>
           <span>Gleichschließung</span>
-          <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
+          <UToggle
+            color="sky"
+            v-model="finalGleichschliessungState"
+            :disabled="disableGleichToggle"
+          />
         </label>
       </div>
     </div>
 
-
     <UModal v-model="isWarningModalOpen" class="warning-modal">
-
       <div class="modal-header">
         <h2>Achtung!</h2>
-        <button class="close-button" @click="isWarningModalOpen = false">X</button>
+        <button class="close-button" @click="isWarningModalOpen = false">
+          X
+        </button>
       </div>
 
       <div class="modal-body">
-        <p>Beim Wechsel des Modells können alle eingegebenen Daten verloren gehen.</p>
+        <p>
+          Beim Wechsel des Modells können alle eingegebenen Daten verloren
+          gehen.
+        </p>
         <p>Möchten Sie den Modellwechsel wirklich durchführen?</p>
       </div>
 
       <div class="modal-footer">
-        <button class="confirm-button" @click="confirmChange">Ja, ändern</button>
+        <button class="confirm-button" @click="confirmChange">
+          Ja, ändern
+        </button>
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
-
     </UModal>
   </div>
 
   <div class="flex-container">
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
-        <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
+        <div
+          class="checkbox-item"
+          v-for="(checkbox, colIndex) in row"
+          :key="colIndex"
+          v-show="colIndex < 1"
+        >
           <div class="door-row" v-if="colIndex < 1">
             <div>
               <h3 v-if="rowIndex < 1 && colIndex < 1">Pos.</h3>
-              <UBadge class="u-badge" v-if="colIndex < 1" v-model="checkbox.position" color="sky" size="lg"
-                variant="solid">
+              <UBadge
+                class="u-badge"
+                v-if="colIndex < 1"
+                v-model="checkbox.position"
+                color="sky"
+                size="lg"
+                variant="solid"
+              >
                 {{ rowIndex + 1 }}
               </UBadge>
             </div>
 
             <div class="door-designation" v-if="colIndex < 1">
               <h3 v-if="rowIndex < 1 && colIndex < 1">Türbezeichnung</h3>
-              <UInput v-if="colIndex < 1" class="door-designation" v-model="checkbox.doorDesignation" color="sky"
-                size="sm" variant="outline" placeholder="z.B. Haupteingang" />
+              <UInput
+                v-if="colIndex < 1"
+                class="door-designation"
+                v-model="checkbox.doorDesignation"
+                color="sky"
+                size="sm"
+                variant="outline"
+                placeholder="z.B. Haupteingang"
+              />
             </div>
 
             <div class="quantity">
               <h3 v-if="rowIndex < 1">Anzahl</h3>
-              <UInput v-model="checkbox.doorquantity" class="quantity-input" min="1" color="sky" size="sm" type="number"
-                variant="outline" />
+              <UInput
+                v-model="checkbox.doorquantity"
+                class="quantity-input"
+                min="1"
+                color="sky"
+                size="sm"
+                type="number"
+                variant="outline"
+              />
             </div>
 
             <div class="cylinder-type">
               <h3 v-if="rowIndex < 1">Zylinder-Typ</h3>
-              <select v-model="checkbox.type" @change="onTypeChange(checkbox)" class="cylinder-type">
+              <select
+                v-model="checkbox.type"
+                @change="onTypeChange(checkbox)"
+                class="cylinder-type"
+              >
                 <option disabled value="">Bitte Typ auswählen</option>
-                <option v-for="type in store.availableTypes" :key="type" :value="type">
+                <option
+                  v-for="type in store.availableTypes"
+                  :key="type"
+                  :value="type"
+                >
                   {{ type }}
                 </option>
               </select>
@@ -103,18 +157,34 @@
             <div class="sizes">
               <div>
                 <h3 v-if="rowIndex < 1">Außen</h3>
-                <select class="outside" v-model.number="checkbox.outside" @change="onOutsideSizeChange(checkbox)">
+                <select
+                  class="outside"
+                  v-model.number="checkbox.outside"
+                  @change="onOutsideSizeChange(checkbox)"
+                >
                   <option value="">...</option>
-                  <option v-for="size in getAvailableOutsideSizes(checkbox)" :key="size" :value="size">
+                  <option
+                    v-for="size in getAvailableOutsideSizes(checkbox)"
+                    :key="size"
+                    :value="size"
+                  >
                     {{ size }} mm
                   </option>
                 </select>
               </div>
               <div>
                 <h3 v-if="rowIndex < 1">Innen</h3>
-                <select class="inside" v-model.number="checkbox.inside" @change="onInsideSizeChange(checkbox)">
+                <select
+                  class="inside"
+                  v-model.number="checkbox.inside"
+                  @change="onInsideSizeChange(checkbox)"
+                >
                   <option value="">...</option>
-                  <option v-for="size in getAvailableInsideSizes(checkbox)" :key="size" :value="size">
+                  <option
+                    v-for="size in getAvailableInsideSizes(checkbox)"
+                    :key="size"
+                    :value="size"
+                  >
                     {{ size }} mm
                   </option>
                 </select>
@@ -124,8 +194,14 @@
             <!--Optionen-->
             <div class="options">
               <h3 v-if="rowIndex < 1">Optionen</h3>
-              <UButton @click="openOptionsModal(rowIndex)" variant="solid" size="sm" color="sky" class="dropdown-button"
-                icon="i-heroicons-cog">
+              <UButton
+                @click="openOptionsModal(rowIndex)"
+                variant="solid"
+                size="sm"
+                color="sky"
+                class="dropdown-button"
+                icon="i-heroicons-cog"
+              >
                 {{ getSelectedOptionsText(checkbox) || "..." }}
               </UButton>
             </div>
@@ -133,106 +209,302 @@
             <!--Zylinder löschen & duplizieren-->
             <div class="duplicate">
               <br v-if="rowIndex < 1" />
-              <UButton icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false"
-                @click="duplicateRow(rowIndex)" />
+              <UButton
+                icon="i-heroicons-document-duplicate"
+                size="sm"
+                color="sky"
+                variant="outline"
+                :trailing="false"
+                @click="duplicateRow(rowIndex)"
+              />
             </div>
             <div class="delete">
               <br v-if="rowIndex < 1" />
-              <UButton icon="i-heroicons-trash" style="color: white" size="sm" color="red" variant="solid"
-                :trailing="false" @click="deleteRow(rowIndex)" />
+              <UButton
+                icon="i-heroicons-trash"
+                style="color: white"
+                size="sm"
+                color="red"
+                variant="solid"
+                :trailing="false"
+                @click="deleteRow(rowIndex)"
+              />
             </div>
           </div>
         </div>
 
-        <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
-          <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
-            v-if="rowIndex < 1" :class="isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
-          " />
+        <div
+          class="checkbox-item"
+          v-for="(checkbox, colIndex) in row"
+          :key="colIndex"
+        >
+          <input
+            type="text"
+            placeholder="Schlüsselname"
+            readonly
+            class="key-name"
+            v-model="checkbox.keyname"
+            v-if="rowIndex < 1"
+            :class="
+              isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
+            "
+          />
 
-          <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
-            v-if="rowIndex < 1" />
-          <UButton class="button-edit" icon="i-heroicons-pencil" v-if="rowIndex < 1" @click="openModal(colIndex)"
-            size="sm" color="sky" variant="solid" :trailing="false" />
-          <ColumnModal v-if="rowIndex < 1" :columnId="colIndex" v-model="modalStates[colIndex]"
-            @update-column-name="updateColumnName(colIndex, $event)" @close-this-modal="closeModal(colIndex)" />
+          <input
+            min="1"
+            class="key-quantity"
+            type="number"
+            placeholder="1"
+            v-model="checkbox.keyquantity"
+            v-if="rowIndex < 1"
+          />
+          <UButton
+            class="button-edit"
+            icon="i-heroicons-pencil"
+            v-if="rowIndex < 1"
+            @click="openModal(colIndex)"
+            size="sm"
+            color="sky"
+            variant="solid"
+            :trailing="false"
+          />
+          <ColumnModal
+            v-if="rowIndex < 1"
+            :columnId="colIndex"
+            v-model="modalStates[colIndex]"
+            @update-column-name="updateColumnName(colIndex, $event)"
+            @close-this-modal="closeModal(colIndex)"
+          />
           <p v-if="rowIndex < 1">&nbsp;</p>
-          <UCheckbox class="checkbox" name="{{ rowIndex * 100 + colIndex + 1 }}" v-model="checkbox.checked" color="blue"
-            variant="solid" :disabled="!isSchliessanlage" :true-value="true" :false-value="false" />
+          <UCheckbox
+            class="checkbox"
+            name="{{ rowIndex * 100 + colIndex + 1 }}"
+            v-model="checkbox.checked"
+            color="blue"
+            variant="solid"
+            :disabled="!isSchliessanlage"
+            :true-value="true"
+            :false-value="false"
+          />
           <p v-if="this.rows.length - 1 < 1">&nbsp;</p>
-          <UButton @click="deleteCheckbox(colIndex)" v-if="rowIndex == this.rows.length - 1" class="button-delete"
-            icon="i-heroicons-trash" size="sm" color="red" variant="solid" :trailing="false" />
-          <UButton @click="duplicateCol(colIndex)" v-if="rowIndex == this.rows.length - 1" class="button-duplicate"
-            icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false" />
+          <UButton
+            @click="deleteCheckbox(colIndex)"
+            v-if="rowIndex == this.rows.length - 1"
+            class="button-delete"
+            icon="i-heroicons-trash"
+            size="sm"
+            color="red"
+            variant="solid"
+            :trailing="false"
+          />
+          <UButton
+            @click="duplicateCol(colIndex)"
+            v-if="rowIndex == this.rows.length - 1"
+            class="button-duplicate"
+            icon="i-heroicons-document-duplicate"
+            size="sm"
+            color="sky"
+            variant="outline"
+            :trailing="false"
+          />
         </div>
-
       </div>
       <div class="buttons">
-        <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
-          variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="button-default" @click="saveInstallation" size="sm" color="amber" variant="solid">
+        <UButton
+          class="button-default"
+          icon="i-heroicons-plus-16-solid"
+          @click="addRow"
+          size="sm"
+          color="amber"
+          variant="solid"
+          :trailing="false"
+          >Tür hinzufügen</UButton
+        >
+        <UButton
+          class="button-default"
+          @click="buttonweitersysteme"
+          size="sm"
+          color="amber"
+          variant="solid"
+        >
           Weiter zu den Angeboten
         </UButton>
-
-
-
       </div>
       <div class="buttons" style="margin-top: 20px">
-        <UButton v-if="showLoadButton" class="button-default" icon="i-heroicons-cloud-arrow-down-16-solid"
-          @click="isOpenL = true" size="sm" color="amber" variant="solid" :trailing="false">Anlage laden
+        <UButton
+          class="button-default"
+          icon="i-heroicons-cloud-arrow-down"
+          @click="isOpenL = true"
+          size="sm"
+          color="amber"
+          variant="solid"
+          :trailing="false"
+          >Anlage laden
         </UButton>
-        </div>
+        <UButton
+          class="button-default"
+          icon="i-heroicons-cloud-arrow-up"
+          @click="isOpenS = true"
+          size="sm"
+          color="amber"
+          variant="solid"
+          :trailing="false"
+          >Anlage speichern
+        </UButton>
+      </div>
     </div>
-    <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
-      variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
+    <UButton
+      class="button-add-key"
+      icon="i-heroicons-plus-16-solid"
+      @click="addCheckbox"
+      size="sm"
+      color="amber"
+      variant="solid"
+      :trailing="false"
+      >Schlüssel hinzufügen</UButton
+    >
 
     <!-- Neues Modal für Optionen -->
-    <UModal v-for="(row, rowIndex) in rows" :key="'options-modal-' + rowIndex" v-model="isOptionsModalOpen[rowIndex]"
-      class="options-modal">
+    <UModal
+      v-for="(row, rowIndex) in rows"
+      :key="'options-modal-' + rowIndex"
+      v-model="isOptionsModalOpen[rowIndex]"
+      class="options-modal"
+    >
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-h2">Optionen auswählen</h2>
-          <UButton class="close-button" color="red" @click="closeOptionsModal(rowIndex)">
+          <UButton
+            class="close-button"
+            color="red"
+            @click="closeOptionsModal(rowIndex)"
+          >
             X
           </UButton>
         </div>
         <h6>Bitte wählen Sie die gewünschten Optionen aus.</h6>
         <div>
-          <div v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
-            <div v-for="option in store.getOptionsForType(checkbox.type)" :key="option" class="option-item">
+          <div
+            v-for="(checkbox, colIndex) in row"
+            :key="colIndex"
+            v-show="colIndex < 1"
+          >
+            <div
+              v-for="option in store.getOptionsForType(checkbox.type)"
+              :key="option"
+              class="option-item"
+            >
               <label>
-                <UCheckbox color="sky" :value="option" v-model="checkbox.optionsSelected" class="option-checkbox" />
+                <UCheckbox
+                  color="sky"
+                  :value="option"
+                  v-model="checkbox.optionsSelected"
+                  class="option-checkbox"
+                />
                 &nbsp{{ option }}
               </label>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <UButton class="save-button" style="color: white" color="amber" @click="closeOptionsModal(rowIndex)">
+          <UButton
+            class="save-button"
+            style="color: white"
+            color="amber"
+            @click="closeOptionsModal(rowIndex)"
+          >
             Speichern
           </UButton>
         </div>
       </div>
     </UModal>
-
   </div>
   <UModal v-model="isOpenL">
-    <div class="p-4">
-      <div class="modal-flex-buttons-top">
+    <div class="p-4 modal-container">
+      <div class="modal-header">
         <h2 class="modal-h2">Anlage laden</h2>
-        <UButton color="red" @click="isOpenL = false">X</UButton>
+        <UButton color="red" @click="isOpenL = false" class="close-button"
+          >X</UButton
+        >
       </div>
-      <br />
+      <p class="modal-info">
+        Bitte geben Sie die Anlagennummer und Ihr Passwort ein, um Ihre
+        gespeicherte Konfiguration zu laden.
+      </p>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="id">Anlagennummer:</label>
-          <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
+          <UInput
+            color="amber"
+            id="id"
+            v-model="id"
+            min="1"
+            type="number"
+            required
+          />
         </div>
         <div class="form-group">
-          <label for="id">Passwort:</label>
-          <UInput color="amber" id="password" v-model="password" min="1" type="password" required />
+          <label for="passwordinput">Passwort:</label>
+          <UInput
+            color="amber"
+            id="passwordinput"
+            v-model="passwordinput"
+            min="1"
+            type="password"
+            required
+          />
         </div>
-        <br />
-        <UButton @click="loadInstallation" type="submit" color="amber" variant="solid">Laden
+        <transition name="fade">
+          <div v-if="passwordwarning" class="password-warning">
+            <i class="i-heroicons-exclamation-circle"></i>
+            <span>Das eingegebene Passwort ist falsch!</span>
+          </div>
+        </transition>
+        <UButton
+          @click="buttonladen"
+          type="submit"
+          color="amber"
+          variant="solid"
+          class="modal-button"
+        >
+          Laden
+        </UButton>
+      </form>
+    </div>
+  </UModal>
+
+  <UModal v-model="isOpenS">
+    <div class="p-4 modal-container">
+      <div class="modal-header">
+        <h2 class="modal-h2">Anlage speichern</h2>
+        <UButton color="red" @click="isOpenS = false" class="close-button"
+          >X</UButton
+        >
+      </div>
+      <p class="modal-info">
+        Bitte überprüfen Sie Ihre Angaben und geben Sie Ihre E-Mail-Adresse ein. Eine Bestätigungsmail wird Ihnen
+        zugeschickt.
+      </p>
+      <form @submit.prevent="handleSubmit">
+        <div class="form-group">
+          <label for="email">E-Mail:</label>
+          <UInput
+            color="amber"
+            id="email"
+            v-model="email"
+            min="1"
+            type="email"
+            required
+          />
+        </div>
+        <UButton
+          @click="buttonspeichern"
+          type="submit"
+          color="amber"
+          variant="solid"
+          class="modal-button"
+        >
+          Speichern
         </UButton>
       </form>
     </div>
@@ -242,7 +514,6 @@
 <script>
 import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
-
 
 export default {
   components: {
@@ -254,7 +525,7 @@ export default {
       anlageNr: "",
       object: "",
       id: "",
-      password: "testPW",
+      password: "",
       email: "",
       name: "",
       phone: "",
@@ -262,13 +533,16 @@ export default {
       typ: "",
       protect: 0,
       modalStates: {},
+      passwordinput: "",
+      passwordwarning: false,
       isOpen: false,
       isOpenL: false,
+      isOpenS: false,
       isDropdownOpen: {},
       isOptionsModalOpen: {},
       hoverInfo: false,
-      selectedModelLocal: '',
-      oldModel: '',
+      selectedModelLocal: "",
+      oldModel: "",
       isWarningModalOpen: false,
       pendingModel: null,
       overrideToGleichschliessung: false,
@@ -286,7 +560,7 @@ export default {
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
-            keycolor: ""
+            keycolor: "",
           },
         ],
       ],
@@ -300,10 +574,10 @@ export default {
     isSchliessanlage() {
       // falls override aktiv ist => return false
       if (this.overrideToGleichschliessung) {
-        return false
+        return false;
       }
       // sonst den Wert aus dem Store
-      return this.store.isSchliessanlage
+      return this.store.isSchliessanlage;
     },
 
     modelOptions() {
@@ -372,26 +646,26 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-      return this.$route.path.includes('/admin');
+      return this.$route.path.includes("/admin");
     },
   },
   watch: {
-    'store.selectedModel': {
+    "store.selectedModel": {
       immediate: true,
       handler(newVal) {
         this.selectedModelLocal = newVal;
         this.oldModel = newVal;
-      }
+      },
     },
-    '$route.query.anlageNr': {
+    "$route.query.anlageNr": {
       handler(newVal) {
         if (newVal) {
           this.id = newVal;
           this.loadInstallation();
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     openOptionsModal(rowIndex) {
@@ -409,7 +683,6 @@ export default {
       }
     },
 
-
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
         const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
@@ -423,13 +696,12 @@ export default {
       return {};
     },
 
-
     getSelectedOptionsText(checkbox) {
       if (checkbox.optionsSelected && checkbox.optionsSelected.length) {
         // Zeige die Werte als Komma-getrennte Liste an
-        return checkbox.optionsSelected.join(", ")
+        return checkbox.optionsSelected.join(", ");
       }
-      return ""
+      return "";
     },
 
     optionsToString(options) {
@@ -441,7 +713,6 @@ export default {
       }
       return optionsArray.join(", ");
     },
-
 
     stringToOptions(optionsString, availableOptions) {
       const optionsArray = optionsString.split(", ").filter(Boolean);
@@ -558,7 +829,6 @@ export default {
       checkbox.outside = "";
       checkbox.options = {};
       checkbox.optionsSelected = [];
-
     },
 
     onInsideSizeChange(checkbox) {
@@ -657,7 +927,9 @@ export default {
 
     deleteCheckbox(colIndex) {
       if (colIndex === 0) {
-        alert("Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden.");
+        alert(
+          "Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden."
+        );
         return;
       }
 
@@ -668,7 +940,6 @@ export default {
         alert("Die letzte Spalte kann nicht entfernt werden.");
       }
     },
-
 
     deleteRow(rowIndex) {
       if (this.rows.length > 1 || rowIndex > 0) {
@@ -709,6 +980,16 @@ export default {
     generateRandomAnlagenNummer() {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
       this.anlageNr = randomNum.toString();
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let password = "";
+      for (let i = 0; i < 6; i++) {
+        password += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      this.password = password;
+      console.log(this.password);
     },
 
     async test() {
@@ -779,13 +1060,17 @@ export default {
             }
           }
           if (!foundAtLeastOne) {
-            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            alert(
+              `Bitte mindestens eine Berechtigung in Spalte #${
+                c + 1
+              } anklicken (Schließanlage).`
+            );
             return;
           }
         }
       }
 
-      // Falls du den alten HTML-Formular-Check nicht mehr nutzt, 
+      // Falls du den alten HTML-Formular-Check nicht mehr nutzt,
       // brauchst du hier nichts weiter. Direkt DB-Speicherung:
 
       // 3) Falls anlageNr noch leer => generiere
@@ -793,9 +1078,12 @@ export default {
         let antwort;
         do {
           this.generateRandomAnlagenNummer();
-          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
-            method: "post",
-          });
+          const response = await $fetch(
+            "./api/sqltestanlage?ID=" + this.anlageNr,
+            {
+              method: "post",
+            }
+          );
           antwort = response.message;
         } while (antwort === "Anlagennummer existiert.");
       }
@@ -813,7 +1101,7 @@ export default {
           Typ: this.typ,
           Modell: this.store.selectedModel,
           protect: this.protect,
-          Password: this.password
+          Password: this.password,
         },
       });
 
@@ -829,10 +1117,13 @@ export default {
           Option: (row[0].optionsSelected || []).join(", "),
         }));
 
-        const queryresultposition = await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
-          method: "post",
-          body: RowObject,
-        });
+        const queryresultposition = await $fetch(
+          "./api/sqlpostposition?ID=" + this.anlageNr,
+          {
+            method: "post",
+            body: RowObject,
+          }
+        );
 
         // 6) Schlüssel speichern
         const KeyNameObject = this.rows[0].map((col, colIndex) => ({
@@ -841,10 +1132,13 @@ export default {
           keyquantity: col.keyquantity || 1,
         }));
 
-        const queryresultschluessel = await $fetch("./api/sqlpostschluessel?ID=" + this.anlageNr, {
-          method: "post",
-          body: KeyNameObject,
-        });
+        const queryresultschluessel = await $fetch(
+          "./api/sqlpostschluessel?ID=" + this.anlageNr,
+          {
+            method: "post",
+            body: KeyNameObject,
+          }
+        );
 
         // 7) Matrix speichern
         const Matrix = this.rows.flatMap((row, rowIndex) =>
@@ -855,22 +1149,58 @@ export default {
           }))
         );
 
-        const queryresultmatrix = await $fetch("./api/sqlpostmatrix?ID=" + this.anlageNr, {
-          method: "post",
-          body: Matrix,
-        });
-
-        // 8) Weiterleitung zur systeme.vue
-        this.$router.push({
-          name: "systeme",
-          query: {
-            anlageNr: this.anlageNr,
-            isSchliessanlage: this.store.isSchliessanlage,
-          },
-        });
+        const queryresultmatrix = await $fetch(
+          "./api/sqlpostmatrix?ID=" + this.anlageNr,
+          {
+            method: "post",
+            body: Matrix,
+          }
+        );
       }
     },
+    weiterleitung_systeme() {
+      // 8) Weiterleitung zur systeme.vue
+      this.$router.push({
+        name: "systeme",
+        query: {
+          anlageNr: this.anlageNr,
+          isSchliessanlage: this.store.isSchliessanlage,
+        },
+      });
+    },
 
+    buttonweitersysteme() {
+      this.saveInstallation();
+      this.weiterleitung_systeme();
+    },
+    buttonladen() {
+      this.checkpassword();
+    },
+
+    buttonspeichern() {
+      this.saveInstallation();
+      //this.sendmailoffice();
+      this.sendmailkunde();
+      this.isOpenS = false;
+    },
+
+    async checkpassword() {
+      const resultcheckpassword = await $fetch("./api/sqlgetanlage", {
+        method: "post",
+        body: { ID: this.id },
+      });
+      this.password = resultcheckpassword.queryresult[0].Password || "";
+      if (this.password === this.passwordinput) {
+        this.passwordwarning = false;
+        this.loadInstallation();
+        this.isOpenL = false;
+      } else {
+        this.passwordwarning = true;
+      }
+
+      //console.log('DatenbankPASS: ' + this.password);
+      //console.log('PASSFormular: ' + this.passwordinput);
+    },
 
     async loadInstallation() {
       this.rows.length = 1;
@@ -898,7 +1228,7 @@ export default {
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
         this.protect = queryresultanlage.queryresult[0].protect || "";
-        this.Password = queryresultanlage.queryresult[0].Password || "";
+        this.password = queryresultanlage.queryresult[0].Password || "";
       }
 
       const queryresultposition = await $fetch("./api/sqlgetposition", {
@@ -919,19 +1249,19 @@ export default {
       }
 
       queryresultposition.queryresult.forEach((item) => {
-        const zeile = item.POS - 1
-        this.rows[zeile][0].doorDesignation = item.Bezeichnung
-        this.rows[zeile][0].doorquantity = item.Anzahl || 1
-        this.rows[zeile][0].type = item.Typ || ""
-        this.rows[zeile][0].outside = item.SizeA || ""
-        this.rows[zeile][0].inside = item.SizeI || ""
+        const zeile = item.POS - 1;
+        this.rows[zeile][0].doorDesignation = item.Bezeichnung;
+        this.rows[zeile][0].doorquantity = item.Anzahl || 1;
+        this.rows[zeile][0].type = item.Typ || "";
+        this.rows[zeile][0].outside = item.SizeA || "";
+        this.rows[zeile][0].inside = item.SizeI || "";
 
-        const loadedString = item.Option || ""
+        const loadedString = item.Option || "";
         this.rows[zeile][0].optionsSelected = loadedString
           .split(",")
-          .map(s => s.trim())
-          .filter(Boolean)
-      })
+          .map((s) => s.trim())
+          .filter(Boolean);
+      });
 
       const queryresultschluessel = await $fetch("./api/sqlgetschluessel", {
         method: "post",
@@ -973,11 +1303,11 @@ export default {
     },
 
     onModelSelect(event) {
-      const newlySelected = event.target.value
+      const newlySelected = event.target.value;
       if (newlySelected !== this.oldModel) {
-        this.pendingModel = newlySelected
-        event.target.value = this.oldModel
-        this.isWarningModalOpen = true
+        this.pendingModel = newlySelected;
+        event.target.value = this.oldModel;
+        this.isWarningModalOpen = true;
       }
     },
 
@@ -989,8 +1319,8 @@ export default {
             checkbox.type = "";
             checkbox.inside = "";
             checkbox.outside = "";
-            checkbox.options = {};          // Falls noch vorhanden
-            checkbox.optionsSelected = [];  // <<--- NEU: Array leeren!
+            checkbox.options = {}; // Falls noch vorhanden
+            checkbox.optionsSelected = []; // <<--- NEU: Array leeren!
             checkbox.checked = !this.isSchliessanlage;
           });
         });
@@ -1003,10 +1333,9 @@ export default {
     },
 
     cancelChange() {
-      this.pendingModel = null
-      this.isWarningModalOpen = false
+      this.pendingModel = null;
+      this.isWarningModalOpen = false;
     },
-
 
     mounted() {
       this.generateRandomAnlagenNummer();
@@ -1018,13 +1347,41 @@ export default {
         this.id = this.$route.query.anlageNr;
         this.loadInstallation();
       }
-
     },
     beforeUnmount() {
       document.removeEventListener("click", this.closeAllDropdowns);
-    }
-    
-  }
+    },
+
+    async sendmailoffice() {
+      const mailresult = await $fetch("./api/mail", {
+        method: "POST",
+        body: {
+          name: "",
+          to: "office@secutimetec.de",
+          subject: "Test",
+          html: "dies ist ein test",
+        },
+      });
+    },
+    async sendmailkunde() {
+      let message = "";
+      message =
+        "Anlagennummer: " +
+        this.anlageNr +
+        "<br>" +
+        "Passwort: " +
+        this.password;
+      const mailresult = await $fetch("./api/mail", {
+        method: "POST",
+        body: {
+          name: "",
+          to: this.email,
+          subject: "stt-shop  ---  Ihre gespeicherte Konfiguration",
+          html: message,
+        },
+      });
+    },
+  },
 };
 </script>
 
