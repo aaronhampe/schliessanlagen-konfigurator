@@ -99,6 +99,20 @@ $color-sky: #0ea5e9;
   height: 100%; /* Falls erforderlich */
 }
 
+.offer-price-summery {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #343a40;
+
+  .price {
+    font-size: 18px;
+    color: #414141;
+  }
+}
+
+
+
 .use-case-badge {
   display: inline-block;
   margin: 6px 0;
@@ -298,6 +312,7 @@ $color-sky: #0ea5e9;
 
   /* Price & Widerruf */
   .price-and-widerruf {
+    
     margin: 0 20px 20px;
 
     h2 {
@@ -352,7 +367,8 @@ $color-sky: #0ea5e9;
   /* Footer mit Button */
   .modal-footer {
     display: flex;
-    justify-content: flex-start;
+    text-align: center;
+    justify-content: center;
     padding: 0 20px 20px 20px;
     gap: 10px;
 

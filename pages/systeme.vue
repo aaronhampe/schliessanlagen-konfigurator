@@ -685,7 +685,7 @@ onMounted(async () => {
         </div>
 
         <!-- Preis -->
-        <div class="offer-price" style="margin-top: 20px">
+        <div class="offer-price-summery" style="margin-top: 20px">
           Gesamtpreis:
           <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br>inkl.Versand</span>
         </div>
