@@ -34,10 +34,9 @@ $color-sky: #0ea5e9;
 
 .offer {
   display: flex;
-  
   align-items: center;
   width: 100%;
-  
+  gap: 20px;
   padding: 15px;
   margin-top: 10px;
   border-radius: 8px;
@@ -71,10 +70,11 @@ $color-sky: #0ea5e9;
 
 
 .offer-details {
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
+  width: 100%;
   gap: 20px;
-  flex-wrap: wrap; /* Falls Platz eng wird */
 }
 
 .offer-delivery {
