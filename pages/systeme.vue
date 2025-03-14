@@ -336,6 +336,7 @@ async function addToCart(systemName, price, productID) {
         product_id: productID,
         price: price,
         quantity: 1,
+        anlage_nummer: body.Anlage,
         config_text: fullConfiguration,
         widerruf_accepted: true,
       }),
