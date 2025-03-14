@@ -91,14 +91,12 @@ $color-sky: #0ea5e9;
 
 
 .offer-price {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #343a40;
-
-  .price {
-    font-size: 18px;
-    color: #414141;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%; /* Falls erforderlich */
 }
 
 .use-case-badge {

@@ -490,7 +490,7 @@ onMounted(async () => {
       </div>
       <div class="offer-price">
         Gesamtpreis:
-        <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">,<br>inkl. Versand</span>
+        <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">inkl. Versand</span>
       </div>
       <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
         @click="openSummary(selectedModelOffer)">
@@ -541,7 +541,7 @@ onMounted(async () => {
         </div>
         <div class="offer-price">
           Gesamtpreis:
-          <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">,<br>inkl. Versand</span>
+          <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
         </div>
         <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
           System auswählen
