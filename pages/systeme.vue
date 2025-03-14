@@ -429,7 +429,7 @@ onMounted(async () => {
 <template>
   <div class="systeme-page">
     <h2>Systemübersicht</h2>
-    <div v-if="anlageNr">
+    <div v-if="anlageNr" >
       <p>
         Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
@@ -459,6 +459,7 @@ onMounted(async () => {
     <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
     <div class="offer-details">
       <h3>{{ selectedModelOffer.title }}</h3>
+      
       <div class="offer-type-info">
         {{
           selectedModelOffer.isSchliessanlage
