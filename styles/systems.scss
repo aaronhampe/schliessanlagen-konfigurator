@@ -100,6 +100,7 @@ $color-sky: #0ea5e9;
 }
 
 .offer-price-summery {
+  
   text-align: center;
   font-size: 16px;
   margin-bottom: 10px;
@@ -312,8 +313,13 @@ $color-sky: #0ea5e9;
 
   /* Price & Widerruf */
   .price-and-widerruf {
+    display: flex;
+    text-align: center;
+    justify-content: center;
     
-    margin: 0 20px 20px;
+    
+
+    
 
     h2 {
       margin-bottom: 10px;
@@ -353,6 +359,8 @@ $color-sky: #0ea5e9;
     }
 
     .offer-price {
+      
+    
       margin-top: 16px;
       font-size: 1.1rem;
       span {

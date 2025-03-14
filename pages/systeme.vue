@@ -639,8 +639,9 @@ onMounted(async () => {
 
       <!-- Widerruf / Checkboxen / Preis -->
       <div class="price-and-widerruf">
-        <h2>Wichtige Hinweise:</h2>
+        
         <div class="required-checks">
+          <h2>Wichtige Hinweise:</h2>
           <!-- Widerruf -->
           <label class="widerruf-label">
             <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
