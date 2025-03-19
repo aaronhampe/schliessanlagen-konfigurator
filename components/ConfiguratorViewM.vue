@@ -1,4 +1,3 @@
-
 <template>
   <div class="mobile-container">
     <!-- Kopfbereich -->
@@ -10,21 +9,31 @@
         <i class="i-heroicons-information-circle" />
       </div>
       <div v-if="showInfo" class="info-tooltip">
-        Bei einer Gleichschließung können alle Schlüssel alle Türen öffnen, bei einer Schließanlage benötigen Schlüssel eine gezielte Zuweisung.
+        Bei einer Gleichschließung können alle Schlüssel alle Türen öffnen, bei
+        einer Schließanlage benötigen Schlüssel eine gezielte Zuweisung.
       </div>
     </div>
 
     <!-- Anlagennummer -->
     <div class="mobile-section">
       <h2>Anlagennummer:</h2>
-      <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
+      <input
+        type="text"
+        readonly
+        v-model="anlageNr"
+        placeholder="Anlagenummer"
+      />
     </div>
 
     <!-- Modellauswahl -->
     <div class="mobile-section">
       <h2>Modellauswahl:</h2>
       <select :value="selectedModelLocal" @change="onModelSelect($event)">
-        <option v-for="model in store.availableModels" :key="model" :value="model">
+        <option
+          v-for="model in store.availableModels"
+          :key="model"
+          :value="model"
+        >
           {{ model }}
         </option>
       </select>
@@ -34,21 +43,34 @@
     <div class="mobile-section">
       <label>
         <span>Gleichschließung aktivieren:</span>
-        <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
+        <UToggle
+          color="sky"
+          v-model="finalGleichschliessungState"
+          :disabled="disableGleichToggle"
+        />
       </label>
     </div>
 
     <!-- Türdetails (Akkordeon) -->
-    <div class="mobile-accordion" v-for="(row, rowIndex) in rows" :key="rowIndex">
+    <div
+      class="mobile-accordion"
+      v-for="(row, rowIndex) in rows"
+      :key="rowIndex"
+    >
       <div class="accordion-header" @click="toggleAccordion(rowIndex)">
         <h3>Tür {{ rowIndex + 1 }}</h3>
-        <i :class="accordionOpen[rowIndex] ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'" />
+        <i
+          :class="accordionOpen[rowIndex] ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
+        />
       </div>
       <div v-if="accordionOpen[rowIndex]" class="accordion-content">
         <!-- Türbezeichnung -->
         <div class="input-group">
           <label>Türbezeichnung:</label>
-          <UInput v-model="row[0].doorDesignation" placeholder="z.B. Haupteingang" />
+          <UInput
+            v-model="row[0].doorDesignation"
+            placeholder="z.B. Haupteingang"
+          />
         </div>
 
         <!-- Anzahl -->
@@ -62,7 +84,11 @@
           <label>Zylinder-Typ:</label>
           <select v-model="row[0].type">
             <option disabled value="">Bitte auswählen</option>
-            <option v-for="type in store.availableTypes" :key="type" :value="type">
+            <option
+              v-for="type in store.availableTypes"
+              :key="type"
+              :value="type"
+            >
               {{ type }}
             </option>
           </select>
@@ -74,13 +100,21 @@
           <div class="size-inputs">
             <select v-model="row[0].outside">
               <option value="">Außen</option>
-              <option v-for="size in getAvailableOutsideSizes(row[0])" :key="size" :value="size">
+              <option
+                v-for="size in getAvailableOutsideSizes(row[0])"
+                :key="size"
+                :value="size"
+              >
                 {{ size }} mm
               </option>
             </select>
             <select v-model="row[0].inside">
               <option value="">Innen</option>
-              <option v-for="size in getAvailableInsideSizes(row[0])" :key="size" :value="size">
+              <option
+                v-for="size in getAvailableInsideSizes(row[0])"
+                :key="size"
+                :value="size"
+              >
                 {{ size }} mm
               </option>
             </select>
@@ -90,17 +124,27 @@
         <!-- Optionen -->
         <div class="input-group">
           <label>Optionen:</label>
-          <UButton @click="openOptionsModal(rowIndex)" icon="i-heroicons-cog">
+          <UButton
+            @click.stop="openOptionsModal(rowIndex)"
+            icon="i-heroicons-cog"
+          >
             {{ getSelectedOptionsText(row[0]) || "Optionen auswählen" }}
           </UButton>
         </div>
 
         <!-- Aktionen (Duplizieren/Löschen) -->
         <div class="action-buttons">
-          <UButton @click="duplicateRow(rowIndex)" icon="i-heroicons-document-duplicate">
+          <UButton
+            @click="duplicateRow(rowIndex)"
+            icon="i-heroicons-document-duplicate"
+          >
             Duplizieren
           </UButton>
-          <UButton @click="deleteRow(rowIndex)" icon="i-heroicons-trash" color="red">
+          <UButton
+            @click="deleteRow(rowIndex)"
+            icon="i-heroicons-trash"
+            color="red"
+          >
             Löschen
           </UButton>
         </div>
@@ -109,32 +153,72 @@
 
     <!-- Schlüssel hinzufügen -->
     <div class="mobile-section">
-      <UButton @click="addCheckbox" icon="i-heroicons-plus" class="full-width-button">
+      <UButton
+        @click="addCheckbox"
+        icon="i-heroicons-plus"
+        class="action-button"
+      >
         Schlüssel hinzufügen
       </UButton>
     </div>
 
     <!-- Weitere Aktionen -->
     <div class="mobile-section">
-      <UButton @click="addRow" icon="i-heroicons-plus" class="full-width-button">
+      <UButton @click="addRow" icon="i-heroicons-plus" class="action-button">
         Tür hinzufügen
       </UButton>
-      <UButton @click="saveInstallation" class="full-width-button">
+      <UButton @click="saveInstallation" class="action-button">
         Weiter zu den Angeboten
       </UButton>
+    </div>
+
+    <!-- Options Modal über UModal -->
+    <UModal v-model="modalOptionsVisible">
+      <template #header>
+        <h3>Optionen auswählen</h3>
+      </template>
+      <template #body>
+        <div v-if="activeOptionsModalIndex !== null">
+          <div v-for="option in getAllOptionsForType(rows[activeOptionsModalIndex][0]).Optionen" :key="option" class="option-item">
+            <label>
+              <input type="checkbox" :value="option" v-model="modalOptionsSelected" />
+              {{ option }}
+            </label>
+          </div>
+        </div>
+      </template>
+      <template #footer>
+        <UButton @click="applyOptions" class="modal-button confirm">Übernehmen</UButton>
+        <UButton @click="closeOptionsModal" class="modal-button cancel">Abbrechen</UButton>
+      </template>
+    </UModal>
+
+    <!-- Warnungsmodal für Modellwechsel -->
+    <div v-if="isWarningModalOpen" class="warning-modal">
+      <div class="warning-modal-content">
+        <p>
+          Modell wechseln? Dadurch werden alle aktuellen Einstellungen
+          zurückgesetzt.
+        </p>
+        <div class="modal-buttons">
+          <button @click="confirmChange" class="modal-button confirm">
+            Ja, wechseln
+          </button>
+          <button @click="cancelChange" class="modal-button cancel">
+            Abbrechen
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import ColumnModal from "./ColumnModal.vue";
+import { ref } from "vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
-
+// Angenommen, UModal, UButton, UInput und UToggle sind globale Komponenten (oder werden importiert)
 export default {
-  components: {
-    ColumnModal,
-  },
-
+  name: "MobileConfiguratorView",
   data() {
     return {
       anlageNr: "",
@@ -150,10 +234,14 @@ export default {
       isOpen: false,
       isOpenL: false,
       isDropdownOpen: {},
-      isOptionsModalOpen: {},
+      // activeOptionsModalIndex steuert, welche Tür aktuell das Optionen-Modal geöffnet hat
+      activeOptionsModalIndex: null,
+      // Modal Sichtbarkeit und ausgewählte Optionen
+      modalOptionsVisible: false,
+      modalOptionsSelected: [],
       hoverInfo: false,
-      selectedModelLocal: '',
-      oldModel: '',
+      selectedModelLocal: "",
+      oldModel: "",
       isWarningModalOpen: false,
       pendingModel: null,
       overrideToGleichschliessung: false,
@@ -171,7 +259,7 @@ export default {
             checked: !this.isSchliessanlage,
             keyquantity: 1,
             keyname: "Schlüssel 1",
-            keycolor: ""
+            keycolor: "",
           },
         ],
       ],
@@ -179,60 +267,41 @@ export default {
       accordionOpen: [],
     };
   },
-
   computed: {
     store() {
       return useCylinderStore();
     },
     isSchliessanlage() {
-      // falls override aktiv ist => return false
       if (this.overrideToGleichschliessung) {
-        return false
+        return false;
       }
-      // sonst den Wert aus dem Store
-      return this.store.isSchliessanlage
+      return this.store.isSchliessanlage;
     },
-
-    modelOptions() {
-      return Object.keys(zylindermodelle);
-    },
-
     finalGleichschliessungState: {
       get() {
-        // 1) Falls im Store gar keine Schließanlage gesetzt => immer Gleichschließung
         if (!this.store.isSchliessanlage) {
           return true;
         }
-
-        // 2) Falls das Modell z.B. ABUS Ec 550 => immer Gleichschließung
         const model = this.store.currentModel || "";
         if (model === "ABUS Ec 550") {
           return true;
         }
-
-        // 3) sonst: nutze den (vom Nutzer) toggelbaren Wert
         return this.overrideToGleichschliessung;
       },
       set(val) {
         this.overrideToGleichschliessung = val;
       },
     },
-
     disableGleichToggle() {
       if (!this.store.isSchliessanlage) {
-        // => schon Gleichschließung => nichts zu toggeln
         return true;
       }
       if (this.store.currentModel === "ABUS Ec 550") {
-        // => immer Gleichschließung => nichts zu toggeln
         return true;
       }
       return false;
     },
-
     effectiveIsSchliessanlage() {
-      // Wir wollen: Schließanlage == NICHT Gleichschließung
-      // Also:
       return !this.finalGleichschliessungState;
     },
     selectedModel: {
@@ -259,35 +328,46 @@ export default {
       return this.store.cylinderType;
     },
     showLoadButton() {
-      return this.$route.path.includes('/admin/');
+      return this.$route.path.includes("/admin/");
     },
   },
   watch: {
-    'store.selectedModel': {
+    "store.selectedModel": {
       immediate: true,
       handler(newVal) {
         this.selectedModelLocal = newVal;
         this.oldModel = newVal;
-      }
+      },
     },
-    '$route.query.anlageNr': {
+    "$route.query.anlageNr": {
       handler(newVal) {
         if (newVal) {
           this.id = newVal;
           this.loadInstallation();
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     openOptionsModal(rowIndex) {
-      this.isOptionsModalOpen[rowIndex] = true;
+      // Setze aktiven Index und lade die aktuell ausgewählten Optionen
+      this.activeOptionsModalIndex = rowIndex;
+      this.modalOptionsSelected = [...this.rows[rowIndex][0].optionsSelected];
+      this.modalOptionsVisible = true;
     },
-    closeOptionsModal(rowIndex) {
-      this.isOptionsModalOpen[rowIndex] = false;
+    closeOptionsModal() {
+      this.modalOptionsVisible = false;
+      this.activeOptionsModalIndex = null;
     },
-
+    applyOptions() {
+      if (this.activeOptionsModalIndex !== null) {
+        this.rows[this.activeOptionsModalIndex][0].optionsSelected = [
+          ...this.modalOptionsSelected,
+        ];
+      }
+      this.closeOptionsModal();
+    },
     toggleDropdown(rowIndex) {
       if (!this.isDropdownOpen[rowIndex]) {
         this.isDropdownOpen[rowIndex] = true;
@@ -295,8 +375,6 @@ export default {
         this.isDropdownOpen[rowIndex] = !this.isDropdownOpen[rowIndex];
       }
     },
-
-
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
         const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
@@ -309,16 +387,12 @@ export default {
       }
       return {};
     },
-
-
     getSelectedOptionsText(checkbox) {
       if (checkbox.optionsSelected && checkbox.optionsSelected.length) {
-        // Zeige die Werte als Komma-getrennte Liste an
-        return checkbox.optionsSelected.join(", ")
+        return checkbox.optionsSelected.join(", ");
       }
-      return ""
+      return "";
     },
-
     optionsToString(options) {
       const optionsArray = [];
       for (const category in options) {
@@ -328,8 +402,6 @@ export default {
       }
       return optionsArray.join(", ");
     },
-
-
     stringToOptions(optionsString, availableOptions) {
       const optionsArray = optionsString.split(", ").filter(Boolean);
       const options = {};
@@ -347,13 +419,11 @@ export default {
       });
       return options;
     },
-
     closeAllDropdowns() {
       Object.keys(this.isDropdownOpen).forEach((key) => {
         this.isDropdownOpen[key] = false;
       });
     },
-
     handleClickOutside(event) {
       if (
         this.$refs.dropdownContainer &&
@@ -362,7 +432,6 @@ export default {
         this.isDropdownOpen = false;
       }
     },
-
     changeModel() {
       this.store.setModel(this.selectedModel);
       this.rows.forEach((row) => {
@@ -375,7 +444,6 @@ export default {
         });
       });
     },
-
     getAvailableInsideSizes(checkbox) {
       const sizes = this.getSizesForType(checkbox.type);
       if (checkbox.outside) {
@@ -389,7 +457,6 @@ export default {
           .filter((value, index, self) => self.indexOf(value) === index);
       }
     },
-
     getAvailableOutsideSizes(checkbox) {
       const sizes = this.getSizesForType(checkbox.type);
       if (checkbox.inside) {
@@ -403,7 +470,6 @@ export default {
           .filter((value, index, self) => self.indexOf(value) === index);
       }
     },
-
     getSizesForType(type) {
       if (this.store.selectedModel && type) {
         const typeKey = type.replace(/\s*\(.*?\)/g, "");
@@ -411,7 +477,6 @@ export default {
       }
       return [];
     },
-
     getAvailableOptions(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
         const typeKey = checkbox.type.replace(/\s*\(.*?\)/g, "");
@@ -419,12 +484,11 @@ export default {
       }
       return {};
     },
-
     setOption(checkbox, category, value) {
       if (!checkbox.options) {
-        this.$set(checkbox, "options", {});
+        checkbox.options = {};
       }
-      this.$set(checkbox.options, category, value);
+      checkbox.options[category] = value;
     },
     getAllOptionsForType(checkbox) {
       if (this.store.selectedModel && checkbox.type) {
@@ -436,7 +500,6 @@ export default {
     setSingleOption(checkbox, value) {
       checkbox.options = value;
     },
-
     onTypeChange(checkbox) {
       if (!this.isSchliessanlage) {
         checkbox.checked = true;
@@ -445,21 +508,17 @@ export default {
       checkbox.outside = "";
       checkbox.options = {};
       checkbox.optionsSelected = [];
-
     },
-
     onInsideSizeChange(checkbox) {
       if (!this.isSizeCombinationValid(checkbox)) {
         checkbox.outside = "";
       }
     },
-
     onOutsideSizeChange(checkbox) {
       if (!this.isSizeCombinationValid(checkbox)) {
         checkbox.inside = "";
       }
     },
-
     isSizeCombinationValid(checkbox) {
       const sizes = this.getSizesForType(checkbox.type);
       return sizes.some(
@@ -471,7 +530,6 @@ export default {
     resetOptions(rowIndex) {
       this.rows[rowIndex].options = [];
     },
-
     navigateToSysteme() {
       this.$router.push({
         name: "systeme",
@@ -481,23 +539,18 @@ export default {
         },
       });
     },
-
     openModal(colIndex) {
       this.modalStates[colIndex] = true;
     },
-
     closeModal(colIndex) {
       this.modalStates[colIndex] = false;
     },
-
     updateColumnName(colIndex, newName) {
       this.rows[0][colIndex].keyname = newName;
     },
-
     addRow() {
       const numCheckboxes = this.rows[0].length;
       const newRow = [];
-
       for (let i = 0; i < numCheckboxes; i++) {
         newRow.push({
           position: this.rows.length + 1,
@@ -513,18 +566,15 @@ export default {
           keyname: "Schlüssel " + (i + 1),
         });
       }
-
       this.rows.push(newRow);
     },
-
     toggleRadio(checkbox, categoryName, option) {
       if (checkbox.options[categoryName] === option) {
-        this.set(checkbox.options, categoryName, null);
+        checkbox.options[categoryName] = null;
       } else {
-        this.set(checkbox.options, categoryName, option);
+        checkbox.options[categoryName] = option;
       }
     },
-
     addCheckbox() {
       this.rows.forEach((checkbox) => {
         if (!this.isSchliessanlage) {
@@ -533,21 +583,22 @@ export default {
             keyquantity: 1,
             keyname: "Schlüssel " + (this.rows[0].length + 1),
           });
-        } else
+        } else {
           checkbox.push({
             checked: false,
             keyquantity: 1,
             keyname: "Schlüssel " + (this.rows[0].length + 1),
           });
+        }
       });
     },
-
     deleteCheckbox(colIndex) {
       if (colIndex === 0) {
-        alert("Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden.");
+        alert(
+          "Die erste Spalte enthält die Hauptdaten und kann nicht entfernt werden."
+        );
         return;
       }
-
       const hasMultipleColumns = this.rows.some((row) => row.length > 1);
       if (hasMultipleColumns || colIndex > 0) {
         this.rows.forEach((row) => row.splice(colIndex, 1));
@@ -555,8 +606,6 @@ export default {
         alert("Die letzte Spalte kann nicht entfernt werden.");
       }
     },
-
-
     deleteRow(rowIndex) {
       if (this.rows.length > 1 || rowIndex > 0) {
         this.rows.splice(rowIndex, 1);
@@ -564,13 +613,11 @@ export default {
         alert("Die letzte Zeile kann nicht entfernt werden.");
       }
     },
-
     duplicateRow(rowIndex) {
       const currentRow = this.rows[rowIndex];
       const newRow = this.deepCopy(currentRow);
       this.rows.splice(rowIndex + 1, 0, newRow);
     },
-
     duplicateCol(colIndex) {
       this.rows.forEach((row, rowIndex) => {
         if (row[colIndex]) {
@@ -579,7 +626,6 @@ export default {
         }
       });
     },
-
     deepCopy(obj) {
       if (typeof obj !== "object" || obj === null) {
         return obj;
@@ -592,12 +638,10 @@ export default {
       }
       return copy;
     },
-
     generateRandomAnlagenNummer() {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
       this.anlageNr = randomNum.toString();
     },
-
     async test() {
       console.log("test");
       try {
@@ -620,22 +664,18 @@ export default {
             billing_email: "fb@secutimetec.de",
           }),
         });
-        console.log(test);
-        // https://www.stt-shop.de/warenkorb/?cocart-load-cart=t_e7d1a169c9f7858d77450e9a4927dc
+        console.log("test");
         const result = await response.json();
         if (result.success) {
-          console.log = "Produkt erfolgreich in den Warenkorb gelegt.";
+          console.log("Produkt erfolgreich in den Warenkorb gelegt.");
         } else {
-          console.log =
-            "Fehler beim Hinzufügen des Produkts: " + result.message;
+          console.log("Fehler beim Hinzufügen des Produkts: " + result.message);
         }
       } catch (error) {
-        console.log = "Es gab einen Fehler bei der Anfrage: " + error;
+        console.log("Es gab einen Fehler bei der Anfrage: " + error);
       }
     },
-
     async saveInstallation() {
-      // 1) PRÜFUNG: Jedes row[0] (Tür) => Type, Außen, Innen nicht leer
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
         const { type, outside, inside } = this.rows[rowIndex][0];
         if (!type) {
@@ -651,12 +691,8 @@ export default {
           return;
         }
       }
-
-      // 2) PRÜFUNG (nur bei isSchliessanlage): Pro Spalte >= 1 angehakt
       if (this.isSchliessanlage) {
-        // Anzahl Spalten = this.rows[0].length
         const colCount = this.rows[0].length;
-        // Jede Spalte => check ob mind. eine row => .checked = true
         for (let c = 0; c < colCount; c++) {
           let foundAtLeastOne = false;
           for (let r = 0; r < this.rows.length; r++) {
@@ -666,16 +702,13 @@ export default {
             }
           }
           if (!foundAtLeastOne) {
-            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            alert(
+              `Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`
+            );
             return;
           }
         }
       }
-
-      // Falls du den alten HTML-Formular-Check nicht mehr nutzt, 
-      // brauchst du hier nichts weiter. Direkt DB-Speicherung:
-
-      // 3) Falls anlageNr noch leer => generiere
       if (this.anlageNr === "") {
         let antwort;
         do {
@@ -686,8 +719,6 @@ export default {
           antwort = response.message;
         } while (antwort === "Anlagennummer existiert.");
       }
-
-      // 4) Anlage in der DB speichern
       const queryresultanlage = await $fetch("/api/sqlpostanlageneu", {
         method: "post",
         body: {
@@ -701,9 +732,7 @@ export default {
           Modell: this.store.selectedModel,
         },
       });
-
       if (queryresultanlage) {
-        // 5) Positionen speichern
         const RowObject = this.rows.map((row, rowIndex) => ({
           POS: rowIndex + 1,
           Bezeichnung: row[0].doorDesignation || "",
@@ -713,25 +742,19 @@ export default {
           SizeI: row[0].inside || "",
           Option: (row[0].optionsSelected || []).join(", "),
         }));
-
         const queryresultposition = await $fetch("/api/sqlpostposition?ID=" + this.anlageNr, {
           method: "post",
           body: RowObject,
         });
-
-        // 6) Schlüssel speichern
         const KeyNameObject = this.rows[0].map((col, colIndex) => ({
           keyPos: colIndex + 1,
           keyname: col.keyname,
           keyquantity: col.keyquantity || 1,
         }));
-
         const queryresultschluessel = await $fetch("/api/sqlpostschluessel?ID=" + this.anlageNr, {
           method: "post",
           body: KeyNameObject,
         });
-
-        // 7) Matrix speichern
         const Matrix = this.rows.flatMap((row, rowIndex) =>
           row.map((col, colIndex) => ({
             position: rowIndex + 1,
@@ -739,13 +762,10 @@ export default {
             checked: col.checked || false,
           }))
         );
-
         const queryresultmatrix = await $fetch("/api/sqlpostmatrix?ID=" + this.anlageNr, {
           method: "post",
           body: Matrix,
         });
-
-        // 8) Weiterleitung zur systeme.vue
         this.$router.push({
           name: "systeme",
           query: {
@@ -755,18 +775,13 @@ export default {
         });
       }
     },
-
-
     async loadInstallation() {
       this.rows.length = 1;
       this.rows[0].length = 1;
-
-      // Daten für die Anlage
       const queryresultanlage = await $fetch("/api/sqlgetanlage", {
         method: "post",
         body: { ID: this.id },
       });
-
       if (
         queryresultanlage &&
         queryresultanlage.queryresult &&
@@ -779,11 +794,9 @@ export default {
         this.phone = queryresultanlage.queryresult[0].Telefon || "";
         this.company = queryresultanlage.queryresult[0].Firma || "";
         this.typ = queryresultanlage.queryresult[0].Typ || "";
-
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
       }
-
       const queryresultposition = await $fetch("/api/sqlgetposition", {
         method: "post",
         body: { ID: this.id },
@@ -791,7 +804,6 @@ export default {
       const maxZeilePosition = Math.max(
         ...queryresultposition.queryresult.map((item) => item.POS)
       );
-
       for (let i = 0; i < maxZeilePosition - 1; i++) {
         const numCheckboxes = this.rows[0].length;
         const newRow = [];
@@ -800,70 +812,58 @@ export default {
         }
         this.rows.push(newRow);
       }
-
       queryresultposition.queryresult.forEach((item) => {
-        const zeile = item.POS - 1
-        this.rows[zeile][0].doorDesignation = item.Bezeichnung
-        this.rows[zeile][0].doorquantity = item.Anzahl || 1
-        this.rows[zeile][0].type = item.Typ || ""
-        this.rows[zeile][0].outside = item.SizeA || ""
-        this.rows[zeile][0].inside = item.SizeI || ""
-
-        const loadedString = item.Option || ""
+        const zeile = item.POS - 1;
+        this.rows[zeile][0].doorDesignation = item.Bezeichnung;
+        this.rows[zeile][0].doorquantity = item.Anzahl || 1;
+        this.rows[zeile][0].type = item.Typ || "";
+        this.rows[zeile][0].outside = item.SizeA || "";
+        this.rows[zeile][0].inside = item.SizeI || "";
+        const loadedString = item.Option || "";
         this.rows[zeile][0].optionsSelected = loadedString
           .split(",")
-          .map(s => s.trim())
-          .filter(Boolean)
-      })
-
+          .map((s) => s.trim())
+          .filter(Boolean);
+      });
       const queryresultschluessel = await $fetch("/api/sqlgetschluessel", {
         method: "post",
         body: { ID: this.id },
       });
-
       const maxSpalteSchluessel = Math.max(
         ...queryresultschluessel.queryresult.map((item) => item.KeyPOS)
       );
-
       while (this.rows[0].length < maxSpalteSchluessel) {
         this.addCheckbox();
       }
-
       queryresultschluessel.queryresult.forEach((item) => {
         const spalte = item.KeyPOS - 1;
         this.rows[0][spalte].keyname = item.Bezeichnung;
         this.rows[0][spalte].keyquantity = item.Anzahl;
       });
-
       const queryresultmatrix = await $fetch("/api/sqlgetmatrix", {
         method: "post",
         body: { ID: this.id },
       });
-
       const maxZeile = Math.max(
         ...queryresultmatrix.queryresult.map((item) => item.POSZylinder)
       );
       const maxSpalte = Math.max(
         ...queryresultmatrix.queryresult.map((item) => item.POSSchluessel)
       );
-
       queryresultmatrix.queryresult.forEach((item) => {
         const zeile = item.POSZylinder - 1;
         const spalte = item.POSSchluessel - 1;
         this.rows[zeile][spalte].checked = item.Berechtigung;
       });
-      this.isOpenL = false;
     },
-
     onModelSelect(event) {
-      const newlySelected = event.target.value
+      const newlySelected = event.target.value;
       if (newlySelected !== this.oldModel) {
-        this.pendingModel = newlySelected
-        event.target.value = this.oldModel
-        this.isWarningModalOpen = true
+        this.pendingModel = newlySelected;
+        event.target.value = this.oldModel;
+        this.isWarningModalOpen = true;
       }
     },
-
     confirmChange() {
       if (this.pendingModel) {
         this.store.setModel(this.pendingModel);
@@ -872,100 +872,136 @@ export default {
             checkbox.type = "";
             checkbox.inside = "";
             checkbox.outside = "";
-            checkbox.options = {};          // Falls noch vorhanden
-            checkbox.optionsSelected = [];  // <<--- NEU: Array leeren!
+            checkbox.options = {};
+            checkbox.optionsSelected = [];
             checkbox.checked = !this.isSchliessanlage;
           });
         });
-
         this.selectedModelLocal = this.pendingModel;
         this.oldModel = this.pendingModel;
         this.isWarningModalOpen = false;
         this.pendingModel = null;
       }
     },
-
     cancelChange() {
-      this.pendingModel = null
-      this.isWarningModalOpen = false
-    },
-
-
-    mounted() {
-      this.generateRandomAnlagenNummer();
-      document.addEventListener("click", this.closeAllDropdowns);
-      this.selectedModelLocal = this.store.selectedModel;
-      this.oldModel = this.store.selectedModel;
-
-      if (this.$route.query.anlageNr) {
-        this.id = this.$route.query.anlageNr;
-        this.loadInstallation();
-      }
-
-    },
-    beforeUnmount() {
-      document.removeEventListener("click", this.closeAllDropdowns);
+      this.pendingModel = null;
+      this.isWarningModalOpen = false;
     },
     toggleInfo() {
       this.showInfo = !this.showInfo;
     },
     toggleAccordion(index) {
-  this.accordionOpen[index] = !this.accordionOpen[index];
-},
+      this.accordionOpen[index] = !this.accordionOpen[index];
+    },
+  },
+  mounted() {
+    this.generateRandomAnlagenNummer();
+    document.addEventListener("click", this.closeAllDropdowns);
+    this.selectedModelLocal = this.store.selectedModel;
+    this.oldModel = this.store.selectedModel;
+    if (this.$route.query.anlageNr) {
+      this.id = this.$route.query.anlageNr;
+      this.loadInstallation();
+    }
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.closeAllDropdowns);
   },
 };
 </script>
 
-<style lang="scss">
-@import "./styles/configurator.scss";
-</style>
-
-<style scoped>
+<style lang="scss" scoped>
+/* Container & genereller Stil */
 .mobile-container {
   padding: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Kopfbereich */
 .mobile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, #4a90e2, #357ab7);
+  border-radius: 8px;
+  color: #fff;
 }
 
 .info-icon {
+  font-size: 24px;
   cursor: pointer;
 }
 
 .info-tooltip {
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
   padding: 8px;
   border-radius: 4px;
   margin-top: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile Sektionen */
 .mobile-section {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
+.mobile-section h2 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Formularelemente */
+input[type="text"],
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+/* Akkordeon */
 .mobile-accordion {
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .accordion-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 12px 16px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   cursor: pointer;
 }
 
-.accordion-content {
-  padding: 12px;
-  border-top: 1px solid #ddd;
+.accordion-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
 }
 
+.accordion-content {
+  padding: 12px 16px;
+}
+
+/* Input Gruppen */
 .input-group {
   margin-bottom: 12px;
 }
@@ -974,6 +1010,7 @@ export default {
   display: block;
   margin-bottom: 4px;
   font-weight: bold;
+  color: #555;
 }
 
 .size-inputs {
@@ -981,14 +1018,107 @@ export default {
   gap: 8px;
 }
 
+/* Aktions-Buttons */
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   margin-top: 12px;
+  justify-content: flex-end;
 }
 
-.full-width-button {
+/* Allgemeiner Button-Stil */
+.action-button {
+  display: block;
   width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.action-button:hover {
+  background-color: #357ab7;
+}
+
+/* Warnungsmodal für Modellwechsel */
+.warning-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.warning-modal-content {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+}
+
+.modal-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-button.confirm {
+  background-color: #4a90e2;
+  color: #fff;
+}
+
+.modal-button.cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Optionen im UModal */
+.option-item {
   margin-bottom: 8px;
+}
+
+.option-item label {
+  font-size: 15px;
+  color: #333;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 600px) {
+  .mobile-container {
+    padding: 12px;
+  }
+  .mobile-header {
+    padding: 10px 12px;
+  }
+  input[type="text"],
+  select,
+  input[type="number"] {
+    padding: 8px;
+  }
+  .action-button {
+    padding: 10px;
+    font-size: 15px;
+  }
 }
 </style>
