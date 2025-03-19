@@ -1,5 +1,5 @@
 <template>
-    <ConfiguratorViewM />
+    <ConfiguratorView />
   </template>
   
   <script setup>
