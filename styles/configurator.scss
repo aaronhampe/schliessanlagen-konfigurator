@@ -628,6 +628,27 @@ $color-sky: #0ea5e9;
   }
 }
 
+.offer-modal {
+  .modal-container {
+    max-width: 400px;
+    margin: auto;
+  }
+  .modal-header {
+    width: 100%;
+    padding: 0 1rem;
+  }
+  .modal-info {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+  .modal-button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+
 /***********************************************************
   *          WEITERE KLASSEN FÜR FORMULARE ETC.
   ***********************************************************/
