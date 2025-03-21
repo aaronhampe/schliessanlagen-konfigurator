@@ -866,29 +866,27 @@ export default {
     },
 
 
-    async saveInstallation() {
-      // 1) PRÜFUNG: Jedes row[0] (Tür) => Type, Außen, Innen nicht leer
+    validateConfiguration() {
+      // 1) Prüfe, ob alle Tür-Eingaben vorhanden sind
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
         const { type, outside, inside } = this.rows[rowIndex][0];
         if (!type) {
           alert(`Bitte Zylinder-Typ in Zeile ${rowIndex + 1} wählen.`);
-          return;
+          return false;
         }
         if (!outside) {
           alert(`Bitte Außenmaß in Zeile ${rowIndex + 1} wählen.`);
-          return;
+          return false;
         }
         if (!inside) {
           alert(`Bitte Innenmaß in Zeile ${rowIndex + 1} wählen.`);
-          return;
+          return false;
         }
       }
 
-      // 2) PRÜFUNG (nur bei isSchliessanlage): Pro Spalte >= 1 angehakt
+      // 2) Wenn es sich um eine Schließanlage handelt: Prüfe, ob in jeder Spalte mindestens eine Berechtigung gesetzt ist.
       if (this.isSchliessanlage) {
-        // Anzahl Spalten = this.rows[0].length
         const colCount = this.rows[0].length;
-        // Jede Spalte => check ob mind. eine row => .checked = true
         for (let c = 0; c < colCount; c++) {
           let foundAtLeastOne = false;
           for (let r = 0; r < this.rows.length; r++) {
@@ -898,29 +896,34 @@ export default {
             }
           }
           if (!foundAtLeastOne) {
-            alert(
-              `Bitte mindestens eine Berechtigung in Spalte #${c + 1
-              } anklicken (Schließanlage).`
-            );
-            return;
+            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            return false;
           }
         }
       }
 
-      // Falls du den alten HTML-Formular-Check nicht mehr nutzt,
-      // brauchst du hier nichts weiter. Direkt DB-Speicherung:
+      // Falls weitere Prüfungen (z. B. für Schlüssel oder Optionsprüfungen) nötig sind,
+      // füge sie hier hinzu.
+
+      // Wenn alle Prüfungen erfolgreich waren:
+      return true;
+    },
+
+    async saveInstallation() {
+      // Validierung prüfen
+      if (!this.validateConfiguration()) {
+        // Validierung schlug fehl – Funktion wird abgebrochen
+        return false;
+      }
 
       // 3) Falls anlageNr noch leer => generiere
       if (this.anlageNr === "") {
         let antwort;
         do {
           this.generateRandomAnlagenNummer();
-          const response = await $fetch(
-            "./api/sqltestanlage?ID=" + this.anlageNr,
-            {
-              method: "post",
-            }
-          );
+          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
+            method: "post",
+          });
           antwort = response.message;
         } while (antwort === "Anlagennummer existiert.");
       }
@@ -943,8 +946,7 @@ export default {
       });
 
       if (queryresultanlage) {
-
-        // 5) Positionen speichern
+        // Speichere Positionen, Schlüssel und Matrix wie bisher...
         const RowObject = this.rows.map((row, rowIndex) => ({
           POS: rowIndex + 1,
           Bezeichnung: row[0].doorDesignation || "",
@@ -954,39 +956,21 @@ export default {
           SizeI: row[0].inside || "",
           Option: (row[0].optionsSelected || []).join(", "),
         }));
+        await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
+          method: "post",
+          body: RowObject,
+        });
 
-        this.alertMessage = "Die Anlage wurde erfolgreich gespeichert.";
-        this.alertType = "success";
-
-        setTimeout(() => {
-          this.alertMessage = "";
-          this.alertType = "";
-        }, 3000);
-
-        const queryresultposition = await $fetch(
-          "./api/sqlpostposition?ID=" + this.anlageNr,
-          {
-            method: "post",
-            body: RowObject,
-          }
-        );
-
-        // 6) Schlüssel speichern
         const KeyNameObject = this.rows[0].map((col, colIndex) => ({
           keyPos: colIndex + 1,
           keyname: col.keyname,
           keyquantity: col.keyquantity || 1,
         }));
+        await $fetch("./api/sqlpostschluessel?ID=" + this.anlageNr, {
+          method: "post",
+          body: KeyNameObject,
+        });
 
-        const queryresultschluessel = await $fetch(
-          "./api/sqlpostschluessel?ID=" + this.anlageNr,
-          {
-            method: "post",
-            body: KeyNameObject,
-          }
-        );
-
-        // 7) Matrix speichern
         const Matrix = this.rows.flatMap((row, rowIndex) =>
           row.map((col, colIndex) => ({
             position: rowIndex + 1,
@@ -994,15 +978,20 @@ export default {
             checked: col.checked || false,
           }))
         );
+        await $fetch("./api/sqlpostmatrix?ID=" + this.anlageNr, {
+          method: "post",
+          body: Matrix,
+        });
 
-        const queryresultmatrix = await $fetch(
-          "./api/sqlpostmatrix?ID=" + this.anlageNr,
-          {
-            method: "post",
-            body: Matrix,
-          }
-        );
+        // Erfolgsmeldung setzen
+        this.alertMessage = "Die Anlage wurde erfolgreich gespeichert.";
+        this.alertType = "success";
+        setTimeout(() => {
+          this.alertMessage = "";
+          this.alertType = "";
+        }, 3000);
       }
+      return true;
     },
     weiterleitung_systeme() {
       // 8) Weiterleitung zur systeme.vue
@@ -1023,13 +1012,35 @@ export default {
       this.checkpassword();
     },
 
-    handleWeiterZuAngeboten() {
+    async handleWeiterZuAngeboten() {
+      // Zuerst alle Validierungen durchführen
+      if (!this.validateConfiguration()) {
+        // Bei Fehlern wird in validateConfiguration bereits ein Alert ausgegeben.
+        // Hier einfach abbrechen:
+        return;
+      }
+
+      // Wenn die Konfiguration valide ist, prüfen wir, ob die Anlage schon existiert.
+      // Dabei gehen wir davon aus, dass wenn sowohl anlageNr als auch email gesetzt sind, 
+      // bereits eine Anlage vorhanden ist.
       if (this.anlageNr && this.email) {
-        this.buttonweitersysteme();
+        // Bestehende Anlage: direkt speichern (ohne erneute E-Mail) und weiterleiten
+        const saved = await this.saveInstallation();
+        if (saved) {
+          this.$router.push({
+            name: "systeme",
+            query: {
+              anlageNr: this.anlageNr,
+              isSchliessanlage: this.store.isSchliessanlage,
+            },
+          });
+        }
       } else {
+        // Neue Anlage: Zeige das E-Mail Modal, damit der Kunde seine Kontaktdaten (und optional Name/Telefon) eingibt.
         this.isOfferModalOpen = true;
       }
     },
+
 
     handleAnlageSpeichern() {
       if (this.id && this.email) {
@@ -1040,11 +1051,14 @@ export default {
     },
 
     async buttonspeichern() {
-      await this.saveInstallation();
-      await this.sendmailoffice();
-      await this.sendmailkunde();
+      const saved = await this.saveInstallation();
+      if (saved) {
+        await this.sendmailoffice();
+        await this.sendmailkunde();
+      }
       this.isOpenS = false;
     },
+
 
     async checkpassword() {
       const resultcheckpassword = await $fetch("./api/sqlgetanlage", {
