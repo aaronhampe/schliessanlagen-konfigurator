@@ -648,6 +648,24 @@ $color-sky: #0ea5e9;
   }
 }
 
+.alert {
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.alert.error {
+  background-color: #f8d7da;
+  color: #842029;
+}
+.alert.success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
 
 /***********************************************************
   *          WEITERE KLASSEN FÜR FORMULARE ETC.

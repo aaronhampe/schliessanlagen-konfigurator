@@ -44,7 +44,7 @@
       </div>-->
     </div>
 
-    <UModal v-model="isWarningModalOpen" class="warning-modal">
+    <!--<UModal v-model="isWarningModalOpen" class="warning-modal">
       <div class="modal-header">
         <h2>Achtung!</h2>
         <button class="close-button" @click="isWarningModalOpen = false">
@@ -66,7 +66,7 @@
         </button>
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
-    </UModal>
+    </UModal>-->
   </div>
 
   <div class="flex-container">
@@ -172,24 +172,32 @@
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="button-default" @click="isOfferModalOpen = true" size="sm" color="amber" variant="solid">
+        <UButton class="button-default" @click="handleWeiterZuAngeboten" size="sm" color="amber" variant="solid">
           Weiter zu den Angeboten
         </UButton>
+
 
       </div>
       <div class="buttons" style="margin-top: 20px">
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-down" @click="isOpenL = true" size="sm"
           color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        <UButton class="button-default" icon="i-heroicons-cloud-arrow-up" @click="isOpenS = true" size="sm"
-          color="amber" variant="solid" :trailing="false">Anlage speichern
+        <UButton class="button-default" icon="i-heroicons-cloud-arrow-up" @click="handleAnlageSpeichern" size="sm"
+          color="amber" variant="solid" :trailing="false">
+          Anlage speichern
         </UButton>
+
       </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
       variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
 
-    <!-- Neues Modal für Optionen -->
+
+
+
+    <!-- ///////////////////////////////////////////////////////////////
+                        MODALE 
+    ///////////////////////////////////////////////////////////////////////-->
     <UModal v-for="(row, rowIndex) in rows" :key="'options-modal-' + rowIndex" v-model="isOptionsModalOpen[rowIndex]"
       class="options-modal">
       <div class="modal-content">
@@ -281,6 +289,15 @@
     </div>
   </UModal>
 
+  <transition name="fade">
+    <div v-if="alertMessage" :class="['alert', alertType]">
+      <i v-if="alertType === 'error'" class="i-heroicons-exclamation-circle"></i>
+      <i v-if="alertType === 'success'" class="i-heroicons-check-circle"></i>
+      <span>{{ alertMessage }}</span>
+    </div>
+  </transition>
+
+
 
   <UModal v-model="isOpenS">
     <div class="p-4 modal-container">
@@ -346,6 +363,8 @@ export default {
       pendingModel: null,
       overrideToGleichschliessung: false,
       ///////////////////////////////////
+      alertMessage: "",
+      alertType: "",
       rows: [
         [
           {
@@ -924,6 +943,7 @@ export default {
       });
 
       if (queryresultanlage) {
+
         // 5) Positionen speichern
         const RowObject = this.rows.map((row, rowIndex) => ({
           POS: rowIndex + 1,
@@ -934,6 +954,14 @@ export default {
           SizeI: row[0].inside || "",
           Option: (row[0].optionsSelected || []).join(", "),
         }));
+
+        this.alertMessage = "Die Anlage wurde erfolgreich gespeichert.";
+        this.alertType = "success";
+
+        setTimeout(() => {
+          this.alertMessage = "";
+          this.alertType = "";
+        }, 3000);
 
         const queryresultposition = await $fetch(
           "./api/sqlpostposition?ID=" + this.anlageNr,
@@ -995,6 +1023,22 @@ export default {
       this.checkpassword();
     },
 
+    handleWeiterZuAngeboten() {
+      if (this.anlageNr && this.email) {
+        this.buttonweitersysteme();
+      } else {
+        this.isOfferModalOpen = true;
+      }
+    },
+
+    handleAnlageSpeichern() {
+      if (this.id && this.email) {
+        this.saveInstallation();
+      } else {
+        this.isOpenS = true;
+      }
+    },
+
     async buttonspeichern() {
       await this.saveInstallation();
       await this.sendmailoffice();
@@ -1031,10 +1075,16 @@ export default {
       });
 
       if (
-        queryresultanlage &&
-        queryresultanlage.queryresult &&
-        queryresultanlage.queryresult.length > 0
+        !queryresultanlage ||
+        !queryresultanlage.queryresult ||
+        queryresultanlage.queryresult.length === 0
       ) {
+        // Anlage existiert nicht – Alert anzeigen
+        this.alertMessage = "Diese Anlage existiert nicht.";
+        this.alertType = "error";
+        return;
+      } else {
+        // Daten übernehmen
         this.anlageNr = queryresultanlage.queryresult[0].ID || "";
         this.object = queryresultanlage.queryresult[0].Objekt || "";
         this.name = queryresultanlage.queryresult[0].Name || "";
@@ -1042,11 +1092,20 @@ export default {
         this.phone = queryresultanlage.queryresult[0].Telefon || "";
         this.company = queryresultanlage.queryresult[0].Firma || "";
         this.typ = queryresultanlage.queryresult[0].Typ || "";
-
         const loadedModel = queryresultanlage.queryresult[0].Modell;
         this.store.setModel(loadedModel);
         this.protect = queryresultanlage.queryresult[0].protect || "";
         this.password = queryresultanlage.queryresult[0].Password || "";
+
+        // Erfolgsmeldung anzeigen
+        this.alertMessage = "Die Anlage wurde erfolgreich geladen.";
+        this.alertType = "success";
+
+        // Optional: Alert nach einigen Sekunden ausblenden
+        setTimeout(() => {
+          this.alertMessage = "";
+          this.alertType = "";
+        }, 3000);
       }
 
       const queryresultposition = await $fetch("./api/sqlgetposition", {
