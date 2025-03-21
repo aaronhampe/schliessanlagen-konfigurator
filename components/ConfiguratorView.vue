@@ -26,22 +26,22 @@
     </div>
 
     <div class="model-container">
-      <h2>1:</h2>
       <h3>Modellauswahl:</h3>
-      <select :value="selectedModelLocal" @change="onModelSelect($event)">
+      <select :value="selectedModelLocal" disabled>
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
 
+
       <!-- Toggle für Gleichschließung -->
-      <div class="toggle-gleichschliessung">
+      <!---<div class="toggle-gleichschliessung">
         <label class="flex align-center gap-2">
           <h2>2:</h2>
           <span>Gleichschließung</span>
           <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
         </label>
-      </div>
+      </div>-->
     </div>
 
     <UModal v-model="isWarningModalOpen" class="warning-modal">
@@ -264,15 +264,15 @@
       <form @submit.prevent="saveAndProceed">
         <div class="form-group">
           <label for="offer-email">E-Mail:</label>
-          <UInput color="amber" id="offer-email" v-model="offerEmail" type="email" required />
+          <UInput color="amber" id="offer-email" v-model="email" type="email" required />
         </div>
         <div class="form-group">
           <label for="offer-name">Name (optional):</label>
-          <UInput color="amber" id="offer-name" v-model="offerName" type="text" />
+          <UInput color="amber" id="offer-name" v-model="name" type="text" />
         </div>
         <div class="form-group">
           <label for="offer-phone">Telefon (optional):</label>
-          <UInput color="amber" id="offer-phone" v-model="offerPhone" type="tel" />
+          <UInput color="amber" id="offer-phone" v-model="phone" type="tel" />
         </div>
         <UButton type="submit" color="amber" variant="solid" class="modal-button">
           Weiter zu den Angeboten
@@ -338,10 +338,6 @@ export default {
       isDropdownOpen: {},
       isOptionsModalOpen: {},
       isOfferModalOpen: false,
-      ///////////////////////////////////
-      offerEmail: "",   // Pflichtfeld
-      offerName: "",    // optional
-      offerPhone: "",   // optional
       ///////////////////////////////////
       hoverInfo: false,
       selectedModelLocal: "",
@@ -833,14 +829,7 @@ export default {
     },
 
     async saveAndProceed() {
-      // Übernehme die eingegebenen Kontaktdaten
-      this.email = this.offerEmail;
-      this.name = this.offerName;
-      this.phone = this.offerPhone;
 
-      // Optional: Du kannst hier noch weitere Validierungen durchführen
-
-      // Rufe die vorhandene Methode auf, die die Anlage speichert und ggf. E-Mails versendet
       await this.buttonspeichern();
 
       this.$router.push({
@@ -1182,23 +1171,59 @@ export default {
     },
 
     async sendmailoffice() {
-      let message = "";
-      message =
-        "Anlagennummer: " +
-        this.anlageNr +
-        "<br>" +
-        "Passwort: " +
-        this.password;
+      const message = `
+    <html>
+      <body style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+        <h2 style="color: #007BFF;">Neue gespeicherte Konfiguration</h2>
+        <p>Es wurde eine neue Konfiguration im Schließanlagenkonfigurator gespeichert. Hier die Details:</p>
+        <table style="border-collapse: collapse;">
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">Anlagennummer:</td>
+            <td style="padding: 4px 8px;">${this.anlageNr}</td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">Name:</td>
+            <td style="padding: 4px 8px;">${this.name || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">E-Mail:</td>
+            <td style="padding: 4px 8px;">${this.email || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">Telefon:</td>
+            <td style="padding: 4px 8px;">${this.phone || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">Modell:</td>
+            <td style="padding: 4px 8px;">${this.store.selectedModel || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 8px; font-weight: bold;">Passwort:</td>
+            <td style="padding: 4px 8px;">${this.password}</td>
+          </tr>
+        </table>
+        <p style="margin-top: 20px;">
+          Bitte bearbeiten Sie diese Konfiguration zeitnah.
+        </p>
+        <p>
+          Mit freundlichen Grüßen,<br>
+          Aaron und Frank
+        </p>
+      </body>
+    </html>
+  `;
+
       const mailresult = await $fetch("./api/mail", {
         method: "POST",
         body: {
           name: "",
           to: "office@secutimetec.de",
-          subject: "stt-shop  ---  Ihre gespeicherte Konfiguration",
+          subject: "stt-shop  ---  Neue gespeicherte Konfiguration",
           html: message,
         },
       });
     },
+
     async sendmailkunde() {
       let message = "";
       message += "<p>Herzlichen Glückwunsch!</p>";
