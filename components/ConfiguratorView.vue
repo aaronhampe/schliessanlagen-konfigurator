@@ -27,12 +27,12 @@
 
     <div class="model-container">
       <h3>Modellauswahl:</h3>
-      <!-- Modellauswahl wieder aktiv: disabled entfernt und @change hinzugefügt -->
-      <select :value="oldModel" @change="onModelSelect">
+      <select :value="selectedModelLocal" disabled>
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
+
 
       <!-- Toggle für Gleichschließung -->
       <!---<div class="toggle-gleichschliessung">
@@ -44,7 +44,7 @@
       </div>-->
     </div>
 
-    <UModal v-model="isWarningModalOpen" class="warning-modal">
+    <!--<UModal v-model="isWarningModalOpen" class="warning-modal">
       <div class="modal-header">
         <h2>Achtung!</h2>
         <button class="close-button" @click="isWarningModalOpen = false">
@@ -53,7 +53,10 @@
       </div>
 
       <div class="modal-body">
-        <p>Beim Wechsel des Modells können alle eingegebenen Daten verloren gehen.</p>
+        <p>
+          Beim Wechsel des Modells können alle eingegebenen Daten verloren
+          gehen.
+        </p>
         <p>Möchten Sie den Modellwechsel wirklich durchführen?</p>
       </div>
 
@@ -63,8 +66,7 @@
         </button>
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
-    </UModal>
-
+    </UModal>-->
   </div>
 
   <div class="flex-container">
@@ -190,6 +192,9 @@
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
       variant="solid" :trailing="false">Schlüssel hinzufügen</UButton>
 
+
+
+
     <!-- ///////////////////////////////////////////////////////////////
                         MODALE 
     ///////////////////////////////////////////////////////////////////////-->
@@ -292,6 +297,8 @@
     </div>
   </transition>
 
+
+
   <UModal v-model="isOpenS">
     <div class="p-4 modal-container">
       <div class="modal-header">
@@ -308,7 +315,7 @@
           <UInput color="amber" id="email" v-model="email" min="1" type="email" required />
         </div>
         <UButton @click="buttonspeichern" type="submit" color="amber" variant="solid" class="modal-button">
-          Anlage speichern
+          Speichern
         </UButton>
       </form>
     </div>
@@ -854,9 +861,140 @@ export default {
 
       // Schließe das Modal und leite weiter
       this.isOfferModalOpen = false;
+      // Falls in buttonspeichern() noch nicht enthalten, kannst du hier die Weiterleitung ausführen:
+      // this.$router.push({ name: "systeme", query: { anlageNr: this.anlageNr, isSchliessanlage: this.store.isSchliessanlage } });
     },
 
-    navigateToSysteme() {
+
+    validateConfiguration() {
+      // 1) Prüfe, ob alle Tür-Eingaben vorhanden sind
+      for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+        const { type, outside, inside } = this.rows[rowIndex][0];
+        if (!type) {
+          alert(`Bitte Zylinder-Typ in Zeile ${rowIndex + 1} wählen.`);
+          return false;
+        }
+        if (!outside) {
+          alert(`Bitte Außenmaß in Zeile ${rowIndex + 1} wählen.`);
+          return false;
+        }
+        if (!inside) {
+          alert(`Bitte Innenmaß in Zeile ${rowIndex + 1} wählen.`);
+          return false;
+        }
+      }
+
+      // 2) Wenn es sich um eine Schließanlage handelt: Prüfe, ob in jeder Spalte mindestens eine Berechtigung gesetzt ist.
+      if (this.isSchliessanlage) {
+        const colCount = this.rows[0].length;
+        for (let c = 0; c < colCount; c++) {
+          let foundAtLeastOne = false;
+          for (let r = 0; r < this.rows.length; r++) {
+            if (this.rows[r][c].checked) {
+              foundAtLeastOne = true;
+              break;
+            }
+          }
+          if (!foundAtLeastOne) {
+            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            return false;
+          }
+        }
+      }
+
+      // Falls weitere Prüfungen (z. B. für Schlüssel oder Optionsprüfungen) nötig sind,
+      // füge sie hier hinzu.
+
+      // Wenn alle Prüfungen erfolgreich waren:
+      return true;
+    },
+
+    async saveInstallation() {
+      // Validierung prüfen
+      if (!this.validateConfiguration()) {
+        // Validierung schlug fehl – Funktion wird abgebrochen
+        return false;
+      }
+
+      // 3) Falls anlageNr noch leer => generiere
+      if (this.anlageNr === "") {
+        let antwort;
+        do {
+          this.generateRandomAnlagenNummer();
+          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
+            method: "post",
+          });
+          antwort = response.message;
+        } while (antwort === "Anlagennummer existiert.");
+      }
+
+      // 4) Anlage in der DB speichern
+      const queryresultanlage = await $fetch("./api/sqlpostanlageneu", {
+        method: "post",
+        body: {
+          ID: this.anlageNr,
+          Objekt: this.object,
+          Name: this.name,
+          EMail: this.email,
+          Telefon: this.phone,
+          Firma: this.company,
+          Typ: this.typ,
+          Modell: this.store.selectedModel,
+          protect: this.protect,
+          Password: this.password,
+        },
+      });
+
+      if (queryresultanlage) {
+        // Speichere Positionen, Schlüssel und Matrix wie bisher...
+        const RowObject = this.rows.map((row, rowIndex) => ({
+          POS: rowIndex + 1,
+          Bezeichnung: row[0].doorDesignation || "",
+          Anzahl: row[0].doorquantity || "",
+          Typ: row[0].type || "",
+          SizeA: row[0].outside || "",
+          SizeI: row[0].inside || "",
+          Option: (row[0].optionsSelected || []).join(", "),
+        }));
+        await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
+          method: "post",
+          body: RowObject,
+        });
+
+        const KeyNameObject = this.rows[0].map((col, colIndex) => ({
+          keyPos: colIndex + 1,
+          keyname: col.keyname,
+          keyquantity: col.keyquantity || 1,
+        }));
+        await $fetch("./api/sqlpostschluessel?ID=" + this.anlageNr, {
+          method: "post",
+          body: KeyNameObject,
+        });
+
+        const Matrix = this.rows.flatMap((row, rowIndex) =>
+          row.map((col, colIndex) => ({
+            position: rowIndex + 1,
+            keynr: colIndex + 1,
+            checked: col.checked || false,
+          }))
+        );
+        await $fetch("./api/sqlpostmatrix?ID=" + this.anlageNr, {
+          method: "post",
+          body: Matrix,
+        });
+
+        // Erfolgsmeldung setzen
+        this.alertMessage = "Die Anlage wurde erfolgreich gespeichert.";
+        this.alertType = "success";
+        setTimeout(() => {
+          this.alertMessage = "";
+          this.alertType = "";
+        }, 3000);
+      }
+      return true;
+    },
+    weiterleitung_systeme() {
+      // 8) Weiterleitung zur systeme.vue
       this.$router.push({
         name: "systeme",
         query: {
@@ -868,18 +1006,25 @@ export default {
 
     async buttonweitersysteme() {
       await this.saveInstallation();
-      this.navigateToSysteme();
+      this.weiterleitung_systeme();
     },
     buttonladen() {
       this.checkpassword();
     },
 
     async handleWeiterZuAngeboten() {
+      // Zuerst alle Validierungen durchführen
       if (!this.validateConfiguration()) {
+        // Bei Fehlern wird in validateConfiguration bereits ein Alert ausgegeben.
+        // Hier einfach abbrechen:
         return;
       }
 
+      // Wenn die Konfiguration valide ist, prüfen wir, ob die Anlage schon existiert.
+      // Dabei gehen wir davon aus, dass wenn sowohl anlageNr als auch email gesetzt sind, 
+      // bereits eine Anlage vorhanden ist.
       if (this.anlageNr && this.email) {
+        // Bestehende Anlage: direkt speichern (ohne erneute E-Mail) und weiterleiten
         const saved = await this.saveInstallation();
         if (saved) {
           this.$router.push({
@@ -891,9 +1036,11 @@ export default {
           });
         }
       } else {
+        // Neue Anlage: Zeige das E-Mail Modal, damit der Kunde seine Kontaktdaten (und optional Name/Telefon) eingibt.
         this.isOfferModalOpen = true;
       }
     },
+
 
     handleAnlageSpeichern() {
       if (this.id && this.email) {
@@ -912,6 +1059,7 @@ export default {
       this.isOpenS = false;
     },
 
+
     async checkpassword() {
       const resultcheckpassword = await $fetch("./api/sqlgetanlage", {
         method: "post",
@@ -925,12 +1073,16 @@ export default {
       } else {
         this.passwordwarning = true;
       }
+
+      //console.log('DatenbankPASS: ' + this.password);
+      //console.log('PASSFormular: ' + this.passwordinput);
     },
 
     async loadInstallation() {
       this.rows.length = 1;
       this.rows[0].length = 1;
 
+      // Daten für die Anlage
       const queryresultanlage = await $fetch("./api/sqlgetanlage", {
         method: "post",
         body: { ID: this.id },
@@ -941,10 +1093,12 @@ export default {
         !queryresultanlage.queryresult ||
         queryresultanlage.queryresult.length === 0
       ) {
+        // Anlage existiert nicht – Alert anzeigen
         this.alertMessage = "Diese Anlage existiert nicht.";
         this.alertType = "error";
         return;
       } else {
+        // Daten übernehmen
         this.anlageNr = queryresultanlage.queryresult[0].ID || "";
         this.object = queryresultanlage.queryresult[0].Objekt || "";
         this.name = queryresultanlage.queryresult[0].Name || "";
@@ -957,9 +1111,11 @@ export default {
         this.protect = queryresultanlage.queryresult[0].protect || "";
         this.password = queryresultanlage.queryresult[0].Password || "";
 
+        // Erfolgsmeldung anzeigen
         this.alertMessage = "Die Anlage wurde erfolgreich geladen.";
         this.alertType = "success";
 
+        // Optional: Alert nach einigen Sekunden ausblenden
         setTimeout(() => {
           this.alertMessage = "";
           this.alertType = "";
@@ -1041,33 +1197,33 @@ export default {
       const newlySelected = event.target.value;
       if (newlySelected !== this.oldModel) {
         this.pendingModel = newlySelected;
-        // Zeige das Warnungsmodal, aber ändere oldModel noch nicht.
+        event.target.value = this.oldModel;
         this.isWarningModalOpen = true;
       }
     },
+
     confirmChange() {
       if (this.pendingModel) {
-        // Jetzt wird das Modell offiziell geändert.
         this.store.setModel(this.pendingModel);
-        this.oldModel = this.pendingModel;
-        this.selectedModelLocal = this.pendingModel;
-        // Eventuell auch alle relevanten Felder zurücksetzen:
         this.rows.forEach((row) => {
           row.forEach((checkbox) => {
             checkbox.type = "";
             checkbox.inside = "";
             checkbox.outside = "";
-            checkbox.options = {};
-            checkbox.optionsSelected = [];
+            checkbox.options = {}; // Falls noch vorhanden
+            checkbox.optionsSelected = []; // <<--- NEU: Array leeren!
             checkbox.checked = !this.isSchliessanlage;
           });
         });
-        this.pendingModel = null;
+
+        this.selectedModelLocal = this.pendingModel;
+        this.oldModel = this.pendingModel;
         this.isWarningModalOpen = false;
+        this.pendingModel = null;
       }
     },
+
     cancelChange() {
-      // Bei Abbruch bleibt oldModel erhalten.
       this.pendingModel = null;
       this.isWarningModalOpen = false;
     },
