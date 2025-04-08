@@ -56,6 +56,14 @@ function confirmPurchase() {
   addToCart(offer.title, offer.price, offer.productID);
 }
 
+function getPositionsForKey(keyPos) {
+  return positionData.value
+    .filter((pos) => matrixCheck(pos.POS, keyPos))
+    .map((pos) => `Pos. ${pos.POS}`)
+    .join(", ");
+}
+
+
 function modelCanHandleAllZylinders(modelName, positionArray) {
   const modelConfig = cylinderModels[modelName];
   if (!modelConfig) return false;
@@ -129,18 +137,19 @@ function generateConfigurationText() {
   });
 
   // 2) Schlüssel-Daten
+  // 2) Schlüssel-Daten
   lines.push("<br>");
-  lines.push("");
   schluesselData.value.forEach((keyItem) => {
     const keyName =
       keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
         ? keyItem.Bezeichnung
         : `Schlüssel ${keyItem.KeyPOS}`;
 
-    // Welche Zylinder schließt dieser Schlüssel?
-    const cylinders = getCylindersForKey(keyItem.KeyPOS);
-    lines.push(`-<b> ${keyName}</b> schließt: ${cylinders}<br>`);
+    // Ermittelt die Positionen der Zylinder, welche dieser Schlüssel öffnen soll
+    const positions = getPositionsForKey(keyItem.KeyPOS);
+    lines.push(`-<b> ${keyName}</b> schließt: ${positions}<br>`);
   });
+
 
   // 3) Widerruf
   lines.push("<br>");
@@ -430,7 +439,7 @@ onMounted(async () => {
 <template>
   <div class="systeme-page">
     <h2>Systemübersicht</h2>
-    <div v-if="anlageNr" >
+    <div v-if="anlageNr">
       <p>
         Anlagennummer: <strong>{{ anlageNr }}</strong>
       </p>
@@ -453,103 +462,103 @@ onMounted(async () => {
       Zurück zum Konfigurator
     </UButton>
 
-   <!-- Haupt-Angebot -->
-<div v-if="selectedModelOffer">
-  <h2>Angebot für Ihr ausgewähltes Modell:</h2>
-  <div class="offer highlighted-offer offer-row">
-    <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
-    <div class="offer-details">
-      <h3>{{ selectedModelOffer.title }}</h3>
-      
-      <div class="offer-type-info">
-        {{
-          selectedModelOffer.isSchliessanlage
-            ? "Schließanlage"
-            : "Gleichschließung"
-        }}
-      </div>
-      <ul class="offer-features">
-        <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
-          <i class="icon-check"></i> {{ feature }}
-        </li>
-      </ul>
-      <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
-        Empfohlen für:
-        <strong>
-          {{
-            selectedModelOffer.useCase === "privat"
-              ? "Privat"
-              : selectedModelOffer.useCase === "gewerblich"
-                ? "Gewerblich"
-                : "Privat & Gewerblich"
-          }}
-        </strong>
-      </div>
-      <div class="offer-delivery">
-        <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
-      </div>
-      <div class="offer-price">
-        Gesamtpreis:
-        <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">inkl. Versand</span>
-      </div>
-      <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-        @click="openSummary(selectedModelOffer)">
-        System auswählen
-      </UButton>
-    </div>
-  </div>
-</div>
+    <!-- Haupt-Angebot -->
+    <div v-if="selectedModelOffer">
+      <h2>Angebot für Ihr ausgewähltes Modell:</h2>
+      <div class="offer highlighted-offer offer-row">
+        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+        <div class="offer-details">
+          <h3>{{ selectedModelOffer.title }}</h3>
 
-<!-- Alternative Angebote -->
-<div v-if="alternativeOffers.length" style="margin-top: 30px">
-  <h2>
-    {{
+          <div class="offer-type-info">
+            {{
+      selectedModelOffer.isSchliessanlage
+        ? "Schließanlage"
+        : "Gleichschließung"
+    }}
+          </div>
+          <ul class="offer-features">
+            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+              <i class="icon-check"></i> {{ feature }}
+            </li>
+          </ul>
+          <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
+            Empfohlen für:
+            <strong>
+              {{
+      selectedModelOffer.useCase === "privat"
+        ? "Privat"
+        : selectedModelOffer.useCase === "gewerblich"
+          ? "Gewerblich"
+          : "Privat & Gewerblich"
+    }}
+            </strong>
+          </div>
+          <div class="offer-delivery">
+            <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
+          </div>
+          <div class="offer-price">
+            Gesamtpreis:
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">inkl. Versand</span>
+          </div>
+          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
+            @click="openSummary(selectedModelOffer)">
+            System auswählen
+          </UButton>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alternative Angebote -->
+    <div v-if="alternativeOffers.length" style="margin-top: 30px">
+      <h2>
+        {{
       selectedModel === "Kein bestimmtes Modell"
         ? "Angebote für Sie:"
         : "Weitere passende Angebote:"
     }}
-  </h2>
-  <div class="offer-container">
-    <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
-      <img :src="offer.image" :alt="offer.alt" class="offer-image" />
-      <div class="offer-details">
-        <h3>{{ offer.title }}</h3>
-        <div class="offer-type-info">
-          {{
-            offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-          }}
+      </h2>
+      <div class="offer-container">
+        <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
+          <img :src="offer.image" :alt="offer.alt" class="offer-image" />
+          <div class="offer-details">
+            <h3>{{ offer.title }}</h3>
+            <div class="offer-type-info">
+              {{
+      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+    }}
+            </div>
+            <ul class="offer-features">
+              <li v-for="(feature, i) in offer.features || []" :key="i">
+                <i class="icon-check"></i> {{ feature }}
+              </li>
+            </ul>
+            <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
+              Unsere Empfehlung: <br />
+              <strong>
+                {{
+      offer.useCase === "privat"
+        ? "Privat"
+        : offer.useCase === "gewerblich"
+          ? "Gewerblich"
+          : "Privat & Gewerblich"
+    }}
+              </strong>
+            </div>
+            <div class="offer-delivery">
+              <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
+            </div>
+            <div class="offer-price">
+              Gesamtpreis:
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
+            </div>
+            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+              System auswählen
+            </UButton>
+          </div>
         </div>
-        <ul class="offer-features">
-          <li v-for="(feature, i) in offer.features || []" :key="i">
-            <i class="icon-check"></i> {{ feature }}
-          </li>
-        </ul>
-        <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
-          Unsere Empfehlung: <br />
-          <strong>
-            {{
-              offer.useCase === "privat"
-                ? "Privat"
-                : offer.useCase === "gewerblich"
-                  ? "Gewerblich"
-                  : "Privat & Gewerblich"
-            }}
-          </strong>
-        </div>
-        <div class="offer-delivery">
-          <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
-        </div>
-        <div class="offer-price">
-          Gesamtpreis:
-          <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
-        </div>
-        <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
-          System auswählen
-        </UButton>
       </div>
     </div>
-  </div>
-</div>
 
 
     <UButton class="back-button" @click="navigateBack">
@@ -625,21 +634,19 @@ onMounted(async () => {
         <ul class="keys-list">
           <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
             <strong>
-              {{
-      keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-        ? keyItem.Bezeichnung
-        : "Schlüssel " + keyItem.KeyPOS
-    }}
+              {{ keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== "" ? keyItem.Bezeichnung : "Schlüssel " +
+      keyItem.KeyPOS }}
             </strong>
             schließt:
-            <span>{{ getCylindersForKey(keyItem.KeyPOS) }}</span>
+            <span>{{ getPositionsForKey(keyItem.KeyPOS) }}</span>
           </li>
+
         </ul>
       </div>
 
       <!-- Widerruf / Checkboxen / Preis -->
       <div class="price-and-widerruf">
-        
+
         <div class="required-checks">
           <h2>Wichtige Hinweise:</h2>
           <!-- Widerruf -->
@@ -704,6 +711,4 @@ onMounted(async () => {
 
 <style scoped>
 @import "@/styles/systems.scss";
-
-
 </style>
