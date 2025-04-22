@@ -158,7 +158,7 @@ $color-sky: #0ea5e9;
   display: flex;
   flex-direction: row;
   gap: 10px;
-  margin: 240px 0 0 340px;
+  margin: 40px 0 0 200px;
 
   /* ========== Tür-/Zeilen-Bereich ========== */
   .checkbox-row {
@@ -762,4 +762,290 @@ $color-sky: #0ea5e9;
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Diese CSS-Klassen in deinen SCSS-Styles einfügen */
+
+/* Intro-Text Styling */
+.intro-text {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background-color: rgba(239, 246, 255, 0.6);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  max-width: 600px;
+  margin: 0.5rem auto;
+  
+  p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Progress Tracker */
+.progress-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
+  
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: #f3f4f6;
+      color: #6b7280;
+      font-weight: 600;
+      border: 2px solid #d1d5db;
+      transition: all 0.3s ease;
+    }
+    
+    .step-label {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-align: center;
+      max-width: 120px;
+    }
+    
+    &.active .step-indicator {
+      background-color: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    
+    &.active .step-label {
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    
+    &.completed .step-indicator {
+      background-color: #10b981;
+      color: white;
+      border-color: #10b981;
+    }
+  }
+  
+  .progress-line {
+    flex: 1;
+    height: 3px;
+    background-color: #d1d5db;
+    margin: 0 0.5rem;
+    position: relative;
+    top: -1.25rem;
+    z-index: 0;
+    transition: background-color 0.3s ease;
+    
+    &.active {
+      background-color: #10b981;
+    }
+  }
+}
+
+/* Section Divider */
+.section-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  
+  &::before, &::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  span {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6b7280;
+  }
+}
+
+/* Tutorial Modal */
+.tutorial-modal {
+  .tutorial-content {
+    padding: 1.5rem;
+    max-width: 650px;
+    margin: 0 auto;
+    
+    .tutorial-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: #333;
+      }
+    }
+    
+    .tutorial-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      
+      .tutorial-step {
+        display: flex;
+        gap: 1rem;
+        
+        .step-number {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 2rem;
+          height: 2rem;
+          background-color: #3b82f6;
+          color: white;
+          font-weight: 600;
+          border-radius: 50%;
+          margin-top: 0.25rem;
+        }
+        
+        .step-content {
+          h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+          }
+          
+          p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+          }
+        }
+      }
+    }
+    
+    .tutorial-footer {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+/* Verbesserte Button-Styles */
+.button-primary {
+  @include flex-center;
+  font-weight: 600;
+  height: 36px;
+  min-width: 200px;
+  color: white !important;
+  background-color: $color-amber !important;
+  border: 1px solid darken($color-amber, 5%);
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: darken($color-amber, 5%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.button-secondary {
+  @include flex-center;
+  font-weight: 600;
+  height: 36px;
+  min-width: 200px;
+  background-color: white !important;
+  color: $primary-color !important;
+  border: 1px solid $color-sky;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: rgba($color-sky, 0.1) !important;
+    border-color: darken($color-sky, 5%);
+    transform: translateY(-1px);
+  }
+}
+
+
+/* Verbesserte Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  
+  button {
+    transition: all 0.2s;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 1024px) {
+  .progress-tracker {
+    flex-direction: column;
+    gap: 1rem;
+    
+    .progress-step {
+      flex-direction: row;
+      width: 100%;
+      gap: 1rem;
+      
+      .step-label {
+        margin-top: 0;
+        text-align: left;
+      }
+    }
+    
+    .progress-line {
+      width: 3px;
+      height: 1.5rem;
+      margin: 0.25rem 0;
+      position: relative;
+      left: 1.25rem;
+    }
+  }
+  
+  .flex-container {
+    margin: 2rem 1rem;
+    flex-direction: column;
+  }
+  
+  .door-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .button-add-key {
+    height: auto;
+    writing-mode: horizontal-tb;
+    margin: 1rem 0;
+  }
 }

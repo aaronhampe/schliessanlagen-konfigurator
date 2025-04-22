@@ -8,17 +8,19 @@
             : "Konfigurator für eine Gleichschließung"
         }}
       </h1>
-      <div class="info-icon" @mouseenter="hoverInfo = true" @mouseleave="hoverInfo = false">
-        <i class="i-heroicons-information-circle" />
-        <transition name="fade">
-          <div v-if="hoverInfo" class="tooltip-box">
-            Bei einer Gleichschließung können alle Schlüssel alle Türen
-            aufschließen, während bei einer Schließanlage die Schlüssel eine
-            gezielte Zuweisung benötigen.
-          </div>
-        </transition>
-      </div>
+      
+  
     </div>
+    <div class="intro-text">
+        <p v-if="showIntroText">
+          <i class="i-heroicons-light-bulb text-amber-500 mr-2"></i>
+          Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen und
+          Größen,
+          und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.
+          <button @click="showIntroText = false" class="text-sm text-blue-500">Ausblenden</button>
+        </p>
+        <button v-else @click="showIntroText = true" class="text-sm text-blue-500">Hilfe anzeigen</button>
+      </div>
 
     <div class="system-number">
       <h2>Anlagennummer:</h2>
@@ -42,6 +44,22 @@
           <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
         </label>
       </div>-->
+    </div>
+    <div class="progress-tracker">
+      <div class="progress-step" :class="{ 'active': activeStep >= 1, 'completed': activeStep > 1 }">
+        <div class="step-indicator">1</div>
+        <span class="step-label">Modell wählen</span>
+      </div>
+      <div class="progress-line" :class="{ 'active': activeStep > 1 }"></div>
+      <div class="progress-step" :class="{ 'active': activeStep >= 2, 'completed': activeStep > 2 }">
+        <div class="step-indicator">2</div>
+        <span class="step-label">Türen & Zylinder konfigurieren</span>
+      </div>
+      <div class="progress-line" :class="{ 'active': activeStep > 2 }"></div>
+      <div class="progress-step" :class="{ 'active': activeStep >= 3 }">
+        <div class="step-indicator">3</div>
+        <span class="step-label">Angebote erhalten</span>
+      </div>
     </div>
 
     <!--<UModal v-model="isWarningModalOpen" class="warning-modal">
@@ -70,6 +88,9 @@
   </div>
 
   <div class="flex-container">
+    <div class="section-divider">
+      <span>Türkonfiguration</span>
+    </div>
     <div class="configurator">
       <div class="checkbox-row" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
@@ -169,14 +190,19 @@
             icon="i-heroicons-document-duplicate" size="sm" color="sky" variant="outline" :trailing="false" />
         </div>
       </div>
+      <div class="section-divider">
+        <span>Aktionen</span>
+      </div>
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
           variant="solid" :trailing="false">Tür hinzufügen</UButton>
         <UButton class="button-default" @click="handleWeiterZuAngeboten" size="sm" color="amber" variant="solid">
           Weiter zu den Angeboten
         </UButton>
-
-
+        <UButton v-if="showTutorialButton" class="button-secondary" icon="i-heroicons-academic-cap"
+          @click="showTutorial = true" size="sm" color="sky" variant="outline" :trailing="false">
+          Tutorial anzeigen
+        </UButton>
       </div>
       <div class="buttons" style="margin-top: 20px">
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-down" @click="isOpenL = true" size="sm"
@@ -320,6 +346,73 @@
       </form>
     </div>
   </UModal>
+
+  <UModal v-model="showTutorial" class="tutorial-modal">
+    <div class="tutorial-content">
+      <div class="tutorial-header">
+        <h2>Konfigurator Anleitung</h2>
+        <UButton @click="showTutorial = false" class="close-button" color="red">X</UButton>
+      </div>
+
+      <div class="tutorial-steps">
+        <div class="tutorial-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Modell auswählen</h3>
+            <p>Wählen Sie im Dropdown-Menü das gewünschte Schloss-Modell aus.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Türen hinzufügen</h3>
+            <p>Klicken Sie auf "Tür hinzufügen", um eine neue Tür zu konfigurieren.</p>
+            <p>Vergeben Sie eine Bezeichnung (z.B. "Haustür", "Kellertür") und wählen Sie die Anzahl.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Zylinder konfigurieren</h3>
+            <p>Wählen Sie den passenden Zylindertyp und die Größen für Innen- und Außenseite.</p>
+            <p>Größen werden in Millimetern angegeben und definieren die Länge des Zylinders.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Optionen hinzufügen</h3>
+            <p>Klicken Sie auf "Optionen", um Zusatzfunktionen wie Not- & Gefahrenfunktion auszuwählen.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Schlüssel hinzufügen</h3>
+            <p>Mit "Schlüssel hinzufügen" können Sie weitere Schlüssel erstellen.</p>
+            <p>Bei einer Schließanlage können Sie für jeden Schlüssel festlegen, welche Türen er öffnen darf.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h3>Konfiguration speichern</h3>
+            <p>Über "Anlage speichern" können Sie Ihre Konfiguration für später speichern.</p>
+            <p>Mit der Anlagennummer und einem Passwort können Sie später darauf zugreifen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tutorial-footer">
+        <UButton @click="showTutorial = false" color="amber" variant="solid">Verstanden</UButton>
+      </div>
+    </div>
+  </UModal>
 </template>
 
 <script>
@@ -365,7 +458,16 @@ export default {
       ///////////////////////////////////
       alertMessage: "",
       alertType: "",
+      ///////////////////////////////////
+      showIntroText: true,
+      activeStep: 1,
+      showTutorial: false,
+      showTutorialButton: true,
+      ///////////////////////////////////
+
+      
       rows: [
+        
         [
           {
             position: 1,
@@ -381,6 +483,7 @@ export default {
             keyname: "Schlüssel 1",
             keycolor: "",
           },
+          
         ],
       ],
     };
@@ -474,6 +577,10 @@ export default {
       handler(newVal) {
         this.selectedModelLocal = newVal;
         this.oldModel = newVal;
+        // Aktualisiere den aktiven Schritt, wenn ein Modell ausgewählt wurde
+        if (newVal && newVal !== "Kein bestimmtes Modell") {
+          this.activeStep = 2;
+        }
       },
     },
     "$route.query.anlageNr": {
@@ -1037,6 +1144,7 @@ export default {
         }
       } else {
         // Neue Anlage: Zeige das E-Mail Modal, damit der Kunde seine Kontaktdaten (und optional Name/Telefon) eingibt.
+        this.activeStep = 3;
         this.isOfferModalOpen = true;
       }
     },
