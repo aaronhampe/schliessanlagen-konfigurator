@@ -7,9 +7,24 @@ $color-amber: #f59e0b;
 $color-red: #dc2626;
 $color-sky: #0ea5e9;
 
+// Breakpoints definieren
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
 .systeme-page {
   margin: 50px;
   font-size: 18px;
+
+  @media (max-width: $breakpoint-md) {
+    margin: 20px;
+    font-size: 16px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin: 10px;
+  }
 
   .back-button {
     margin-top: 20px;
@@ -17,11 +32,21 @@ $color-sky: #0ea5e9;
     background-color: white;
     color: $primary-color;
   }
+
+  h2 {
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .heading {
   margin: 0px;
   font-size: 24px;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 20px;
+  }
 }
 
 .offer-container {
@@ -49,10 +74,18 @@ $color-sky: #0ea5e9;
   &:hover {
     transform: translateY(-3px);
   }
-}
 
-.offer:hover {
-  transform: translateY(-5px);
+  @media (max-width: $breakpoint-lg) {
+    gap: 15px;
+    padding: 12px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px 10px;
+  }
 }
 
 .offer-image {
@@ -60,6 +93,15 @@ $color-sky: #0ea5e9;
   height: auto;
   margin-right: 20px;
   object-fit: cover;
+
+  @media (max-width: $breakpoint-lg) {
+    width: 100px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
 }
 
 .offer-type-info {
@@ -68,13 +110,35 @@ $color-sky: #0ea5e9;
   color: #6c757d; // dezentes Grau
 }
 
-
 .offer-details {
   display: grid;
   grid-template-columns: 100px 1fr 3fr 1fr 1fr 1fr 1fr;
   align-items: center;
   width: 100%;
   gap: 20px;
+
+  @media (max-width: $breakpoint-xl) {
+    grid-template-columns: 100px 1fr 2fr 1fr 1fr 1fr;
+    gap: 15px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  h3 {
+    @media (max-width: $breakpoint-sm) {
+      font-size: 1.1rem;
+    }
+  }
 }
 
 .offer-delivery {
@@ -87,8 +151,19 @@ $color-sky: #0ea5e9;
   margin: 1rem 0;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
+  @media (max-width: $breakpoint-lg) {
+    font-size: 0.95rem;
+    padding: 0.7rem 0.9rem;
+    margin: 0.8rem 0;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
 
 .offer-price {
   display: flex;
@@ -97,60 +172,70 @@ $color-sky: #0ea5e9;
   justify-content: center;
   text-align: center;
   height: 100%; /* Falls erforderlich */
+
+  @media (max-width: $breakpoint-md) {
+    margin: 10px 0;
+  }
 }
 
 .offer-price-summery {
-  
   text-align: center;
   font-size: 16px;
   margin-bottom: 10px;
   color: #343a40;
 
+  @media (max-width: $breakpoint-sm) {
+    font-size: 14px;
+  }
+
   .price {
     font-size: 18px;
     color: #414141;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 16px;
+    }
   }
 }
-
-
 
 .use-case-badge {
   display: inline-block;
   margin: 6px 0;
-  /* etwas Abstand */
   padding: 4px 8px;
-  /* rundum innenabstand */
   font-size: 0.85rem;
   font-weight: 600;
   border-radius: 4px;
-  /* abgerundete Ecken */
   color: #fff;
-  /* weiße Schrift */
   background-color: #6c757d;
-  /* Default-Fall, falls kein passender Case? */
+
+  @media (max-width: $breakpoint-lg) {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* Für privat */
 .use-case-privat {
   background-color: #51c4d3;
-  /* oder ein helles Türkis */
   color: #fff;
 }
 
 /* Für gewerblich */
 .use-case-gewerblich {
   background-color: #f9a825;
-  /* Gelb/Orange */
   color: #222;
 }
 
 /* Für privat & gewerblich */
 .use-case-privat\ \&\ gewerblich {
   background-color: #7e57c2;
-  /* Lila z.B. */
   color: #fff;
 }
-
 
 .offer-features {
   list-style-type: disc;
@@ -158,11 +243,29 @@ $color-sky: #0ea5e9;
   padding-left: 1.5rem;
   margin: 10px 0;
 
+  @media (max-width: $breakpoint-lg) {
+    padding-left: 1.2rem;
+    margin: 8px 0;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    text-align: left;
+    width: 100%;
+    padding-left: 2rem;
+  }
+
   li {
     font-size: 0.9rem;
-    /* etwas kleinere Schrift */
     margin-bottom: 4px;
-    /* minimaler Abstand zwischen Punkten */
+
+    @media (max-width: $breakpoint-lg) {
+      font-size: 0.85rem;
+      margin-bottom: 3px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 0.8rem;
+    }
   }
 
   i {
@@ -171,26 +274,39 @@ $color-sky: #0ea5e9;
   }
 }
 
-/* Container, falls du mehrere Filter nebeneinander platzieren willst */
+/* Container für Filter */
 .filters-container {
   display: flex;
   align-items: center;
   gap: 10px;
   margin: 10px 0;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-/* Das Label für den Filtertitel */
+/* Label für den Filtertitel */
 .filter-label {
   font-size: 1rem;
   font-weight: 500;
   color: #333;
+
+  @media (max-width: $breakpoint-sm) {
+    margin-bottom: 5px;
+  }
 }
 
 .shipping {
   font-size: 12px;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 10px;
+  }
 }
 
-/* Das Select-Feld selbst */
+/* Select-Feld */
 .filter-select {
   font-size: 0.9rem;
   padding: 4px 8px;
@@ -200,7 +316,10 @@ $color-sky: #0ea5e9;
   color: #333;
   transition: box-shadow 0.2s ease;
 
-  /* Entferne Standard-Outline in manchen Browsern */
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+  }
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -208,7 +327,20 @@ $color-sky: #0ea5e9;
   }
 }
 
+/* Responsive-Anpassungen für den Select-System-Button */
+.select-system-button {
+  @media (max-width: $breakpoint-lg) {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
 
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+// Modal Styles
 .summary-modal.modern-design {
   .modal-content {
     background: #fff;
@@ -217,9 +349,11 @@ $color-sky: #0ea5e9;
     display: flex;
     flex-direction: column;
     gap: 20px;
-
-
     overflow-y: auto;
+
+    @media (max-width: $breakpoint-md) {
+      gap: 15px;
+    }
   }
 
   /* Header-Bereich */
@@ -234,15 +368,28 @@ $color-sky: #0ea5e9;
       padding: 16px 20px;
       border-radius: 6px 6px 0 0;
 
+      @media (max-width: $breakpoint-md) {
+        padding: 12px 15px;
+      }
+
       h2 {
         margin: 0;
         color: #fff;
         font-size: 1.4rem;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 1.1rem;
+        }
       }
 
       .close-button {
         font-size: 0.9rem;
         padding: 6px 12px;
+
+        @media (max-width: $breakpoint-sm) {
+          padding: 4px 8px;
+          font-size: 0.8rem;
+        }
       }
     }
   }
@@ -253,14 +400,33 @@ $color-sky: #0ea5e9;
     gap: 20px;
     padding: 20px;
     margin: 0 20px;
-    /* etwas Rand zum Seitenrand */
     background-color: #f5f5f5;
     border: 1px solid #ddd;
     border-radius: 4px;
 
+    @media (max-width: $breakpoint-lg) {
+      gap: 15px;
+      padding: 15px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+    }
+
     .model-image-section {
       flex: 0 0 auto;
       max-width: 200px;
+
+      @media (max-width: $breakpoint-lg) {
+        max-width: 180px;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        max-width: 150px;
+      }
 
       img {
         max-width: 100%;
@@ -279,6 +445,16 @@ $color-sky: #0ea5e9;
         line-height: 1.4;
         margin: 0;
         color: #333;
+
+        @media (max-width: $breakpoint-lg) {
+          font-size: 0.9rem;
+          line-height: 1.35;
+        }
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 0.85rem;
+          text-align: center;
+        }
       }
     }
   }
@@ -290,51 +466,102 @@ $color-sky: #0ea5e9;
     flex-direction: column;
     gap: 16px;
 
+    @media (max-width: $breakpoint-md) {
+      padding: 0 15px;
+    }
+
+    .config-heading {
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1.1rem;
+      }
+    }
+
     .zylinder-table {
       width: 100%;
       border-collapse: collapse;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        /* Option für kleine Bildschirme: horizontales Scrollen */
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
 
       thead {
         background-color: #eee;
       }
 
-      th,
-      td {
+      th, td {
         border: 1px solid #ccc;
         padding: 6px 8px;
         text-align: left;
+
+        @media (max-width: $breakpoint-md) {
+          padding: 4px 6px;
+        }
       }
     }
 
     .keys-info {
       font-size: 0.9rem;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 0.85rem;
+      }
+    }
+
+    .keys-list {
+      @media (max-width: $breakpoint-md) {
+        font-size: 0.85rem;
+        padding-left: 20px;
+      }
     }
   }
 
   /* Price & Widerruf */
   .price-and-widerruf {
     display: flex;
-    text-align: center;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    
-    
+    text-align: center;
+    padding: 0 20px;
 
-    
+    @media (max-width: $breakpoint-md) {
+      padding: 0 15px;
+    }
 
     h2 {
       margin-bottom: 10px;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1.2rem;
+      }
     }
 
     .required-checks {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 500px;
     }
 
     .widerruf-label {
       display: flex;
       align-items: center;
       gap: 8px;
+      width: 100%;
+      text-align: left;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 0.85rem;
+      }
 
       .info-icon {
         position: relative;
@@ -353,19 +580,38 @@ $color-sky: #0ea5e9;
           width: 300px;
           font-size: 0.85rem;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
 
+          @media (max-width: $breakpoint-md) {
+            width: 250px;
+            font-size: 0.8rem;
+          }
+
+          @media (max-width: $breakpoint-sm) {
+            width: 200px;
+            left: auto;
+            right: 0;
+            transform: none;
+          }
+        }
       }
     }
 
     .offer-price {
-      
-    
       margin-top: 16px;
       font-size: 1.1rem;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 1rem;
+      }
+
       span {
         font-size: 12px;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 10px;
+        }
       }
+
       strong {
         margin-left: 5px;
       }
@@ -380,8 +626,17 @@ $color-sky: #0ea5e9;
     padding: 0 20px 20px 20px;
     gap: 10px;
 
+    @media (max-width: $breakpoint-md) {
+      padding: 0 15px 15px 15px;
+    }
+
     button {
       min-width: 120px;
+
+      @media (max-width: $breakpoint-sm) {
+        min-width: unset;
+        width: 100%;
+      }
     }
   }
 }
