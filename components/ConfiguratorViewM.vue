@@ -458,7 +458,7 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   watch: {
     "store.selectedModel": {
@@ -813,11 +813,11 @@ export default {
     },
 
     getSelectedOptionsText(checkbox) {
-      if (checkbox.optionsSelected && checkbox.optionsSelected.length) {
-        return checkbox.optionsSelected.join(", ");
-      }
-      return "Keine";
+      return (checkbox.optionsSelected && checkbox.optionsSelected.length > 0)
+        ? checkbox.optionsSelected.join(", ")
+        : "";
     },
+
 
     // Hilfsmethoden
     deepCopy(obj) {
@@ -942,123 +942,59 @@ export default {
     },
 
     async loadInstallation() {
-      this.rows.length = 1;
-      this.rows[0].length = 1;
 
-      // Anlagedaten laden
-      const queryresultanlage = await $fetch("./api/sqlgetanlage", {
-        method: "post",
-        body: { ID: this.id },
-      });
+      this.anlageNr = this.id;
+      // 1) Lade alle drei Teile
+      const [{ queryresult: positions },
+        { queryresult: keys },
+        { queryresult: matrix }] = await Promise.all([
+          $fetch("./api/sqlgetposition", { method: "post", body: { ID: this.id } }),
+          $fetch("./api/sqlgetschluessel", { method: "post", body: { ID: this.id } }),
+          $fetch("./api/sqlgetmatrix", { method: "post", body: { ID: this.id } })
+        ]);
 
-      if (
-        queryresultanlage &&
-        queryresultanlage.queryresult &&
-        queryresultanlage.queryresult.length > 0
-      ) {
-        this.anlageNr = queryresultanlage.queryresult[0].ID || "";
-        this.object = queryresultanlage.queryresult[0].Objekt || "";
-        this.name = queryresultanlage.queryresult[0].Name || "";
-        this.email = queryresultanlage.queryresult[0].EMail || "";
-        this.phone = queryresultanlage.queryresult[0].Telefon || "";
-        this.company = queryresultanlage.queryresult[0].Firma || "";
-        this.typ = queryresultanlage.queryresult[0].Typ || "";
+      // Wenn gar nichts da ist, verlassen
+      if (!positions.length) return;
 
-        // Modell setzen
-        const loadedModel = queryresultanlage.queryresult[0].Modell;
-        this.store.setModel(loadedModel);
+      // 2) Dimensions ermitteln
+      const numDoors = positions.length;
+      const numKeys = keys.length ? Math.max(...keys.map(k => k.KeyPOS)) : 1;
 
-        // Weitere Details
-        this.protect = queryresultanlage.queryresult[0].protect || 0;
-        this.password = queryresultanlage.queryresult[0].Password || "";
-      }
-
-      // Positionsdaten (Türen) laden
-      const queryresultposition = await $fetch("./api/sqlgetposition", {
-        method: "post",
-        body: { ID: this.id },
-      });
-
-      const maxZeilePosition = Math.max(
-        ...queryresultposition.queryresult.map((item) => item.POS)
-      );
-
-      // Zeilen erstellen
-      for (let i = 0; i < maxZeilePosition - 1; i++) {
-        const numCheckboxes = this.rows[0].length;
-        const newRow = [];
-        for (let j = 0; j < numCheckboxes; j++) {
-          newRow.push({
-            checked: false,
-            doorquantity: 1,
-            position: i + 2 // +2 weil wir die erste Zeile (i=0) schon haben und die Positionen bei 1 beginnen
-          });
+      // 3) rows leeren und komplett neu aufbauen
+      this.rows = [];
+      for (let i = 0; i < numDoors; i++) {
+        const doorData = positions.find(p => p.POS === i + 1) || {};
+        this.rows[i] = [];
+        for (let j = 0; j < numKeys; j++) {
+          const keyData = keys.find(k => k.KeyPOS === j + 1) || {};
+          const mat = matrix.find(m => m.POSZylinder === i + 1 && m.POSSchluessel === j + 1);
+          this.rows[i][j] = {
+            // Tür‑Felder nur in Spalte 0 füllen, in allen anderen Zellen ignorieren
+            ...(j === 0 ? {
+              position: i + 1,
+              doorDesignation: doorData.Bezeichnung || "",
+              doorquantity: doorData.Anzahl || 1,
+              type: doorData.Typ || "",
+              outside: doorData.SizeA || "",
+              inside: doorData.SizeI || "",
+              optionsSelected: (doorData.Option || "")
+                .split(",")
+                .map(s => s.trim())
+                .filter(Boolean),
+            } : {}),
+            // Schlüssel‑Felder
+            checked: !!mat?.Berechtigung,
+            keyquantity: keyData.Anzahl || 1,
+            keyname: keyData.Bezeichnung || `Schlüssel ${j + 1}`,
+            keycolor: keyData.Farbe || "",
+          };
         }
-        this.rows.push(newRow);
       }
 
-      // Türdaten befüllen
-      queryresultposition.queryresult.forEach((item) => {
-        const zeile = item.POS - 1;
-        this.rows[zeile][0].doorDesignation = item.Bezeichnung;
-        this.rows[zeile][0].doorquantity = item.Anzahl || 1;
-        this.rows[zeile][0].type = item.Typ || "";
-        this.rows[zeile][0].outside = item.SizeA || "";
-        this.rows[zeile][0].inside = item.SizeI || "";
-
-        const loadedString = item.Option || "";
-        this.rows[zeile][0].optionsSelected = loadedString
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      });
-
-      // Schlüsseldaten laden
-      const queryresultschluessel = await $fetch("./api/sqlgetschluessel", {
-        method: "post",
-        body: { ID: this.id },
-      });
-
-      const maxSpalteSchluessel = Math.max(
-        ...queryresultschluessel.queryresult.map((item) => item.KeyPOS)
-      );
-
-      // Fehlende Schlüssel hinzufügen
-      while (this.rows[0].length < maxSpalteSchluessel) {
-        this.addCheckbox();
-      }
-
-      // Schlüsseldaten befüllen
-      queryresultschluessel.queryresult.forEach((item) => {
-        const spalte = item.KeyPOS - 1;
-        this.rows[0][spalte].keyname = item.Bezeichnung;
-        this.rows[0][spalte].keyquantity = item.Anzahl;
-        this.rows[0][spalte].keycolor = item.Farbe || "";
-      });
-
-      // Matrix laden (welcher Schlüssel öffnet welche Tür)
-      const queryresultmatrix = await $fetch("./api/sqlgetmatrix", {
-        method: "post",
-        body: { ID: this.id },
-      });
-
-      // Matrix setzen
-      queryresultmatrix.queryresult.forEach((item) => {
-        const zeile = item.POSZylinder - 1;
-        const spalte = item.POSSchluessel - 1;
-        if (zeile >= 0 && zeile < this.rows.length &&
-          spalte >= 0 && spalte < this.rows[zeile].length) {
-          this.rows[zeile][spalte].checked = !!item.Berechtigung;
-        }
-      });
-
-      // Erfolgsmeldung
+      // 4) Erfolgsmeldung
       this.alertMessage = "Ihre Konfiguration wurde erfolgreich geladen.";
       this.alertType = "success";
-      setTimeout(() => {
-        this.alertMessage = "";
-        this.alertType = "";
-      }, 3000);
+      setTimeout(() => this.alertMessage = "", 3000);
     },
 
     // E-Mail-Versand
@@ -1156,7 +1092,13 @@ export default {
   },
 
   mounted() {
-    this.generateRandomAnlagenNummer();
+    if (this.$route.query.anlageNr) {
+      this.id = this.$route.query.anlageNr;
+      this.loadInstallation();
+    } else {
+      this.generateRandomAnlagenNummer();
+    }
+
 
     // Modell aus URL laden
     this.selectedModelLocal = this.store.selectedModel;
@@ -1167,9 +1109,6 @@ export default {
       this.id = this.$route.query.anlageNr;
       this.loadInstallation();
     }
-
-    // Standardmäßig erste Tür öffnen
-    this.accordionOpen[0] = true
   }
 };
 </script>
@@ -1440,6 +1379,7 @@ export default {
 
   .options-button-text {
     flex: 1;
+    color: #333;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -1721,6 +1661,9 @@ export default {
     .modal-button {
       padding: 8px 16px;
       border-radius: 6px;
+      flex: 0 0 auto;
+      /* kein Stretchen */
+      width: auto !important;
 
       &.confirm {
         background-color: #0ea5e9;
