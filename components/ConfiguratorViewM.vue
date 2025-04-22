@@ -53,14 +53,6 @@
         </select>
       </div>
 
-      <!-- Gleichschließung Toggle -->
-      <div class="mobile-section toggle-section">
-        <label>
-          <span>Gleichschließung aktivieren:</span>
-          <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
-        </label>
-      </div>
-
       <!-- Türliste -->
       <div class="doors-list-header">
         <h2>Meine Türen</h2>
@@ -1599,7 +1591,7 @@ export default {
   width: 90%;
   max-width: 400px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: visible !important;
 
   .modal-header {
     display: flex;
