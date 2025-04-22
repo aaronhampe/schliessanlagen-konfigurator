@@ -8,19 +8,19 @@
             : "Konfigurator für eine Gleichschließung"
         }}
       </h1>
-      
-  
+
+
     </div>
     <div class="intro-text">
-        <p v-if="showIntroText">
-          <i class="i-heroicons-light-bulb text-amber-500 mr-2"></i>
-          Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen und
-          Größen,
-          und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.
-          <button @click="showIntroText = false" class="text-sm text-blue-500">Ausblenden</button>
-        </p>
-        <button v-else @click="showIntroText = true" class="text-sm text-blue-500">Hilfe anzeigen</button>
-      </div>
+      <p v-if="showIntroText">
+        <i class="i-heroicons-light-bulb text-amber-500 mr-2"></i>
+        Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen und
+        Größen,
+        und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.
+        <button @click="showIntroText = false" class="text-sm text-blue-500">Ausblenden</button>
+      </p>
+      <button v-else @click="showIntroText = true" class="text-sm text-blue-500">Hilfe anzeigen</button>
+    </div>
 
     <div class="system-number">
       <h2>Anlagennummer:</h2>
@@ -29,22 +29,16 @@
 
     <div class="model-container">
       <h3>Modellauswahl:</h3>
-      <select :value="selectedModelLocal" disabled>
+      <select v-model="selectedModelLocal" @change="onModelSelect" class="select-model">
+       
         <option v-for="model in store.availableModels" :key="model" :value="model">
           {{ model }}
         </option>
       </select>
 
-
-      <!-- Toggle für Gleichschließung -->
-      <!---<div class="toggle-gleichschliessung">
-        <label class="flex align-center gap-2">
-          <h2>2:</h2>
-          <span>Gleichschließung</span>
-          <UToggle color="sky" v-model="finalGleichschliessungState" :disabled="disableGleichToggle" />
-        </label>
-      </div>-->
     </div>
+
+
     <div class="progress-tracker">
       <div class="progress-step" :class="{ 'active': activeStep >= 1, 'completed': activeStep > 1 }">
         <div class="step-indicator">1</div>
@@ -61,30 +55,21 @@
         <span class="step-label">Angebote erhalten</span>
       </div>
     </div>
-
-    <!--<UModal v-model="isWarningModalOpen" class="warning-modal">
+    <!-- Warn‑Modal, wenn Modell gewechselt wird -->
+    <UModal v-model="isWarningModalOpen" class="warning-modal">
       <div class="modal-header">
         <h2>Achtung!</h2>
-        <button class="close-button" @click="isWarningModalOpen = false">
-          X
-        </button>
+        <button class="close-button" @click="cancelChange">X</button>
       </div>
-
       <div class="modal-body">
-        <p>
-          Beim Wechsel des Modells können alle eingegebenen Daten verloren
-          gehen.
-        </p>
-        <p>Möchten Sie den Modellwechsel wirklich durchführen?</p>
+        <p>Beim Wechsel des Modells gehen alle eingegebenen Daten verloren.</p>
+        <p>Möchtest du wirklich wechseln?</p>
       </div>
-
       <div class="modal-footer">
-        <button class="confirm-button" @click="confirmChange">
-          Ja, ändern
-        </button>
+        <button class="confirm-button" @click="confirmChange">Ja, wechseln</button>
         <button class="cancel-button" @click="cancelChange">Abbrechen</button>
       </div>
-    </UModal>-->
+    </UModal>
   </div>
 
   <div class="flex-container">
@@ -465,9 +450,9 @@ export default {
       showTutorialButton: true,
       ///////////////////////////////////
 
-      
+
       rows: [
-        
+
         [
           {
             position: 1,
@@ -483,7 +468,7 @@ export default {
             keyname: "Schlüssel 1",
             keycolor: "",
           },
-          
+
         ],
       ],
     };
@@ -571,6 +556,22 @@ export default {
       return this.$route.path.includes("/admin");
     },
   },
+  created() {
+    // direkt beim Erzeugen des Components
+    // — falls im Store schon “Kein bestimmtes Modell” steht, nimm das,
+    //   ansonsten nimm den ersten Wert aus availableModels
+    this.selectedModelLocal =
+      this.store.currentModel ||
+      (this.store.availableModels.length > 0
+        ? this.store.availableModels[0]
+        : "");
+    this.oldModel = this.selectedModelLocal;
+
+    // Setze optional auch im Store den Default, falls noch leer
+    if (!this.store.currentModel) {
+      this.store.setModel(this.selectedModelLocal);
+    }
+  },
   watch: {
     "store.selectedModel": {
       immediate: true,
@@ -582,6 +583,13 @@ export default {
           this.activeStep = 2;
         }
       },
+    },
+    'store.currentModel': {
+      immediate: true,
+      handler(v) {
+        this.selectedModelLocal = v;
+        this.oldModel = v;
+      }
     },
     "$route.query.anlageNr": {
       handler(newVal) {
@@ -1301,46 +1309,50 @@ export default {
       this.isOpenL = false;
     },
 
-    onModelSelect(event) {
-      const newlySelected = event.target.value;
-      if (newlySelected !== this.oldModel) {
-        this.pendingModel = newlySelected;
-        event.target.value = this.oldModel;
+    onModelSelect() {
+      if (this.selectedModelLocal !== this.oldModel) {
+        // speichere das neue Modell zwischen und zeige das Modal
+        this.pendingModel = this.selectedModelLocal;
+        this.selectedModelLocal = this.oldModel;
         this.isWarningModalOpen = true;
       }
     },
-
     confirmChange() {
-      if (this.pendingModel) {
-        this.store.setModel(this.pendingModel);
-        this.rows.forEach((row) => {
-          row.forEach((checkbox) => {
-            checkbox.type = "";
-            checkbox.inside = "";
-            checkbox.outside = "";
-            checkbox.options = {}; // Falls noch vorhanden
-            checkbox.optionsSelected = []; // <<--- NEU: Array leeren!
-            checkbox.checked = !this.isSchliessanlage;
-          });
-        });
-
-        this.selectedModelLocal = this.pendingModel;
-        this.oldModel = this.pendingModel;
-        this.isWarningModalOpen = false;
-        this.pendingModel = null;
-      }
-    },
-
-    cancelChange() {
-      this.pendingModel = null;
+      // wenn bestätigt, setze das Modell um und räume Daten
+      this.selectedModel = this.pendingModel;
+      this.oldModel = this.pendingModel;
       this.isWarningModalOpen = false;
+      this.pendingModel = null;
+      // hier z.B. rows zurücksetzen …
+      this.rows.forEach(row =>
+        row.forEach(c => {
+          c.type = '';
+          c.inside = '';
+          c.outside = '';
+          c.optionsSelected = [];
+          c.checked = !this.isSchliessanlage;
+        })
+      );
+      this.activeStep = 2;
+    },
+    cancelChange() {
+      // Abbruch: Auswahl zurücksetzen
+      this.isWarningModalOpen = false;
+      this.pendingModel = null;
+      this.selectedModelLocal = this.oldModel;
     },
 
     mounted() {
       this.generateRandomAnlagenNummer();
       document.addEventListener("click", this.closeAllDropdowns);
-      this.selectedModelLocal = this.store.selectedModel;
-      this.oldModel = this.store.selectedModel;
+      // Wenn noch kein Modell im Store steht, auf den Default‑Placeholder zurücksetzen:
+      this.selectedModelLocal = this.store.currentModel || "";
+      this.oldModel = this.selectedModelLocal;
+
+      // Falls du direkt auch im Store den Default repräsentieren willst:
+      if (!this.store.currentModel) {
+        this.store.setModel("");
+      }
 
       if (this.$route.query.anlageNr) {
         this.id = this.$route.query.anlageNr;
