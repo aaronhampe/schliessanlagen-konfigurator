@@ -2,19 +2,25 @@
   <div class="mobile-container">
     <!-- Fortschrittsanzeige -->
     <div class="progress-indicator">
-      <div class="progress-step" :class="{ 'active': currentStep === 1, 'completed': currentStep > 1 }"
-        @click="currentStep > 1 && setStep(1)">
+      <div
+        class="progress-step"
+        :class="{ active: currentStep === 1, completed: currentStep > 1 }"
+        @click="currentStep > 1 && setStep(1)"
+      >
         <span class="step-number">1</span>
         <span class="step-label">Türen</span>
       </div>
       <div class="progress-line"></div>
-      <div class="progress-step" :class="{ 'active': currentStep === 2, 'completed': currentStep > 2 }"
-        @click="currentStep > 2 && setStep(2)">
+      <div
+        class="progress-step"
+        :class="{ active: currentStep === 2, completed: currentStep > 2 }"
+        @click="currentStep > 2 && setStep(2)"
+      >
         <span class="step-number">2</span>
         <span class="step-label">Schlüssel</span>
       </div>
       <div class="progress-line"></div>
-      <div class="progress-step" :class="{ 'active': currentStep === 3 }">
+      <div class="progress-step" :class="{ active: currentStep === 3 }">
         <span class="step-number">3</span>
         <span class="step-label">Fertig</span>
       </div>
@@ -31,14 +37,20 @@
     </div>
 
     <div v-if="showInfo" class="info-tooltip">
-      Bei einer <strong>Gleichschließung</strong> können alle Schlüssel alle Türen öffnen, bei einer
-      <strong>Schließanlage</strong> benötigen Schlüssel eine gezielte Zuweisung.
+      Bei einer <strong>Gleichschließung</strong> können alle Schlüssel alle
+      Türen öffnen, bei einer <strong>Schließanlage</strong> benötigen Schlüssel
+      eine gezielte Zuweisung.
     </div>
 
     <!-- Anlagennummer -->
     <div class="mobile-section">
       <label>Anlagennummer:</label>
-      <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
+      <input
+        type="text"
+        readonly
+        v-model="anlageNr"
+        placeholder="Anlagenummer"
+      />
     </div>
 
     <!-- SCHRITT 1: TÜRKONFIGURATION -->
@@ -47,7 +59,11 @@
       <div class="mobile-section">
         <label>Modellauswahl:</label>
         <select :value="selectedModelLocal" @change="onModelSelect($event)">
-          <option v-for="model in store.availableModels" :key="model" :value="model">
+          <option
+            v-for="model in store.availableModels"
+            :key="model"
+            :value="model"
+          >
             {{ model }}
           </option>
         </select>
@@ -56,26 +72,43 @@
       <!-- Türliste -->
       <div class="doors-list-header">
         <h2>Meine Türen</h2>
-        <UButton @click="addRow" icon="i-heroicons-plus" class="add-door-button">
+        <UButton
+          @click="addRow"
+          icon="i-heroicons-plus"
+          class="add-door-button"
+        >
           Tür hinzufügen
         </UButton>
       </div>
 
       <!-- Türdetails (Akkordeon) -->
-      <div class="mobile-accordion" v-for="(row, rowIndex) in rows" :key="rowIndex">
+      <div
+        class="mobile-accordion"
+        v-for="(row, rowIndex) in rows"
+        :key="rowIndex"
+      >
         <div class="accordion-header" @click="toggleAccordion(rowIndex)">
           <div class="accordion-title">
             <span class="door-number">{{ rowIndex + 1 }}</span>
             <span class="door-name">{{ getDoorName(row[0]) }}</span>
           </div>
-          <i :class="accordionOpen[rowIndex] ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'" />
+          <i
+            :class="
+              accordionOpen[rowIndex]
+                ? 'i-heroicons-chevron-up'
+                : 'i-heroicons-chevron-down'
+            "
+          />
         </div>
 
         <div v-if="accordionOpen[rowIndex]" class="accordion-content">
           <!-- Türbezeichnung -->
           <div class="input-group">
             <label>Türbezeichnung:</label>
-            <UInput v-model="row[0].doorDesignation" placeholder="z.B. Haupteingang" />
+            <UInput
+              v-model="row[0].doorDesignation"
+              placeholder="z.B. Haupteingang"
+            />
           </div>
 
           <!-- Anzahl -->
@@ -89,7 +122,11 @@
             <label>Zylinder-Typ:</label>
             <select v-model="row[0].type" @change="onTypeChange(row[0])">
               <option disabled value="">Bitte auswählen</option>
-              <option v-for="type in store.availableTypes" :key="type" :value="type">
+              <option
+                v-for="type in store.availableTypes"
+                :key="type"
+                :value="type"
+              >
                 {{ type }}
               </option>
             </select>
@@ -101,18 +138,32 @@
             <div class="size-inputs">
               <div class="size-input-container">
                 <label class="sublabel">Außen:</label>
-                <select v-model="row[0].outside" @change="onOutsideSizeChange(row[0])">
+                <select
+                  v-model="row[0].outside"
+                  @change="onOutsideSizeChange(row[0])"
+                >
                   <option value="">Wählen...</option>
-                  <option v-for="size in getAvailableOutsideSizes(row[0])" :key="size" :value="size">
+                  <option
+                    v-for="size in getAvailableOutsideSizes(row[0])"
+                    :key="size"
+                    :value="size"
+                  >
                     {{ size }} mm
                   </option>
                 </select>
               </div>
               <div class="size-input-container">
                 <label class="sublabel">Innen:</label>
-                <select v-model="row[0].inside" @change="onInsideSizeChange(row[0])">
+                <select
+                  v-model="row[0].inside"
+                  @change="onInsideSizeChange(row[0])"
+                >
                   <option value="">Wählen...</option>
-                  <option v-for="size in getAvailableInsideSizes(row[0])" :key="size" :value="size">
+                  <option
+                    v-for="size in getAvailableInsideSizes(row[0])"
+                    :key="size"
+                    :value="size"
+                  >
                     {{ size }} mm
                   </option>
                 </select>
@@ -123,18 +174,30 @@
           <!-- Optionen -->
           <div class="input-group">
             <label>Optionen:</label>
-            <UButton @click.stop="openOptionsModal(rowIndex)" class="options-button">
-              <span class="options-button-text">{{ getSelectedOptionsText(row[0]) || "Optionen auswählen" }}</span>
+            <UButton
+              @click.stop="openOptionsModal(rowIndex)"
+              class="options-button"
+            >
+              <span class="options-button-text">{{
+                getSelectedOptionsText(row[0]) || "Optionen auswählen"
+              }}</span>
               <i class="i-heroicons-cog"></i>
             </UButton>
           </div>
 
           <!-- Aktionen (Duplizieren/Löschen) -->
           <div class="action-buttons">
-            <UButton @click="duplicateRow(rowIndex)" icon="i-heroicons-document-duplicate">
+            <UButton
+              @click="duplicateRow(rowIndex)"
+              icon="i-heroicons-document-duplicate"
+            >
               Duplizieren
             </UButton>
-            <UButton @click="deleteRow(rowIndex)" icon="i-heroicons-trash" color="red">
+            <UButton
+              @click="deleteRow(rowIndex)"
+              icon="i-heroicons-trash"
+              color="red"
+            >
               Löschen
             </UButton>
           </div>
@@ -151,32 +214,57 @@
     <div v-if="currentStep === 2">
       <div class="keys-list-header">
         <h2>Meine Schlüssel</h2>
-        <UButton @click="addCheckbox" icon="i-heroicons-plus" class="add-key-button">
+        <UButton
+          @click="addCheckbox"
+          icon="i-heroicons-plus"
+          class="add-key-button"
+        >
           Schlüssel hinzufügen
         </UButton>
       </div>
 
       <!-- Liste der Schlüssel (nur erste Zeile) -->
       <div class="keys-list">
-        <div v-for="(keyItem, colIndex) in rows[0]" :key="colIndex" class="key-card">
+        <div
+          v-for="(keyItem, colIndex) in rows[0]"
+          :key="colIndex"
+          class="key-card"
+        >
           <div class="key-card-header">
             <span class="key-name">{{ keyItem.keyname }}</span>
-            <UButton @click="openKeyModal(colIndex)" icon="i-heroicons-pencil" class="key-edit-button" size="xs"
-              color="sky" />
+            <UButton
+              @click="openKeyModal(colIndex)"
+              icon="i-heroicons-pencil"
+              class="key-edit-button"
+              size="xs"
+              color="sky"
+            />
           </div>
 
           <div class="key-card-body">
             <div class="key-quantity">
               <label>Anzahl:</label>
-              <UInput v-model="keyItem.keyquantity" type="number" min="1" class="quantity-input" />
+              <UInput
+                v-model="keyItem.keyquantity"
+                type="number"
+                min="1"
+                class="quantity-input"
+              />
             </div>
 
             <div v-if="isSchliessanlage" class="door-assignments">
               <label>Öffnet folgende Türen:</label>
               <div class="door-checkbox-list">
-                <div v-for="(row, rowIndex) in rows" :key="rowIndex" class="door-checkbox-item">
+                <div
+                  v-for="(row, rowIndex) in rows"
+                  :key="rowIndex"
+                  class="door-checkbox-item"
+                >
                   <label>
-                    <input type="checkbox" v-model="rows[rowIndex][colIndex].checked" />
+                    <input
+                      type="checkbox"
+                      v-model="rows[rowIndex][colIndex].checked"
+                    />
                     <span>{{ getDoorName(row[0]) }}</span>
                   </label>
                 </div>
@@ -184,7 +272,12 @@
             </div>
 
             <div v-if="colIndex > 0" class="key-actions">
-              <UButton @click="deleteCheckbox(colIndex)" icon="i-heroicons-trash" color="red" size="xs">
+              <UButton
+                @click="deleteCheckbox(colIndex)"
+                icon="i-heroicons-trash"
+                color="red"
+                size="xs"
+              >
                 Löschen
               </UButton>
             </div>
@@ -217,7 +310,9 @@
         </div>
         <div class="summary-item">
           <span class="summary-label">Typ:</span>
-          <span class="summary-value">{{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}</span>
+          <span class="summary-value">{{
+            isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+          }}</span>
         </div>
         <div class="summary-item">
           <span class="summary-label">Anzahl Türen:</span>
@@ -258,7 +353,11 @@
 
     <!-- Modals -->
     <!-- Optionen Modal -->
-    <div v-if="modalOptionsVisible" class="modal-overlay" @click.self="closeOptionsModal">
+    <div
+      v-if="modalOptionsVisible"
+      class="modal-overlay"
+      @click.self="closeOptionsModal"
+    >
       <div class="modal-container">
         <div class="modal-header">
           <h3>Optionen auswählen</h3>
@@ -266,28 +365,52 @@
         </div>
         <div class="modal-body">
           <div v-if="activeOptionsModalIndex !== null">
-            <div v-for="option in getAllOptionsForType(rows[activeOptionsModalIndex][0]).Optionen || []" :key="option"
-              class="option-item">
+            <div
+              v-for="option in getAllOptionsForType(
+                rows[activeOptionsModalIndex][0]
+              ).Optionen || []"
+              :key="option"
+              class="option-item"
+            >
               <label class="option-label">
-                <input type="checkbox" :value="option" v-model="modalOptionsSelected" />
+                <input
+                  type="checkbox"
+                  :value="option"
+                  v-model="modalOptionsSelected"
+                />
                 <span class="option-text">{{ option }}</span>
               </label>
             </div>
-            <div v-if="(getAllOptionsForType(rows[activeOptionsModalIndex][0]).Optionen || []).length === 0"
-              class="no-options">
+            <div
+              v-if="
+                (
+                  getAllOptionsForType(rows[activeOptionsModalIndex][0])
+                    .Optionen || []
+                ).length === 0
+              "
+              class="no-options"
+            >
               Keine Optionen für diesen Zylindertyp verfügbar.
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <UButton @click="applyOptions" class="modal-button confirm">Übernehmen</UButton>
-          <UButton @click="closeOptionsModal" class="modal-button cancel">Abbrechen</UButton>
+          <UButton @click="applyOptions" class="modal-button confirm"
+            >Übernehmen</UButton
+          >
+          <UButton @click="closeOptionsModal" class="modal-button cancel"
+            >Abbrechen</UButton
+          >
         </div>
       </div>
     </div>
 
     <!-- Schlüssel Bearbeiten Modal -->
-    <div v-if="isKeyModalVisible" class="modal-overlay" @click.self="closeKeyModal">
+    <div
+      v-if="isKeyModalVisible"
+      class="modal-overlay"
+      @click.self="closeKeyModal"
+    >
       <div class="modal-container">
         <div class="modal-header">
           <h3>Schlüssel bearbeiten</h3>
@@ -304,8 +427,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <UButton @click="saveKeyChanges" class="modal-button confirm">Speichern</UButton>
-          <UButton @click="closeKeyModal" class="modal-button cancel">Abbrechen</UButton>
+          <UButton @click="saveKeyChanges" class="modal-button confirm"
+            >Speichern</UButton
+          >
+          <UButton @click="closeKeyModal" class="modal-button cancel"
+            >Abbrechen</UButton
+          >
         </div>
       </div>
     </div>
@@ -319,7 +446,8 @@
         </div>
         <div class="modal-body">
           <p>
-            Modell wechseln? Dadurch werden alle aktuellen Einstellungen zurückgesetzt.
+            Modell wechseln? Dadurch werden alle aktuellen Einstellungen
+            zurückgesetzt.
           </p>
         </div>
         <div class="modal-footer">
@@ -337,6 +465,8 @@
 
 <script>
 import { useCylinderStore } from "@/stores/cylinderStores.js";
+
+import { nextTick } from "vue";
 
 export default {
   name: "MobileConfiguratorView",
@@ -434,8 +564,8 @@ export default {
 
         // Bei Wechsel zu Gleichschließung alle Checkboxen aktivieren
         if (val === true) {
-          this.rows.forEach(row => {
-            row.forEach(cell => {
+          this.rows.forEach((row) => {
+            row.forEach((cell) => {
               cell.checked = true;
             });
           });
@@ -476,35 +606,35 @@ export default {
       this.currentStep = step;
     },
 
-    goToStep2() {
-      // Prüfung aller Türen
+    async goToStep2() {
+      // 1) Validierung
       let isValid = true;
-
-      for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
-        const { type, outside, inside } = this.rows[rowIndex][0];
-
+      for (let i = 0; i < this.rows.length; i++) {
+        const { type, outside, inside } = this.rows[i][0];
         if (!type) {
-          alert(`Bitte Zylinder-Typ für Tür ${rowIndex + 1} wählen.`);
+          alert(`Bitte Zylinder-Typ für Tür ${i + 1} wählen.`);
           isValid = false;
           break;
         }
-
         if (!outside) {
-          alert(`Bitte Außenmaß für Tür ${rowIndex + 1} wählen.`);
+          alert(`Bitte Außenmaß für Tür ${i + 1} wählen.`);
           isValid = false;
           break;
         }
-
         if (!inside) {
-          alert(`Bitte Innenmaß für Tür ${rowIndex + 1} wählen.`);
+          alert(`Bitte Innenmaß für Tür ${i + 1} wählen.`);
           isValid = false;
           break;
         }
       }
+      if (!isValid) return;
 
-      if (isValid) {
-        this.setStep(2);
-      }
+      // 2) Wechsel zu Schritt 2
+      this.currentStep = 2;
+
+      // 3) Warten bis das DOM neu gerendert ist, dann scrollen
+      await nextTick();
+      window.scrollTo(0, 0);
     },
 
     goToStep3() {
@@ -523,7 +653,9 @@ export default {
           }
 
           if (!foundAtLeastOne) {
-            alert(`Bitte weisen Sie dem Schlüssel "${this.rows[0][c].keyname}" mindestens eine Tür zu.`);
+            alert(
+              `Bitte weisen Sie dem Schlüssel "${this.rows[0][c].keyname}" mindestens eine Tür zu.`
+            );
             return;
           }
         }
@@ -540,15 +672,14 @@ export default {
       // Falls nicht initialisiert
       if (this.accordionOpen[index] === undefined) {
         // noch nicht initialisiert
-        this.accordionOpen[index] = true
+        this.accordionOpen[index] = true;
       } else {
-        this.accordionOpen[index] = !this.accordionOpen[index]
+        this.accordionOpen[index] = !this.accordionOpen[index];
       }
-
     },
 
     getDoorName(doorData) {
-      return doorData.doorDesignation || `Tür ${doorData.position || 'Neu'}`;
+      return doorData.doorDesignation || `Tür ${doorData.position || "Neu"}`;
     },
 
     // Tür-Methoden
@@ -652,7 +783,7 @@ export default {
     saveKeyChanges() {
       if (this.activeKeyIndex !== null) {
         // Aktualisiere auf allen Zeilen den Schlüssel mit dem gleichen Index
-        this.rows.forEach(row => {
+        this.rows.forEach((row) => {
           row[this.activeKeyIndex].keyname = this.activeKeyName;
           row[this.activeKeyIndex].keyquantity = this.activeKeyQuantity;
         });
@@ -805,11 +936,10 @@ export default {
     },
 
     getSelectedOptionsText(checkbox) {
-      return (checkbox.optionsSelected && checkbox.optionsSelected.length > 0)
+      return checkbox.optionsSelected && checkbox.optionsSelected.length > 0
         ? checkbox.optionsSelected.join(", ")
         : "";
     },
-
 
     // Hilfsmethoden
     deepCopy(obj) {
@@ -830,10 +960,13 @@ export default {
       this.anlageNr = randomNum.toString();
 
       // Optional: Auch gleich ein Passwort generieren
-      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let password = "";
       for (let i = 0; i < 6; i++) {
-        password += characters.charAt(Math.floor(Math.random() * characters.length));
+        password += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
       }
       this.password = password;
     },
@@ -851,9 +984,12 @@ export default {
         let antwort;
         do {
           this.generateRandomAnlagenNummer();
-          const response = await $fetch("./api/sqltestanlage?ID=" + this.anlageNr, {
-            method: "post",
-          });
+          const response = await $fetch(
+            "./api/sqltestanlage?ID=" + this.anlageNr,
+            {
+              method: "post",
+            }
+          );
           antwort = response.message;
         } while (antwort === "Anlagennummer existiert.");
       }
@@ -934,46 +1070,57 @@ export default {
     },
 
     async loadInstallation() {
-
       this.anlageNr = this.id;
       // 1) Lade alle drei Teile
-      const [{ queryresult: positions },
+      const [
+        { queryresult: positions },
         { queryresult: keys },
-        { queryresult: matrix }] = await Promise.all([
-          $fetch("./api/sqlgetposition", { method: "post", body: { ID: this.id } }),
-          $fetch("./api/sqlgetschluessel", { method: "post", body: { ID: this.id } }),
-          $fetch("./api/sqlgetmatrix", { method: "post", body: { ID: this.id } })
-        ]);
+        { queryresult: matrix },
+      ] = await Promise.all([
+        $fetch("./api/sqlgetposition", {
+          method: "post",
+          body: { ID: this.id },
+        }),
+        $fetch("./api/sqlgetschluessel", {
+          method: "post",
+          body: { ID: this.id },
+        }),
+        $fetch("./api/sqlgetmatrix", { method: "post", body: { ID: this.id } }),
+      ]);
 
       // Wenn gar nichts da ist, verlassen
       if (!positions.length) return;
 
       // 2) Dimensions ermitteln
       const numDoors = positions.length;
-      const numKeys = keys.length ? Math.max(...keys.map(k => k.KeyPOS)) : 1;
+      const numKeys = keys.length ? Math.max(...keys.map((k) => k.KeyPOS)) : 1;
 
       // 3) rows leeren und komplett neu aufbauen
       this.rows = [];
       for (let i = 0; i < numDoors; i++) {
-        const doorData = positions.find(p => p.POS === i + 1) || {};
+        const doorData = positions.find((p) => p.POS === i + 1) || {};
         this.rows[i] = [];
         for (let j = 0; j < numKeys; j++) {
-          const keyData = keys.find(k => k.KeyPOS === j + 1) || {};
-          const mat = matrix.find(m => m.POSZylinder === i + 1 && m.POSSchluessel === j + 1);
+          const keyData = keys.find((k) => k.KeyPOS === j + 1) || {};
+          const mat = matrix.find(
+            (m) => m.POSZylinder === i + 1 && m.POSSchluessel === j + 1
+          );
           this.rows[i][j] = {
             // Tür‑Felder nur in Spalte 0 füllen, in allen anderen Zellen ignorieren
-            ...(j === 0 ? {
-              position: i + 1,
-              doorDesignation: doorData.Bezeichnung || "",
-              doorquantity: doorData.Anzahl || 1,
-              type: doorData.Typ || "",
-              outside: doorData.SizeA || "",
-              inside: doorData.SizeI || "",
-              optionsSelected: (doorData.Option || "")
-                .split(",")
-                .map(s => s.trim())
-                .filter(Boolean),
-            } : {}),
+            ...(j === 0
+              ? {
+                  position: i + 1,
+                  doorDesignation: doorData.Bezeichnung || "",
+                  doorquantity: doorData.Anzahl || 1,
+                  type: doorData.Typ || "",
+                  outside: doorData.SizeA || "",
+                  inside: doorData.SizeI || "",
+                  optionsSelected: (doorData.Option || "")
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                }
+              : {}),
             // Schlüssel‑Felder
             checked: !!mat?.Berechtigung,
             keyquantity: keyData.Anzahl || 1,
@@ -986,7 +1133,7 @@ export default {
       // 4) Erfolgsmeldung
       this.alertMessage = "Ihre Konfiguration wurde erfolgreich geladen.";
       this.alertType = "success";
-      setTimeout(() => this.alertMessage = "", 3000);
+      setTimeout(() => (this.alertMessage = ""), 3000);
     },
 
     // E-Mail-Versand
@@ -1034,31 +1181,45 @@ export default {
             <table style="border-collapse: collapse; width: 100%;">
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Anlagennummer:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.anlageNr}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.anlageNr
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Modell:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.store.selectedModel}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.store.selectedModel
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Typ:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.isSchliessanlage ? "Schließanlage" : "Gleichschließung"}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.name || "-"}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.name || "-"
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>E-Mail:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.email}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.email
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Telefon:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.phone || "-"}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.phone || "-"
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Passwort:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${this.password}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${
+                  this.password
+                }</td>
               </tr>
             </table>
             <p style="margin-top: 20px;">Diese Konfiguration wurde in der Datenbank gespeichert.</p>
@@ -1078,9 +1239,10 @@ export default {
 
     // Validierungsmethoden
     validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
-    }
+    },
   },
 
   mounted() {
@@ -1091,7 +1253,6 @@ export default {
       this.generateRandomAnlagenNummer();
     }
 
-
     // Modell aus URL laden
     this.selectedModelLocal = this.store.selectedModel;
     this.oldModel = this.store.selectedModel;
@@ -1101,7 +1262,7 @@ export default {
       this.id = this.$route.query.anlageNr;
       this.loadInstallation();
     }
-  }
+  },
 };
 </script>
 
