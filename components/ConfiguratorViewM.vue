@@ -100,6 +100,7 @@
             "
           />
         </div>
+        <!-- Türposition -->
 
         <div v-if="accordionOpen[rowIndex]" class="accordion-content">
           <!-- Türbezeichnung -->
