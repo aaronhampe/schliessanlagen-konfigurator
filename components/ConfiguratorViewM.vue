@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-container">
     <!-- Fortschrittsanzeige -->
-    <div class="progress-indicator">
+    <div class="progress-indicator" id="progress-top">
       <div class="progress-step" :class="{ active: currentStep === 1, completed: currentStep > 1 }"
         @click="currentStep > 1 && setStep(1)">
         <span class="step-number">1</span>
@@ -156,6 +156,9 @@
 
     <!-- SCHRITT 2: SCHLÜSSELKONFIGURATION -->
     <div v-if="currentStep === 2">
+
+      <div id="keys-section-top" ref="keysSectionTop"></div>
+
       <div class="keys-list-header">
         <h2>Meine Schlüssel</h2>
         <UButton @click="addCheckbox" icon="i-heroicons-plus" class="add-key-button">
@@ -518,12 +521,12 @@ export default {
       // 2) Wechsel zu Schritt 2
       this.currentStep = 2;
 
-
-      // 3) Warten bis das DOM neu gerendert ist, dann scrollen
+      // 3) Warten bis das DOM neu gerendert ist
       await nextTick();
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+
+      document.getElementById('progress-top')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     },
 
@@ -551,6 +554,10 @@ export default {
         }
       }
 
+      document.getElementById('progress-top')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
       this.setStep(3);
     },
 
