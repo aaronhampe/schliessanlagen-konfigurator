@@ -70,8 +70,8 @@
             <span class="door-name">{{ getDoorName(row[0]) }}</span>
           </div>
           <i :class="accordionOpen[rowIndex]
-          ? 'i-heroicons-chevron-up'
-          : 'i-heroicons-chevron-down'
+        ? 'i-heroicons-chevron-up'
+        : 'i-heroicons-chevron-down'
         " />
         </div>
         <!-- Türposition -->
@@ -284,9 +284,9 @@
               </label>
             </div>
             <div v-if="(
-          getAllOptionsForType(rows[activeOptionsModalIndex][0])
-            .Optionen || []
-        ).length === 0
+        getAllOptionsForType(rows[activeOptionsModalIndex][0])
+          .Optionen || []
+      ).length === 0
         " class="no-options">
               Keine Optionen für diesen Zylindertyp verfügbar.
             </div>
@@ -519,15 +519,12 @@ export default {
       this.currentStep = 2;
 
 
-
       // 3) Warten bis das DOM neu gerendert ist, dann scrollen
       await nextTick();
-      window.scrollTo(0, 0);
-
-      // NEU: Signal ans Parent
-      if (window.parent !== window) {
-        window.parent.postMessage({ action: 'configStep', step: 2 }, '*');
-      }
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     },
 
     goToStep3() {
