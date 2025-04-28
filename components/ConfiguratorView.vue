@@ -11,19 +11,7 @@
           }}
         </h1>
 
-        <!-- Info Icon mit verbessertem Tooltip -->
-        <div class="info-icon-container">
-          <i class="i-heroicons-information-circle" @mouseenter="showInfo = true" @mouseleave="showInfo = false"></i>
-          <div class="info-tooltip" v-if="showInfo">
-            <div class="tooltip-arrow"></div>
-            <p>
-              <strong>Gleichschließung:</strong> Alle Schlüssel öffnen alle Türen.
-            </p>
-            <p>
-              <strong>Schließanlage:</strong> Verschiedene Zutrittsberechtigungen können konfiguriert werden.
-            </p>
-          </div>
-        </div>
+        
       </div>
 
       <div class="config-overview">
