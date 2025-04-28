@@ -1,6 +1,6 @@
 export default {
     isSchliessanlage: true,
-    image: "./images/dom-rs-sigma-doppelzylinder-logo-500x500.png",
+    image: "./images/dom-rs-sigma-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 3.20,
     productID: 28709,
     useCase: "privat & gewerblich",
