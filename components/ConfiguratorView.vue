@@ -1,76 +1,113 @@
 <template>
-  <div class="heading">
-    <div class="first-flex">
-      <h1>
-        {{
-          isSchliessanlage
-            ? "Konfigurator für eine Schließanlage"
-            : "Konfigurator für eine Gleichschließung"
-        }}
-      </h1>
+  <!-- Neuer stylischer Header-Bereich ohne Hintergrund -->
+  <div class="configurator-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>
+          {{
+            isSchliessanlage
+              ? "Konfigurator für eine Schließanlage"
+              : "Konfigurator für eine Gleichschließung"
+          }}
+        </h1>
 
+        <!-- Info Icon mit verbessertem Tooltip -->
+        <div class="info-icon-container">
+          <i class="i-heroicons-information-circle" @mouseenter="showInfo = true" @mouseleave="showInfo = false"></i>
+          <div class="info-tooltip" v-if="showInfo">
+            <div class="tooltip-arrow"></div>
+            <p>
+              <strong>Gleichschließung:</strong> Alle Schlüssel öffnen alle Türen.
+            </p>
+            <p>
+              <strong>Schließanlage:</strong> Verschiedene Zutrittsberechtigungen können konfiguriert werden.
+            </p>
+          </div>
+        </div>
+      </div>
 
+      <div class="config-overview">
+        <div class="anlage-badge">
+          <span class="label">Anlagennummer:</span>
+          <input type="text" readonly v-model="anlageNr" class="anlage-input" />
+        </div>
+
+        <div class="model-selector-container">
+          <span class="label">Modellauswahl:</span>
+          <div class="select-wrapper">
+            <select v-model="selectedModelLocal" @change="onModelSelect" class="model-select">
+              <option v-for="model in store.availableModels" :key="model" :value="model">
+                {{ model }}
+              </option>
+            </select>
+            <i class="i-heroicons-chevron-down select-arrow"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verbesserte Fortschrittsanzeige -->
+      <div class="progress-tracker">
+        <div class="progress-step" :class="{ 'active': activeStep >= 1, 'completed': activeStep > 1 }"
+          @click="activeStep > 1 && setStepIfAllowed(1)">
+          <div class="step-indicator">
+            <span v-if="activeStep > 1" class="checkmark">✓</span>
+            <span v-else>1</span>
+          </div>
+          <div class="step-label">Modell wählen</div>
+        </div>
+
+        <div class="progress-connector" :class="{ 'active': activeStep > 1 }"></div>
+
+        <div class="progress-step" :class="{ 'active': activeStep >= 2, 'completed': activeStep > 2 }"
+          @click="activeStep > 2 && setStepIfAllowed(2)">
+          <div class="step-indicator">
+            <span v-if="activeStep > 2" class="checkmark">✓</span>
+            <span v-else>2</span>
+          </div>
+          <div class="step-label">Türen & Zylinder konfigurieren</div>
+        </div>
+
+        <div class="progress-connector" :class="{ 'active': activeStep > 2 }"></div>
+
+        <div class="progress-step" :class="{ 'active': activeStep >= 3 }">
+          <div class="step-indicator">3</div>
+          <div class="step-label">Angebote erhalten</div>
+        </div>
+      </div>
+
+      <!-- Verbessertes Info-Banner -->
+      <div class="intro-banner" v-if="showIntroText">
+        <div class="banner-content">
+          <i class="i-heroicons-light-bulb banner-icon"></i>
+          <p>Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen
+            und Größen, und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.</p>
+          <button @click="showIntroText = false" class="banner-close-button">
+            <i class="i-heroicons-x-mark"></i>
+          </button>
+        </div>
+      </div>
+      <button v-else @click="showIntroText = true" class="show-help-button">
+        <i class="i-heroicons-question-mark-circle"></i>
+        Hilfe anzeigen
+      </button>
     </div>
-    <div class="intro-text">
-      <p v-if="showIntroText">
-        <i class="i-heroicons-light-bulb text-amber-500 mr-2"></i>
-        Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen und
-        Größen,
-        und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.
-        <button @click="showIntroText = false" class="text-sm text-blue-500">Ausblenden</button>
-      </p>
-      <button v-else @click="showIntroText = true" class="text-sm text-blue-500">Hilfe anzeigen</button>
-    </div>
-
-    <div class="system-number">
-      <h2>Anlagennummer:</h2>
-      <input type="text" readonly v-model="anlageNr" placeholder="Anlagenummer" />
-    </div>
-
-    <div class="model-container">
-      <h3>Modellauswahl:</h3>
-      <select v-model="selectedModelLocal" @change="onModelSelect" class="select-model">
-       
-        <option v-for="model in store.availableModels" :key="model" :value="model">
-          {{ model }}
-        </option>
-      </select>
-
-    </div>
-
-
-    <div class="progress-tracker">
-      <div class="progress-step" :class="{ 'active': activeStep >= 1, 'completed': activeStep > 1 }">
-        <div class="step-indicator">1</div>
-        <span class="step-label">Modell wählen</span>
-      </div>
-      <div class="progress-line" :class="{ 'active': activeStep > 1 }"></div>
-      <div class="progress-step" :class="{ 'active': activeStep >= 2, 'completed': activeStep > 2 }">
-        <div class="step-indicator">2</div>
-        <span class="step-label">Türen & Zylinder konfigurieren</span>
-      </div>
-      <div class="progress-line" :class="{ 'active': activeStep > 2 }"></div>
-      <div class="progress-step" :class="{ 'active': activeStep >= 3 }">
-        <div class="step-indicator">3</div>
-        <span class="step-label">Angebote erhalten</span>
-      </div>
-    </div>
-    <!-- Warn‑Modal, wenn Modell gewechselt wird -->
-    <UModal v-model="isWarningModalOpen" class="warning-modal">
-      <div class="modal-header">
-        <h2>Achtung!</h2>
-        <button class="close-button" @click="cancelChange">X</button>
-      </div>
-      <div class="modal-body">
-        <p>Beim Wechsel des Modells gehen alle eingegebenen Daten verloren.</p>
-        <p>Möchtest du wirklich wechseln?</p>
-      </div>
-      <div class="modal-footer">
-        <button class="confirm-button" @click="confirmChange">Ja, wechseln</button>
-        <button class="cancel-button" @click="cancelChange">Abbrechen</button>
-      </div>
-    </UModal>
   </div>
+
+  <!-- Modal für Modellwechsel-Warnung bleibt unverändert -->
+  <UModal v-model="isWarningModalOpen" class="warning-modal">
+    <div class="modal-header">
+      <h2>Achtung!</h2>
+      <button class="close-button" @click="cancelChange">X</button>
+    </div>
+    <div class="modal-body">
+      <p>Beim Wechsel des Modells gehen alle eingegebenen Daten verloren.</p>
+      <p>Möchtest du wirklich wechseln?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="confirm-button" @click="confirmChange">Ja, wechseln</button>
+      <button class="cancel-button" @click="cancelChange">Abbrechen</button>
+    </div>
+  </UModal>
 
   <div class="flex-container">
     <div class="section-divider">
@@ -157,7 +194,7 @@
         <div class="checkbox-item" v-for="(checkbox, colIndex) in row" :key="colIndex">
           <input type="text" placeholder="Schlüsselname" readonly class="key-name" v-model="checkbox.keyname"
             v-if="rowIndex < 1" :class="isSchliessanlage ? 'default-margin' : 'gleichschliessung-margin'
-          " />
+            " />
 
           <input min="1" class="key-quantity" type="number" placeholder="1" v-model="checkbox.keyquantity"
             v-if="rowIndex < 1" />
@@ -1317,6 +1354,7 @@ export default {
         this.isWarningModalOpen = true;
       }
     },
+
     confirmChange() {
       // wenn bestätigt, setze das Modell um und räume Daten
       this.selectedModel = this.pendingModel;
