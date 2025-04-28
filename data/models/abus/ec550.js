@@ -1,7 +1,7 @@
 export default {
   isSchliessanlage: false,
   image: "./images/abus-ec550-doppelzylinder-logo-500x500.png",
-  keyPrice: 4.31,
+  keyPrice: 2.16,
   productID: 28336,
   useCase: "privat",
   securityLevel: 5,

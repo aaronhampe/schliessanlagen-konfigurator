@@ -1,7 +1,7 @@
 export default {
     isSchliessanlage: false,
     image: "./images/iseo-r6-doppelzylinder-schluessel-logo-500x500.png",
-    keyPrice: 4.10,
+    keyPrice: 2.03,
     productID: 28498,
     useCase: "privat",
     securityLevel: 6,

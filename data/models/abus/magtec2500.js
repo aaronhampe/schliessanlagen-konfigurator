@@ -1,7 +1,7 @@
 export default {
     isSchliessanlage: true,
     image: "./images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
-    keyPrice: 8.35,
+    keyPrice: 4.38,
     productID: 28683,
     useCase: "privat & gewerblich", 
     securityLevel: 7, 
