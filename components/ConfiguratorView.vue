@@ -581,10 +581,10 @@ export default {
           ],
           matrix: [
             [true, true, true],
-            [true, true, false], 
-            [true, true, true], 
-            [true, true, false], 
-            [true, false, false] 
+            [true, true, false],
+            [true, true, true],
+            [true, true, false],
+            [true, false, false]
           ]
         },
         {
@@ -640,14 +640,14 @@ export default {
             { id: 5, name: 'IT-Admin' }
           ],
           matrix: [
-            [true, true, true, true, true], 
             [true, true, true, true, true],
-            [true, true, false, false, false], 
-            [true, true, true, false, false], 
-            [true, true, false, false, true], 
-            [true, true, true, true, false], 
-            [true, true, false, true, false], 
-            [true, true, true, true, false]  
+            [true, true, true, true, true],
+            [true, true, false, false, false],
+            [true, true, true, false, false],
+            [true, true, false, false, true],
+            [true, true, true, true, false],
+            [true, true, false, true, false],
+            [true, true, true, true, false]
           ]
         },
         {
@@ -669,12 +669,12 @@ export default {
             { id: 3, name: 'Mitarbeiter' }
           ],
           matrix: [
-            [true, true, true], 
-            [true, true, true], 
-            [true, true, false], 
-            [true, true, true], 
-            [true, true, true], 
-            [true, true, false] 
+            [true, true, true],
+            [true, true, true],
+            [true, true, false],
+            [true, true, true],
+            [true, true, true],
+            [true, true, false]
           ]
         }
       ],
@@ -846,8 +846,10 @@ export default {
       const template = this.selectedTemplate;
       if (!template) return;
 
-      // 1. Modell setzen (falls ein bestimmtes Modell empfohlen wird für die Vorlage)
-      // Falls die Vorlage ein bestimmtes Modell bevorzugt, könnte man hier den Code zum Setzen des Modells einbauen
+      // 1. Modell explizit auf "Kein bestimmtes Modell" setzen
+      this.store.setModel("Kein bestimmtes Modell");
+      this.selectedModelLocal = "Kein bestimmtes Modell";
+      this.oldModel = "Kein bestimmtes Modell";
 
       // 2. Alte Daten löschen und neue Türen hinzufügen
       this.rows = [];
@@ -897,7 +899,7 @@ export default {
       this.isTemplateModalOpen = false;
 
       // Erfolgs-Meldung anzeigen
-      this.alertMessage = `Vorlage "${template.name}" erfolgreich angewendet!`;
+      this.alertMessage = `Vorlage "${template.name}" erfolgreich angewendet! Das Modell wurde auf "Kein bestimmtes Modell" zurückgesetzt.`;
       this.alertType = "success";
       setTimeout(() => {
         this.alertMessage = "";
