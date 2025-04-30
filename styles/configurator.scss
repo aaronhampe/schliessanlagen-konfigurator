@@ -1306,3 +1306,111 @@
     }
   }
 }
+
+/* Call-to-Action Button */
+.button-cta {
+  @include flex-center;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  height: 44px !important;
+  min-width: 280px !important;
+  border-radius: 8px !important;
+  background-color: #10b981 !important; /* Grün für Conversion */
+  color: white !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  
+  /* Hover-Effekt mit Zoom und Glow */
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3) !important;
+  }
+  
+  /* Aktiver Zustand */
+  &:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Ripple-Effekt (optional) */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+  }
+  
+  &:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
+
+/* Anpassung für die Button-Gruppe */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  padding: 5px;
+  
+  /* Kleine Animation um die Aufmerksamkeit auf den CTA-Button zu lenken */
+  .button-cta {
+    animation: subtle-pulse 2s infinite;
+  }
+  
+  @keyframes subtle-pulse {
+    0% {
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
+    }
+    50% {
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    100% {
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
+    }
+  }
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+    
+    .button-cta {
+      width: 100%;
+      order: -1; /* CTA-Button an die erste Stelle setzen */
+      margin-bottom: 10px;
+    }
+    
+    .button-default, .button-secondary {
+      width: 100%;
+    }
+  }
+}

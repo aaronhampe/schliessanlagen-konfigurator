@@ -213,22 +213,32 @@
       </div>
       <div class="buttons">
         <UButton class="button-default" icon="i-heroicons-plus-16-solid" @click="addRow" size="sm" color="amber"
-          variant="solid" :trailing="false">Tür hinzufügen</UButton>
-        <UButton class="button-default" @click="handleWeiterZuAngeboten" size="sm" color="amber" variant="solid">
-          Weiter zu den Angeboten
+          variant="solid" :trailing="false">
+          Tür hinzufügen
         </UButton>
-        <UButton v-if="showTutorialButton" class="button-secondary" icon="i-heroicons-academic-cap"
-          @click="showTutorial = true" size="sm" color="sky" variant="outline" :trailing="false">
-          Tutorial anzeigen
+
+        <!-- Verbesserter Call-to-Action Button -->
+        <UButton class="button-cta" @click="handleWeiterZuAngeboten" size="md" color="green" variant="solid"
+          icon="i-heroicons-shopping-cart">
+          Konfiguration abschließen & kaufen
         </UButton>
+
+
       </div>
       <div class="buttons" style="margin-top: 20px">
+
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-down" @click="isOpenL = true" size="sm"
           color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
+        
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-up" @click="handleAnlageSpeichern" size="sm"
           color="amber" variant="solid" :trailing="false">
           Anlage speichern
+        </UButton>
+
+        <UButton v-if="showTutorialButton" class="button-secondary" icon="i-heroicons-academic-cap"
+          @click="showTutorial = true" size="sm" color="sky" variant="outline" :trailing="false">
+          Tutorial anzeigen
         </UButton>
 
       </div>
