@@ -92,19 +92,38 @@
     </div>
   </div>
 
-  <!-- Modal für Modellwechsel-Warnung bleibt unverändert -->
-  <UModal v-model="isWarningModalOpen" class="warning-modal">
-    <div class="modal-header">
-      <h2>Achtung!</h2>
-      <button class="close-button" @click="cancelChange">X</button>
-    </div>
-    <div class="modal-body">
-      <p>Beim Wechsel des Modells gehen alle eingegebenen Daten verloren.</p>
-      <p>Möchtest du wirklich wechseln?</p>
-    </div>
-    <div class="modal-footer">
-      <button class="confirm-button" @click="confirmChange">Ja, wechseln</button>
-      <button class="cancel-button" @click="cancelChange">Abbrechen</button>
+  <UModal v-model="isWarningModalOpen" class="improved-warning-modal">
+    <div class="warning-modal-content">
+      <div class="warning-modal-header">
+        <div class="warning-title">
+          <i class="i-heroicons-exclamation-triangle warning-icon"></i>
+          <h2>Achtung!</h2>
+        </div>
+        <UButton class="close-button" color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="cancelChange" />
+      </div>
+
+      <div class="warning-modal-body">
+        <div class="warning-message">
+          <p class="question">Haben Sie bereits mit dem Konfigurieren begonnen?</p>
+
+          <div class="alert-box">
+            <p>Beim Wechsel des Modells gehen <strong>alle bisher eingegebenen Daten verloren.</strong></p>
+          </div>
+
+          <p class="confirmation-question">Möchten Sie wirklich wechseln?</p>
+        </div>
+      </div>
+
+      <div class="warning-modal-footer">
+        <UButton class="cancel-button" variant="soft" color="gray" @click="cancelChange">
+          Abbrechen
+        </UButton>
+
+        <UButton class="confirm-button" variant="solid" color="red" @click="confirmChange"
+          icon="i-heroicons-arrow-path">
+          Ja, Modell wechseln
+        </UButton>
+      </div>
     </div>
   </UModal>
 
@@ -561,13 +580,11 @@ export default {
             { id: 3, name: 'Kinderschlüssel' }
           ],
           matrix: [
-            // [Tür-Position][Schlüssel-ID]
-            // Hauptschlüssel kann alle Türen öffnen
-            [true, true, true], // Haustür-Berechtigungen
-            [true, true, false], // Kellertür-Berechtigungen
-            [true, true, true], // Terrassentür-Berechtigungen
-            [true, true, false], // Gartentür-Berechtigungen
-            [true, false, false] // Garage-Berechtigungen
+            [true, true, true],
+            [true, true, false], 
+            [true, true, true], 
+            [true, true, false], 
+            [true, false, false] 
           ]
         },
         {
@@ -591,7 +608,6 @@ export default {
             { id: 4, name: 'Wohnung 3' }
           ],
           matrix: [
-            // Hausmeister kann alles öffnen
             [true, true, true, true],
             [true, true, true, true],
             [true, true, false, false],
@@ -624,14 +640,14 @@ export default {
             { id: 5, name: 'IT-Admin' }
           ],
           matrix: [
-            [true, true, true, true, true], // Haupteingang
-            [true, true, true, true, true], // Personaleingang
-            [true, true, false, false, false], // Büro Geschäftsführer
-            [true, true, true, false, false], // Büro Verwaltung
-            [true, true, false, false, true], // Serverraum
-            [true, true, true, true, false], // Lager
-            [true, true, false, true, false], // Werkstatt
-            [true, true, true, true, false]  // Außentür Hof
+            [true, true, true, true, true], 
+            [true, true, true, true, true],
+            [true, true, false, false, false], 
+            [true, true, true, false, false], 
+            [true, true, false, false, true], 
+            [true, true, true, true, false], 
+            [true, true, false, true, false], 
+            [true, true, true, true, false]  
           ]
         },
         {
@@ -653,12 +669,12 @@ export default {
             { id: 3, name: 'Mitarbeiter' }
           ],
           matrix: [
-            [true, true, true], // Haupteingang
-            [true, true, true], // Hintereingang
-            [true, true, false], // Büro
-            [true, true, true], // Lager
-            [true, true, true], // Personalraum
-            [true, true, false] // Tresor/Wertsachen
+            [true, true, true], 
+            [true, true, true], 
+            [true, true, false], 
+            [true, true, true], 
+            [true, true, true], 
+            [true, true, false] 
           ]
         }
       ],

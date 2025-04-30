@@ -1,29 +1,67 @@
-<!-- ColumnModal.vue -->
+<!-- Verbessertes ColumnModal.vue -->
 <template>
-  <UModal class="column-modal" v-model="isOpenC">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h6 class="modal-title">Schlüssel benennen</h6>
-        <UButton class="close-button" color="red" @click="closeModal"
-          >X</UButton
-        >
-      </div>
-      <div class="modal-body">
-        <label for="input" class="modal-label">Schlüsselbezeichnung:</label>
-        <UInput
-          autofocus
-          class="modal-input"
-          v-model="columnName"
-          color="amber"
-          placeholder="z.B. Haustürschlüssel"
+  <UModal class="improved-column-modal" v-model="isOpenC">
+    <div class="column-modal-content">
+      <div class="column-modal-header">
+        <div class="modal-title-wrapper">
+          <i class="i-heroicons-key modal-icon"></i>
+          <h6 class="modal-title">Schlüssel benennen</h6>
+        </div>
+        <UButton 
+          class="close-button" 
+          color="gray" 
+          variant="ghost" 
+          icon="i-heroicons-x-mark" 
+          @click="closeModal" 
         />
       </div>
-      <div class="modal-footer">
+      
+      <div class="column-modal-body">
+        <div class="input-group">
+          <label for="keyName" class="input-label">Schlüsselbezeichnung:</label>
+          <div class="input-wrapper">
+            <UInput
+              id="keyName"
+              autofocus
+              class="key-name-input"
+              v-model="columnName"
+              color="amber"
+              placeholder="z.B. Haustürschlüssel"
+            />
+            <div class="input-hint">Vergeben Sie einen eindeutigen Namen für den Schlüssel</div>
+          </div>
+        </div>
+        
+        <div class="name-suggestions" v-if="suggestions.length > 0">
+          <div class="suggestions-label">Vorschläge:</div>
+          <div class="suggestion-chips">
+            <button 
+              v-for="suggestion in suggestions" 
+              :key="suggestion"
+              class="suggestion-chip"
+              @click="selectSuggestion(suggestion)"
+            >
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="column-modal-footer">
+        <UButton
+          class="cancel-button"
+          color="gray"
+          variant="soft"
+          @click="closeModal"
+        >
+          Abbrechen
+        </UButton>
         <UButton
           class="save-button"
-          style="color: #fff"
-          @click="closeModal"
           color="amber"
+          variant="solid"
+          icon="i-heroicons-check"
+          @click="saveKey"
         >
           Speichern
         </UButton>
@@ -40,126 +78,319 @@ export default {
     return {
       isOpenC: false,
       columnName: "",
+      suggestions: [
+        "Hauptschlüssel",
+        "Elternschlüssel", 
+        "Kinderschlüssel",
+        "Zweitschlüssel",
+        "Ersatzschlüssel",
+        "Gästeschlüssel"
+      ]
     };
   },
   methods: {
-    closeModal() {
-      // Hier z. B. das neue Spalten-Label speichern
-      this.$emit("update-column-name", this.columnName);
-      this.$emit("close-this-modal", this.isOpenC);
+    selectSuggestion(suggestion) {
+      this.columnName = suggestion;
     },
-  },
+    saveKey() {
+      if (this.columnName.trim()) {
+        this.$emit("update-column-name", this.columnName);
+        this.$emit("close-this-modal", this.isOpenC);
+      }
+    },
+    closeModal() {
+      // Nur emittieren wenn ein Name eingegeben wurde
+      if (this.columnName.trim()) {
+        this.$emit("update-column-name", this.columnName);
+      }
+      this.$emit("close-this-modal", this.isOpenC);
+    }
+  }
 };
 </script>
 
 <style scoped>
-@media (prefers-color-scheme: dark) {
-  h6 {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-    font-weight: 900;
-  }
-
-  .modal-label {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-    font-weight: 400;
-  }
+.improved-column-modal :deep(.u-modal-overlay) {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
 }
 
-.column-modal ::v-deep .u-modal-content {
-  background: #ffffff; /* oder #f9fafb für ein helleres Offwhite */
+.improved-column-modal :deep(.u-modal-container) {
+  align-items: center;
+  padding: 1rem;
+}
+
+.improved-column-modal :deep(.u-modal-content) {
+  background: transparent;
+  padding: 0;
+  max-width: 480px;
+  width: 95%;
   border-radius: 12px;
-  max-width: 480px; /* Modale etwas schmaler halten */
-  margin: 1.5rem auto;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  transition: opacity 0.3s ease, transform 0.3s ease;
   overflow: hidden;
 }
 
-.modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 20px;
+.column-modal-content {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.modal-header {
+.column-modal-header {
+  background-color: #fef3c7;
+  border-bottom: 1px solid #fde68a;
+  padding: 16px 20px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  
+  .modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .modal-icon {
+    color: #d97706;
+    font-size: 20px;
+  }
+  
+  .modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #92400e;
+    margin: 0;
+  }
+  
+  .close-button {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
 }
 
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-  color: #333;
+.column-modal-body {
+  padding: 24px 20px;
+  
+  .input-group {
+    margin-bottom: 16px;
+  }
+  
+  .input-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 8px;
+  }
+  
+  .input-wrapper {
+    position: relative;
+  }
+  
+  .key-name-input {
+    width: 100%;
+    
+    :deep(.u-input__field) {
+      border-color: #d1d5db;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      
+      &:hover {
+        border-color: #9ca3af;
+      }
+      
+      &:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      }
+    }
+  }
+  
+  .input-hint {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 6px;
+  }
+  
+  .name-suggestions {
+    margin-top: 16px;
+    
+    .suggestions-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+    
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      .suggestion-chip {
+        background-color: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #4b5563;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background-color: #fef3c7;
+          border-color: #fde68a;
+          color: #92400e;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
 }
 
-.close-button {
-  background-color: #dc2626 !important; /* rote Nuance */
-  color: #fff !important;
-  font-weight: 600;
-  border-radius: 6px;
-  min-width: 36px;
-  min-height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-.close-button:hover {
-  background-color: #b91c1c !important; /* dunkleres Rot */
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.modal-label {
-  font-size: 0.95rem;
-  color: #555; /* Für helle Themes */
-}
-
-.modal-input ::v-deep .u-input__field {
-  border-color: #cbd5e1;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.modal-input ::v-deep .u-input__field:hover {
-  border-color: #94a3b8;
-}
-
-.modal-input ::v-deep .u-input__field:focus {
-  border-color: #f59e0b; /* Amber-Hover */
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
-}
-
-.modal-footer {
+.column-modal-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 0.5rem;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  
+  .save-button, .cancel-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .save-button {
+    background-color: #f59e0b;
+    color: white;
+    
+    &:hover {
+      background-color: #d97706;
+    }
+  }
+  
+  .cancel-button {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    
+    &:hover {
+      background-color: #e5e7eb;
+    }
+  }
 }
 
-.save-button {
-  background-color: #f59e0b !important; /* Amber-Farbe */
-  color: #fff !important;
-  font-weight: 600;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  transition: background-color 0.2s, transform 0.1s;
+/* Responsive Anpassungen */
+@media (max-width: 640px) {
+  .column-modal-header {
+    padding: 12px 16px;
+    
+    .modal-title {
+      font-size: 1rem;
+    }
+  }
+  
+  .column-modal-body {
+    padding: 16px;
+  }
+  
+  .column-modal-footer {
+    padding: 12px 16px;
+    
+    .save-button, .cancel-button {
+      padding: 8px 12px;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .name-suggestions {
+    .suggestion-chips {
+      .suggestion-chip {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+      }
+    }
+  }
 }
 
-.save-button:hover {
-  background-color: #d97706 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .column-modal-content {
+    background-color: #1f2937;
+  }
+  
+  .column-modal-header {
+    background-color: #fef3c7;
+    border-bottom-color: #fde68a;
+    
+    .modal-title {
+      color: #92400e;
+    }
+    
+    .modal-icon {
+      color: #d97706;
+    }
+  }
+  
+  .column-modal-body {
+    .input-label {
+      color: #e5e7eb;
+    }
+    
+    .key-name-input :deep(.u-input__field) {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #e5e7eb;
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+    
+    .input-hint {
+      color: #9ca3af;
+    }
+    
+    .name-suggestions {
+      .suggestions-label {
+        color: #d1d5db;
+      }
+      
+      .suggestion-chip {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #e5e7eb;
+        
+        &:hover {
+          background-color: #fef3c7;
+          border-color: #fde68a;
+          color: #92400e;
+        }
+      }
+    }
+  }
+  
+  .column-modal-footer {
+    background-color: #111827;
+    border-top-color: #374151;
+  }
 }
 </style>
