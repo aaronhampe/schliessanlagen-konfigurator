@@ -71,21 +71,24 @@
         </div>
       </div>
 
-      <!-- Verbessertes Info-Banner -->
-      <div class="intro-banner" v-if="showIntroText">
+      <div class="intro-banner template-selector">
         <div class="banner-content">
-          <i class="i-heroicons-light-bulb banner-icon"></i>
-          <p>Konfigurieren Sie Ihre Schließanlage in wenigen Schritten. Fügen Sie Türen hinzu, wählen Sie Zylindertypen
-            und Größen, und weisen Sie jedem Schlüssel Zugangsberechtigungen zu.</p>
-          <button @click="showIntroText = false" class="banner-close-button">
-            <i class="i-heroicons-x-mark"></i>
-          </button>
+          <i class="i-heroicons-template banner-icon"></i>
+          <div class="template-message">
+            <p>Starten Sie mit einer <strong>Vorlage</strong> für Ihre Konfiguration:</p>
+            <div class="template-options">
+              <UButton v-for="template in templates" :key="template.id" @click="applyTemplate(template.id)"
+                class="template-button" :color="template.color" variant="soft" size="sm">
+                <i :class="template.icon"></i>
+                {{ template.name }}
+              </UButton>
+            </div>
+          </div>
         </div>
       </div>
-      <button v-else @click="showIntroText = true" class="show-help-button">
-        <i class="i-heroicons-question-mark-circle"></i>
-        Hilfe anzeigen
-      </button>
+
+      <!-- Vorlagen-Modal mit Bestätigung -->
+
     </div>
   </div>
 
@@ -102,6 +105,51 @@
     <div class="modal-footer">
       <button class="confirm-button" @click="confirmChange">Ja, wechseln</button>
       <button class="cancel-button" @click="cancelChange">Abbrechen</button>
+    </div>
+  </UModal>
+
+  <UModal v-model="isTemplateModalOpen" class="template-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-h2">{{ selectedTemplate ? selectedTemplate.name : 'Vorlage anwenden' }}</h2>
+        <UButton class="close-button" color="red" @click="isTemplateModalOpen = false">X</UButton>
+      </div>
+      <div class="modal-body">
+        <p v-if="rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)">
+          Wenn Sie diese Vorlage anwenden, werden Ihre bisherigen Konfigurationen überschrieben.
+          Möchten Sie fortfahren?
+        </p>
+        <div v-else>
+          <p>Die Vorlage <strong>{{ selectedTemplate?.name }}</strong> enthält folgende Konfiguration:</p>
+          <div class="template-preview">
+            <div v-if="selectedTemplate" class="template-doors">
+              <h3>Enthaltene Türen:</h3>
+              <ul>
+                <li v-for="door in selectedTemplate.doors" :key="door.position">
+                  <span class="door-name">{{ door.name }}</span>
+                  <span class="door-type">({{ door.type }})</span>
+                </li>
+              </ul>
+            </div>
+            <div v-if="selectedTemplate" class="template-keys">
+              <h3>Enthaltene Schlüssel:</h3>
+              <ul>
+                <li v-for="key in selectedTemplate.keys" :key="key.id">
+                  {{ key.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <UButton @click="confirmApplyTemplate" class="confirm-button" color="amber" variant="solid">
+          Vorlage anwenden
+        </UButton>
+        <UButton @click="isTemplateModalOpen = false" class="cancel-button" color="gray" variant="outline">
+          Abbrechen
+        </UButton>
+      </div>
     </div>
   </UModal>
 
@@ -230,7 +278,7 @@
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-down" @click="isOpenL = true" size="sm"
           color="amber" variant="solid" :trailing="false">Anlage laden
         </UButton>
-        
+
         <UButton class="button-default" icon="i-heroicons-cloud-arrow-up" @click="handleAnlageSpeichern" size="sm"
           color="amber" variant="solid" :trailing="false">
           Anlage speichern
@@ -492,8 +540,129 @@ export default {
       showTutorial: false,
       showTutorialButton: true,
       ///////////////////////////////////
-
-
+      isTemplateModalOpen: false,
+      selectedTemplateId: null,
+      templates: [
+        {
+          id: 'einfamilienhaus',
+          name: 'Einfamilienhaus',
+          icon: 'i-heroicons-home',
+          color: 'green',
+          doors: [
+            { position: 1, name: 'Haustür', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 3, name: 'Terrassentür', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Gartentür', type: 'Doppelzylinder', outside: 30, inside: 30, options: [] },
+            { position: 5, name: 'Garage', type: 'Halbzylinder', outside: 30, inside: 10, options: [] }
+          ],
+          keys: [
+            { id: 1, name: 'Hauptschlüssel' },
+            { id: 2, name: 'Elternschlüssel' },
+            { id: 3, name: 'Kinderschlüssel' }
+          ],
+          matrix: [
+            // [Tür-Position][Schlüssel-ID]
+            // Hauptschlüssel kann alle Türen öffnen
+            [true, true, true], // Haustür-Berechtigungen
+            [true, true, false], // Kellertür-Berechtigungen
+            [true, true, true], // Terrassentür-Berechtigungen
+            [true, true, false], // Gartentür-Berechtigungen
+            [true, false, false] // Garage-Berechtigungen
+          ]
+        },
+        {
+          id: 'mehrfamilienhaus',
+          name: 'Mehrfamilienhaus',
+          icon: 'i-heroicons-building-office-2',
+          color: 'blue',
+          doors: [
+            { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: ["Not- & Gefahrenfunktion"] },
+            { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 3, name: 'Wohnung 1', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Wohnung 2', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 5, name: 'Wohnung 3', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 6, name: 'Hintereingang', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 7, name: 'Fahrradkeller', type: 'Doppelzylinder', outside: 30, inside: 30, options: [] }
+          ],
+          keys: [
+            { id: 1, name: 'Hausmeister' },
+            { id: 2, name: 'Wohnung 1' },
+            { id: 3, name: 'Wohnung 2' },
+            { id: 4, name: 'Wohnung 3' }
+          ],
+          matrix: [
+            // Hausmeister kann alles öffnen
+            [true, true, true, true],
+            [true, true, true, true],
+            [true, true, false, false],
+            [true, false, true, false],
+            [true, false, false, true],
+            [true, true, true, true],
+            [true, true, true, true]
+          ]
+        },
+        {
+          id: 'betriebsgebaeude',
+          name: 'Betriebsgebäude',
+          icon: 'i-heroicons-building-office',
+          color: 'indigo',
+          doors: [
+            { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 45, inside: 45, options: ["Not- & Gefahrenfunktion"] },
+            { position: 2, name: 'Personaleingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 3, name: 'Büro Geschäftsführer', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Büro Verwaltung', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 5, name: 'Serverraum', type: 'Doppelzylinder', outside: 35, inside: 35, options: ["Erhöhter Bohrschutz"] },
+            { position: 6, name: 'Lager', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 7, name: 'Werkstatt', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 8, name: 'Außentür Hof', type: 'Doppelzylinder', outside: 40, inside: 40, options: ["Seewasserfest"] }
+          ],
+          keys: [
+            { id: 1, name: 'Generalschlüssel' },
+            { id: 2, name: 'Geschäftsführer' },
+            { id: 3, name: 'Büropersonal' },
+            { id: 4, name: 'Werkstattpersonal' },
+            { id: 5, name: 'IT-Admin' }
+          ],
+          matrix: [
+            [true, true, true, true, true], // Haupteingang
+            [true, true, true, true, true], // Personaleingang
+            [true, true, false, false, false], // Büro Geschäftsführer
+            [true, true, true, false, false], // Büro Verwaltung
+            [true, true, false, false, true], // Serverraum
+            [true, true, true, true, false], // Lager
+            [true, true, false, true, false], // Werkstatt
+            [true, true, true, true, false]  // Außentür Hof
+          ]
+        },
+        {
+          id: 'einzelhandel',
+          name: 'Einzelhandel',
+          icon: 'i-heroicons-shopping-bag',
+          color: 'orange',
+          doors: [
+            { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: ["Not- & Gefahrenfunktion"] },
+            { position: 2, name: 'Hintereingang', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 3, name: 'Büro', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Lager', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 5, name: 'Personalraum', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 6, name: 'Tresor/Wertsachen', type: 'Doppelzylinder', outside: 35, inside: 35, options: ["Erhöhter Bohrschutz"] }
+          ],
+          keys: [
+            { id: 1, name: 'Inhaber' },
+            { id: 2, name: 'Filialleiter' },
+            { id: 3, name: 'Mitarbeiter' }
+          ],
+          matrix: [
+            [true, true, true], // Haupteingang
+            [true, true, true], // Hintereingang
+            [true, true, false], // Büro
+            [true, true, true], // Lager
+            [true, true, true], // Personalraum
+            [true, true, false] // Tresor/Wertsachen
+          ]
+        }
+      ],
+      ///////////////////////////////////
       rows: [
 
         [
@@ -518,6 +687,14 @@ export default {
   },
 
   computed: {
+    selectedTemplate() {
+      return this.templates.find(template => template.id === this.selectedTemplateId);
+    },
+    hasDataInFirstRow() {
+      if (this.rows.length === 0) return false;
+      const firstRow = this.rows[0][0];
+      return !!(firstRow.doorDesignation || firstRow.type || firstRow.outside || firstRow.inside);
+    },
     store() {
       return useCylinderStore();
     },
@@ -645,6 +822,73 @@ export default {
     },
   },
   methods: {
+    applyTemplate(templateId) {
+      this.selectedTemplateId = templateId;
+      this.isTemplateModalOpen = true;
+    },
+    confirmApplyTemplate() {
+      const template = this.selectedTemplate;
+      if (!template) return;
+
+      // 1. Modell setzen (falls ein bestimmtes Modell empfohlen wird für die Vorlage)
+      // Falls die Vorlage ein bestimmtes Modell bevorzugt, könnte man hier den Code zum Setzen des Modells einbauen
+
+      // 2. Alte Daten löschen und neue Türen hinzufügen
+      this.rows = [];
+
+      // Für jede Tür in der Vorlage
+      template.doors.forEach((door, doorIndex) => {
+        const newRow = [];
+
+        // Für jeden Schlüssel in der Vorlage
+        template.keys.forEach((key, keyIndex) => {
+          if (doorIndex === 0) {
+            // Erste Zeile mit allen Details
+            newRow.push({
+              position: door.position,
+              doorDesignation: door.name,
+              doorquantity: 1,
+              type: door.type,
+              outside: door.outside,
+              inside: door.inside,
+              options: {},
+              optionsSelected: door.options || [],
+              checked: template.matrix[doorIndex][keyIndex],
+              keyquantity: 1,
+              keyname: key.name,
+              keycolor: "",
+            });
+          } else {
+            // Weitere Zeilen nur mit Checkbox-Status
+            newRow.push({
+              position: door.position,
+              doorDesignation: door.name,
+              doorquantity: 1,
+              type: door.type,
+              outside: door.outside,
+              inside: door.inside,
+              options: {},
+              optionsSelected: door.options || [],
+              checked: template.matrix[doorIndex][keyIndex],
+            });
+          }
+        });
+
+        this.rows.push(newRow);
+      });
+
+      // Modal schließen
+      this.isTemplateModalOpen = false;
+
+      // Erfolgs-Meldung anzeigen
+      this.alertMessage = `Vorlage "${template.name}" erfolgreich angewendet!`;
+      this.alertType = "success";
+      setTimeout(() => {
+        this.alertMessage = "";
+        this.alertType = "";
+      }, 3000);
+    },
+
     openOptionsModal(rowIndex) {
       this.isOptionsModalOpen[rowIndex] = true;
     },

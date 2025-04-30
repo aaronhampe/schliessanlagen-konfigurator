@@ -1414,3 +1414,306 @@
     }
   }
 }
+
+.template-selector {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  .banner-content {
+    padding: 16px;
+    
+    .banner-icon {
+      color: #0ea5e9;
+      font-size: 24px;
+    }
+    
+    .template-message {
+      flex: 1;
+      
+      p {
+        margin: 0 0 10px 0;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+      }
+    }
+    
+    .template-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      
+      .template-button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        i {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+/* Verbessertes Styling für das Template-Modal */
+.template-modal {
+  /* Verbesserte Modal-Styling */
+  :deep(.u-modal-content) {
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .modal-content {
+    max-width: 700px;
+    
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .modal-h2 {
+        font-size: 1.5rem;
+        color: #2d3748;
+        margin: 0;
+      }
+      
+      .close-button {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    
+    .modal-body {
+      padding: 24px;
+      margin-bottom: 0;
+      
+      p {
+        color: #4a5568;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        
+        strong {
+          color: #2d3748;
+          font-weight: 600;
+        }
+      }
+      
+      /* Verbesserter Vorschau-Bereich */
+      .template-preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-top: 24px;
+        
+        .template-doors, .template-keys {
+          flex: 1;
+          min-width: 240px;
+          background-color: #f8fafc;
+          border-radius: 10px;
+          padding: 20px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          
+          h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            position: relative;
+            
+            &:after {
+              content: "";
+              position: absolute;
+              bottom: -1px;
+              left: 0;
+              width: 60px;
+              height: 3px;
+              background-color: #0ea5e9;
+              border-radius: 3px;
+            }
+          }
+          
+          ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            
+            li {
+              padding: 10px 0;
+              display: flex;
+              align-items: center;
+              border-bottom: 1px solid #edf2f7;
+              
+              &:last-child {
+                border-bottom: none;
+              }
+              
+              &:before {
+                content: "";
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: #0ea5e9;
+                margin-right: 12px;
+                flex-shrink: 0;
+              }
+              
+              .door-name {
+                font-weight: 600;
+                color: #2d3748;
+              }
+              
+              .door-type {
+                color: #718096;
+                font-size: 0.85rem;
+                margin-left: 8px;
+                background-color: #e2e8f0;
+                padding: 2px 8px;
+                border-radius: 4px;
+              }
+              
+              /* Hover-Effekt für bessere Interaktion */
+              &:hover {
+                background-color: #f1f5f9;
+                border-radius: 6px;
+                padding-left: 8px;
+                margin-left: -8px;
+                transition: all 0.2s ease;
+              }
+            }
+          }
+        }
+        
+        /* Spezifische Styling-Verbesserungen für die Schlüssel-Seite */
+        .template-keys {
+          background-color: #f0f9ff;
+          
+          h3:after {
+            background-color: #3b82f6;
+          }
+          
+          ul li:before {
+            background-color: #3b82f6;
+          }
+        }
+      }
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px 24px;
+      background-color: #f8fafc;
+      border-top: 1px solid #eee;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      
+      .confirm-button, .cancel-button {
+        padding: 10px 20px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+      }
+      
+      .confirm-button {
+        background-color: #0ea5e9;
+        color: #fff;
+      }
+      
+      .cancel-button {
+        background-color: #f1f5f9;
+        color: #475569;
+      }
+    }
+  }
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+  .template-selector {
+    .banner-content {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 16px;
+      
+      .banner-icon {
+        margin-bottom: 12px;
+      }
+      
+      .template-options {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        
+        .template-button {
+          flex: 0 0 calc(50% - 4px);
+          justify-content: center;
+          padding: 10px;
+          
+          @media (max-width: 480px) {
+            flex: 0 0 100%;
+          }
+        }
+      }
+    }
+  }
+  
+  .template-modal {
+    .modal-content {
+      width: 95%;
+      max-height: 80vh;
+    }
+    
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+    }
+    
+    .template-preview {
+      flex-direction: column;
+      
+      .template-doors, .template-keys {
+        width: 100%;
+        min-width: 100%;
+        padding: 16px;
+      }
+    }
+    
+    .modal-footer {
+      padding: 12px 16px;
+      flex-direction: column-reverse;
+      
+      .confirm-button, .cancel-button {
+        width: 100%;
+      }
+    }
+  }
+}
