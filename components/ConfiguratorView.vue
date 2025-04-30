@@ -11,13 +11,21 @@
           }}
         </h1>
 
-        
+
       </div>
 
       <div class="config-overview">
         <div class="anlage-badge">
           <span class="label">Anlagennummer:</span>
-          <input type="text" readonly v-model="anlageNr" class="anlage-input" />
+          <div class="anlage-display">
+            <span class="anlage-number">{{ anlageNr || '' }}</span>
+            <div class="anlage-actions">
+              <UButton class="anlage-action-button" icon="i-heroicons-folder-open" size="xs" color="sky" variant="ghost"
+                @click="isOpenL = true" title="Anlage laden">
+                Laden
+              </UButton>
+            </div>
+          </div>
         </div>
 
         <div class="model-selector-container">
@@ -1445,17 +1453,18 @@ export default {
 
     async sendmailkunde() {
       let message = "";
-      message += "<p>Herzlichen Glückwunsch!</p>";
-      message += "<p>Sie haben erfolgreich eine neue Anlage erstellt und gespeichert.</p>";
-      message += "<p>Ihre Zugangsdaten:</p>";
+      message += "<p><b>Herzlichen Glückwunsch!</b></p>";
+      message += "<p>Ihre neue Schließanlage wurde erfolgreich erstellt und gespeichert.</p>";
+      message += "<p><b>Ihre Zugangsdaten:</b></p>";
       message += "<ul>";
       message += "<li><strong>Anlagennummer:</strong> " + this.anlageNr + "</li>";
       message += "<li><strong>Passwort:</strong> " + this.password + "</li>";
       message += "</ul>";
       message += "<p>Sie können Ihre gespeicherte Anlage jederzeit im Konfigurator abrufen und bearbeiten.</p>";
-      message += "<p>Besuchen Sie dazu einfach unseren <a href='https://www.stt-shop.de/schliessanlagenkonfigurator/' target='_blank'>Schließanlagenkonfigurator</a>.</p>";
+      message += "<p>Besuchen Sie dazu einfach unseren <a href='https://www.stt-shop.de/schliessanlagenkonfigurator/' target='_blank'>Schließanlagenkonfigurator</a> und klicken Sie auf den Button „Anlage laden“.</p>";
+      message += "<p>Mit der oben genannten Anlagennummer und dem Passwort können Sie Ihre Konfiguration fortsetzen.</p>";
       message += "<p>Falls Sie Fragen haben oder Unterstützung benötigen, steht Ihnen unser Support-Team gerne zur Verfügung.</p>";
-      message += "<p>Mit freundlichen Grüßen,<br>Ihr stt-shop Team</p>";
+      message += "<p><b>Mit freundlichen Grüßen</b><br>Ihr stt-shop Team<br><em>secutimetec GmbH</em><br>Walsroder Str. 24–26<br>30900 Wedemark<br>Telefon: +49 5130 609390</p>";
 
       const mailresult = await $fetch("./api/mail", {
         method: "POST",

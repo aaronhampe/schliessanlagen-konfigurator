@@ -123,6 +123,8 @@
        }
      }
    }
+
+   
  
    .config-overview {
      display: flex;
@@ -1270,5 +1272,37 @@
     height: auto;
     writing-mode: horizontal-tb;
     margin: 1rem 0;
+  }
+}
+
+.anlage-display {
+  display: flex;
+  align-items: center;
+  background-color: #f5f7fa;
+  border: 1px solid #e0e4e8;
+  border-radius: 4px;
+  padding: 6px 8px;
+  width: 220px;
+  
+  .anlage-number {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    padding: 0 8px;
+  }
+  
+  .anlage-actions {
+    display: flex;
+    gap: 4px;
+    
+    .anlage-action-button {
+      padding: 2px 8px;
+      font-size: 13px;
+      
+      &:hover {
+        background-color: rgba(14, 165, 233, 0.1);
+      }
+    }
   }
 }
