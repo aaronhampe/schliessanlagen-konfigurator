@@ -10,7 +10,7 @@
       <p class="estimated-time">Voraussichtliche Dauer: ca. 2 Stunden</p>
       <div class="contact-info">
         <p>Bei Fragen erreichen Sie uns unter:</p>
-        <p><a href="mailto:office@secutimetec.de">office@secutimetec.de</a> oder +49 5130 609390</p>
+        <p><a href="mailto:office@secutimetec.de">office@secutimetec.de</a> oder 05130 60939-0</p>
       </div>
       <p class="thank-you">Vielen Dank für Ihr Verständnis!</p>
       <p class="signature">Ihr stt-shop Team</p>
