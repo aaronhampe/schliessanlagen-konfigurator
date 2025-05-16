@@ -1,7 +1,9 @@
 <template>
-  <NuxtLayout>
+  
+  <!--<NuxtLayout>
     <NuxtPage />
-  </NuxtLayout>
+  </NuxtLayout>-->
+  <MaintenanceMessage />
   <br />
 </template>
 
