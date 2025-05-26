@@ -45,14 +45,7 @@
     <!-- SCHRITT 1: TÜRKONFIGURATION -->
     <div v-if="currentStep === 1">
       <!-- Modellauswahl -->
-      <div class="mobile-section">
-        <label>Modellauswahl:</label>
-        <select :value="selectedModelLocal" @change="onModelSelect($event)">
-          <option v-for="model in store.availableModels" :key="model" :value="model">
-            {{ model }}
-          </option>
-        </select>
-      </div>
+   
 
       <!-- Türliste -->
       <div class="doors-list-header">

@@ -503,7 +503,7 @@ onMounted(async () => {
           </div>
           <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
             @click="openSummary(selectedModelOffer)">
-            System auswählen
+            System kaufen
           </UButton>
         </div>
       </div>
@@ -553,7 +553,7 @@ onMounted(async () => {
               <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
             </div>
             <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
-              System auswählen
+              System kaufen
             </UButton>
           </div>
         </div>

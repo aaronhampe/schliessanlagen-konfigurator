@@ -27,49 +27,29 @@
             </div>
           </div>
         </div>
-
-        <div class="model-selector-container">
-          <span class="label">Modellauswahl:</span>
-          <div class="select-wrapper">
-            <select v-model="selectedModelLocal" @change="onModelSelect" class="model-select">
-              <option v-for="model in store.availableModels" :key="model" :value="model">
-                {{ model }}
-              </option>
-            </select>
-            <i class="i-heroicons-chevron-down select-arrow"></i>
-          </div>
-        </div>
       </div>
 
-      <!-- Verbesserte Fortschrittsanzeige -->
       <div class="progress-tracker">
-        <div class="progress-step" :class="{ 'active': activeStep >= 1, 'completed': activeStep > 1 }"
+        <!-- Schritt 1 -->
+        <div class="progress-step" :class="{ active: activeStep >= 1, completed: activeStep > 1 }"
           @click="activeStep > 1 && setStepIfAllowed(1)">
           <div class="step-indicator">
             <span v-if="activeStep > 1" class="checkmark">✓</span>
             <span v-else>1</span>
           </div>
-          <div class="step-label">Modell wählen</div>
+          <div class="step-label">Türen &amp; Zylinder konfigurieren</div>
         </div>
 
-        <div class="progress-connector" :class="{ 'active': activeStep > 1 }"></div>
+        <!-- Verbindung -->
+        <div class="progress-connector" :class="{ active: activeStep > 1 }"></div>
 
-        <div class="progress-step" :class="{ 'active': activeStep >= 2, 'completed': activeStep > 2 }"
-          @click="activeStep > 2 && setStepIfAllowed(2)">
-          <div class="step-indicator">
-            <span v-if="activeStep > 2" class="checkmark">✓</span>
-            <span v-else>2</span>
-          </div>
-          <div class="step-label">Türen & Zylinder konfigurieren</div>
-        </div>
-
-        <div class="progress-connector" :class="{ 'active': activeStep > 2 }"></div>
-
-        <div class="progress-step" :class="{ 'active': activeStep >= 3 }">
-          <div class="step-indicator">3</div>
+        <!-- Schritt 2 -->
+        <div class="progress-step" :class="{ active: activeStep >= 2 }">
+          <div class="step-indicator">2</div>
           <div class="step-label">Angebote erhalten</div>
         </div>
       </div>
+
 
       <div class="intro-banner template-selector">
         <div class="banner-content">
@@ -287,7 +267,7 @@
         <!-- Verbesserter Call-to-Action Button -->
         <UButton class="button-cta" @click="handleWeiterZuAngeboten" size="md" color="green" variant="solid"
           icon="i-heroicons-shopping-cart">
-          Konfiguration abschließen & kaufen
+          Zur Modellauswahl und den Preisen
         </UButton>
 
 
