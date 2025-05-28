@@ -291,10 +291,6 @@ const sortedAlternativeOffers = computed(() => {
     sorted.sort((a, b) => a.price - b.price);
   } else if (selectedSort.value === "priceDesc") {
     sorted.sort((a, b) => b.price - a.price);
-  } else if (selectedSort.value === "useCasePrivat") {
-    sorted.sort((a, b) => compareUseCase(a, b, "privat"));
-  } else if (selectedSort.value === "useCaseGewerblich") {
-    sorted.sort((a, b) => compareUseCase(a, b, "gewerblich"));
   } else if (selectedSort.value === "securityAsc") {
     sorted.sort((a, b) => a.securityLevel - b.securityLevel);
   } else if (selectedSort.value === "securityDesc") {
@@ -304,31 +300,6 @@ const sortedAlternativeOffers = computed(() => {
   return sorted;
 });
 
-function compareUseCase(a, b, focus) {
-  const rankPrivat = {
-    privat: 0,
-    "privat & gewerblich": 1,
-    gewerblich: 2,
-  };
-  const rankGewerblich = {
-    gewerblich: 0,
-    "privat & gewerblich": 1,
-    privat: 2,
-  };
-
-  // Wähle Rangtabelle je nach Fokus
-  const rank = focus === "privat" ? rankPrivat : rankGewerblich;
-
-  const rA = rank[a.useCase] ?? 999; // Fallback, falls useCase fehlt
-  const rB = rank[b.useCase] ?? 999;
-
-  // Zuerst nach Rang
-  const diff = rA - rB;
-  if (diff !== 0) return diff;
-
-  // Falls Rang gleich => fallback: Preis aufsteigend
-  return a.price - b.price;
-}
 
 // In den Warenkorb legen (gleich geblieben)
 async function addToCart(systemName, price, productID) {
@@ -451,8 +422,6 @@ onMounted(async () => {
           <option value="none">Keine Sortierung</option>
           <option value="priceAsc">Preis (aufsteigend)</option>
           <option value="priceDesc">Preis (absteigend)</option>
-          <option value="useCasePrivat">Privat</option>
-          <option value="useCaseGewerblich">Gewerblich</option>
           <option value="securityAsc">Sicherheit (aufsteigend)</option>
           <option value="securityDesc">Sicherheit (absteigend)</option>
         </select>
@@ -482,18 +451,7 @@ onMounted(async () => {
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <div class="use-case-badge" :class="`use-case-${selectedModelOffer.useCase}`">
-            Empfohlen für:
-            <strong>
-              {{
-      selectedModelOffer.useCase === "privat"
-        ? "Privat"
-        : selectedModelOffer.useCase === "gewerblich"
-          ? "Gewerblich"
-          : "Privat & Gewerblich"
-    }}
-            </strong>
-          </div>
+         
           <div class="offer-delivery">
             <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
           </div>
@@ -533,18 +491,7 @@ onMounted(async () => {
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-            <div class="use-case-badge" :class="`use-case-${offer.useCase}`">
-              Unsere Empfehlung: <br />
-              <strong>
-                {{
-      offer.useCase === "privat"
-        ? "Privat"
-        : offer.useCase === "gewerblich"
-          ? "Gewerblich"
-          : "Privat & Gewerblich"
-    }}
-              </strong>
-            </div>
+           
             <div class="offer-delivery">
               <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
             </div>

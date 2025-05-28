@@ -11,6 +11,7 @@ import domixtwido from './models/dom/ixtwido.js'
 import domrssigma from './models/dom/rssigma.js'
 import iseor6 from './models/iseo/r6.js'
 import keso8000omega from './models/keso/8000omega.js'
+import domrssirius from './models/dom/rssirius.js'
 
 
 export default {
@@ -25,6 +26,7 @@ export default {
   "DOM RN": domrn,
   "DOM IX Twido": domixtwido,
   "DOM RS Sigma": domrssigma,
+  "DOM RS Sirius": domrssirius,
   "ISEO R6": iseor6,
   "KESO 8000 Omega": keso8000omega,
 };

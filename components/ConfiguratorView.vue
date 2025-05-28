@@ -1703,32 +1703,78 @@ export default {
       });
     },
 
+    // Beispiel in <script setup> / Composition API
     async sendmailkunde() {
-      let message = "";
-      message += "<p><b>Herzlichen Glückwunsch!</b></p>";
-      message += "<p>Ihre neue Schließanlage wurde erfolgreich erstellt und gespeichert.</p>";
-      message += "<p><b>Ihre Zugangsdaten:</b></p>";
-      message += "<ul>";
-      message += "<li><strong>Anlagennummer:</strong> " + this.anlageNr + "</li>";
-      message += "<li><strong>Passwort:</strong> " + this.password + "</li>";
-      message += "</ul>";
-      message += "<p>Sie können Ihre gespeicherte Anlage jederzeit im Konfigurator abrufen und bearbeiten.</p>";
-      message += "<p>Besuchen Sie dazu einfach unseren <a href='https://www.stt-shop.de/schliessanlagenkonfigurator/' target='_blank'>Schließanlagenkonfigurator</a> und klicken Sie auf den Button „Anlage laden“.</p>";
-      message += "<p>Mit der oben genannten Anlagennummer und dem Passwort können Sie Ihre Konfiguration fortsetzen.</p>";
-      message += "<p>Falls Sie Fragen haben oder Unterstützung benötigen, steht Ihnen unser Support-Team gerne zur Verfügung.</p>";
-      message += "<p><b>Mit freundlichen Grüßen</b><br>Ihr stt-shop Team<br><em>secutimetec GmbH</em><br>Walsroder Str. 24–26<br>30900 Wedemark<br>Telefon: +49 5130 609390</p>";
+      /* --------------------------------------------------
+       * 1) Logo-URL – besser extern hosten als cid/Anhang,
+       *    damit es zuverlässig geladen wird.
+       * -------------------------------------------------- */
+      const logoUrl = "https://www.stt-shop.de/favicon.ico"; // 64×64 px reicht
 
-      const mailresult = await $fetch("./api/mail", {
+      /* --------------------------------------------------
+       * 2) Sauberes, in-line gestyltes HTML-Template.
+       *    (Tabellenlayout ist leider noch immer das
+       *    robusteste für Mail-Clients.)
+       * -------------------------------------------------- */
+      const html = `
+  <div style="font-family:Arial,Helvetica,sans-serif;color:#222;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:24px 0;">
+          <img src="${logoUrl}" alt="STT-Shop Logo"
+               style="width:64px;height:64px;border-radius:12px;">
+        </td>
+      </tr>
+
+      <tr><td style="padding:0 24px;">
+        <h1 style="font-size:20px;margin:0 0 16px;">Herzlichen&nbsp;Glückwunsch!</h1>
+        <p>Ihre neue Schließanlage wurde erfolgreich erstellt und gespeichert.</p>
+
+        <h2 style="font-size:16px;margin:24px 0 8px;">Ihre&nbsp;Zugangsdaten</h2>
+        <ul style="padding-left:16px;margin:0 0 24px;">
+          <li><strong>Anlagennummer:</strong> ${this.anlageNr}</li>
+          <li><strong>Passwort:</strong> ${this.password}</li>
+        </ul>
+
+        <p>Rufen Sie Ihre gespeicherte Anlage jederzeit im
+           <a href="https://www.stt-shop.de/schliessanlagenkonfigurator/" target="_blank">
+             Schließanlagen­konfigurator
+           </a> ab und klicken Sie auf <em>Anlage laden</em>.</p>
+
+        <p>Bei Fragen hilft unser Support-Team gerne weiter.</p>
+
+        <p style="margin-top:40px;">
+          Mit freundlichen Grüßen<br>
+          <strong>Ihr STT-Shop Team</strong><br>
+          <em>secutimetec GmbH</em><br>
+          Walsroder Str. 24–26<br>
+          30900 Wedemark<br>
+          Telefon +49 5130 609390
+        </p>
+      </td></tr>
+    </table>
+  </div>`;
+
+      /* --------------------------------------------------
+       * 3) Mail verschicken – From + Subject anpassen.
+       * -------------------------------------------------- */
+      await $fetch("/api/mail", {
         method: "POST",
         body: {
-          name: "",
+          from: "STT-Shop <noreply@stt-shop.de>",   // << Absendername & -Adresse
           to: this.email,
-          subject: "stt-shop  ---  Ihre gespeicherte Konfiguration",
-          html: message,
+          subject: "Ihre Schließanlagen­konfiguration",
+          html,
+          /* attachments: [         // (Optional) Logo per CID einbetten
+             {
+               filename: "logo.ico",
+               path: "./public/favicon.ico",
+               cid: "sttlogo"
+             }
+           ] */
         },
       });
     }
-
   },
 };
 </script>
