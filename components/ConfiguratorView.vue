@@ -111,7 +111,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-h2">{{ selectedTemplate ? selectedTemplate.name : 'Vorlage anwenden' }}</h2>
-        <UButton class="close-button" color="red" @click="isTemplateModalOpen = false">X</UButton>
+        <UButton class="close-button" color="red" icon="i-heroicons-x-mark" @click="isTemplateModalOpen = false"></UButton>
       </div>
       <div class="modal-body">
         <p v-if="rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)">
@@ -304,8 +304,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-h2">Optionen auswählen</h2>
-          <UButton class="close-button" color="red" @click="closeOptionsModal(rowIndex)">
-            X
+          <UButton class="close-button" icon="i-heroicons-x-mark" color="red" @click="closeOptionsModal(rowIndex)">
+            
           </UButton>
         </div>
         <h6>Bitte wählen Sie die gewünschten Optionen aus.</h6>
@@ -331,7 +331,7 @@
     <div class="p-4 modal-container">
       <div class="modal-header">
         <h2 class="modal-h2">Anlage laden</h2>
-        <UButton color="red" @click="isOpenL = false" class="close-button">X</UButton>
+        <UButton color="red" @click="isOpenL = false" icon="i-heroicons-x-mark" class="close-button"></UButton>
       </div>
       <p class="modal-info">
         Bitte geben Sie die Anlagennummer und Ihr Passwort ein, um Ihre
@@ -364,7 +364,7 @@
     <div class="p-4 modal-container">
       <div class="modal-header">
         <h2 class="modal-h2">Kontaktdaten bestätigen</h2>
-        <UButton color="red" @click="isOfferModalOpen = false" class="close-button">X</UButton>
+        <UButton color="red" @click="isOfferModalOpen = false" icon="i-heroicons-x-mark" class="close-button"></UButton>
       </div>
       <p class="modal-info">
         Bitte geben Sie Ihre E-Mail-Adresse ein (Pflichtfeld). Zusätzlich können Sie Ihren Namen und Ihre Telefonnummer
@@ -404,7 +404,7 @@
     <div class="p-4 modal-container">
       <div class="modal-header">
         <h2 class="modal-h2">Anlage speichern</h2>
-        <UButton color="red" @click="isOpenS = false" class="close-button">X</UButton>
+        <UButton color="red" @click="isOpenS = false" icon="i-heroicons-x-mark" class="close-button"></UButton>
       </div>
       <p class="modal-info">
         Bitte überprüfen Sie Ihre Angaben und geben Sie Ihre E-Mail-Adresse ein. Eine Bestätigungsmail wird Ihnen
@@ -426,7 +426,7 @@
     <div class="tutorial-content">
       <div class="tutorial-header">
         <h2>Konfigurator Anleitung</h2>
-        <UButton @click="showTutorial = false" class="close-button" color="red">X</UButton>
+        <UButton @click="showTutorial = false" icon="i-heroicons-x-mark" class="close-button" color="red"></UButton>
       </div>
 
       <div class="tutorial-steps">
