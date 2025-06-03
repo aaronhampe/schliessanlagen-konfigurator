@@ -10,8 +10,6 @@
               : "Konfigurator für eine Gleichschließung"
           }}
         </h1>
-
-
       </div>
 
       <div class="config-overview">

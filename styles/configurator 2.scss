@@ -1,0 +1,624 @@
+/***********************************************************
+ *                    VARIABLEN & MIXINS
+ ***********************************************************/
+$primary-color: #333333;
+$input-width: 80px;
+$badge-width: 80px;
+
+// Farben (kannst du nach Belieben erweitern oder anpassen)
+$color-amber: #f59e0b;
+$color-red: #dc2626;
+$color-sky: #0ea5e9;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin input-style {
+  width: $input-width;
+  color: $primary-color;
+}
+
+@mixin badge-style {
+  width: $badge-width;
+}
+
+/***********************************************************
+  *                     GLOBALE KLASSEN
+  ***********************************************************/
+// Einfache Fade-Transition für Tooltips & Ähnliches
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/***********************************************************
+  *                    HEADING & SYSTEMNUMMER
+  ***********************************************************/
+.heading {
+  @include flex-center;
+  flex-direction: column;
+  margin-top: 1em !important;
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .first-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info-icon {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    margin-left: 8px;
+
+    i {
+      font-size: 1.7rem;
+      color: #438fc2;
+    }
+
+    &:hover i {
+      color: #333;
+    }
+
+    .tooltip-box {
+      position: absolute;
+      top: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      color: #333;
+      width: 220px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 999;
+    }
+  }
+
+  .system-number {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: 20px;
+
+    input {
+      width: 180px;
+
+      &:focus {
+        border-color: $color-sky;
+        box-shadow: 0 0 0 1px $color-sky;
+        outline: none !important;
+      }
+    }
+  }
+
+  .model-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    select {
+      @include input-style;
+      width: 220px;
+      height: 32px;
+      border: 1px solid $color-sky;
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 14px;
+      background-color: white;
+      cursor: pointer;
+
+      &:hover {
+        border-color: $color-sky;
+      }
+
+      &:focus {
+        border-color: $color-sky;
+        box-shadow: 0 0 0 1px $color-sky;
+        outline: none !important;
+      }
+
+      option {
+        font-size: 14px;
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+/***********************************************************
+  *                 HAUPT-CONTAINER (KONFIGURATOR)
+  ***********************************************************/
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 240px 0 0 340px;
+
+  /* ========== Tür-/Zeilen-Bereich ========== */
+  .checkbox-row {
+    display: flex;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .door-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .u-badge {
+      @include flex-center;
+      width: 30px;
+    }
+
+    .door-designation,
+    .quantity-input,
+    .cylinder-type {
+      margin-top: 0px;
+      width: 200px;
+
+      select {
+        @include input-style;
+        width: 100%;
+        height: 32px;
+        border: 1px solid $color-sky;
+        border-radius: 6px;
+        padding: 4px;
+        font-size: 14px;
+        background-color: white;
+        color: $primary-color;
+        cursor: pointer;
+
+        &:hover {
+          border-color: $color-sky;
+        }
+
+        &:focus {
+          border-color: $color-sky;
+          box-shadow: 0 0 0 1px $color-sky;
+          outline: none !important;
+        }
+
+        option {
+          font-size: 14px;
+          color: $primary-color;
+        }
+      }
+    }
+
+    .quantity-input {
+      width: 60px;
+    }
+
+    .sizes {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      background-color: white;
+
+      .inside,
+      .outside {
+        width: 100px;
+        height: 32px;
+        border: 1px solid $color-sky;
+        border-radius: 6px;
+        padding: 4px;
+        font-size: 14px;
+        background-color: white;
+        color: #333;
+        cursor: pointer;
+        appearance: none;
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+
+        &:hover {
+          border-color: $color-sky;
+        }
+
+        &:focus {
+          border-color: $color-sky;
+          box-shadow: 0 0 0 1px $color-sky;
+          outline: none !important;
+        }
+      }
+    }
+
+    .options {
+      margin-top: 0px;
+      width: 360px;
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+        color: #333333;
+      }
+
+      .dropdown-button {
+        background-color: white;
+        border: 1px solid $color-sky;
+        height: 32px;
+        color: #333333;
+        border-radius: 6px;
+        padding: 5px 12px;
+        cursor: pointer;
+        width: 360px;
+        text-align: left;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  /* ========== Schlüssel-/Spalten-Bereich ========== */
+  .checkbox-item {
+    @include flex-center;
+    flex-direction: column;
+    margin-right: 10px;
+    padding-bottom: -10px;
+
+    .key-name {
+      width: 32px;
+      overflow: hidden;
+      writing-mode: vertical-rl;
+      position: absolute;
+      padding: 4px;
+      height: 150px;
+      cursor: default;
+      border: 1px solid lightgray;
+      border-radius: 8px;
+
+      &:focus {
+        outline: none;
+        border-color: $color-sky;
+        box-shadow: 0 0 0 1px $color-sky;
+      }
+
+      &.default-margin {
+        margin-top: -20.8em;
+      }
+
+      &.gleichschliessung-margin {
+        margin-top: -20.8em;
+      }
+    }
+
+    .key-quantity {
+      position: absolute;
+      margin-top: -11.8em;
+      width: 33px;
+      height: 20px;
+      font-size: 12px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+
+      &:focus {
+        outline: none;
+        border-color: $color-sky;
+        box-shadow: 0 0 0 1px $color-sky;
+      }
+    }
+
+    .button-edit {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: -4.4em;
+      color: white;
+    }
+
+    .button-delete {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 5.5em;
+      color: white;
+    }
+
+    .button-duplicate {
+      writing-mode: vertical-rl;
+      position: absolute;
+      margin-top: 11.4em;
+    }
+  }
+
+  /* ========== Weitere Buttons rechts neben dem Table ========== */
+  .button-add-key {
+    margin: 23px 0 0 2px;
+    writing-mode: vertical-rl;
+    @include flex-center;
+    font-weight: 600;
+    height: 200px;
+  }
+
+  /* ========== Buttons unten ========== */
+  .buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+
+    .button-default {
+      @include flex-center;
+      font-weight: 600;
+      height: 36px;
+      width: 200px;
+      color: #ffffff;
+    }
+
+    .modal-h2 {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+  }
+}
+
+/***********************************************************
+  *                     OPTIONS MODAL
+  ***********************************************************/
+.options-modal {
+  :deep(.u-modal-overlay)  {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  // Modal Content
+  :deep(.u-modal-content)  {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 8px;
+    padding: 10px;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .modal-h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: #333;
+      }
+
+      .close-button {
+        background-color: #dc2626 !important;
+        color: #fff !important;
+        font-weight: 600;
+        border-radius: 6px;
+        min-width: 36px;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background: darken($color-red, 5%) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+    }
+
+    h6 {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    .option-item {
+      display: flex;
+      gap: 8px;
+      margin: 4px 0 4px 0;
+      margin-top: 12px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 8px 12px;
+        cursor: pointer;
+
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+
+        &:hover {
+          background-color: #f9fafb;
+          border-color: $color-sky;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        :deep(.u-checkbox__check)  {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+
+      .save-button {
+        background-color: #f59e0b !important;
+        /* Amber-Farbe */
+        color: #fff !important;
+        font-weight: 600;
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        transition: background-color 0.2s, transform 0.1s;
+
+        &:hover {
+          background-color: darken($color-amber, 5%) !important;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+}
+
+/***********************************************************
+  *                     WARNING MODAL
+  ***********************************************************/
+.warning-modal {
+  :deep(.u-modal-content)  {
+    background: #831414;
+    border-radius: 10px;
+    padding: 24px;
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d2d2d;
+      margin: 0;
+    }
+
+    .close-button {
+      background: $color-red;
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+
+      &:hover {
+        background: darken($color-red, 5%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  .modal-body {
+    color: #4a4a4a;
+    font-size: 0.9rem;
+    padding: 20px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 10px;
+
+    .confirm-button {
+      background: #ef4444;
+      color: #fff !important;
+      border: none;
+      border-radius: 5px;
+      font-weight: 400;
+      padding: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+
+      &:hover {
+        background-color: $color-red;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .cancel-button {
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      border-radius: 5px;
+      font-weight: 400;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+
+      &:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+}
+
+/***********************************************************
+  *          WEITERE KLASSEN FÜR FORMULARE ETC.
+  ***********************************************************/
+.modal-flex-buttons-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
