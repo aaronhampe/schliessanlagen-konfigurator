@@ -22,6 +22,7 @@ const schluesselData = ref([]);
 const selectedSort = ref("priceAsc");
 
 const isSummaryModalOpen = ref(false);
+const isInfoModalOpen = ref(false);
 const selectedOffer = ref(null);
 const hasAcceptedWiderruf = ref(false);
 const hasMeasuredCorrectly = ref(false);
@@ -44,6 +45,11 @@ function openSummary(offer) {
   selectedOffer.value = offer;
   hasAcceptedWiderruf.value = false;
   isSummaryModalOpen.value = true;
+}
+
+function openInfo(offer) {                // <-- NEU
+  selectedOffer.value = offer;
+  isInfoModalOpen.value = true;
 }
 
 function confirmPurchase() {
@@ -451,7 +457,10 @@ onMounted(async () => {
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-         
+          <UButton class="info-button" color="gray" variant="ghost"
+            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)">
+            Mehr&nbsp;Infos
+          </UButton>
           <div class="offer-delivery">
             <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
           </div>
@@ -491,7 +500,12 @@ onMounted(async () => {
                 <i class="icon-check"></i> {{ feature }}
               </li>
             </ul>
-           
+
+            <UButton class="info-button" color="gray" variant="ghost"
+              @click="openInfo(offer /* bzw. offer im v-for */)">
+              Mehr&nbsp;Infos
+            </UButton>
+
             <div class="offer-delivery">
               <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
             </div>
@@ -654,6 +668,36 @@ onMounted(async () => {
       </div>
     </div>
   </UModal>
+
+  <UModal :fullscreen="true" v-model="isInfoModalOpen" class="info-modal modern-design">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header-title">
+          <h2>
+            {{ selectedOffer.title || "Ausgewähltes Modell" }}
+            -
+            {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
+          </h2>
+          <UButton color="red" class="close-button" @click="isInfoModalOpen = false">
+            X
+          </UButton>
+        </div>
+      </div>
+
+      <!-- Flex-Container: Bild & Info-Text -->
+      <div class="model-overview-card">
+        <div class="model-image-section">
+          <img :src="selectedOffer.image" alt="Zylinder-Modell" />
+        </div>
+        <div class="model-info-section">
+          <p class="model-info-text" style="white-space: pre-wrap">
+            {{ selectedOffer.infoText }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </UModal>
+
 </template>
 
 <style scoped>
