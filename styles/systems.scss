@@ -183,12 +183,13 @@ h3 {
   gap: 10px; // Abstand zwischen den Listenelementen
 }
 
-.offer { // Das einzelne Listenelement/die Karte
-  display: flex;          // Bild links, .offer-details rechts
+.offer {
+  // Das einzelne Listenelement/die Karte
+  display: flex; // Bild links, .offer-details rechts
   flex-direction: row;
-  align-items: center;    // Vertikale Zentrierung von Bild und Details-Block
+  align-items: center; // Vertikale Zentrierung von Bild und Details-Block
   gap: 16px;
-  padding: 12px;          // Kompaktes Padding für Listenelemente
+  padding: 12px; // Kompaktes Padding für Listenelemente
   background-color: $background-color-card;
   border: 1px solid $border-color-soft;
   border-radius: 10px;
@@ -206,57 +207,62 @@ h3 {
   }
 
   // Mobile Ansicht: Die Elemente werden gestapelt
-  @media (max-width: $breakpoint-md) { // z.B. für Bildschirme schmaler als 768px
+  @media (max-width: $breakpoint-md) {
+
+    // z.B. für Bildschirme schmaler als 768px
     .offer {
-      flex-direction: column;    // Bild und Details-Block untereinander
-      align-items: center;       // Zentriert das Bild und den darunterliegenden .offer-details Block
-      padding: 16px 12px;        // Etwas mehr vertikales Padding für die Karte
-      gap: 12px;                 // Abstand zwischen Bild und .offer-details Block
+      flex-direction: column; // Bild und Details-Block untereinander
+      align-items: center; // Zentriert das Bild und den darunterliegenden .offer-details Block
+      padding: 16px 12px; // Etwas mehr vertikales Padding für die Karte
+      gap: 12px; // Abstand zwischen Bild und .offer-details Block
     }
-  
+
     .offer-image {
-      width: 64px;               // Beibehaltung der kleinen Bildgröße für Kompaktheit
+      width: 64px; // Beibehaltung der kleinen Bildgröße für Kompaktheit
       height: 64px;
-      margin-bottom: 0;          // Abstand wird durch 'gap' im .offer Parent geregelt
+      margin-bottom: 0; // Abstand wird durch 'gap' im .offer Parent geregelt
     }
-  
+
     .offer-details {
       display: flex;
       flex-direction: column;
-      align-items: center;       // Zentriert die meisten Kinder (wie Buttons, Preis-Block)
-      gap: 8px;                  // Konsistenter, enger Abstand zwischen den Elementen
-      width: 100%;               // .offer-details Block nimmt volle Breite der Karte ein
-  
+      align-items: center; // Zentriert die meisten Kinder (wie Buttons, Preis-Block)
+      gap: 8px; // Konsistenter, enger Abstand zwischen den Elementen
+      width: 100%; // .offer-details Block nimmt volle Breite der Karte ein
+
       // Universeller Reset und Basis-Styling für direkte Kinder von .offer-details auf Mobilgeräten
       // (h3, div.offer-type-info, ul.offer-features, UButton-Komponenten etc.)
-      > * {
+      >* {
         grid-column: auto !important; // Desktop-Grid-Layout explizit aufheben
         grid-row: auto !important;
         justify-self: auto !important;
-        align-self: auto !important;   // Spezifische Ausrichtungen vom Desktop zurücksetzen
-        margin: 0;                  // Abstände primär über 'gap' des Flex-Parents
-        max-width: 100%;            // Verhindert Überlaufen
+        align-self: auto !important; // Spezifische Ausrichtungen vom Desktop zurücksetzen
+        margin: 0; // Abstände primär über 'gap' des Flex-Parents
+        max-width: 100%; // Verhindert Überlaufen
         // width: auto; // Wird bei Bedarf unten spezifischer gesetzt
-        text-align: center;         // Standard-Textausrichtung für Kinder
+        text-align: center; // Standard-Textausrichtung für Kinder
       }
-  
+
       // Visuelle Reihenfolge und spezifisches Styling mit der 'order'-Eigenschaft
-      > h3 { // Titel
+      >h3 {
+        // Titel
         order: 1;
-        font-size: 1rem;        // Kompakt, aber lesbar (ca. 16px)
+        font-size: 1rem; // Kompakt, aber lesbar (ca. 16px)
         font-weight: 600;
         line-height: 1.3;
-        width: 100%;            // Nimmt volle Breite für effektives text-align: center
-        white-space: normal;    // Erlaubt Umbruch für längere Titel
-        overflow: visible;      // Desktop-Eigenschaften zurücksetzen
+        width: 100%; // Nimmt volle Breite für effektives text-align: center
+        white-space: normal; // Erlaubt Umbruch für längere Titel
+        overflow: visible; // Desktop-Eigenschaften zurücksetzen
         text-overflow: clip;
       }
-      > .offer-type-info {
+
+      >.offer-type-info {
         order: 2;
-        font-size: 0.75rem;     // Klein und dezent (ca. 12px)
+        font-size: 0.75rem; // Klein und dezent (ca. 12px)
         color: $text-color-secondary;
       }
-      > .offer-delivery {
+
+      >.offer-delivery {
         order: 3;
         font-size: 0.75rem;
         color: $text-color-subtle;
@@ -265,35 +271,43 @@ h3 {
         overflow: visible;
         text-overflow: clip;
       }
-      
-      > .offer-price {
+
+      >.offer-price {
         order: 4;
-        margin-top: 6px;        // Etwas Abstand nach oben zum Info-Block
-        strong { 
-          font-size: 1.125rem;  // Preisgröße (ca. 18px)
+        margin-top: 6px; // Etwas Abstand nach oben zum Info-Block
+
+        strong {
+          font-size: 1.125rem; // Preisgröße (ca. 18px)
           font-weight: 600;
         }
-        .shipping { font-size: 0.7rem; } // "inkl. Versand"
+
+        .shipping {
+          font-size: 0.7rem;
+        }
+
+        // "inkl. Versand"
       }
-      
+
       // Buttons untereinander, zentriert und mit guter Tappbarkeit
-      > .info-button {
+      >.info-button {
         order: 5;
         width: 100%;
-        max-width: 240px;       // Maximale Breite für Buttons
+        max-width: 240px; // Maximale Breite für Buttons
         font-size: 0.875rem !important; // Angepasste Schriftgröße für Mobil
-        padding: 8px 10px !important;   // Angepasstes Padding
-        margin-top: 6px;        // Abstand zum Preis
+        padding: 8px 10px !important; // Angepasstes Padding
+        margin-top: 6px; // Abstand zum Preis
       }
-      > .select-system-button {
+
+      >.select-system-button {
         order: 6;
         width: 100%;
         max-width: 240px;
         font-size: 0.9375rem !important; // "Auswählen" Button präsenter
         padding: 10px 12px !important;
       }
-  
-      > .offer-features { // Features bleiben für maximale Kompaktheit ausgeblendet
+
+      >.offer-features {
+        // Features bleiben für maximale Kompaktheit ausgeblendet
         order: 7;
         display: none !important;
       }
@@ -302,7 +316,7 @@ h3 {
 }
 
 .offer-image {
-  width: 56px;    // Kleineres Bild für die Desktop-Liste
+  width: 56px; // Kleineres Bild für die Desktop-Liste
   height: 56px;
   object-fit: contain;
   border-radius: 6px;
@@ -311,22 +325,24 @@ h3 {
   flex-shrink: 0; // Verhindert Schrumpfen des Bildes
 }
 
-.offer-details { // Direkter Container der verschiedenen Info-Elemente
-  flex-grow: 1;  // Nimmt den restlichen Platz neben dem Bild ein
+.offer-details {
+  // Direkter Container der verschiedenen Info-Elemente
+  flex-grow: 1; // Nimmt den restlichen Platz neben dem Bild ein
   display: grid;
   // Grid-Spalten: 1 (Hauptinfos) | 2 (Preis) | 3 (Aktionen)
-  grid-template-columns: minmax(0, 1fr) auto auto; 
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 10px 16px; // Reihenabstand (kleiner) Spaltenabstand (größer)
   align-items: center;
-  width: 100%;   // Füllt den verfügbaren Platz
+  width: 100%; // Füllt den verfügbaren Platz
 
   // Zuweisung der direkten Kinder zu den Grid-Zellen
   // Die Reihenfolge im HTML: h3, div.offer-type-info, ul.offer-features, UButton.info-button, 
   //                          div.offer-delivery, div.offer-price, UButton.select-system-button
 
-  > h3 { // Titel
-    grid-column: 1;   // Erste Spalte
-    grid-row: 1;      // Erste Zeile dieser Spalte
+  >h3 {
+    // Titel
+    grid-column: 1; // Erste Spalte
+    grid-row: 1; // Erste Zeile dieser Spalte
     font-size: 0.9375rem; // ca. 15px
     font-weight: 600;
     line-height: 1.3;
@@ -337,73 +353,85 @@ h3 {
     align-self: end; // Am unteren Rand der Zelle ausrichten, wenn Zeile 2+3 Platz nehmen
   }
 
-  > .offer-type-info { // Typ (z.B. Schließanlage)
+  >.offer-type-info {
+    // Typ (z.B. Schließanlage)
     grid-column: 1;
-    grid-row: 2;      // Zweite Zeile in Spalte 1
+    grid-row: 2; // Zweite Zeile in Spalte 1
     font-size: 0.75rem; // ca. 12px
     color: $text-color-secondary;
-    padding: 0;       // Kein extra Padding/Background in der Liste
-    margin-top: 1px;  // Minimaler Abstand zum Titel
+    padding: 0; // Kein extra Padding/Background in der Liste
+    margin-top: 1px; // Minimaler Abstand zum Titel
   }
-  
-  > .offer-delivery { // Lieferzeit
+
+  >.offer-delivery {
+    // Lieferzeit
     grid-column: 1;
-    grid-row: 3;      // Dritte Zeile in Spalte 1
+    grid-row: 3; // Dritte Zeile in Spalte 1
     font-size: 0.75rem;
     color: $text-color-subtle;
     margin-top: 1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
     strong {
       color: $text-color-secondary;
       font-weight: 500;
     }
   }
 
-  > .offer-price { // Preis
-    grid-column: 2;   // Zweite Hauptspalte
+  >.offer-price {
+    // Preis
+    grid-column: 2; // Zweite Hauptspalte
     grid-row: 1 / span 3; // Erstreckt sich über alle 3 Zeilen der ersten Spalte
     display: flex;
     flex-direction: column;
-    align-items: flex-end;  // Text rechtsbündig
+    align-items: flex-end; // Text rechtsbündig
     justify-content: center; // Vertikal zentrieren in der Zelle
     text-align: right;
-    padding-left: 10px;     // Abstand zur ersten Spalte
+    padding-left: 10px; // Abstand zur ersten Spalte
     margin: 0;
 
-    strong { // Preis-Text
-      font-size: 1.05rem;  // Etwas kleiner für die Liste (ca. 17px)
+    strong {
+      // Preis-Text
+      font-size: 1.05rem; // Etwas kleiner für die Liste (ca. 17px)
       font-weight: 600;
       color: $text-color-primary;
       display: block;
       margin-bottom: 0;
       white-space: nowrap;
     }
-    .shipping { // "inkl. Versand"
+
+    .shipping {
+      // "inkl. Versand"
       font-size: 0.6875rem; // ca. 11px
       color: $text-color-subtle;
     }
   }
-  
+
   // Aktionsbuttons in der dritten Spalte
-  > .info-button { // UButton "Mehr Infos"
-    grid-column: 3;   // Dritte Hauptspalte
-    grid-row: 1;      // Erste Zeile dieser Spalte (oben)
+  >.info-button {
+    // UButton "Mehr Infos"
+    grid-column: 3; // Dritte Hauptspalte
+    grid-row: 1; // Erste Zeile dieser Spalte (oben)
     justify-self: flex-end; // Button rechtsbündig in seiner Zelle
     padding: 2px 0px !important; // Sehr kompakt
     font-size: 0.8rem !important;
     line-height: 1.2 !important;
     text-decoration: none !important;
     color: $accent-color-blue !important;
-    &:hover { text-decoration: underline !important; }
+
+    &:hover {
+      text-decoration: underline !important;
+    }
   }
 
-  > .select-system-button { // UButton "Auswählen"
+  >.select-system-button {
+    // UButton "Auswählen"
     grid-column: 3;
     grid-row: 2 / span 2; // Nimmt die Zeilen 2 und 3 in dieser Spalte ein (unten)
     justify-self: flex-end; // Button rechtsbündig
-    align-self: center;     // Vertikal zentrieren über die gespannten Zeilen
+    align-self: center; // Vertikal zentrieren über die gespannten Zeilen
     padding: 6px 10px !important; // Kleinerer Button
     font-size: 0.8rem !important;
     min-width: auto !important; // Breite an Inhalt anpassen
@@ -411,9 +439,10 @@ h3 {
     // margin-top: 4px; // Ggf. kleiner Abstand zum Info-Button, falls sie näher rücken
   }
 
-  > .offer-features { // Feature-Liste
+  >.offer-features {
+    // Feature-Liste
     display: none !important; // Auf Desktop komplett ausblenden für maximale Kompaktheit
-                              // Wird in der @media-Query für Mobilgeräte wieder eingeblendet
+    // Wird in der @media-Query für Mobilgeräte wieder eingeblendet
   }
 }
 
@@ -421,20 +450,23 @@ h3 {
 // Diese sind von den obigen List-Item Styles getrennt.
 .offer-main-highlighted {
   margin-bottom: 24px; // Abstand zur folgenden Liste
-  .offer.spacious-card { // Eine spezielle Klasse für die große Karte
+
+  .offer.spacious-card {
+    // Eine spezielle Klasse für die große Karte
     flex-direction: row; // Auch auf Desktop als Reihe, aber mit mehr Platz
     padding: 24px;
     border-radius: 16px;
     align-items: flex-start; // Oben ausrichten, wenn Inhalt unterschiedlich hoch
 
-    .offer-image-large { // Ein spezielles Bild für die große Karte
+    .offer-image-large {
+      // Ein spezielles Bild für die große Karte
       width: 150px;
       height: 150px;
       padding: 10px;
       margin-right: 24px;
       flex-shrink: 0;
     }
-    
+
     // Die .offer-details der großen Karte könnte display: flex; flex-direction: column; nutzen
     .offer-details.spacious-details {
       display: flex;
@@ -442,28 +474,69 @@ h3 {
       align-items: flex-start; // Linksbündig für die große Karte
       gap: 12px;
 
-      h3 { font-size: 1.5rem; } // Größerer Titel
-      .offer-type-info { font-size: 0.9rem; background-color: $background-color-hover; padding: 4px 10px; border-radius: 20px; }
-      .offer-delivery { font-size: 0.9rem; }
+      h3 {
+        font-size: 1.5rem;
+      }
+
+      // Größerer Titel
+      .offer-type-info {
+        font-size: 0.9rem;
+        background-color: $background-color-hover;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+
+      .offer-delivery {
+        font-size: 0.9rem;
+      }
+
       .offer-features.spacious-features {
         display: block !important; // Features hier immer anzeigen
         margin-top: 8px;
-        ul { list-style: disc; padding-left: 20px; }
-        li { font-size: 0.9rem; margin-bottom: 4px; }
-        .icon-check { color: $accent-color-green; margin-right: 6px; }
+
+        ul {
+          list-style: disc;
+          padding-left: 20px;
+        }
+
+        li {
+          font-size: 0.9rem;
+          margin-bottom: 4px;
+        }
+
+        .icon-check {
+          color: $accent-color-green;
+          margin-right: 6px;
+        }
       }
+
       .offer-price {
         text-align: left; // Preis linksbündig für die große Karte
         margin-top: 16px;
-        strong { font-size: 1.75rem; }
-        .shipping { font-size: 0.8rem; }
+
+        strong {
+          font-size: 1.75rem;
+        }
+
+        .shipping {
+          font-size: 0.8rem;
+        }
       }
-      .offer-actions.spacious-actions { // Eigener Wrapper im HTML nötig
+
+      .offer-actions.spacious-actions {
+        // Eigener Wrapper im HTML nötig
         display: flex;
         gap: 12px;
         margin-top: 16px;
-        .info-button.large-info { font-size: 0.9rem !important; }
-        .select-system-button.large-buy { font-size: 1rem !important; padding: 10px 20px !important; }
+
+        .info-button.large-info {
+          font-size: 0.9rem !important;
+        }
+
+        .select-system-button.large-buy {
+          font-size: 1rem !important;
+          padding: 10px 20px !important;
+        }
       }
     }
   }
@@ -471,21 +544,11 @@ h3 {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // === KAUFEN MODAL STYLING (Summary Modal) ===
 .summary-modal.modern-design {
   max-width: 90%; // Statt 80% für etwas mehr Raum, oder wie du es final hattest
+  height: auto; // Passt sich an Inhalt an bis max-height
+  max-height: 100%;
 
   :deep(.u-modal-overlay) {
     background-color: rgba(0, 0, 0, 0.5);
@@ -903,7 +966,8 @@ h3 {
       padding: 12px 28px;
       font-size: 1rem;
       font-weight: 500;
-      border-radius: 10px;;
+      border-radius: 10px;
+      ;
 
       // Farben kommen von UButton props (color="blue")
       &.pseudo-disabled {
@@ -941,116 +1005,128 @@ h3 {
 // KAUFEN MODAL STYLING
 
 .summary-modal.modern-design {
-  max-width: 80%;
+  max-width: 90%; 
+  height: auto; // Erlaubt dem äußeren Modal-Wrapper, sich an den Inhalt anzupassen
+  max-height: 100vh; // Verhindert, dass das Modal den Viewport übersteigt
 
   :deep(.u-modal-overlay) {
     background-color: rgba(0, 0, 0, 0.5);
-
   }
 
   :deep(.u-modal-container) {
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; 
+    height: auto; // Wichtig: Erlaubt dem Nuxt UI Container, sich anzupassen
+    max-height: 100%; // Kann bleiben
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  // Innerer Content-Wrapper von Nuxt UI anpassen, um Scrollen zu ermöglichen
   :deep(.u-modal-content) {
-    background-color: transparent; // Macht den Hintergrund unseres 
+    background-color: transparent;
     padding: 0;
-    overflow-y: visible; // Erlaubt unserem .modal-content
-    width: 100%; // Nimmt die Breite des Containers (
-    max-height: none;
-    box-shadow: none; // Schatten wird von unserem 
+    overflow-y: visible; 
+    width: 100%;
+    height: auto; // Wichtig: Erlaubt dem Nuxt UI Inhalts-Slot, sich anzupassen
+    max-height: none; 
+    box-shadow: none;
   }
 
   // Unser Haupt-Modal-Inhaltscontainer
   .modal-content {
-    background: #ffffff;
+    background: $background-color-card; // oder #ffffff, je nach Variable
     border-radius: 18px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12),
-      0 4px 6px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+                0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden; 
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    max-height: 90vh;
-    max-width: 90%;
-    position: absolute;
-    left: 5%;
+    width: 100%; // Nimmt die Breite des Elternelements an (gesteuert durch max-width auf .summary-modal.modern-design)
+    
+    // WICHTIGSTE ÄNDERUNG HIER:
+    height: auto;             // Erlaubt dem Container, sich an den Inhalt anzupassen ("shrink-wrapping")
+    max-height: 90vh;         // Maximale Höhe, wenn der Inhalt viel Platz benötigt
+
+    // position: absolute; und left: 5%; sind hier wahrscheinlich nicht mehr nötig,
+    // wenn die Zentrierung über flex auf :deep(.u-modal-container) erfolgt.
+    // Falls doch, ggf. anpassen oder wieder einkommentieren.
+    // position: absolute;
+    // left: 5%; // War vorher max-width: 90%; left: 5%; - jetzt sollte max-width auf .summary-modal.modern-design reichen
 
     @media (max-width: $breakpoint-md) {
       border-radius: 12px;
-      max-width: 100vw;
-      max-height: 100vh;
-      border-radius: 0;
+      max-width: 100vw; 
+      max-height: 100vh; // Auf Mobilgeräten kann es potenziell höher werden
+      border-radius: 0; 
+      // left: 0; // Falls position: absolute noch verwendet wird
     }
 
     @media (max-width: $breakpoint-sm) {
-      max-height: 100dvh; // Dynamische Viewport Höhe 
+      max-height: 100dvh; 
     }
   }
 
   .modal-header {
     padding: 20px 30px;
-    border-bottom: 1px solid rgba(0, 0, 0, .08);
-    background: rgba(248, 248, 248, .8);
+    border-bottom: 1px solid $border-color-soft;
+    background: rgba(248, 248, 248, 0.9); 
     z-index: 10;
-    width: 100%;
+    flex-shrink: 0; // Verhindert, dass der Header schrumpft
   }
 
   .header-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; // << wichtig
-  }
 
-  .header-title h2 {
-    margin: 0;
-    flex: 1 1 auto; // nimmt den freien Platz ein
-    color: #1d1d1f;
-    font-size: 21px;
-    font-weight: 600;
-    letter-spacing: -0.016em;
+    h2 {
+      margin: 0;
+      flex: 1 1 auto;
+      color: $text-color-primary;
+      font-size: 1.25rem; 
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding-right: 16px;
 
-    @media (max-width: $breakpoint-md) {
-      font-size: 19px;
+      @media (max-width: $breakpoint-md) {
+        font-size: 1.125rem; 
+      }
     }
   }
 
   .close-button {
-    background-color: #dc2626 !important;
-    color: #fff !important;
-    font-weight: 600;
-    border-radius: 50%;
-    min-width: 36px;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
+    background-color: rgba(0, 0, 0, 0.08) !important; 
+    color: $text-color-secondary !important;
+    font-weight: 400 !important; 
+    border-radius: 50% !important;
+    width: 36px !important; 
+    height: 36px !important; 
+    min-width: auto !important;
+    padding: 0 !important; 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s ease !important;
 
     &:hover {
-      background: darken($accent-color-red, 5%) !important;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.12) !important;
+      transform: none !important; 
+      box-shadow: none !important;
     }
 
     &:active {
-      transform: scale(0.98);
+      transform: none !important;
     }
   }
 
-  /* Neuer scrollbarer Body-Bereich */
   .modal-body-scrollable {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 32px;
+    flex-grow: 1; // Wächst, um den verfügbaren Platz zwischen Header und Footer zu füllen
+                   // Wenn .modal-content height: auto hat, wird dieser "verfügbare Platz" durch den Inhalt bestimmt.
+    flex-shrink: 1; // Erlaubt dem Body zu schrumpfen, wenn der Inhalt klein ist.
+    overflow-y: auto; // Scrollbar nur, wenn der Inhalt die max-height des .modal-content überschreitet oder
+                      // wenn der .modal-content durch seinen eigenen Inhalt größer als 90vh wird.
+    padding: 24px 32px; 
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -1058,37 +1134,7 @@ h3 {
 
     &::-webkit-scrollbar-track {
       background: transparent;
-      margin-top: 16px;
-      margin-bottom: 16px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.25);
-      border-radius: 4px;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.35);
-      }
-    }
-
-    @media (max-width: $breakpoint-md) {
-      padding: 0 20px;
-    }
-  }
-
-  .table-scroll-wrapper {
-    width: 100%; // Nimmt die volle Breite des .content-wrapper ein
-    overflow-x: auto; // Ermöglicht horizontales Scrollen nur für diesen Wrapper
-    -webkit-overflow-scrolling: touch; // Für sanftes Scrollen auf iOS
-
-    // Optional: Styling für die horizontale Scrollbar (konsistent mit vertikaler)
-    &::-webkit-scrollbar {
-      height: 8px; // Höhe für horizontale Scrollbar
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-      margin: 0 8px; // Etwas Einzug für die horizontale Scrollbar-Spur
+      margin: 8px 0;
     }
 
     &::-webkit-scrollbar-thumb {
@@ -1099,417 +1145,239 @@ h3 {
     &::-webkit-scrollbar-thumb:hover {
       background-color: rgba(0, 0, 0, 0.35);
     }
+
+    @media (max-width: $breakpoint-md) {
+      padding: 20px;
+    }
+  }
+  
+  .table-scroll-wrapper { // Dieses Styling ist gut für Tabellen, die breiter als der Modal-Inhalt sind
+    width: 100%; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+
+    &::-webkit-scrollbar {
+      height: 8px; 
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 0 8px; 
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.35);
+      }
+    }
   }
 
-
-  /* Zylinderbild-Container Styling */
   .cylinder-image-container {
-    padding: 24px 0; // Abstand oben/unten
-    text-align: center; // Zentriert das Bild, falls es schmaler ist
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07); // Optionale Trennlinie
+    padding: 16px 0;
+    text-align: center;
     margin-bottom: 24px;
 
     .cylinder-image {
-      max-width: 100%;
-      max-height: 250px; // Höhe begrenzen, damit es nicht zu dominant wird
+      max-width: 80%; 
+      max-height: 200px;
       object-fit: contain;
-      border-radius: 12px; // Abgerundete Ecken für das Bild
+      border-radius: 10px;
     }
   }
 
-
-  /* Inhalt-Wrapper (Zylinder, Schlüssel) */
   .content-wrapper {
-    padding-top: 24px; // Abstand zum Bild oder Header
-    padding-bottom: 24px; // Abstand zum nächsten Block
+    padding-top: 0; // Padding kommt von .modal-body-scrollable, wenn nötig
+    padding-bottom: 16px; // Oder 24px für mehr Raum
 
     .config-heading {
-      font-size: 1.25rem;
+      font-size: 1.125rem; 
       font-weight: 600;
-      color: #1d1d1f;
-      margin-bottom: 16px;
-      letter-spacing: -0.01em;
-
-
-
-      @media (max-width: $breakpoint-sm) {
-        font-size: 1.1rem;
-      }
-    }
-
-    // Tabelle im Apple-Stil
-    .zylinder-table {
-      width: 100%;
-      border-collapse: separate; // Wichtig für border-spacing und border-radius auf table
-      border-spacing: 0;
-      background-color: #ffffff;
-      border-radius: 12px;
-      overflow: visible; // Nicht mehr hidden, da die Tabelle nicht scrollen soll
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      margin-bottom: 32px; // Mehr Abstand
-
-      @media (max-width: $breakpoint-md) {
-        font-size: 0.875rem;
-        border-radius: 8px;
-      }
-
-      thead {
-        background-color: #f9f9fb; // Noch helleres Grau für Tabellenkopf
-
-        th {
-          padding: 14px 18px; // Etwas mehr Padding
-          text-align: left;
-          font-weight: 600;
-          color: #333333; // Etwas weicher als #1d1d1f
-          font-size: 0.8125rem; // Kleinere Schrift für Header
-          letter-spacing: -0.005em;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-          text-transform: uppercase; // Optional für Header-Texte
-
-          @media (max-width: $breakpoint-md) {
-            padding: 10px 12px;
-            font-size: 0.75rem;
-          }
-        }
-      }
-
-      tbody {
-        tr {
-          transition: background-color 0.15s ease;
-
-          &:hover {
-            background-color: rgba(0, 122, 255, 0.04); // Apple Blue Akzent
-          }
-
-          &:not(:last-child) td {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Subtilere Linien
-          }
-        }
-
-        td {
-          padding: 14px 18px;
-          color: #1d1d1f;
-          font-size: 0.9375rem; // ca. 15px
-          vertical-align: middle; // Bessere Ausrichtung bei mehrzeiligem Inhalt
-
-          @media (max-width: $breakpoint-md) {
-            padding: 12px;
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
-
-    .keys-info {
-      background-color: #f5f5f7;
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 32px; // Mehr Abstand
-      font-size: 0.9375rem;
-      color: #1d1d1f;
-      display: flex;
-      align-items: center;
-      justify-content: center; // Zentriert den Text
-      text-align: center;
-
-      strong {
-        font-weight: 600;
-        margin-left: 6px;
-      }
-
-      @media (max-width: $breakpoint-md) {
-        font-size: 0.875rem;
-        padding: 12px 16px;
-        border-radius: 8px;
-      }
-    }
-
-    .keys-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        background-color: #f5f5f7;
-        border-radius: 12px;
-        padding: 16px 20px;
-        margin-bottom: 10px; // Etwas mehr Abstand zwischen Items
-        display: flex;
-        align-items: center;
-        transition: all 0.2s ease;
-        border: 1px solid transparent; // Für Hover-Effekt vorbereiten
-
-        &:hover {
-          background-color: #ebebed;
-          border-color: rgba(0, 0, 0, 0.05); // Subtiler Rand beim Hover
-          // transform: translateX(4px); // Kann man machen, aber nicht unbedingt Apple-like
-        }
-
-        strong {
-          font-weight: 600;
-          color: #1d1d1f;
-          margin-right: 8px;
-          min-width: 100px; // Etwas weniger, passt sich besser an
-          flex-shrink: 0;
-        }
-
-        span {
-          color: #555555; // Etwas dunkler für bessere Lesbarkeit
-          font-size: 0.9375rem;
-          word-break: break-word; // Wichtig für lange Listen von Positionen
-        }
-
-        @media (max-width: $breakpoint-md) {
-          padding: 12px 16px;
-          border-radius: 8px;
-          flex-direction: column;
-          align-items: flex-start;
-
-          strong {
-            margin-bottom: 6px; // Mehr Abstand
-            min-width: auto;
-          }
-
-          span {
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
-  }
-
-  /* Preis & Checkboxen Bereich */
-  .price-and-widerruf {
-    background-color: #f5f5f7; // Behält Hintergrundfarbe
-    border-top: 1px solid rgba(0, 0, 0, 0.07);
-    padding: 32px 0; // Padding nur oben/unten, links/rechts kommt von .modal-body-scrollable
-    margin-top: 16px; // Abstand zum content-wrapper
-
-    @media (max-width: $breakpoint-md) {
-      padding: 20px 0;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #1d1d1f;
-      margin-bottom: 24px; // Mehr Abstand
-      text-align: center;
-      letter-spacing: -0.01em;
-
-      @media (max-width: $breakpoint-sm) {
-        font-size: 1.1rem;
-      }
-    }
-
-    .required-checks {
-      max-width: 600px;
-      margin: 0 auto 32px; // Mehr Abstand nach unten
-    }
-
-    .widerruf-label {
-      display: flex;
-      align-items: flex-start; // Besser für mehrzeiligen Text neben Checkbox
-      gap: 12px;
-      padding: 16px;
-      background-color: #ffffff;
-      border-radius: 12px;
+      color: $text-color-primary;
+      margin-top: 24px; // Abstand nach oben, außer beim ersten
       margin-bottom: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.08); // Subtilerer Rand
-      transition: all 0.2s ease;
+      letter-spacing: -0.005em;
 
-      &:hover {
-        border-color: rgba(0, 122, 255, 0.4); // Apple Blue Akzent
-        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.08); // Sanfter Schatten
+      &:first-child {
+        margin-top: 0;
       }
 
-      @media (max-width: $breakpoint-md) {
-        padding: 12px;
-        border-radius: 8px;
-      }
-
-      :deep(.u-checkbox) {
-        margin-top: 3px; // Feinjustierung für vertikale Ausrichtung
-        flex-shrink: 0;
-      }
-
-      span {
-        // Der Text neben der Checkbox
-        flex: 1;
-        font-size: 0.9375rem;
-        color: #1d1d1f;
-        line-height: 1.5;
-
-        @media (max-width: $breakpoint-md) {
-          font-size: 0.875rem;
-        }
-      }
-
-      .info-icon {
-        position: relative;
-        color: #007aff;
-        font-size: 1.125rem; // Etwas größer
-        cursor: help;
-        transition: color 0.2s ease;
-        margin-left: auto; // Schiebt Icon nach rechts, falls nötig
-        flex-shrink: 0;
-        padding-left: 8px; // Kleiner Abstand zum Text
-
-        &:hover {
-          color: #0056b3; // Dunkleres Blau beim Hover
-        }
-
-        .tooltip-box {
-          position: absolute;
-          z-index: 1000;
-          bottom: calc(100% + 10px); // Tooltip über dem Icon
-          right: 50%; // Zentriert starten
-          transform: translateX(50%); // Zentriert ausrichten
-          background: #2c2c2e; // Dunkler Tooltip-Hintergrund (iOS-Stil)
-          color: #ffffff; // Heller Text
-          border: none; // Kein Rand für diesen Stil
-          border-radius: 8px; // Weichere Ecken
-          padding: 10px 14px; // Kompakteres Padding
-          width: 300px; // Feste Breite
-          font-size: 0.8125rem; // Kleinere Schrift im Tooltip
-          line-height: 1.4;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); // Deutlicherer Schatten
-
-          // Pfeil unten (angepasst)
-          &::after {
-            content: '';
-            position: absolute;
-            top: 100%; // Pfeil am unteren Rand des Tooltips
-            right: calc(50% - 6px); // Zentriert
-            width: 12px;
-            height: 12px;
-            background: #2c2c2e;
-            transform: rotate(45deg);
-            margin-top: -6px; // Überlappt für nahtlosen Übergang
-          }
-
-          @media (max-width: $breakpoint-md) {
-            width: 260px;
-            font-size: 0.75rem;
-          }
-
-          @media (max-width: $breakpoint-sm) {
-            width: clamp(200px, 80vw, 280px); // Flexible Breite
-            right: auto; // Auf kleineren Screens anders positionieren
-            left: 50%;
-            transform: translateX(-50%);
-
-            &::after {
-              left: calc(50% - 6px); // Zentrierung des Pfeils beibehalten
-              right: auto;
-            }
-          }
-        }
-      }
-    }
-
-    .offer-price-summery {
-      text-align: center;
-      padding: 24px;
-      background-color: #ffffff;
-      border-radius: 16px;
-      border: 1px solid rgba(0, 0, 0, 0.08); // Standard Rand
-      // border: 2px solid #007aff; // Blaue Hervorhebung nur bei Bedarf
-      margin-top: 32px;
-      font-size: 1.125rem;
-      color: #666666; // Etwas dunklerer Text
-
-      strong {
-        display: block;
-        font-size: 2rem; // Etwas kleiner, aber immer noch prominent
-        font-weight: 600;
-        color: #1d1d1f;
-        margin: 4px 0 8px; // Angepasste Margins
-        letter-spacing: -0.02em;
-
-        @media (max-width: $breakpoint-sm) {
-          font-size: 1.75rem;
-        }
-      }
-
-      .shipping {
-        display: block;
-        font-size: 0.8125rem; // Kleinere Schrift für Versandinfo
-        color: #86868b;
-        margin-top: 4px;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1rem;
       }
     }
   }
 
-  /* Footer mit Kaufbutton */
-  .modal-footer {
-    background-color: #ffffff; // Weißer Hintergrund
-    border-top: 1px solid rgba(0, 0, 0, 0.07);
-    padding: 24px 32px;
-    display: flex;
-    justify-content: center; // Button rechtsbündig, üblich bei Apple
-    flex-shrink: 0; // Verhindert Schrumpfen
+  .zylinder-table {
+    width: 100%;
+    min-width: 500px; // Beispiel: Erzwingt horizontales Scrollen, wenn der Platz knapp wird,
+                      // anstatt dass Spalten unleserlich klein werden. Anpassen nach Bedarf.
+    border-collapse: separate; 
+    border-spacing: 0;
+    background-color: $background-color-card; 
+    border-radius: 12px;
+    // overflow: hidden; // Entfernt, da der table-scroll-wrapper das Scrolling übernimmt
+    border: 1px solid $border-color-soft;
+    margin-bottom: 24px;
 
-    @media (max-width: $breakpoint-md) {
+    thead {
+      background-color: $background-color-hover;
+      th {
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 500;
+        color: $text-color-secondary;
+        font-size: 0.8125rem; 
+        letter-spacing: normal;
+        border-bottom: 1px solid $border-color-soft;
+        text-transform: none;
+      }
+    }
+    tbody {
+      tr {
+        transition: background-color 0.15s ease;
+        &:hover { background-color: rgba($accent-color-blue, 0.04); }
+        &:not(:last-child) td { border-bottom: 1px solid $border-color-soft; }
+      }
+      td {
+        padding: 12px 16px;
+        color: $text-color-primary;
+        font-size: 0.875rem; 
+        vertical-align: middle;
+        white-space: nowrap; // Verhindert Umbruch in Tabellenzellen, was zu horizontalem Scrollen führt
+                             // Entfernen, falls Umbruch gewünscht ist und die Tabelle nicht scrollen soll.
+      }
+    }
+  }
+
+  .keys-info,
+  .keys-list li {
+    background-color: $background-color-hover;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    color: $text-color-primary;
+    strong { font-weight: 500; }
+  }
+
+  .keys-info {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .keys-list {
+    list-style: none; padding: 0; margin: 0;
+    li {
+      display: flex; align-items: center; transition: background-color 0.2s ease;
+      &:hover { background-color: darken($background-color-hover, 3%); }
+      strong { margin-right: 8px; min-width: 90px; flex-shrink: 0; }
+      span { color: $text-color-secondary; word-break: break-word; }
+      @media (max-width: $breakpoint-md) {
+        flex-direction: column; align-items: flex-start;
+        strong { margin-bottom: 4px; min-width: auto; }
+      }
+    }
+  }
+
+  .price-and-widerruf {
+    background-color: $background-color-hover; 
+    border-top: 1px solid $border-color-soft;
+    padding: 24px 0; 
+    margin-top: 16px;
+    h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $text-color-primary;
+      margin-bottom: 16px;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .required-checks {
+    max-width: 550px; 
+    margin: 0 auto 24px;
+    padding: 0 16px; 
+  }
+
+  .widerruf-label {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px; background-color: $background-color-card;
+    border-radius: 10px; margin-bottom: 10px;
+    border: 1px solid $border-color-soft;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    &:hover {
+      border-color: rgba($accent-color-blue, 0.4);
+    }
+    :deep(.u-checkbox) { margin-top: 2px; flex-shrink: 0; }
+    span { flex: 1; font-size: 0.875rem; color: $text-color-primary; line-height: 1.5; }
+    .info-icon {
+      position: relative; color: $accent-color-blue; font-size: 1.1rem; cursor: help;
+      transition: color 0.2s ease; margin-left: auto; flex-shrink: 0; padding-left: 8px;
+      &:hover { color: darken($accent-color-blue, 15%); }
+      .tooltip-box { /* Dein bestehendes Tooltip-Styling */ }
+    }
+  }
+
+  .error-message-pflichtfelder { /* Dein bestehendes Styling */ }
+
+  .offer-price-summery {
+    text-align: center; padding: 20px;
+    background-color: $background-color-card; border-radius: 12px;
+    border: 1px solid $border-color-soft; 
+    margin: 24px auto 0; max-width: 550px;
+    font-size: 1rem; color: $text-color-secondary;
+    strong {
+      display: block; font-size: 1.875rem; 
+      font-weight: 600; color: $text-color-primary;
+      margin: 6px 0; letter-spacing: -0.015em;
+    }
+    .shipping { display: block; font-size: 0.8125rem; color: $text-color-subtle; margin-top: 4px; }
+  }
+
+  .modal-footer {
+    background-color: $background-color-card; 
+    border-top: 1px solid $border-color-soft;
+    padding: 20px 32px; // Vorher 24px 32px
+    display: flex;
+    justify-content: center; 
+    flex-shrink: 0; 
+
+    @media (max-width: $breakpoint-md) { // War schon justify-content: center;
       padding: 16px 20px;
-      justify-content: center; // Button zentriert auf kleineren Screens
     }
 
     button {
-      // Styling für den UButton
-      min-width: 180px; // Etwas schmaler
-      padding: 12px 28px; // Kompakteres Padding
-      font-size: 1rem; // Standard Schriftgröße
-      font-weight: 500; // Etwas weniger fett
-      border-radius: 10px; // Passend zu anderen Elementen
+      min-width: 260px; // War vorher 180px, dann 250px, jetzt 260px wie besprochen
+      padding: 12px 28px; 
+      font-size: 1rem; 
+      font-weight: 600; // War vorher 500, jetzt 600 wie besprochen
+      border-radius: 10px;
 
-
+      &.pseudo-disabled {
+        background-color: #e5e5ea !important; // Helleres Grau
+        color: #8e8e93 !important;           // Gedämpfte Textfarbe
+        border-color: transparent !important;
+        box-shadow: none !important;
+        cursor: not-allowed;
+        
+        &:hover { // Sicherstellen, dass Hover-Effekte für den deaktivierten Zustand nicht greifen
+          background-color: #e5e5ea !important;
+          color: #8e8e93 !important;
+          box-shadow: none !important;
+          transform: none !important;
+        }
+      }
+      
       @media (max-width: $breakpoint-sm) {
         width: 100%;
-        min-width: unset;
-        padding: 14px 28px; // Etwas größer für mobile Taps
+        min-width: unset; 
+        padding: 14px 28px; 
       }
-    }
-
-    .modal-footer button.pseudo-disabled {
-      background-color: #c6c6c8; // Oder eine andere Farbe für "deaktiviert"
-      cursor: not-allowed; // Zeigt an, dass nicht geklickt werden kann (obwohl es technisch geht)
-      // Ggf. weitere Stile, um es wie den :disabled Zustand von UButton aussehen zu lassen
-      // color: #8e8e93; (Beispiel für Textfarbe)
-    }
-  }
-
-  .error-message-pflichtfelder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 16px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-
-
-    background-color: rgba(255, 59, 48, 0.08);
-    border: 1px solid rgba(255, 59, 48, 0.2);
-
-    .error-icon {
-      font-size: 1.3rem;
-      color: #ff3b30;
-      margin-right: 10px;
-      flex-shrink: 0;
-    }
-
-    .error-text-content {
-      color: #BF281D; // Ein dunkleres, gut lesbares Rot für den Text
-      font-weight: 500; // Mittlere Schriftstärke (statt 'bold', was oft 700 ist)
-      font-size: 0.9rem; // Ca. 14-15px, klar und deutlich
-      line-height: 1.4; // Guter Zeilenabstand für Lesbarkeit
-      text-align: left; // Text innerhalb des Spans ist linksbündig.
-      // Die Zentrierung des gesamten Blocks erfolgt über justify-content der Eltern-Klasse.
     }
   }
 }
-
 // Fade Animation (bleibt gleich)
 .fade-enter-active,
 .fade-leave-active {
