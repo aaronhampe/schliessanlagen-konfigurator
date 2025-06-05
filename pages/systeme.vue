@@ -71,10 +71,6 @@ async function performActualPurchase() {
     // showRequirementError.value = true;
     return;
   }
-
-  // Die addToCart-Funktion bleibt wie sie ist.
-  // Sie verwendet intern generateConfigurationText, was die Werte der Checkboxen bereits berücksichtigt.
-  // Der Parameter widerruf_accepted: true in addToCart ist okay, da allRequiredChecked dies sicherstellt.
   await addToCart(offer.title, offer.price, offer.productID);
 }
 
@@ -570,35 +566,36 @@ onMounted(async () => {
 
         <div class="content-wrapper">
           <h3 class="config-heading">Zylinderübersicht</h3>
-          <table class="zylinder-table">
-            <thead>
-              <tr>
-                <th>Pos.</th>
-                <th>Bezeichnung</th>
-                <th>Typ</th>
-                <th>Außen / Innen</th>
-                <th>Anzahl</th>
-                <th>Optionen</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="pos in positionData" :key="pos.POS">
-                <td>{{ pos.POS }}</td>
-                <td>
-                  {{
+          <div class="table-scroll-wrapper">
+            <table class="zylinder-table">
+              <thead>
+                <tr>
+                  <th>Pos.</th>
+                  <th>Bezeichnung</th>
+                  <th>Typ</th>
+                  <th>Außen / Innen</th>
+                  <th>Anzahl</th>
+                  <th>Optionen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="pos in positionData" :key="pos.POS">
+                  <td>{{ pos.POS }}</td>
+                  <td>
+                    {{
       pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
         ? pos.Bezeichnung
         : "Tür " + pos.POS
     }}
-                </td>
-                <td>{{ pos.Typ }}</td>
-                <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
-                <td>{{ pos.Anzahl }}</td>
-                <td>{{ pos.Option }}</td>
-              </tr>
-            </tbody>
-          </table>
-
+                  </td>
+                  <td>{{ pos.Typ }}</td>
+                  <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
+                  <td>{{ pos.Anzahl }}</td>
+                  <td>{{ pos.Option }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p class="keys-info">
             Gesamtanzahl Schlüssel: <strong>{{ totalGlobalKeys }}</strong>
           </p>

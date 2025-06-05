@@ -1,348 +1,941 @@
-$primary-color: #333333;
-$input-width: 80px;
-$badge-width: 80px;
+// === GRUNDLAGEN & VARIABLEN ===
+$font-family-apple: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$text-color-primary: #1d1d1f;
+$text-color-secondary: #6e6e73;
+$text-color-subtle: #86868b;
 
-// Farben (kannst du nach Belieben erweitern oder anpassen)
-$color-amber: #f59e0b;
-$color-red: #dc2626;
-$color-sky: #0ea5e9;
+$background-color-page: #f9f9fb; // Sehr helles Grau, fast weiß
+$background-color-card: #ffffff;
+$background-color-hover: #f5f5f7;
 
-// Breakpoints definieren
+$accent-color-blue: #007aff;
+$accent-color-red: #ff3b30;
+$accent-color-green: #34c759;
+$accent-color-gray: #8e8e93;
+
+$border-color-soft: rgba(0, 0, 0, 0.12);
+$border-color-medium: rgba(0, 0, 0, 0.2);
+
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 
+// === ALLGEMEINE SEITENGESTALTUNG ===
+body {
+  // Falls nicht schon global gesetzt
+  font-family: $font-family-apple;
+  color: $text-color-primary;
+  background-color: $background-color-page;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .systeme-page {
-  margin: 50px;
-  font-size: 18px;
+  font-family: $font-family-apple;
+  color: $text-color-primary;
+  background-color: $background-color-page;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
 
   @media (max-width: $breakpoint-md) {
-    margin: 20px;
-    font-size: 16px;
+    padding: 30px 15px;
+  }
+
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 20px 10px;
+  }
+}
+
+h2 {
+  font-size: 1.75rem; // ca. 28px
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: $text-color-primary;
+  margin-bottom: 24px;
+  margin-top: 32px;
+
+  &:first-of-type {
+    margin-top: 0;
   }
 
   @media (max-width: $breakpoint-sm) {
-    margin: 10px;
-  }
-
-  .back-button {
-    margin-top: 20px;
-    border: 2px solid $color-amber;
-    background-color: white;
-    color: $primary-color;
-  }
-
-  h2 {
-    @media (max-width: $breakpoint-sm) {
-      font-size: 1.5rem;
-    }
+    font-size: 1.5rem; // ca. 24px
   }
 }
 
-.heading {
-  margin: 0px;
-  font-size: 24px;
+h3 {
+  // Innerhalb von offer-details
+  font-size: 1.25rem; // ca. 20px
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: $text-color-primary;
+  margin: 0 0 8px 0;
 
   @media (max-width: $breakpoint-sm) {
-    font-size: 20px;
+    font-size: 1.125rem; // ca. 18px
   }
 }
 
-.offer-container {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.offer {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
-  padding: 15px;
-  margin-top: 10px;
-  border-radius: 8px;
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease;
+// === BUTTONS ===
+.back-button {
+  // Gilt für UButton mit dieser Klasse
+  background-color: $background-color-hover !important;
+  color: $text-color-primary !important;
+  border: 1px solid $border-color-soft !important;
+  padding: 10px 16px !important;
+  font-weight: 500 !important;
+  border-radius: 10px !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    transform: translateY(-3px);
-  }
-
-  @media (max-width: $breakpoint-lg) {
-    gap: 15px;
-    padding: 12px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 15px 10px;
-  }
-}
-
-.offer-image {
-  width: 120px;
-  height: auto;
-  margin-right: 20px;
-  object-fit: cover;
-
-  @media (max-width: $breakpoint-lg) {
-    width: 100px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    margin-right: 0;
-    margin-bottom: 15px;
-  }
-}
-
-.offer-type-info {
-  margin: 4px 0;
-  font-size: 0.95rem;
-  color: #6c757d; // dezentes Grau
-}
-
-.offer-details {
-  display: grid;
-  grid-template-columns: 100px 1fr 3fr 1fr 1fr 1fr 1fr;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
-
-  @media (max-width: $breakpoint-xl) {
-    grid-template-columns: 100px 1fr 2fr 1fr 1fr 1fr;
-    gap: 15px;
-  }
-
-  @media (max-width: $breakpoint-lg) {
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-  }
-
-  h3 {
-    @media (max-width: $breakpoint-sm) {
-      font-size: 1.1rem;
-    }
-  }
-}
-
-.offer-delivery {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #2a2a2a;
-  background-color: #eef5ff;
-  border: 1px solid #cce0ff;
-  padding: 0.75rem 1rem;
-  margin: 1rem 0;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: $breakpoint-lg) {
-    font-size: 0.95rem;
-    padding: 0.7rem 0.9rem;
-    margin: 0.8rem 0;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    width: 100%;
-    font-size: 0.9rem;
-    padding: 0.5rem 0.75rem;
-  }
-}
-
-.offer-price {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
-  /* Falls erforderlich */
-
-  @media (max-width: $breakpoint-md) {
-    margin: 10px 0;
-  }
-}
-
-.offer-price-summery {
-  text-align: center;
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #343a40;
-
-  @media (max-width: $breakpoint-sm) {
-    font-size: 14px;
-  }
-
-  .price {
-    font-size: 18px;
-    color: #414141;
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: 16px;
-    }
-  }
-}
-
-.use-case-badge {
-  display: inline-block;
-  margin: 6px 0;
-  padding: 4px 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #6c757d;
-
-  @media (max-width: $breakpoint-lg) {
-    font-size: 0.8rem;
-    padding: 3px 6px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-/* Für privat */
-.use-case-privat {
-  background-color: #51c4d3;
-  color: #fff;
-}
-
-/* Für gewerblich */
-.use-case-gewerblich {
-  background-color: #f9a825;
-  color: #222;
-}
-
-/* Für privat & gewerblich */
-.use-case-privat\ \&\ gewerblich {
-  background-color: #7e57c2;
-  color: #fff;
-}
-
-.offer-features {
-  list-style-type: disc;
-  color: #2e2e2e;
-  padding-left: 1.5rem;
-  margin: 10px 0;
-
-  @media (max-width: $breakpoint-lg) {
-    padding-left: 1.2rem;
-    margin: 8px 0;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    text-align: left;
-    width: 100%;
-    padding-left: 2rem;
-  }
-
-  li {
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-
-    @media (max-width: $breakpoint-lg) {
-      font-size: 0.85rem;
-      margin-bottom: 3px;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: 0.8rem;
-    }
-  }
-
-  i {
-    color: #28a745;
-    margin-right: 8px;
-  }
-}
-
-/* Container für Filter */
-.filters-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-
-  @media (max-width: $breakpoint-sm) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-/* Label für den Filtertitel */
-.filter-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-
-  @media (max-width: $breakpoint-sm) {
-    margin-bottom: 5px;
-  }
-}
-
-.shipping {
-  font-size: 12px;
-
-  @media (max-width: $breakpoint-sm) {
-    font-size: 10px;
-  }
-}
-
-/* Select-Feld */
-.filter-select {
-  font-size: 0.9rem;
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  transition: box-shadow 0.2s ease;
-
-  @media (max-width: $breakpoint-sm) {
-    width: 100%;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+    background-color: darken($background-color-hover, 5%) !important;
+    border-color: $border-color-medium !important;
   }
 }
 
 .select-system-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // Gilt für UButton mit dieser Klasse
+  background-color: $accent-color-blue !important;
+  color: white !important;
+  padding: 12px 20px !important;
+  font-weight: 500 !important;
+  border-radius: 10px !important;
+  transition: background-color 0.2s ease;
 
-
-  @media (max-width: $breakpoint-lg) {
-    font-size: 0.95rem;
-    padding: 8px 12px;
+  &:hover {
+    background-color: darken($accent-color-blue, 10%) !important;
   }
 
   @media (max-width: $breakpoint-md) {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
   }
+}
+
+.info-button {
+  // Gilt für UButton mit dieser Klasse (variant="ghost" color="gray" ist gut)
+  color: $accent-color-blue !important;
+  padding: 6px 0 !important; // Kleineres Padding für Ghost-Button
+  font-weight: 500;
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+
+// === FILTER ===
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 16px;
+  background-color: $background-color-card;
+  border-radius: 12px;
+  border: 1px solid $border-color-soft;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+}
+
+.filter-label {
+  font-size: 0.9375rem; // ca. 15px
+  font-weight: 500;
+  color: $text-color-secondary;
+}
+
+.filter-select {
+  font-family: $font-family-apple;
+  font-size: 0.9375rem;
+  padding: 10px 12px;
+  border: 1px solid $border-color-medium;
+  border-radius: 8px;
+  background-color: $background-color-hover;
+  color: $text-color-primary;
+  flex-grow: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $accent-color-blue;
+    box-shadow: 0 0 0 3px rgba($accent-color-blue, 0.2);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+  }
+}
+
+// === ANGEBOTSKARTEN / LISTENELEMENTE (Angepasst für ursprüngliche HTML-Struktur) ===
+
+.offer-container {
+  display: grid;
+  grid-template-columns: 1fr; // Jedes Angebot in einer neuen Zeile
+  gap: 10px; // Abstand zwischen den Listenelementen
+}
+
+.offer { // Das einzelne Listenelement/die Karte
+  display: flex;          // Bild links, .offer-details rechts
+  flex-direction: row;
+  align-items: center;    // Vertikale Zentrierung von Bild und Details-Block
+  gap: 16px;
+  padding: 12px;          // Kompaktes Padding für Listenelemente
+  background-color: $background-color-card;
+  border: 1px solid $border-color-soft;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03); // Sehr subtiler Schatten
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    border-color: $border-color-medium;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  &.highlighted-offer {
+    border-color: $accent-color-blue;
+    // box-shadow: 0 2px 6px rgba($accent-color-blue, 0.07); // Etwas mehr Hervorhebung
+  }
+
+  // Mobile Ansicht: Die Elemente werden gestapelt
+  @media (max-width: $breakpoint-md) { // z.B. für Bildschirme schmaler als 768px
+    .offer {
+      flex-direction: column;    // Bild und Details-Block untereinander
+      align-items: center;       // Zentriert das Bild und den darunterliegenden .offer-details Block
+      padding: 16px 12px;        // Etwas mehr vertikales Padding für die Karte
+      gap: 12px;                 // Abstand zwischen Bild und .offer-details Block
+    }
+  
+    .offer-image {
+      width: 64px;               // Beibehaltung der kleinen Bildgröße für Kompaktheit
+      height: 64px;
+      margin-bottom: 0;          // Abstand wird durch 'gap' im .offer Parent geregelt
+    }
+  
+    .offer-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;       // Zentriert die meisten Kinder (wie Buttons, Preis-Block)
+      gap: 8px;                  // Konsistenter, enger Abstand zwischen den Elementen
+      width: 100%;               // .offer-details Block nimmt volle Breite der Karte ein
+  
+      // Universeller Reset und Basis-Styling für direkte Kinder von .offer-details auf Mobilgeräten
+      // (h3, div.offer-type-info, ul.offer-features, UButton-Komponenten etc.)
+      > * {
+        grid-column: auto !important; // Desktop-Grid-Layout explizit aufheben
+        grid-row: auto !important;
+        justify-self: auto !important;
+        align-self: auto !important;   // Spezifische Ausrichtungen vom Desktop zurücksetzen
+        margin: 0;                  // Abstände primär über 'gap' des Flex-Parents
+        max-width: 100%;            // Verhindert Überlaufen
+        // width: auto; // Wird bei Bedarf unten spezifischer gesetzt
+        text-align: center;         // Standard-Textausrichtung für Kinder
+      }
+  
+      // Visuelle Reihenfolge und spezifisches Styling mit der 'order'-Eigenschaft
+      > h3 { // Titel
+        order: 1;
+        font-size: 1rem;        // Kompakt, aber lesbar (ca. 16px)
+        font-weight: 600;
+        line-height: 1.3;
+        width: 100%;            // Nimmt volle Breite für effektives text-align: center
+        white-space: normal;    // Erlaubt Umbruch für längere Titel
+        overflow: visible;      // Desktop-Eigenschaften zurücksetzen
+        text-overflow: clip;
+      }
+      > .offer-type-info {
+        order: 2;
+        font-size: 0.75rem;     // Klein und dezent (ca. 12px)
+        color: $text-color-secondary;
+      }
+      > .offer-delivery {
+        order: 3;
+        font-size: 0.75rem;
+        color: $text-color-subtle;
+        width: 100%; // Volle Breite, damit text-align:center wirkt
+        white-space: normal; // Erlaubt Umbruch
+        overflow: visible;
+        text-overflow: clip;
+      }
+      
+      > .offer-price {
+        order: 4;
+        margin-top: 6px;        // Etwas Abstand nach oben zum Info-Block
+        strong { 
+          font-size: 1.125rem;  // Preisgröße (ca. 18px)
+          font-weight: 600;
+        }
+        .shipping { font-size: 0.7rem; } // "inkl. Versand"
+      }
+      
+      // Buttons untereinander, zentriert und mit guter Tappbarkeit
+      > .info-button {
+        order: 5;
+        width: 100%;
+        max-width: 240px;       // Maximale Breite für Buttons
+        font-size: 0.875rem !important; // Angepasste Schriftgröße für Mobil
+        padding: 8px 10px !important;   // Angepasstes Padding
+        margin-top: 6px;        // Abstand zum Preis
+      }
+      > .select-system-button {
+        order: 6;
+        width: 100%;
+        max-width: 240px;
+        font-size: 0.9375rem !important; // "Auswählen" Button präsenter
+        padding: 10px 12px !important;
+      }
+  
+      > .offer-features { // Features bleiben für maximale Kompaktheit ausgeblendet
+        order: 7;
+        display: none !important;
+      }
+    }
+  }
+}
+
+.offer-image {
+  width: 56px;    // Kleineres Bild für die Desktop-Liste
+  height: 56px;
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: $background-color-hover;
+  padding: 4px;
+  flex-shrink: 0; // Verhindert Schrumpfen des Bildes
+}
+
+.offer-details { // Direkter Container der verschiedenen Info-Elemente
+  flex-grow: 1;  // Nimmt den restlichen Platz neben dem Bild ein
+  display: grid;
+  // Grid-Spalten: 1 (Hauptinfos) | 2 (Preis) | 3 (Aktionen)
+  grid-template-columns: minmax(0, 1fr) auto auto; 
+  gap: 10px 16px; // Reihenabstand (kleiner) Spaltenabstand (größer)
+  align-items: center;
+  width: 100%;   // Füllt den verfügbaren Platz
+
+  // Zuweisung der direkten Kinder zu den Grid-Zellen
+  // Die Reihenfolge im HTML: h3, div.offer-type-info, ul.offer-features, UButton.info-button, 
+  //                          div.offer-delivery, div.offer-price, UButton.select-system-button
+
+  > h3 { // Titel
+    grid-column: 1;   // Erste Spalte
+    grid-row: 1;      // Erste Zeile dieser Spalte
+    font-size: 0.9375rem; // ca. 15px
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; // "..." für zu lange Titel
+    align-self: end; // Am unteren Rand der Zelle ausrichten, wenn Zeile 2+3 Platz nehmen
+  }
+
+  > .offer-type-info { // Typ (z.B. Schließanlage)
+    grid-column: 1;
+    grid-row: 2;      // Zweite Zeile in Spalte 1
+    font-size: 0.75rem; // ca. 12px
+    color: $text-color-secondary;
+    padding: 0;       // Kein extra Padding/Background in der Liste
+    margin-top: 1px;  // Minimaler Abstand zum Titel
+  }
+  
+  > .offer-delivery { // Lieferzeit
+    grid-column: 1;
+    grid-row: 3;      // Dritte Zeile in Spalte 1
+    font-size: 0.75rem;
+    color: $text-color-subtle;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    strong {
+      color: $text-color-secondary;
+      font-weight: 500;
+    }
+  }
+
+  > .offer-price { // Preis
+    grid-column: 2;   // Zweite Hauptspalte
+    grid-row: 1 / span 3; // Erstreckt sich über alle 3 Zeilen der ersten Spalte
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;  // Text rechtsbündig
+    justify-content: center; // Vertikal zentrieren in der Zelle
+    text-align: right;
+    padding-left: 10px;     // Abstand zur ersten Spalte
+    margin: 0;
+
+    strong { // Preis-Text
+      font-size: 1.05rem;  // Etwas kleiner für die Liste (ca. 17px)
+      font-weight: 600;
+      color: $text-color-primary;
+      display: block;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .shipping { // "inkl. Versand"
+      font-size: 0.6875rem; // ca. 11px
+      color: $text-color-subtle;
+    }
+  }
+  
+  // Aktionsbuttons in der dritten Spalte
+  > .info-button { // UButton "Mehr Infos"
+    grid-column: 3;   // Dritte Hauptspalte
+    grid-row: 1;      // Erste Zeile dieser Spalte (oben)
+    justify-self: flex-end; // Button rechtsbündig in seiner Zelle
+    padding: 2px 0px !important; // Sehr kompakt
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+    text-decoration: none !important;
+    color: $accent-color-blue !important;
+    &:hover { text-decoration: underline !important; }
+  }
+
+  > .select-system-button { // UButton "Auswählen"
+    grid-column: 3;
+    grid-row: 2 / span 2; // Nimmt die Zeilen 2 und 3 in dieser Spalte ein (unten)
+    justify-self: flex-end; // Button rechtsbündig
+    align-self: center;     // Vertikal zentrieren über die gespannten Zeilen
+    padding: 6px 10px !important; // Kleinerer Button
+    font-size: 0.8rem !important;
+    min-width: auto !important; // Breite an Inhalt anpassen
+    line-height: 1.2 !important;
+    // margin-top: 4px; // Ggf. kleiner Abstand zum Info-Button, falls sie näher rücken
+  }
+
+  > .offer-features { // Feature-Liste
+    display: none !important; // Auf Desktop komplett ausblenden für maximale Kompaktheit
+                              // Wird in der @media-Query für Mobilgeräte wieder eingeblendet
+  }
+}
+
+// Optionale Styles für eine größere, hervorgehobene Karte, falls du selectedModelOffer anders darstellen willst
+// Diese sind von den obigen List-Item Styles getrennt.
+.offer-main-highlighted {
+  margin-bottom: 24px; // Abstand zur folgenden Liste
+  .offer.spacious-card { // Eine spezielle Klasse für die große Karte
+    flex-direction: row; // Auch auf Desktop als Reihe, aber mit mehr Platz
+    padding: 24px;
+    border-radius: 16px;
+    align-items: flex-start; // Oben ausrichten, wenn Inhalt unterschiedlich hoch
+
+    .offer-image-large { // Ein spezielles Bild für die große Karte
+      width: 150px;
+      height: 150px;
+      padding: 10px;
+      margin-right: 24px;
+      flex-shrink: 0;
+    }
+    
+    // Die .offer-details der großen Karte könnte display: flex; flex-direction: column; nutzen
+    .offer-details.spacious-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; // Linksbündig für die große Karte
+      gap: 12px;
+
+      h3 { font-size: 1.5rem; } // Größerer Titel
+      .offer-type-info { font-size: 0.9rem; background-color: $background-color-hover; padding: 4px 10px; border-radius: 20px; }
+      .offer-delivery { font-size: 0.9rem; }
+      .offer-features.spacious-features {
+        display: block !important; // Features hier immer anzeigen
+        margin-top: 8px;
+        ul { list-style: disc; padding-left: 20px; }
+        li { font-size: 0.9rem; margin-bottom: 4px; }
+        .icon-check { color: $accent-color-green; margin-right: 6px; }
+      }
+      .offer-price {
+        text-align: left; // Preis linksbündig für die große Karte
+        margin-top: 16px;
+        strong { font-size: 1.75rem; }
+        .shipping { font-size: 0.8rem; }
+      }
+      .offer-actions.spacious-actions { // Eigener Wrapper im HTML nötig
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+        .info-button.large-info { font-size: 0.9rem !important; }
+        .select-system-button.large-buy { font-size: 1rem !important; padding: 10px 20px !important; }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// === KAUFEN MODAL STYLING (Summary Modal) ===
+.summary-modal.modern-design {
+  max-width: 90%; // Statt 80% für etwas mehr Raum, oder wie du es final hattest
+
+  :deep(.u-modal-overlay) {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  :deep(.u-modal-container) {
+    padding: 0;
+    width: 100%; // Max-width kommt vom .summary-modal.modern-design oder .modal-content
+    height: auto; // Passt sich an Inhalt an bis max-height
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :deep(.u-modal-content) {
+    background-color: transparent;
+    padding: 0;
+    overflow-y: visible; // Damit unser .modal-content scrollt
+    width: 100%;
+    max-height: none; // Höhe wird durch .modal-content (unten) gesteuert
+    box-shadow: none;
+  }
+
+  .modal-content {
+    background: $background-color-card;
+    border-radius: 18px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12),
+      0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden; // Für border-radius und Scroll-Verhalten
+    display: flex;
+    flex-direction: column;
+    width: 100%; // Nimmt Breite von .summary-modal.modern-design an
+    max-height: 90vh; // Maximale Höhe des Modals
+    // position: absolute; left: 5%; // Diese waren vorher da, überdenke ob sie noch nötig sind
+    // wenn .summary-modal.modern-design max-width hat und
+    // u-modal-container es zentriert.
+
+    @media (max-width: $breakpoint-md) {
+      border-radius: 12px;
+      max-width: 100vw; // Auf kleineren Screens volle Breite/Höhe
+      max-height: 100vh;
+      border-radius: 0; // Oft keine Rundung bei Fullscreen Mobile
+      // left: 0; position: static; // oder anpassen
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      max-height: 100dvh;
+    }
+  }
+
+  .modal-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid $border-color-soft;
+    background: rgba(248, 248, 248, 0.9); // Leichter Blur-Effekt Hintergrund
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      margin: 0;
+      flex: 1 1 auto;
+      color: $text-color-primary;
+      font-size: 1.25rem; // ca. 20px
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding-right: 16px;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 1.125rem; // ca. 18px
+      }
+    }
+  }
+
+  .close-button {
+    // Für UButton mit dieser Klasse
+    background-color: rgba(0, 0, 0, 0.08) !important; // Helleres Grau
+    color: $text-color-secondary !important;
+    font-weight: 400 !important; // Normales Gewicht für X
+    border-radius: 50% !important;
+    width: 36px !important; // Feste Größe
+    height: 36px !important; // Feste Größe
+    min-width: auto !important;
+    padding: 0 !important; // Kein zusätzliches Padding
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.2s ease !important;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.12) !important;
+      transform: none !important; // Keine Skalierung/Schatten für minimalistischen Close-Button
+      box-shadow: none !important;
+    }
+
+    &:active {
+      transform: none !important;
+    }
+  }
+
+  .modal-body-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px; // Padding für den scrollbaren Inhalt
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 8px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: $breakpoint-md) {
+      padding: 20px;
+    }
+  }
+
+  .cylinder-image-container {
+    padding: 16px 0;
+    text-align: center;
+    margin-bottom: 24px;
+
+    .cylinder-image {
+      max-width: 80%; // Damit es nicht zu breit wird
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+  }
+
+  .content-wrapper {
+    // Wrapper für Tabellen etc. innerhalb des scrollbaren Bereichs
+    padding-top: 0; // Padding kommt von .modal-body-scrollable
+    padding-bottom: 16px;
+
+    .config-heading {
+      font-size: 1.125rem; // ca. 18px
+      font-weight: 600;
+      color: $text-color-primary;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      letter-spacing: -0.005em;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .zylinder-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: $background-color-card; // Weißer Hintergrund für die Tabelle
+    border-radius: 12px;
+    overflow: hidden; // Wichtig für border-radius auf der Tabelle selbst
+    border: 1px solid $border-color-soft;
+    margin-bottom: 24px;
+
+    thead {
+      background-color: $background-color-hover;
+
+      th {
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 500;
+        color: $text-color-secondary;
+        font-size: 0.8125rem; // ca. 13px
+        letter-spacing: normal;
+        border-bottom: 1px solid $border-color-soft;
+        text-transform: none;
+      }
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background-color: rgba($accent-color-blue, 0.04);
+        }
+
+        &:not(:last-child) td {
+          border-bottom: 1px solid $border-color-soft;
+        }
+      }
+
+      td {
+        padding: 12px 16px;
+        color: $text-color-primary;
+        font-size: 0.875rem; // ca. 14px
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .keys-info,
+  .keys-list li {
+    background-color: $background-color-hover;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    color: $text-color-primary;
+
+    strong {
+      font-weight: 500;
+    }
+  }
+
+  .keys-info {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .keys-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: darken($background-color-hover, 3%);
+      }
+
+      strong {
+        margin-right: 8px;
+        min-width: 90px;
+        flex-shrink: 0;
+      }
+
+      span {
+        color: $text-color-secondary;
+        word-break: break-word;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        strong {
+          margin-bottom: 4px;
+          min-width: auto;
+        }
+      }
+    }
+  }
+
+  .price-and-widerruf {
+    background-color: $background-color-hover; // Heller Bereich für Checkboxen und Preis
+    border-top: 1px solid $border-color-soft;
+    padding: 24px 0; // Padding wird durch .modal-body-scrollable seitlich gehandhabt
+    margin-top: 16px;
+
+    h2 {
+      // "Wichtige Hinweise" Titel
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $text-color-primary;
+      margin-bottom: 16px;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .required-checks {
+    max-width: 550px; // Etwas schmaler für bessere Lesbarkeit der Labels
+    margin: 0 auto 24px;
+    padding: 0 16px; // Padding falls .modal-body-scrollable es nicht genug macht
+  }
+
+  .widerruf-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    background-color: $background-color-card;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid $border-color-soft;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      border-color: rgba($accent-color-blue, 0.4);
+      // box-shadow: 0 2px 8px rgba($accent-color-blue, 0.08); // Weniger Schatten
+    }
+
+    :deep(.u-checkbox) {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    span {
+      flex: 1;
+      font-size: 0.875rem;
+      color: $text-color-primary;
+      line-height: 1.5;
+    }
+
+    .info-icon {
+      position: relative;
+      color: $accent-color-blue;
+      font-size: 1.1rem;
+      cursor: help;
+      transition: color 0.2s ease;
+      margin-left: auto;
+      flex-shrink: 0;
+      padding-left: 8px;
+
+      &:hover {
+        color: darken($accent-color-blue, 15%);
+      }
+    }
+  }
+
+  // Dein .error-message-pflichtfelder von der vorherigen Antwort
+  .error-message-pflichtfelder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-color: rgba($accent-color-red, 0.08);
+    border: 1px solid rgba($accent-color-red, 0.2);
+
+    .error-icon {
+      font-size: 1.3rem;
+      color: $accent-color-red;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .error-text-content {
+      color: darken($accent-color-red, 15%);
+      font-weight: 500;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+  }
+
+
+  .offer-price-summery {
+    // Preis im Modal
+    text-align: center;
+    padding: 20px;
+    background-color: $background-color-card;
+    border-radius: 12px;
+    border: 1px solid $border-color-soft; // Sanfter Rand
+    margin: 24px auto 0;
+    max-width: 550px;
+    font-size: 1rem;
+    color: $text-color-secondary;
+
+    strong {
+      display: block;
+      font-size: 1.875rem; // ca. 30px
+      font-weight: 600;
+      color: $text-color-primary;
+      margin: 6px 0;
+      letter-spacing: -0.015em;
+    }
+
+    .shipping {
+      display: block;
+      font-size: 0.8125rem;
+      color: $text-color-subtle;
+      margin-top: 4px;
+    }
+  }
+
+  .modal-footer {
+    background-color: $background-color-card;
+    border-top: 1px solid $border-color-soft;
+    padding: 20px 32px;
+    display: flex;
+    justify-content: center; // Button rechts
+    flex-shrink: 0;
+
+    @media (max-width: $breakpoint-md) {
+      justify-content: center;
+      padding: 16px 20px;
+    }
+
+    button {
+      // Für UButton :class="{ 'pseudo-disabled': ...}"
+      min-width: 180px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 10px;;
+
+      // Farben kommen von UButton props (color="blue")
+      &.pseudo-disabled {
+        // Dein existierender Stil für pseudo-disabled
+        background-color: #c6c6c8 !important; // Nuxt UI Grau als Beispiel
+        border-color: #c6c6c8 !important;
+        color: $text-color-subtle !important;
+        cursor: not-allowed;
+
+        &:hover {
+          box-shadow: none !important;
+          transform: none !important;
+        }
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  }
+}
+
+// Fade Animation (bleibt gleich)
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 // KAUFEN MODAL STYLING
@@ -443,7 +1036,7 @@ $breakpoint-xl: 1200px;
     transition: background-color 0.2s;
 
     &:hover {
-      background: darken($color-red, 5%) !important;
+      background: darken($accent-color-red, 5%) !important;
       transform: translateY(-1px);
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -482,6 +1075,32 @@ $breakpoint-xl: 1200px;
       padding: 0 20px;
     }
   }
+
+  .table-scroll-wrapper {
+    width: 100%; // Nimmt die volle Breite des .content-wrapper ein
+    overflow-x: auto; // Ermöglicht horizontales Scrollen nur für diesen Wrapper
+    -webkit-overflow-scrolling: touch; // Für sanftes Scrollen auf iOS
+
+    // Optional: Styling für die horizontale Scrollbar (konsistent mit vertikaler)
+    &::-webkit-scrollbar {
+      height: 8px; // Höhe für horizontale Scrollbar
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 0 8px; // Etwas Einzug für die horizontale Scrollbar-Spur
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.35);
+    }
+  }
+
 
   /* Zylinderbild-Container Styling */
   .cylinder-image-container {
@@ -828,7 +1447,7 @@ $breakpoint-xl: 1200px;
     border-top: 1px solid rgba(0, 0, 0, 0.07);
     padding: 24px 32px;
     display: flex;
-    justify-content: flex-end; // Button rechtsbündig, üblich bei Apple
+    justify-content: center; // Button rechtsbündig, üblich bei Apple
     flex-shrink: 0; // Verhindert Schrumpfen
 
     @media (max-width: $breakpoint-md) {
@@ -851,6 +1470,7 @@ $breakpoint-xl: 1200px;
         padding: 14px 28px; // Etwas größer für mobile Taps
       }
     }
+
     .modal-footer button.pseudo-disabled {
       background-color: #c6c6c8; // Oder eine andere Farbe für "deaktiviert"
       cursor: not-allowed; // Zeigt an, dass nicht geklickt werden kann (obwohl es technisch geht)
@@ -858,33 +1478,34 @@ $breakpoint-xl: 1200px;
       // color: #8e8e93; (Beispiel für Textfarbe)
     }
   }
+
   .error-message-pflichtfelder {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 12px 16px; 
-    margin-top: 10px;   
-    margin-bottom: 20px; 
-    border-radius: 10px;  
-    
-    
-    background-color: rgba(255, 59, 48, 0.08); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+
+    background-color: rgba(255, 59, 48, 0.08);
     border: 1px solid rgba(255, 59, 48, 0.2);
-  
+
     .error-icon {
-      font-size: 1.3rem;     
-      color: #ff3b30;        
-      margin-right: 10px;    
-      flex-shrink: 0;        
+      font-size: 1.3rem;
+      color: #ff3b30;
+      margin-right: 10px;
+      flex-shrink: 0;
     }
-  
+
     .error-text-content {
-      color: #BF281D;        // Ein dunkleres, gut lesbares Rot für den Text
-      font-weight: 500;       // Mittlere Schriftstärke (statt 'bold', was oft 700 ist)
-      font-size: 0.9rem;      // Ca. 14-15px, klar und deutlich
-      line-height: 1.4;       // Guter Zeilenabstand für Lesbarkeit
-      text-align: left;       // Text innerhalb des Spans ist linksbündig.
-                              // Die Zentrierung des gesamten Blocks erfolgt über justify-content der Eltern-Klasse.
+      color: #BF281D; // Ein dunkleres, gut lesbares Rot für den Text
+      font-weight: 500; // Mittlere Schriftstärke (statt 'bold', was oft 700 ist)
+      font-size: 0.9rem; // Ca. 14-15px, klar und deutlich
+      line-height: 1.4; // Guter Zeilenabstand für Lesbarkeit
+      text-align: left; // Text innerhalb des Spans ist linksbündig.
+      // Die Zentrierung des gesamten Blocks erfolgt über justify-content der Eltern-Klasse.
     }
   }
 }
@@ -971,7 +1592,7 @@ $breakpoint-xl: 1200px;
       transition: background-color 0.2s;
 
       &:hover {
-        background: darken($color-red, 5%) !important;
+        background: darken($accent-color-red, 5%) !important;
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
@@ -1253,6 +1874,8 @@ $breakpoint-xl: 1200px;
     }
   }
 }
+
+
 
 // Smooth transitions
 * {
