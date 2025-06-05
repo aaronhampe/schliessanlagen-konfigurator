@@ -171,7 +171,8 @@ $breakpoint-xl: 1200px;
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 100%; /* Falls erforderlich */
+  height: 100%;
+  /* Falls erforderlich */
 
   @media (max-width: $breakpoint-md) {
     margin: 10px 0;
@@ -327,8 +328,12 @@ $breakpoint-xl: 1200px;
   }
 }
 
-/* Responsive-Anpassungen für den Select-System-Button */
 .select-system-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
   @media (max-width: $breakpoint-lg) {
     font-size: 0.95rem;
     padding: 8px 12px;
@@ -340,303 +345,918 @@ $breakpoint-xl: 1200px;
   }
 }
 
-// Modal Styles
+// KAUFEN MODAL STYLING
+
 .summary-modal.modern-design {
-  .modal-content {
-    background: #fff;
-    border-radius: 6px;
+  max-width: 80%;
+
+  :deep(.u-modal-overlay) {
+    background-color: rgba(0, 0, 0, 0.5);
+
+  }
+
+  :deep(.u-modal-container) {
     padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Innerer Content-Wrapper von Nuxt UI anpassen, um Scrollen zu ermöglichen
+  :deep(.u-modal-content) {
+    background-color: transparent; // Macht den Hintergrund unseres 
+    padding: 0;
+    overflow-y: visible; // Erlaubt unserem .modal-content
+    width: 100%; // Nimmt die Breite des Containers (
+    max-height: none;
+    box-shadow: none; // Schatten wird von unserem 
+  }
+
+  // Unser Haupt-Modal-Inhaltscontainer
+  .modal-content {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12),
+      0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    max-height: 90vh;
+    max-width: 90%;
+    position: absolute;
+    left: 5%;
 
     @media (max-width: $breakpoint-md) {
-      gap: 15px;
+      border-radius: 12px;
+      max-width: 100vw;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      max-height: 100dvh; // Dynamische Viewport Höhe 
     }
   }
 
-  /* Header-Bereich */
   .modal-header {
-    .header-title {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #263238;
-      color: #fff;
-      padding: 16px 20px;
-      border-radius: 6px 6px 0 0;
+    padding: 20px 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+    background: rgba(248, 248, 248, .8);
+    z-index: 10;
+    width: 100%;
+  }
 
-      @media (max-width: $breakpoint-md) {
-        padding: 12px 15px;
-      }
+  .header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; // << wichtig
+  }
 
-      h2 {
-        margin: 0;
-        color: #fff;
-        font-size: 1.4rem;
+  .header-title h2 {
+    margin: 0;
+    flex: 1 1 auto; // nimmt den freien Platz ein
+    color: #1d1d1f;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.016em;
 
-        @media (max-width: $breakpoint-sm) {
-          font-size: 1.1rem;
-        }
-      }
-
-      .close-button {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-
-        @media (max-width: $breakpoint-sm) {
-          padding: 4px 8px;
-          font-size: 0.8rem;
-        }
-      }
+    @media (max-width: $breakpoint-md) {
+      font-size: 19px;
     }
   }
 
-  /* Flex-Container Card für Bild + Infotext */
-  .model-overview-card {
+  .close-button {
+    background-color: #dc2626 !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 50%;
+    min-width: 36px;
+    min-height: 36px;
     display: flex;
-    gap: 20px;
-    padding: 20px;
-    margin: 0 20px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
 
-    @media (max-width: $breakpoint-lg) {
-      gap: 15px;
-      padding: 15px;
+    &:hover {
+      background: darken($color-red, 5%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  /* Neuer scrollbarer Body-Bereich */
+  .modal-body-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 32px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.35);
+      }
     }
 
     @media (max-width: $breakpoint-md) {
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      padding: 15px;
-    }
-
-    .model-image-section {
-      flex: 0 0 auto;
-      max-width: 200px;
-
-      @media (max-width: $breakpoint-lg) {
-        max-width: 180px;
-      }
-
-      @media (max-width: $breakpoint-md) {
-        max-width: 150px;
-      }
-
-      img {
-        max-width: 100%;
-        border-radius: 4px;
-        display: block;
-      }
-    }
-
-    .model-info-section {
-      flex: 1;
-      display: flex;
-      align-items: center;
-
-      .model-info-text {
-        font-size: 0.95rem;
-        line-height: 1.4;
-        margin: 0;
-        color: #333;
-
-        @media (max-width: $breakpoint-lg) {
-          font-size: 0.9rem;
-          line-height: 1.35;
-        }
-
-        @media (max-width: $breakpoint-md) {
-          font-size: 0.85rem;
-          text-align: center;
-        }
-      }
+      padding: 0 20px;
     }
   }
 
-  /* content-wrapper => restlicher Inhalt */
+  /* Zylinderbild-Container Styling */
+  .cylinder-image-container {
+    padding: 24px 0; // Abstand oben/unten
+    text-align: center; // Zentriert das Bild, falls es schmaler ist
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07); // Optionale Trennlinie
+    margin-bottom: 24px;
+
+    .cylinder-image {
+      max-width: 100%;
+      max-height: 250px; // Höhe begrenzen, damit es nicht zu dominant wird
+      object-fit: contain;
+      border-radius: 12px; // Abgerundete Ecken für das Bild
+    }
+  }
+
+
+  /* Inhalt-Wrapper (Zylinder, Schlüssel) */
   .content-wrapper {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    @media (max-width: $breakpoint-md) {
-      padding: 0 15px;
-    }
+    padding-top: 24px; // Abstand zum Bild oder Header
+    padding-bottom: 24px; // Abstand zum nächsten Block
 
     .config-heading {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+
+
+
       @media (max-width: $breakpoint-sm) {
         font-size: 1.1rem;
       }
     }
 
+    // Tabelle im Apple-Stil
     .zylinder-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate; // Wichtig für border-spacing und border-radius auf table
+      border-spacing: 0;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: visible; // Nicht mehr hidden, da die Tabelle nicht scrollen soll
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      margin-bottom: 32px; // Mehr Abstand
 
       @media (max-width: $breakpoint-md) {
-        font-size: 0.85rem;
-      }
-
-      @media (max-width: $breakpoint-sm) {
-        /* Option für kleine Bildschirme: horizontales Scrollen */
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        font-size: 0.875rem;
+        border-radius: 8px;
       }
 
       thead {
-        background-color: #eee;
+        background-color: #f9f9fb; // Noch helleres Grau für Tabellenkopf
+
+        th {
+          padding: 14px 18px; // Etwas mehr Padding
+          text-align: left;
+          font-weight: 600;
+          color: #333333; // Etwas weicher als #1d1d1f
+          font-size: 0.8125rem; // Kleinere Schrift für Header
+          letter-spacing: -0.005em;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+          text-transform: uppercase; // Optional für Header-Texte
+
+          @media (max-width: $breakpoint-md) {
+            padding: 10px 12px;
+            font-size: 0.75rem;
+          }
+        }
       }
 
-      th, td {
-        border: 1px solid #ccc;
-        padding: 6px 8px;
-        text-align: left;
+      tbody {
+        tr {
+          transition: background-color 0.15s ease;
 
-        @media (max-width: $breakpoint-md) {
-          padding: 4px 6px;
+          &:hover {
+            background-color: rgba(0, 122, 255, 0.04); // Apple Blue Akzent
+          }
+
+          &:not(:last-child) td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Subtilere Linien
+          }
+        }
+
+        td {
+          padding: 14px 18px;
+          color: #1d1d1f;
+          font-size: 0.9375rem; // ca. 15px
+          vertical-align: middle; // Bessere Ausrichtung bei mehrzeiligem Inhalt
+
+          @media (max-width: $breakpoint-md) {
+            padding: 12px;
+            font-size: 0.875rem;
+          }
         }
       }
     }
 
     .keys-info {
-      font-size: 0.9rem;
+      background-color: #f5f5f7;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 32px; // Mehr Abstand
+      font-size: 0.9375rem;
+      color: #1d1d1f;
+      display: flex;
+      align-items: center;
+      justify-content: center; // Zentriert den Text
+      text-align: center;
+
+      strong {
+        font-weight: 600;
+        margin-left: 6px;
+      }
 
       @media (max-width: $breakpoint-md) {
-        font-size: 0.85rem;
+        font-size: 0.875rem;
+        padding: 12px 16px;
+        border-radius: 8px;
       }
     }
 
     .keys-list {
-      @media (max-width: $breakpoint-md) {
-        font-size: 0.85rem;
-        padding-left: 20px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        background-color: #f5f5f7;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 10px; // Etwas mehr Abstand zwischen Items
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        border: 1px solid transparent; // Für Hover-Effekt vorbereiten
+
+        &:hover {
+          background-color: #ebebed;
+          border-color: rgba(0, 0, 0, 0.05); // Subtiler Rand beim Hover
+          // transform: translateX(4px); // Kann man machen, aber nicht unbedingt Apple-like
+        }
+
+        strong {
+          font-weight: 600;
+          color: #1d1d1f;
+          margin-right: 8px;
+          min-width: 100px; // Etwas weniger, passt sich besser an
+          flex-shrink: 0;
+        }
+
+        span {
+          color: #555555; // Etwas dunkler für bessere Lesbarkeit
+          font-size: 0.9375rem;
+          word-break: break-word; // Wichtig für lange Listen von Positionen
+        }
+
+        @media (max-width: $breakpoint-md) {
+          padding: 12px 16px;
+          border-radius: 8px;
+          flex-direction: column;
+          align-items: flex-start;
+
+          strong {
+            margin-bottom: 6px; // Mehr Abstand
+            min-width: auto;
+          }
+
+          span {
+            font-size: 0.875rem;
+          }
+        }
       }
     }
   }
 
-  /* Price & Widerruf */
+  /* Preis & Checkboxen Bereich */
   .price-and-widerruf {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 20px;
+    background-color: #f5f5f7; // Behält Hintergrundfarbe
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 32px 0; // Padding nur oben/unten, links/rechts kommt von .modal-body-scrollable
+    margin-top: 16px; // Abstand zum content-wrapper
 
     @media (max-width: $breakpoint-md) {
-      padding: 0 15px;
+      padding: 20px 0;
     }
 
     h2 {
-      margin-bottom: 10px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 24px; // Mehr Abstand
+      text-align: center;
+      letter-spacing: -0.01em;
 
       @media (max-width: $breakpoint-sm) {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
     }
 
     .required-checks {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
-      width: 100%;
-      max-width: 500px;
+      max-width: 600px;
+      margin: 0 auto 32px; // Mehr Abstand nach unten
     }
 
     .widerruf-label {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      text-align: left;
+      align-items: flex-start; // Besser für mehrzeiligen Text neben Checkbox
+      gap: 12px;
+      padding: 16px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08); // Subtilerer Rand
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: rgba(0, 122, 255, 0.4); // Apple Blue Akzent
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.08); // Sanfter Schatten
+      }
 
       @media (max-width: $breakpoint-md) {
-        font-size: 0.85rem;
+        padding: 12px;
+        border-radius: 8px;
+      }
+
+      :deep(.u-checkbox) {
+        margin-top: 3px; // Feinjustierung für vertikale Ausrichtung
+        flex-shrink: 0;
+      }
+
+      span {
+        // Der Text neben der Checkbox
+        flex: 1;
+        font-size: 0.9375rem;
+        color: #1d1d1f;
+        line-height: 1.5;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 0.875rem;
+        }
       }
 
       .info-icon {
         position: relative;
-        cursor: pointer;
+        color: #007aff;
+        font-size: 1.125rem; // Etwas größer
+        cursor: help;
+        transition: color 0.2s ease;
+        margin-left: auto; // Schiebt Icon nach rechts, falls nötig
+        flex-shrink: 0;
+        padding-left: 8px; // Kleiner Abstand zum Text
+
+        &:hover {
+          color: #0056b3; // Dunkleres Blau beim Hover
+        }
 
         .tooltip-box {
           position: absolute;
           z-index: 1000;
-          top: 120%;
-          left: 50%;
-          transform: translateX(-50%);
-          background: #fff;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          padding: 8px 12px;
-          width: 300px;
-          font-size: 0.85rem;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          bottom: calc(100% + 10px); // Tooltip über dem Icon
+          right: 50%; // Zentriert starten
+          transform: translateX(50%); // Zentriert ausrichten
+          background: #2c2c2e; // Dunkler Tooltip-Hintergrund (iOS-Stil)
+          color: #ffffff; // Heller Text
+          border: none; // Kein Rand für diesen Stil
+          border-radius: 8px; // Weichere Ecken
+          padding: 10px 14px; // Kompakteres Padding
+          width: 300px; // Feste Breite
+          font-size: 0.8125rem; // Kleinere Schrift im Tooltip
+          line-height: 1.4;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); // Deutlicherer Schatten
+
+          // Pfeil unten (angepasst)
+          &::after {
+            content: '';
+            position: absolute;
+            top: 100%; // Pfeil am unteren Rand des Tooltips
+            right: calc(50% - 6px); // Zentriert
+            width: 12px;
+            height: 12px;
+            background: #2c2c2e;
+            transform: rotate(45deg);
+            margin-top: -6px; // Überlappt für nahtlosen Übergang
+          }
 
           @media (max-width: $breakpoint-md) {
-            width: 250px;
-            font-size: 0.8rem;
+            width: 260px;
+            font-size: 0.75rem;
           }
 
           @media (max-width: $breakpoint-sm) {
-            width: 200px;
-            left: auto;
-            right: 0;
-            transform: none;
+            width: clamp(200px, 80vw, 280px); // Flexible Breite
+            right: auto; // Auf kleineren Screens anders positionieren
+            left: 50%;
+            transform: translateX(-50%);
+
+            &::after {
+              left: calc(50% - 6px); // Zentrierung des Pfeils beibehalten
+              right: auto;
+            }
           }
         }
       }
     }
 
-    .offer-price {
-      margin-top: 16px;
-      font-size: 1.1rem;
+    .offer-price-summery {
+      text-align: center;
+      padding: 24px;
+      background-color: #ffffff;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.08); // Standard Rand
+      // border: 2px solid #007aff; // Blaue Hervorhebung nur bei Bedarf
+      margin-top: 32px;
+      font-size: 1.125rem;
+      color: #666666; // Etwas dunklerer Text
 
-      @media (max-width: $breakpoint-md) {
-        font-size: 1rem;
-      }
+      strong {
+        display: block;
+        font-size: 2rem; // Etwas kleiner, aber immer noch prominent
+        font-weight: 600;
+        color: #1d1d1f;
+        margin: 4px 0 8px; // Angepasste Margins
+        letter-spacing: -0.02em;
 
-      span {
-        font-size: 12px;
-
-        @media (max-width: $breakpoint-md) {
-          font-size: 10px;
+        @media (max-width: $breakpoint-sm) {
+          font-size: 1.75rem;
         }
       }
 
-      strong {
-        margin-left: 5px;
+      .shipping {
+        display: block;
+        font-size: 0.8125rem; // Kleinere Schrift für Versandinfo
+        color: #86868b;
+        margin-top: 4px;
       }
     }
   }
 
-  /* Footer mit Button */
+  /* Footer mit Kaufbutton */
   .modal-footer {
+    background-color: #ffffff; // Weißer Hintergrund
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 24px 32px;
     display: flex;
-    text-align: center;
-    justify-content: center;
-    padding: 0 20px 20px 20px;
-    gap: 10px;
+    justify-content: flex-end; // Button rechtsbündig, üblich bei Apple
+    flex-shrink: 0; // Verhindert Schrumpfen
 
     @media (max-width: $breakpoint-md) {
-      padding: 0 15px 15px 15px;
+      padding: 16px 20px;
+      justify-content: center; // Button zentriert auf kleineren Screens
     }
 
     button {
-      min-width: 120px;
+      // Styling für den UButton
+      min-width: 180px; // Etwas schmaler
+      padding: 12px 28px; // Kompakteres Padding
+      font-size: 1rem; // Standard Schriftgröße
+      font-weight: 500; // Etwas weniger fett
+      border-radius: 10px; // Passend zu anderen Elementen
+
 
       @media (max-width: $breakpoint-sm) {
-        min-width: unset;
         width: 100%;
+        min-width: unset;
+        padding: 14px 28px; // Etwas größer für mobile Taps
+      }
+    }
+    .modal-footer button.pseudo-disabled {
+      background-color: #c6c6c8; // Oder eine andere Farbe für "deaktiviert"
+      cursor: not-allowed; // Zeigt an, dass nicht geklickt werden kann (obwohl es technisch geht)
+      // Ggf. weitere Stile, um es wie den :disabled Zustand von UButton aussehen zu lassen
+      // color: #8e8e93; (Beispiel für Textfarbe)
+    }
+  }
+  .error-message-pflichtfelder {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 12px 16px; 
+    margin-top: 10px;   
+    margin-bottom: 20px; 
+    border-radius: 10px;  
+    
+    
+    background-color: rgba(255, 59, 48, 0.08); 
+    border: 1px solid rgba(255, 59, 48, 0.2);
+  
+    .error-icon {
+      font-size: 1.3rem;     
+      color: #ff3b30;        
+      margin-right: 10px;    
+      flex-shrink: 0;        
+    }
+  
+    .error-text-content {
+      color: #BF281D;        // Ein dunkleres, gut lesbares Rot für den Text
+      font-weight: 500;       // Mittlere Schriftstärke (statt 'bold', was oft 700 ist)
+      font-size: 0.9rem;      // Ca. 14-15px, klar und deutlich
+      line-height: 1.4;       // Guter Zeilenabstand für Lesbarkeit
+      text-align: left;       // Text innerhalb des Spans ist linksbündig.
+                              // Die Zentrierung des gesamten Blocks erfolgt über justify-content der Eltern-Klasse.
+    }
+  }
+}
+
+// Fade Animation (bleibt gleich)
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease; // Etwas sanfter
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+//INFO MODAL STYLING
+
+.info-button {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+
+.info-modal {
+  width: 100vw;
+
+  &.modern-design {
+
+
+    :deep(.u-modal-container) {
+      align-items: center;
+      padding: 0;
+    }
+
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(0, 0, 0, .08);
+      background: rgba(248, 248, 248, .8);
+      z-index: 10;
+      width: 100%;
+    }
+
+    .header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; // << wichtig
+    }
+
+    .header-title h2 {
+      margin: 0;
+      flex: 1 1 auto; // nimmt den freien Platz ein
+      color: #1d1d1f;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.016em;
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 19px;
+      }
+    }
+
+    .close-button {
+      background-color: #dc2626 !important;
+      color: #fff !important;
+      font-weight: 600;
+      border-radius: 50%;
+      min-width: 36px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background: darken($color-red, 5%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .model-overview-card {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 60px;
+      padding: 60px;
+      background: #ffffff;
+      overflow-y: auto;
+      flex: 1;
+
+      @media (max-width: $breakpoint-lg) {
+        grid-template-columns: 320px 1fr;
+        gap: 40px;
+        padding: 40px;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 30px;
+      }
+
+      .model-image-section {
+        position: relative;
+
+        @media (max-width: $breakpoint-md) {
+          max-width: 300px;
+          margin: 0 auto;
+        }
+
+        .image-card {
+          background: #f5f5f7;
+          border-radius: 12px;
+          padding: 40px;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 320px;
+
+          img {
+            max-width: 100%;
+            height: auto;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.08));
+            transition: transform 0.3s ease;
+
+            &:hover {
+              transform: scale(1.05);
+            }
+          }
+        }
+
+        .security-badge {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: #0071e3;
+          color: white;
+          padding: 8px 16px;
+          border-radius: 980px;
+          font-size: 13px;
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+      }
+
+      .model-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        .info-header {
+          .model-title {
+            font-size: 32px;
+            line-height: 1.125;
+            font-weight: 600;
+            letter-spacing: -0.022em;
+            color: #1d1d1f;
+            margin: 0 0 12px 0;
+
+            @media (max-width: $breakpoint-md) {
+              font-size: 28px;
+            }
+          }
+
+          .model-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            border-radius: 980px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: -0.016em;
+          }
+        }
+
+        .model-info-text {
+          font-size: 17px;
+          line-height: 1.47059;
+          letter-spacing: -0.022em;
+          color: #1d1d1f;
+          margin: 0;
+          font-weight: 400;
+
+          @media (max-width: $breakpoint-md) {
+            font-size: 16px;
+          }
+
+          // Erste Zeile hervorheben
+          &::first-line {
+            font-weight: 600;
+            color: #1d1d1f;
+          }
+        }
+
+        .features-preview {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+
+          .feature-tag {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.16);
+            color: #1d1d1f;
+            padding: 8px 16px;
+            border-radius: 980px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.016em;
+            transition: all 0.15s ease;
+
+            &:hover {
+              background: #f5f5f7;
+              border-color: transparent;
+            }
+          }
+        }
+
+        .action-hint {
+          margin-top: auto;
+          padding: 16px 20px;
+          background: #f5f5f7;
+          border-radius: 10px;
+          color: #6e6e73;
+          font-size: 14px;
+          text-align: center;
+          font-weight: 400;
+          letter-spacing: -0.016em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          .hint-icon {
+            font-size: 16px;
+            opacity: 0.8;
+          }
+        }
       }
     }
   }
+}
+
+// Scrollbar styling für Webkit
+.info-modal.modern-design {
+  .model-overview-card {
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .info-modal.modern-design {
+    .modal-content {
+      background: #000000;
+    }
+
+    .modal-header {
+      background: rgba(29, 29, 31, 0.8);
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+
+      .header-title {
+        h2 {
+          color: #f5f5f7;
+        }
+
+        .close-button {
+          background: rgba(255, 255, 255, 0.08) !important;
+          color: #f5f5f7 !important;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+          }
+        }
+      }
+    }
+
+    .model-overview-card {
+      background: #000000;
+
+      .model-image-section {
+        .image-card {
+          background: #1d1d1f;
+        }
+
+        .security-badge {
+          background: #0a84ff;
+        }
+      }
+
+      .model-info-section {
+        .info-header {
+          .model-title {
+            color: #f5f5f7;
+          }
+
+          .model-type {
+            background: #1d1d1f;
+            color: #f5f5f7;
+          }
+        }
+
+        .model-info-text {
+          color: #f5f5f7;
+
+          &::first-line {
+            color: #f5f5f7;
+          }
+        }
+
+        .features-preview {
+          .feature-tag {
+            border-color: rgba(255, 255, 255, 0.16);
+            color: #f5f5f7;
+
+            &:hover {
+              background: #1d1d1f;
+            }
+          }
+        }
+
+        .action-hint {
+          background: #1d1d1f;
+          color: #86868b;
+        }
+      }
+    }
+  }
+}
+
+// Smooth transitions
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
 }
