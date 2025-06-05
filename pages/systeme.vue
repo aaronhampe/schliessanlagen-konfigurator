@@ -54,11 +54,19 @@ function openSummary(offer) {
   hasAcceptedLieferzeiten.value = false;
   showRequirementError.value = false; // Fehlermeldung zurücksetzen
   isSummaryModalOpen.value = true;
+  if (window.self !== window.top) { // Prüft, ob die Seite in einem iFrame läuft
+    window.scrollTo(0, 0);
+    // Alternativ, manchmal zuverlässiger für das Wurzelelement:
+    // document.documentElement.scrollTop = 0;
+  }
 }
 
 function openInfo(offer) {
   selectedOffer.value = offer;
   isInfoModalOpen.value = true;
+  if (window.self !== window.top) {
+    document.documentElement.scrollTop = 0;
+  }
 }
 
 // Umbenannt von confirmPurchase zu performActualPurchase, wird aufgerufen, wenn alle Checks ok sind.
