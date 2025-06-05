@@ -586,8 +586,8 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton color="red" class="close-button" @click="isSummaryModalOpen = false">
-            X
+          <UButton color="red" class="close-button" icon="i-heroicons-x-mark" @click="isSummaryModalOpen = false">
+            
           </UButton>
         </div>
       </div>

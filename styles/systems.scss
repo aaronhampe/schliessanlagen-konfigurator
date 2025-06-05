@@ -602,55 +602,52 @@ h3 {
 
   .modal-header {
     padding: 20px 30px;
-    border-bottom: 1px solid $border-color-soft;
-    background: rgba(248, 248, 248, 0.9); // Leichter Blur-Effekt Hintergrund
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+    background: rgba(248, 248, 248, .8);
     z-index: 10;
-    flex-shrink: 0;
+    width: 100%;
   }
 
   .header-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%; // << wichtig
+  }
 
-    h2 {
-      margin: 0;
-      flex: 1 1 auto;
-      color: $text-color-primary;
-      font-size: 1.25rem; // ca. 20px
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      padding-right: 16px;
+  .header-title h2 {
+    margin: 0;
+    flex: 1 1 auto; // nimmt den freien Platz ein
+    color: #1d1d1f;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.016em;
 
-      @media (max-width: $breakpoint-md) {
-        font-size: 1.125rem; // ca. 18px
-      }
+    @media (max-width: $breakpoint-md) {
+      font-size: 19px;
     }
   }
 
   .close-button {
-    // Für UButton mit dieser Klasse
-    background-color: rgba(0, 0, 0, 0.08) !important; // Helleres Grau
-    color: $text-color-secondary !important;
-    font-weight: 400 !important; // Normales Gewicht für X
-    border-radius: 50% !important;
-    width: 36px !important; // Feste Größe
-    height: 36px !important; // Feste Größe
-    min-width: auto !important;
-    padding: 0 !important; // Kein zusätzliches Padding
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: background-color 0.2s ease !important;
+    background-color: #dc2626 !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 50%;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.12) !important;
-      transform: none !important; // Keine Skalierung/Schatten für minimalistischen Close-Button
-      box-shadow: none !important;
+      background: darken($accent-color-red, 5%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     &:active {
-      transform: none !important;
+      transform: scale(0.98);
     }
   }
 
@@ -1005,7 +1002,7 @@ h3 {
 // KAUFEN MODAL STYLING
 
 .summary-modal.modern-design {
-  max-width: 90%; 
+  max-width: 90%;
   height: auto; // Erlaubt dem äußeren Modal-Wrapper, sich an den Inhalt anzupassen
   max-height: 100vh; // Verhindert, dass das Modal den Viewport übersteigt
 
@@ -1015,7 +1012,7 @@ h3 {
 
   :deep(.u-modal-container) {
     padding: 0;
-    width: 100%; 
+    width: 100%;
     height: auto; // Wichtig: Erlaubt dem Nuxt UI Container, sich anzupassen
     max-height: 100%; // Kann bleiben
     display: flex;
@@ -1026,10 +1023,10 @@ h3 {
   :deep(.u-modal-content) {
     background-color: transparent;
     padding: 0;
-    overflow-y: visible; 
+    overflow-y: visible;
     width: 100%;
     height: auto; // Wichtig: Erlaubt dem Nuxt UI Inhalts-Slot, sich anzupassen
-    max-height: none; 
+    max-height: none;
     box-shadow: none;
   }
 
@@ -1038,15 +1035,15 @@ h3 {
     background: $background-color-card; // oder #ffffff, je nach Variable
     border-radius: 18px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12),
-                0 4px 6px rgba(0, 0, 0, 0.05);
-    overflow: hidden; 
+      0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     width: 100%; // Nimmt die Breite des Elternelements an (gesteuert durch max-width auf .summary-modal.modern-design)
-    
+
     // WICHTIGSTE ÄNDERUNG HIER:
-    height: auto;             // Erlaubt dem Container, sich an den Inhalt anzupassen ("shrink-wrapping")
-    max-height: 90vh;         // Maximale Höhe, wenn der Inhalt viel Platz benötigt
+    height: auto; // Erlaubt dem Container, sich an den Inhalt anzupassen ("shrink-wrapping")
+    max-height: 90vh; // Maximale Höhe, wenn der Inhalt viel Platz benötigt
 
     // position: absolute; und left: 5%; sind hier wahrscheinlich nicht mehr nötig,
     // wenn die Zentrierung über flex auf :deep(.u-modal-container) erfolgt.
@@ -1056,21 +1053,21 @@ h3 {
 
     @media (max-width: $breakpoint-md) {
       border-radius: 12px;
-      max-width: 100vw; 
+      max-width: 100vw;
       max-height: 100vh; // Auf Mobilgeräten kann es potenziell höher werden
-      border-radius: 0; 
+      border-radius: 0;
       // left: 0; // Falls position: absolute noch verwendet wird
     }
 
     @media (max-width: $breakpoint-sm) {
-      max-height: 100dvh; 
+      max-height: 100dvh;
     }
   }
 
   .modal-header {
     padding: 20px 30px;
     border-bottom: 1px solid $border-color-soft;
-    background: rgba(248, 248, 248, 0.9); 
+    background: rgba(248, 248, 248, 0.9);
     z-index: 10;
     flex-shrink: 0; // Verhindert, dass der Header schrumpft
   }
@@ -1084,49 +1081,47 @@ h3 {
       margin: 0;
       flex: 1 1 auto;
       color: $text-color-primary;
-      font-size: 1.25rem; 
+      font-size: 1.25rem;
       font-weight: 600;
       letter-spacing: -0.01em;
       padding-right: 16px;
 
       @media (max-width: $breakpoint-md) {
-        font-size: 1.125rem; 
+        font-size: 1.125rem;
       }
     }
   }
 
   .close-button {
-    background-color: rgba(0, 0, 0, 0.08) !important; 
-    color: $text-color-secondary !important;
-    font-weight: 400 !important; 
-    border-radius: 50% !important;
-    width: 36px !important; 
-    height: 36px !important; 
-    min-width: auto !important;
-    padding: 0 !important; 
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: background-color 0.2s ease !important;
+    background-color: #dc2626 !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 50%;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.12) !important;
-      transform: none !important; 
-      box-shadow: none !important;
+      background: darken($accent-color-red, 5%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     &:active {
-      transform: none !important;
+      transform: scale(0.98);
     }
   }
 
   .modal-body-scrollable {
     flex-grow: 1; // Wächst, um den verfügbaren Platz zwischen Header und Footer zu füllen
-                   // Wenn .modal-content height: auto hat, wird dieser "verfügbare Platz" durch den Inhalt bestimmt.
+    // Wenn .modal-content height: auto hat, wird dieser "verfügbare Platz" durch den Inhalt bestimmt.
     flex-shrink: 1; // Erlaubt dem Body zu schrumpfen, wenn der Inhalt klein ist.
     overflow-y: auto; // Scrollbar nur, wenn der Inhalt die max-height des .modal-content überschreitet oder
-                      // wenn der .modal-content durch seinen eigenen Inhalt größer als 90vh wird.
-    padding: 24px 32px; 
+    // wenn der .modal-content durch seinen eigenen Inhalt größer als 90vh wird.
+    padding: 24px 32px;
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -1150,22 +1145,26 @@ h3 {
       padding: 20px;
     }
   }
-  
-  .table-scroll-wrapper { // Dieses Styling ist gut für Tabellen, die breiter als der Modal-Inhalt sind
-    width: 100%; 
-    overflow-x: auto; 
-    -webkit-overflow-scrolling: touch; 
+
+  .table-scroll-wrapper {
+    // Dieses Styling ist gut für Tabellen, die breiter als der Modal-Inhalt sind
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 
     &::-webkit-scrollbar {
-      height: 8px; 
+      height: 8px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
-      margin: 0 8px; 
+      margin: 0 8px;
     }
+
     &::-webkit-scrollbar-thumb {
       background-color: rgba(0, 0, 0, 0.25);
       border-radius: 4px;
+
       &:hover {
         background-color: rgba(0, 0, 0, 0.35);
       }
@@ -1178,7 +1177,7 @@ h3 {
     margin-bottom: 24px;
 
     .cylinder-image {
-      max-width: 80%; 
+      max-width: 80%;
       max-height: 200px;
       object-fit: contain;
       border-radius: 10px;
@@ -1190,7 +1189,7 @@ h3 {
     padding-bottom: 16px; // Oder 24px für mehr Raum
 
     .config-heading {
-      font-size: 1.125rem; 
+      font-size: 1.125rem;
       font-weight: 600;
       color: $text-color-primary;
       margin-top: 24px; // Abstand nach oben, außer beim ersten
@@ -1210,10 +1209,10 @@ h3 {
   .zylinder-table {
     width: 100%;
     min-width: 500px; // Beispiel: Erzwingt horizontales Scrollen, wenn der Platz knapp wird,
-                      // anstatt dass Spalten unleserlich klein werden. Anpassen nach Bedarf.
-    border-collapse: separate; 
+    // anstatt dass Spalten unleserlich klein werden. Anpassen nach Bedarf.
+    border-collapse: separate;
     border-spacing: 0;
-    background-color: $background-color-card; 
+    background-color: $background-color-card;
     border-radius: 12px;
     // overflow: hidden; // Entfernt, da der table-scroll-wrapper das Scrolling übernimmt
     border: 1px solid $border-color-soft;
@@ -1221,30 +1220,39 @@ h3 {
 
     thead {
       background-color: $background-color-hover;
+
       th {
         padding: 12px 16px;
         text-align: left;
         font-weight: 500;
         color: $text-color-secondary;
-        font-size: 0.8125rem; 
+        font-size: 0.8125rem;
         letter-spacing: normal;
         border-bottom: 1px solid $border-color-soft;
         text-transform: none;
       }
     }
+
     tbody {
       tr {
         transition: background-color 0.15s ease;
-        &:hover { background-color: rgba($accent-color-blue, 0.04); }
-        &:not(:last-child) td { border-bottom: 1px solid $border-color-soft; }
+
+        &:hover {
+          background-color: rgba($accent-color-blue, 0.04);
+        }
+
+        &:not(:last-child) td {
+          border-bottom: 1px solid $border-color-soft;
+        }
       }
+
       td {
         padding: 12px 16px;
         color: $text-color-primary;
-        font-size: 0.875rem; 
+        font-size: 0.875rem;
         vertical-align: middle;
         white-space: nowrap; // Verhindert Umbruch in Tabellenzellen, was zu horizontalem Scrollen führt
-                             // Entfernen, falls Umbruch gewünscht ist und die Tabelle nicht scrollen soll.
+        // Entfernen, falls Umbruch gewünscht ist und die Tabelle nicht scrollen soll.
       }
     }
   }
@@ -1257,7 +1265,10 @@ h3 {
     margin-bottom: 8px;
     font-size: 0.875rem;
     color: $text-color-primary;
-    strong { font-weight: 500; }
+
+    strong {
+      font-weight: 500;
+    }
   }
 
   .keys-info {
@@ -1267,24 +1278,48 @@ h3 {
   }
 
   .keys-list {
-    list-style: none; padding: 0; margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
     li {
-      display: flex; align-items: center; transition: background-color 0.2s ease;
-      &:hover { background-color: darken($background-color-hover, 3%); }
-      strong { margin-right: 8px; min-width: 90px; flex-shrink: 0; }
-      span { color: $text-color-secondary; word-break: break-word; }
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: darken($background-color-hover, 3%);
+      }
+
+      strong {
+        margin-right: 8px;
+        min-width: 90px;
+        flex-shrink: 0;
+      }
+
+      span {
+        color: $text-color-secondary;
+        word-break: break-word;
+      }
+
       @media (max-width: $breakpoint-md) {
-        flex-direction: column; align-items: flex-start;
-        strong { margin-bottom: 4px; min-width: auto; }
+        flex-direction: column;
+        align-items: flex-start;
+
+        strong {
+          margin-bottom: 4px;
+          min-width: auto;
+        }
       }
     }
   }
 
   .price-and-widerruf {
-    background-color: $background-color-hover; 
+    background-color: $background-color-hover;
     border-top: 1px solid $border-color-soft;
-    padding: 24px 0; 
+    padding: 24px 0;
     margin-top: 16px;
+
     h2 {
       font-size: 1.125rem;
       font-weight: 600;
@@ -1296,88 +1331,135 @@ h3 {
   }
 
   .required-checks {
-    max-width: 550px; 
+    max-width: 550px;
     margin: 0 auto 24px;
-    padding: 0 16px; 
+    padding: 0 16px;
   }
 
   .widerruf-label {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 14px; background-color: $background-color-card;
-    border-radius: 10px; margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    background-color: $background-color-card;
+    border-radius: 10px;
+    margin-bottom: 10px;
     border: 1px solid $border-color-soft;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
     &:hover {
       border-color: rgba($accent-color-blue, 0.4);
     }
-    :deep(.u-checkbox) { margin-top: 2px; flex-shrink: 0; }
-    span { flex: 1; font-size: 0.875rem; color: $text-color-primary; line-height: 1.5; }
+
+    :deep(.u-checkbox) {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    span {
+      flex: 1;
+      font-size: 0.875rem;
+      color: $text-color-primary;
+      line-height: 1.5;
+    }
+
     .info-icon {
-      position: relative; color: $accent-color-blue; font-size: 1.1rem; cursor: help;
-      transition: color 0.2s ease; margin-left: auto; flex-shrink: 0; padding-left: 8px;
-      &:hover { color: darken($accent-color-blue, 15%); }
-      .tooltip-box { /* Dein bestehendes Tooltip-Styling */ }
+      position: relative;
+      color: $accent-color-blue;
+      font-size: 1.1rem;
+      cursor: help;
+      transition: color 0.2s ease;
+      margin-left: auto;
+      flex-shrink: 0;
+      padding-left: 8px;
+
+      &:hover {
+        color: darken($accent-color-blue, 15%);
+      }
+
+      .tooltip-box {
+        /* Dein bestehendes Tooltip-Styling */
+      }
     }
   }
 
-  .error-message-pflichtfelder { /* Dein bestehendes Styling */ }
+  .error-message-pflichtfelder {
+    /* Dein bestehendes Styling */
+  }
 
   .offer-price-summery {
-    text-align: center; padding: 20px;
-    background-color: $background-color-card; border-radius: 12px;
-    border: 1px solid $border-color-soft; 
-    margin: 24px auto 0; max-width: 550px;
-    font-size: 1rem; color: $text-color-secondary;
+    text-align: center;
+    padding: 20px;
+    background-color: $background-color-card;
+    border-radius: 12px;
+    border: 1px solid $border-color-soft;
+    margin: 24px auto 0;
+    max-width: 550px;
+    font-size: 1rem;
+    color: $text-color-secondary;
+
     strong {
-      display: block; font-size: 1.875rem; 
-      font-weight: 600; color: $text-color-primary;
-      margin: 6px 0; letter-spacing: -0.015em;
+      display: block;
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: $text-color-primary;
+      margin: 6px 0;
+      letter-spacing: -0.015em;
     }
-    .shipping { display: block; font-size: 0.8125rem; color: $text-color-subtle; margin-top: 4px; }
+
+    .shipping {
+      display: block;
+      font-size: 0.8125rem;
+      color: $text-color-subtle;
+      margin-top: 4px;
+    }
   }
 
   .modal-footer {
-    background-color: $background-color-card; 
+    background-color: $background-color-card;
     border-top: 1px solid $border-color-soft;
     padding: 20px 32px; // Vorher 24px 32px
     display: flex;
-    justify-content: center; 
-    flex-shrink: 0; 
+    justify-content: center;
+    flex-shrink: 0;
 
-    @media (max-width: $breakpoint-md) { // War schon justify-content: center;
+    @media (max-width: $breakpoint-md) {
+      // War schon justify-content: center;
       padding: 16px 20px;
     }
 
     button {
       min-width: 260px; // War vorher 180px, dann 250px, jetzt 260px wie besprochen
-      padding: 12px 28px; 
-      font-size: 1rem; 
+      padding: 12px 28px;
+      font-size: 1rem;
       font-weight: 600; // War vorher 500, jetzt 600 wie besprochen
       border-radius: 10px;
 
       &.pseudo-disabled {
         background-color: #e5e5ea !important; // Helleres Grau
-        color: #8e8e93 !important;           // Gedämpfte Textfarbe
+        color: #8e8e93 !important; // Gedämpfte Textfarbe
         border-color: transparent !important;
         box-shadow: none !important;
         cursor: not-allowed;
-        
-        &:hover { // Sicherstellen, dass Hover-Effekte für den deaktivierten Zustand nicht greifen
+
+        &:hover {
+          // Sicherstellen, dass Hover-Effekte für den deaktivierten Zustand nicht greifen
           background-color: #e5e5ea !important;
           color: #8e8e93 !important;
           box-shadow: none !important;
           transform: none !important;
         }
       }
-      
+
       @media (max-width: $breakpoint-sm) {
         width: 100%;
-        min-width: unset; 
-        padding: 14px 28px; 
+        min-width: unset;
+        padding: 14px 28px;
       }
     }
   }
 }
+
 // Fade Animation (bleibt gleich)
 .fade-enter-active,
 .fade-leave-active {
@@ -1401,22 +1483,47 @@ h3 {
   width: 100vw;
 
   &.modern-design {
-
+    height: auto; // Erlaubt dem äußeren Modal-Wrapper, sich an den Inhalt anzupassen
+    max-height: 100vh;
 
     :deep(.u-modal-container) {
-      align-items: center;
       padding: 0;
+      width: 100%; 
+      height: auto; // Wichtig: Erlaubt dem Nuxt UI Container, sich anzupassen
+      max-height: 100%; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    :deep(.u-modal-content) {
+      background-color: transparent;
+      padding: 0;
+      overflow-y: visible; 
+      width: 100%;
+      height: auto; // Wichtig: Erlaubt dem Nuxt UI Inhalts-Slot, sich anzupassen
+      max-height: none; 
+      box-shadow: none;
     }
 
 
-    .modal-content {
-      background: #ffffff;
+    .modal-content { 
+      background: #ffffff; 
       border-radius: 18px;
-      overflow: hidden;
-      position: relative;
-      height: 100%;
+      overflow: hidden; 
       display: flex;
       flex-direction: column;
+      width: 100%; 
+      height: auto;             
+      max-height: 90vh;         
+
+      @media (max-width: $breakpoint-md) { // Für kleinere Bildschirme 
+        max-height: 100vh;
+        border-radius: 0; 
+      }
+       @media (max-width: $breakpoint-sm) {
+        max-height: 100dvh;
+      }
     }
 
     .modal-header {
