@@ -48,28 +48,30 @@ function roundPrice(price) {
 
 function openSummary(offer) {
   selectedOffer.value = offer;
-  // Reset der Checkboxen und Fehlermeldung beim Öffnen des Modals
   hasAcceptedWiderruf.value = false;
   hasMeasuredCorrectly.value = false;
   hasAcceptedLieferzeiten.value = false;
   showRequirementError.value = false;
   isSummaryModalOpen.value = true;
 
-  // Warten auf das nächste DOM-Update, nachdem isSummaryModalOpen true wurde
   nextTick(() => {
     if (isSummaryModalOpen.value && window.self !== window.top) { // Prüfen, ob in iFrame
-      // Das Wurzelelement des UModal-Komponente auswählen
-      const modalElement = document.querySelector('.summary-modal.modern-design'); 
-      if (modalElement) {
-        // Das Modal (oder dessen oberer Rand) in den sichtbaren Bereich des iFrames scrollen
-        // 'behavior: auto' für einen sofortigen Sprung, 'smooth' für eine Animation
-        // 'block: start' richtet den oberen Rand des Elements am oberen Rand des Viewports aus
-        modalElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+      // Wähle ein Element, das sich zuverlässig am Anfang deiner Seite befindet.
+      // Das könnte die erste h2-Überschrift oder der .filters-container sein.
+      const pageTopElement = document.querySelector('.systeme-page > h2:first-of-type') || 
+                             document.querySelector('.filters-container') || 
+                             document.body; // Fallback
+
+      if (pageTopElement) {
+        // Scrolle dieses Element an den Anfang des sichtbaren Bereichs des iFrames.
+        pageTopElement.scrollIntoView({ behavior: 'auto', block: 'start' });
       } else {
-        // Fallback, falls das Element nicht sofort gefunden wird (sollte selten sein mit nextTick)
-        console.warn("Summary Modal Element (.summary-modal.modern-design) nicht für scrollIntoView gefunden.");
-        // Als allerletzten Ausweg die alten Methoden probieren:
+        // Sollte nicht passieren, aber als letzte Instanz die alten Methoden versuchen.
+        console.warn("Kein geeignetes Element am Seitenanfang für scrollIntoView gefunden.");
         // if (document.documentElement) document.documentElement.scrollTop = 0;
+        // if (document.body) document.body.scrollTop = 0;
+        // const nuxtAppRoot = document.getElementById('__nuxt');
+        // if (nuxtAppRoot && nuxtAppRoot.scrollTop !== undefined) nuxtAppRoot.scrollTop = 0;
       }
     }
   });
@@ -81,11 +83,13 @@ function openInfo(offer) {
 
   nextTick(() => {
     if (isInfoModalOpen.value && window.self !== window.top) {
-      const modalElement = document.querySelector('.info-modal.modern-design'); // Selektor anpassen!
-      if (modalElement) {
-        modalElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+      const pageTopElement = document.querySelector('.systeme-page > h2:first-of-type') ||
+                             document.querySelector('.filters-container') ||
+                             document.body;
+      if (pageTopElement) {
+        pageTopElement.scrollIntoView({ behavior: 'auto', block: 'start' });
       } else {
-        console.warn("Info Modal Element (.info-modal.modern-design) nicht für scrollIntoView gefunden.");
+        console.warn("Kein geeignetes Element am Seitenanfang für scrollIntoView im InfoModal gefunden.");
       }
     }
   });
