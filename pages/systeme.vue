@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted, computed, watch } from "vue"; // watch hinzugefügt
+import { ref, onMounted, computed, watch, nextTick } from "vue"; // watch hinzugefügt
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import cylinderModels from "@/data/cylinderModels.js";
 import {
@@ -52,21 +52,43 @@ function openSummary(offer) {
   hasAcceptedWiderruf.value = false;
   hasMeasuredCorrectly.value = false;
   hasAcceptedLieferzeiten.value = false;
-  showRequirementError.value = false; // Fehlermeldung zurücksetzen
+  showRequirementError.value = false;
   isSummaryModalOpen.value = true;
-  if (window.self !== window.top) { // Prüft, ob die Seite in einem iFrame läuft
-    window.scrollTo(0, 0);
-    // Alternativ, manchmal zuverlässiger für das Wurzelelement:
-    // document.documentElement.scrollTop = 0;
-  }
+
+  // Warten auf das nächste DOM-Update, nachdem isSummaryModalOpen true wurde
+  nextTick(() => {
+    if (isSummaryModalOpen.value && window.self !== window.top) { // Prüfen, ob in iFrame
+      // Das Wurzelelement des UModal-Komponente auswählen
+      const modalElement = document.querySelector('.summary-modal.modern-design'); 
+      if (modalElement) {
+        // Das Modal (oder dessen oberer Rand) in den sichtbaren Bereich des iFrames scrollen
+        // 'behavior: auto' für einen sofortigen Sprung, 'smooth' für eine Animation
+        // 'block: start' richtet den oberen Rand des Elements am oberen Rand des Viewports aus
+        modalElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+      } else {
+        // Fallback, falls das Element nicht sofort gefunden wird (sollte selten sein mit nextTick)
+        console.warn("Summary Modal Element (.summary-modal.modern-design) nicht für scrollIntoView gefunden.");
+        // Als allerletzten Ausweg die alten Methoden probieren:
+        // if (document.documentElement) document.documentElement.scrollTop = 0;
+      }
+    }
+  });
 }
 
 function openInfo(offer) {
   selectedOffer.value = offer;
   isInfoModalOpen.value = true;
-  if (window.self !== window.top) {
-    document.documentElement.scrollTop = 0;
-  }
+
+  nextTick(() => {
+    if (isInfoModalOpen.value && window.self !== window.top) {
+      const modalElement = document.querySelector('.info-modal.modern-design'); // Selektor anpassen!
+      if (modalElement) {
+        modalElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+      } else {
+        console.warn("Info Modal Element (.info-modal.modern-design) nicht für scrollIntoView gefunden.");
+      }
+    }
+  });
 }
 
 // Umbenannt von confirmPurchase zu performActualPurchase, wird aufgerufen, wenn alle Checks ok sind.
