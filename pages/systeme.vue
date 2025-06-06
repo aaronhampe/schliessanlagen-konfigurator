@@ -780,7 +780,7 @@ onMounted(async () => {
 
   <UModal v-model="isSuccessModalOpen" class="success-modal modern-design">
     <div class="modal-content ">
-      <div class="modal-header padding">
+      <div class="modal-header flex padding">
         <div class="header-title">
           <h2>Erfolgreich hinzugefügt</h2>
         </div>
@@ -789,7 +789,7 @@ onMounted(async () => {
           variant="ghost"
           icon="i-heroicons-x-mark-20-solid"
           class="close-button"
-          style="margin-bottom: 20px;"
+          style="margin-bottom: 20px; border-radius: 50%; width: 40px; height: 40px;"
           @click="isSuccessModalOpen = false"
         />
       </div>
