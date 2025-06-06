@@ -23,6 +23,8 @@ const selectedSort = ref("priceAsc");
 
 const isSummaryModalOpen = ref(false);
 const isInfoModalOpen = ref(false);
+const isSuccessModalOpen = ref(false);
+
 const selectedOffer = ref(null);
 const hasAcceptedWiderruf = ref(false);
 const hasMeasuredCorrectly = ref(false);
@@ -115,6 +117,12 @@ const allRequiredChecked = computed(() => {
     hasAcceptedLieferzeiten.value
   );
 });
+
+function goToCart() {
+  window.open("https://www.stt-shop.de/warenkorb/", "_blank");
+  isSuccessModalOpen.value = false; // Modal danach schließen
+}
+
 
 // NEU: Funktion, die vom Kaufen-Button aufgerufen wird
 function handlePurchaseClick() {
@@ -394,10 +402,13 @@ async function addToCart(systemName, price, productID) {
     if (!response.ok) {
       throw new Error(`Failed to add to cart: ${response.statusText}`);
     }
+    isSummaryModalOpen.value = false;
+    isSuccessModalOpen.value = true;
     window.open("https://www.stt-shop.de/warenkorb/", "_blank");
   } catch (error) {
     console.error("Error adding to cart:", error);
     // Hier könntest du auch eine Fehlermeldung für den Nutzer setzen
+    isSummaryModalOpen.value = false;
     requirementErrorText.value = `Fehler beim Hinzufügen zum Warenkorb: ${error.message}`;
     showRequirementError.value = true;
   }
@@ -767,8 +778,100 @@ onMounted(async () => {
     </div>
   </UModal>
 
+  <UModal v-model="isSuccessModalOpen" class="success-modal modern-design">
+    <div class="modal-content ">
+      <div class="modal-header padding">
+        <div class="header-title">
+          <h2>Erfolgreich hinzugefügt</h2>
+        </div>
+        <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-x-mark-20-solid"
+          class="close-button"
+          style="margin-bottom: 20px;"
+          @click="isSuccessModalOpen = false"
+        />
+      </div>
+
+      <div class="modal-body-success">
+        <div class="success-icon-wrapper">
+          <i class="i-heroicons-check-circle-solid success-icon"></i>
+        </div>
+        <h3 class="success-title">Konfiguration im Warenkorb</h3>
+        <p class="success-message">
+          Ihre individuelle Schließanlage wurde erfolgreich zum Warenkorb hinzugefügt.
+          Bitte überprüfen Sie die Details im Warenkorb, bevor Sie Ihre Bestellung abschließen.
+        </p>
+      </div>
+
+      <div class="modal-footer-success">
+        <UButton color="gray" variant="ghost" @click="isSuccessModalOpen = false">
+          Weiter einkaufen
+        </UButton>
+        <UButton icon="i-heroicons-arrow-right-16-solid" @click="goToCart">
+          Zum Warenkorb
+        </UButton>
+      </div>
+    </div>
+  </UModal>
+
 </template>
 
 <style scoped>
 @import "@/styles/systems.scss";
+
+.padding {
+  padding: 20px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body-success {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.success-icon {
+  font-size: 5rem; /* Oder 80px */
+  color: #4ade80; /* Ein schönes Grün, z.B. Tailwind green-400 */
+  width: 80px;
+  height: 80px;
+}
+
+.success-title {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.success-message {
+  font-size: 1rem; /* 16px */
+  color: #6b7280; /* a gray color */
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.modal-footer-success {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem; /* 12px */
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb; /* light gray border */
+  background-color: #f9fafb; /* slightly off-white */
+}
 </style>
