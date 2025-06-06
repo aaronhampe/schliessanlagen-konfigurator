@@ -1144,35 +1144,47 @@ export default {
     },
 
     // NEU: Die "reine" Speicherlogik ohne Weiterleitung
+    // In ConfiguratorViewM.vue, innerhalb des 'methods' Objekts
+
     async performSave() {
       // Modal auf jeden Fall schließen, falls es offen war
       this.isSaveModalOpen = false;
 
-      // Erneute Validierung der E-Mail, da sie im Modal eingegeben worden sein könnte
+      // Erneute Validierung der E-Mail
       if (!this.email || !this.validateEmail(this.email)) {
         alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
         return false; // Speichern abbrechen
       }
 
       try {
-        // Anlagennummer generieren, falls noch nicht vorhanden
+        // ---- KORREKTUR: Nur bei einer wirklich neuen Anlage Nummer UND Passwort generieren ----
+
+        // Prüfen, ob die 'anlageNr' fehlt. Das ist der Indikator für eine brandneue Konfiguration.
         if (!this.anlageNr) {
-          let antwort;
+          // Dieser Block wird jetzt NUR noch für die allererste Speicherung einer neuen Anlage ausgeführt.
+          let anlageExists = true;
           do {
+            // `generateRandomAnlagenNummer` erstellt BEIDES: eine neue Nummer und ein neues Passwort.
             this.generateRandomAnlagenNummer();
+
             const response = await $fetch(
               "./api/sqltestanlage?ID=" + this.anlageNr,
               {
                 method: "post",
               }
             );
-            antwort = response.message;
-          } while (antwort === "Anlagennummer existiert.");
+            // Prüfen, ob die zufällig generierte Nummer schon existiert.
+            anlageExists = response.message === "Anlagennummer existiert.";
+          } while (anlageExists);
         }
+
+        // WICHTIG: Wenn eine `anlageNr` bereits existiert (weil die Anlage geladen wurde),
+        // wird der gesamte `if`-Block oben übersprungen. Dadurch behalten `this.anlageNr`
+        // und `this.password` ihre ursprünglichen, geladenen Werte.
 
         // --- Start der API-Aufrufe zum Speichern ---
 
-        // Anlage speichern/aktualisieren
+        // Anlage speichern/aktualisieren. Sendet entweder das neue oder das alte Passwort an die DB.
         await $fetch("./api/sqlpostanlageneu", {
           method: "post",
           body: {
@@ -1185,11 +1197,11 @@ export default {
             Typ: this.typ,
             Modell: this.store.selectedModel,
             protect: this.protect,
-            Password: this.password,
+            Password: this.password, // Sendet das korrekte Passwort
           },
         });
 
-        // Positionen (Türen) speichern
+        // ... (der Rest deiner Speicherlogik für Position, Schlüssel, Matrix bleibt unverändert)
         const RowObject = this.rows.map((row, rowIndex) => ({
           POS: rowIndex + 1,
           Bezeichnung: row[0].doorDesignation || "",
@@ -1204,7 +1216,6 @@ export default {
           body: RowObject,
         });
 
-        // Schlüssel speichern
         const KeyNameObject = this.rows[0].map((col, colIndex) => ({
           keyPos: colIndex + 1,
           keyname: col.keyname || `Schlüssel ${colIndex + 1}`,
@@ -1216,7 +1227,6 @@ export default {
           body: KeyNameObject,
         });
 
-        // Matrix (Berechtigungen) speichern
         const Matrix = this.rows.flatMap((row, rowIndex) =>
           row.map((col, colIndex) => ({
             position: rowIndex + 1,
@@ -1229,23 +1239,21 @@ export default {
           body: Matrix,
         });
 
-        // --- Ende der API-Aufrufe ---
-
-        // Bestätigungs-E-Mails senden
+        // E-Mails senden. Wenn eine bestehende Anlage gespeichert wird,
+        // wird die E-Mail erneut mit den alten Zugangsdaten versendet, was als Bestätigung dient.
         await this.sendConfirmationEmails();
 
-        // Erfolgsmeldung für den Benutzer anzeigen
         alert(
-          `Ihre Anlage wurde erfolgreich gespeichert.\nAnlagennummer: ${this.anlageNr}`
+          `Ihre Anlage wurde erfolgreich unter der Nummer ${this.anlageNr} gespeichert.\nSie erhalten eine Bestätigung per E-Mail.`
         );
 
-        return true; // Erfolg signalisieren
+        return true;
       } catch (error) {
         console.error("Fehler beim Speichern der Anlage:", error);
         alert(
           "Beim Speichern ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
         );
-        return false; // Misserfolg signalisieren
+        return false;
       }
     },
 
