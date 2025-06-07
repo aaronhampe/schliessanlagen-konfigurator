@@ -428,7 +428,8 @@ async function addToCart(systemName, price, productID) {
     isSummaryModalOpen.value = false;
     isSuccessModalOpen.value = true;
     nextTick(() => {
-      if (isInfoModalOpen.value && window.self !== window.top) {
+      // Prüfe jetzt auf das korrekte Modal: isSuccessModalOpen
+      if (isSuccessModalOpen.value && window.self !== window.top) {
         const pageTopElement =
           document.querySelector(".systeme-page > h2:first-of-type") ||
           document.querySelector(".filters-container") ||
