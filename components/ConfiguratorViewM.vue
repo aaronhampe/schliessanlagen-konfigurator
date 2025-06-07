@@ -697,10 +697,10 @@ export default {
       },
     },
     "$route.query.anlageNr": {
-      handler(newVal) {
-        if (newVal) {
-          this.id = newVal;
-          this.loadInstallation();
+      handler(newAnlageNr, oldAnlageNr) {
+        if (newAnlageNr && newAnlageNr !== oldAnlageNr) {
+          console.log(`Anlage ${newAnlageNr} wird aus der URL geladen...`);
+          this.loadInstallation(newAnlageNr);
         }
       },
       immediate: true,
@@ -1093,6 +1093,9 @@ export default {
       this.password = password;
     },
 
+    // In ConfiguratorViewM.vue -> methods
+    // Ersetze die komplette handleLoad Methode mit dieser Version
+
     async handleLoad() {
       if (!this.loadId || !this.loadPassword) {
         this.loadError = "Bitte Anlagennummer und Passwort eingeben.";
@@ -1101,31 +1104,35 @@ export default {
       this.loadError = "";
 
       try {
-        // Passwort abrufen
-        const anlageData = await $fetch("./api/sqlgetanlage", {
+        // Schritt 1: Passwort aus der Datenbank abrufen und vergleichen
+        const anlageStammdaten = await $fetch("./api/sqlgetanlage", {
           method: "post",
           body: { ID: this.loadId },
         });
 
-        if (!anlageData.queryresult || anlageData.queryresult.length === 0) {
-          this.loadError = "Anlage nicht gefunden.";
+        if (
+          !anlageStammdaten.queryresult ||
+          anlageStammdaten.queryresult.length === 0
+        ) {
+          this.loadError = "Anlage mit dieser Nummer nicht gefunden.";
           return;
         }
 
-        const correctPassword = anlageData.queryresult[0].Password;
+        const correctPassword = anlageStammdaten.queryresult[0].Password;
         if (this.loadPassword !== correctPassword) {
           this.loadError = "Das Passwort ist nicht korrekt.";
           return;
         }
 
-        // Wenn Passwort korrekt, lade die Anlage
-        this.id = this.loadId; // Setze die globale ID für loadInstallation
-        await this.loadInstallation(); // Bestehende Methode aufrufen
+        // Schritt 2: Wenn Passwort korrekt, lade die GESAMTE Anlage
+        await this.loadInstallation(this.loadId, anlageStammdaten);
 
+        // Schritt 3: URL aktualisieren, um die Anlagennummer zu speichern
+        this.$router.replace({ query: { anlageNr: this.loadId } });
+
+        // Schritt 4: Modal schließen und Feedback geben
         this.isLoadModalOpen = false;
-        this.currentStep = 1; // Nach dem Laden immer zu Schritt 1 gehen
-
-        // Erfolgsmeldung anzeigen (benötigt Alert-Template)
+        this.currentStep = 1;
         alert("Anlage erfolgreich geladen!");
       } catch (error) {
         console.error("Fehler beim Laden:", error);
@@ -1146,6 +1153,8 @@ export default {
     // NEU: Die "reine" Speicherlogik ohne Weiterleitung
     // In ConfiguratorViewM.vue, innerhalb des 'methods' Objekts
 
+    // In ConfiguratorViewM.vue -> methods
+
     async performSave() {
       // Modal auf jeden Fall schließen, falls es offen war
       this.isSaveModalOpen = false;
@@ -1157,34 +1166,28 @@ export default {
       }
 
       try {
-        // ---- KORREKTUR: Nur bei einer wirklich neuen Anlage Nummer UND Passwort generieren ----
+        // NEU: Eine Variable, um zu prüfen, ob es die allererste Speicherung ist.
+        let isNewInstallation = false;
 
-        // Prüfen, ob die 'anlageNr' fehlt. Das ist der Indikator für eine brandneue Konfiguration.
+        // Prüfen, ob die 'anlageNr' fehlt.
         if (!this.anlageNr) {
-          // Dieser Block wird jetzt NUR noch für die allererste Speicherung einer neuen Anlage ausgeführt.
+          // Wenn ja, setzen wir unsere Variable auf true.
+          isNewInstallation = true;
+
           let anlageExists = true;
           do {
-            // `generateRandomAnlagenNummer` erstellt BEIDES: eine neue Nummer und ein neues Passwort.
             this.generateRandomAnlagenNummer();
-
             const response = await $fetch(
               "./api/sqltestanlage?ID=" + this.anlageNr,
               {
                 method: "post",
               }
             );
-            // Prüfen, ob die zufällig generierte Nummer schon existiert.
             anlageExists = response.message === "Anlagennummer existiert.";
           } while (anlageExists);
         }
 
-        // WICHTIG: Wenn eine `anlageNr` bereits existiert (weil die Anlage geladen wurde),
-        // wird der gesamte `if`-Block oben übersprungen. Dadurch behalten `this.anlageNr`
-        // und `this.password` ihre ursprünglichen, geladenen Werte.
-
-        // --- Start der API-Aufrufe zum Speichern ---
-
-        // Anlage speichern/aktualisieren. Sendet entweder das neue oder das alte Passwort an die DB.
+        // --- Die API-Aufrufe zum Speichern bleiben identisch ---
         await $fetch("./api/sqlpostanlageneu", {
           method: "post",
           body: {
@@ -1197,11 +1200,9 @@ export default {
             Typ: this.typ,
             Modell: this.store.selectedModel,
             protect: this.protect,
-            Password: this.password, // Sendet das korrekte Passwort
+            Password: this.password,
           },
         });
-
-        // ... (der Rest deiner Speicherlogik für Position, Schlüssel, Matrix bleibt unverändert)
         const RowObject = this.rows.map((row, rowIndex) => ({
           POS: rowIndex + 1,
           Bezeichnung: row[0].doorDesignation || "",
@@ -1215,7 +1216,6 @@ export default {
           method: "post",
           body: RowObject,
         });
-
         const KeyNameObject = this.rows[0].map((col, colIndex) => ({
           keyPos: colIndex + 1,
           keyname: col.keyname || `Schlüssel ${colIndex + 1}`,
@@ -1226,7 +1226,6 @@ export default {
           method: "post",
           body: KeyNameObject,
         });
-
         const Matrix = this.rows.flatMap((row, rowIndex) =>
           row.map((col, colIndex) => ({
             position: rowIndex + 1,
@@ -1239,13 +1238,21 @@ export default {
           body: Matrix,
         });
 
-        // E-Mails senden. Wenn eine bestehende Anlage gespeichert wird,
-        // wird die E-Mail erneut mit den alten Zugangsdaten versendet, was als Bestätigung dient.
-        await this.sendConfirmationEmails();
+        // --- NEU: Bedingter E-Mail-Versand und angepasste Benachrichtigung ---
+        if (isNewInstallation) {
+          // Sende die E-Mails NUR, wenn es eine neue Anlage war.
+          await this.sendConfirmationEmails();
 
-        alert(
-          `Ihre Anlage wurde erfolgreich unter der Nummer ${this.anlageNr} gespeichert.\nSie erhalten eine Bestätigung per E-Mail.`
-        );
+          // Gib eine spezifische Meldung für die Ersterstellung.
+          alert(
+            `Ihre neue Anlage wurde erfolgreich unter der Nummer ${this.anlageNr} erstellt.\nSie erhalten Ihre Zugangsdaten in Kürze per E-Mail.`
+          );
+        } else {
+          // Gib bei allen weiteren Speicherungen nur eine einfache Bestätigung.
+          alert(
+            `Ihre Änderungen an der Anlage ${this.anlageNr} wurden erfolgreich gespeichert.`
+          );
+        }
 
         return true;
       } catch (error) {
@@ -1274,71 +1281,107 @@ export default {
       }
     },
 
-    async loadInstallation() {
-      this.anlageNr = this.id;
-      // 1) Lade alle drei Teile
-      const [
-        { queryresult: positions },
-        { queryresult: keys },
-        { queryresult: matrix },
-      ] = await Promise.all([
-        $fetch("./api/sqlgetposition", {
-          method: "post",
-          body: { ID: this.id },
-        }),
-        $fetch("./api/sqlgetschluessel", {
-          method: "post",
-          body: { ID: this.id },
-        }),
-        $fetch("./api/sqlgetmatrix", { method: "post", body: { ID: this.id } }),
-      ]);
+    async loadInstallation(id, anlageStammdatenResponse = null) {
+      this.id = id;
+      this.anlageNr = id;
 
-      // Wenn gar nichts da ist, verlassen
-      if (!positions.length) return;
-
-      // 2) Dimensions ermitteln
-      const numDoors = positions.length;
-      const numKeys = keys.length ? Math.max(...keys.map((k) => k.KeyPOS)) : 1;
-
-      // 3) rows leeren und komplett neu aufbauen
-      this.rows = [];
-      for (let i = 0; i < numDoors; i++) {
-        const doorData = positions.find((p) => p.POS === i + 1) || {};
-        this.rows[i] = [];
-        for (let j = 0; j < numKeys; j++) {
-          const keyData = keys.find((k) => k.KeyPOS === j + 1) || {};
-          const mat = matrix.find(
-            (m) => m.POSZylinder === i + 1 && m.POSSchluessel === j + 1
-          );
-          this.rows[i][j] = {
-            // Tür‑Felder nur in Spalte 0 füllen, in allen anderen Zellen ignorieren
-            ...(j === 0
-              ? {
-                  position: i + 1,
-                  doorDesignation: doorData.Bezeichnung || "",
-                  doorquantity: doorData.Anzahl || 1,
-                  type: doorData.Typ || "",
-                  outside: doorData.SizeA || "",
-                  inside: doorData.SizeI || "",
-                  optionsSelected: (doorData.Option || "")
-                    .split(",")
-                    .map((s) => s.trim())
-                    .filter(Boolean),
-                }
-              : {}),
-            // Schlüssel‑Felder
-            checked: !!mat?.Berechtigung,
-            keyquantity: keyData.Anzahl || 1,
-            keyname: keyData.Bezeichnung || `Schlüssel ${j + 1}`,
-            keycolor: keyData.Farbe || "",
-          };
+      try {
+        // Schritt 1: Lade die Stammdaten, FALLS sie nicht schon übergeben wurden.
+        let anlageData = anlageStammdatenResponse;
+        if (!anlageData) {
+          anlageData = await $fetch("./api/sqlgetanlage", {
+            method: "post",
+            body: { ID: this.id },
+          });
         }
-      }
 
-      // 4) Erfolgsmeldung
-      this.alertMessage = "Ihre Konfiguration wurde erfolgreich geladen.";
-      this.alertType = "success";
-      setTimeout(() => (this.alertMessage = ""), 3000);
+        // Stammdaten in den State des Konfigurators übernehmen
+        if (
+          anlageData &&
+          anlageData.queryresult &&
+          anlageData.queryresult.length > 0
+        ) {
+          const data = anlageData.queryresult[0];
+          this.object = data.Objekt || "";
+          this.name = data.Name || "";
+          this.email = data.EMail || "";
+          this.phone = data.Telefon || "";
+          this.company = data.Firma || "";
+          this.typ = data.Typ || "";
+          this.store.setModel(data.Modell || "Kein bestimmtes Modell");
+
+          // HIER IST DER ENTSCHEIDENDE PUNKT: DAS GELADENE PASSWORT SPEICHERN
+          this.password = data.Password || "";
+        }
+
+        // Schritt 2: Lade Türen, Schlüssel und Matrix (wie bisher)
+        const [
+          { queryresult: positions },
+          { queryresult: keys },
+          { queryresult: matrix },
+        ] = await Promise.all([
+          $fetch("./api/sqlgetposition", {
+            method: "post",
+            body: { ID: this.id },
+          }),
+          $fetch("./api/sqlgetschluessel", {
+            method: "post",
+            body: { ID: this.id },
+          }),
+          $fetch("./api/sqlgetmatrix", {
+            method: "post",
+            body: { ID: this.id },
+          }),
+        ]);
+
+        if (!positions || !positions.length) return;
+
+        // Schritt 3: Baue die `rows`-Datenstruktur neu auf (dein bestehender Code hier ist korrekt)
+        const numDoors = positions.length;
+        const numKeys = keys.length
+          ? Math.max(...keys.map((k) => k.KeyPOS))
+          : 1;
+
+        this.rows = [];
+        for (let i = 0; i < numDoors; i++) {
+          const doorData = positions.find((p) => p.POS === i + 1) || {};
+          this.rows[i] = [];
+          for (let j = 0; j < numKeys; j++) {
+            const keyData = keys.find((k) => k.KeyPOS === j + 1) || {};
+            const mat = matrix.find(
+              (m) => m.POSZylinder === i + 1 && m.POSSchluessel === j + 1
+            );
+            this.rows[i][j] = {
+              ...(j === 0
+                ? {
+                    position: i + 1,
+                    doorDesignation: doorData.Bezeichnung || "",
+                    doorquantity: doorData.Anzahl || 1,
+                    type: doorData.Typ || "",
+                    outside: doorData.SizeA || "",
+                    inside: doorData.SizeI || "",
+                    optionsSelected: (doorData.Option || "")
+                      .split(",")
+                      .map((s) => s.trim())
+                      .filter(Boolean),
+                  }
+                : {}),
+              checked: !!mat?.Berechtigung,
+              keyquantity: keyData.Anzahl || 1,
+              keyname: keyData.Bezeichnung || `Schlüssel ${j + 1}`,
+              keycolor: keyData.Farbe || "",
+            };
+          }
+        }
+
+        // Akkordeon-Status für die geladenen Türen initialisieren
+        this.accordionOpen = Array(this.rows.length).fill(false);
+      } catch (error) {
+        console.error("Fehler beim Aufbau der geladenen Anlage:", error);
+        alert(
+          "Die Konfigurationsdaten konnten nicht vollständig verarbeitet werden."
+        );
+      }
     },
 
     // E-Mail-Versand
@@ -1451,22 +1494,15 @@ export default {
   },
 
   mounted() {
-    if (this.$route.query.anlageNr) {
-      this.id = this.$route.query.anlageNr;
-      this.loadInstallation();
-    } else {
-      this.generateRandomAnlagenNummer();
+    if (!this.$route.query.anlageNr) {
+      console.log("Keine Anlage in URL gefunden, starte neue Konfiguration.");
+      // Setzt den Anfangszustand für eine leere Konfiguration zurück.
+      
     }
 
-    // Modell aus URL laden
+    // Modell aus dem Store laden (dies kann bleiben)
     this.selectedModelLocal = this.store.selectedModel;
     this.oldModel = this.store.selectedModel;
-
-    // Anlagennummer aus URL laden
-    if (this.$route.query.anlageNr) {
-      this.id = this.$route.query.anlageNr;
-      this.loadInstallation();
-    }
   },
 };
 </script>
