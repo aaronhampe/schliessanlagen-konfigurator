@@ -57,19 +57,23 @@ function openSummary(offer) {
   isSummaryModalOpen.value = true;
 
   nextTick(() => {
-    if (isSummaryModalOpen.value && window.self !== window.top) { // Prüfen, ob in iFrame
+    if (isSummaryModalOpen.value && window.self !== window.top) {
+      // Prüfen, ob in iFrame
       // Wähle ein Element, das sich zuverlässig am Anfang deiner Seite befindet.
       // Das könnte die erste h2-Überschrift oder der .filters-container sein.
-      const pageTopElement = document.querySelector('.systeme-page > h2:first-of-type') || 
-                             document.querySelector('.filters-container') || 
-                             document.body; // Fallback
+      const pageTopElement =
+        document.querySelector(".systeme-page > h2:first-of-type") ||
+        document.querySelector(".filters-container") ||
+        document.body; // Fallback
 
       if (pageTopElement) {
         // Scrolle dieses Element an den Anfang des sichtbaren Bereichs des iFrames.
-        pageTopElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+        pageTopElement.scrollIntoView({ behavior: "auto", block: "start" });
       } else {
         // Sollte nicht passieren, aber als letzte Instanz die alten Methoden versuchen.
-        console.warn("Kein geeignetes Element am Seitenanfang für scrollIntoView gefunden.");
+        console.warn(
+          "Kein geeignetes Element am Seitenanfang für scrollIntoView gefunden."
+        );
         // if (document.documentElement) document.documentElement.scrollTop = 0;
         // if (document.body) document.body.scrollTop = 0;
         // const nuxtAppRoot = document.getElementById('__nuxt');
@@ -85,13 +89,16 @@ function openInfo(offer) {
 
   nextTick(() => {
     if (isInfoModalOpen.value && window.self !== window.top) {
-      const pageTopElement = document.querySelector('.systeme-page > h2:first-of-type') ||
-                             document.querySelector('.filters-container') ||
-                             document.body;
+      const pageTopElement =
+        document.querySelector(".systeme-page > h2:first-of-type") ||
+        document.querySelector(".filters-container") ||
+        document.body;
       if (pageTopElement) {
-        pageTopElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+        pageTopElement.scrollIntoView({ behavior: "auto", block: "start" });
       } else {
-        console.warn("Kein geeignetes Element am Seitenanfang für scrollIntoView im InfoModal gefunden.");
+        console.warn(
+          "Kein geeignetes Element am Seitenanfang für scrollIntoView im InfoModal gefunden."
+        );
       }
     }
   });
@@ -123,7 +130,6 @@ function goToCart() {
   isSuccessModalOpen.value = false; // Modal danach schließen
 }
 
-
 // NEU: Funktion, die vom Kaufen-Button aufgerufen wird
 function handlePurchaseClick() {
   // Optional: Bestehenden Timeout löschen, falls verwendet
@@ -131,11 +137,13 @@ function handlePurchaseClick() {
   //   clearTimeout(requirementErrorTimeout.value);
   // }
 
-  if (allRequiredChecked.value) { // Hier wird das computed property .value geprüft
+  if (allRequiredChecked.value) {
+    // Hier wird das computed property .value geprüft
     showRequirementError.value = false; // Fehlermeldung ausblenden, falls sie sichtbar war
     performActualPurchase();
   } else {
-    requirementErrorText.value = "Bitte bestätigen Sie alle Hinweise, um fortzufahren.";
+    requirementErrorText.value =
+      "Bitte bestätigen Sie alle Hinweise, um fortzufahren.";
     showRequirementError.value = true;
 
     // Versuch, zum ersten nicht angehakten Element oder der Sektion zu scrollen
@@ -154,21 +162,31 @@ function handlePurchaseClick() {
       // Versuche zuerst, ein spezifisches Label anhand einer ID zu finden
       // Gib hierfür deinen Labels entsprechende IDs, z.B.
       // <label id="widerruf-checkbox-label" class="widerruf-label">...</label>
-      // elementToScrollTo = document.getElementById(targetElementId); 
+      // elementToScrollTo = document.getElementById(targetElementId);
 
       // Als Fallback oder wenn IDs nicht verwendet werden, scrolle zum allgemeinen Bereich
       // Diese Selektoren müssen ggf. an deine exakte HTML-Struktur angepasst werden.
-      if (!hasAcceptedWiderruf.value) elementToScrollTo = document.querySelector('.widerruf-label:nth-of-type(1)');
-      else if (!hasAcceptedLieferzeiten.value) elementToScrollTo = document.querySelector('.widerruf-label:nth-of-type(2)');
-      else if (!hasMeasuredCorrectly.value) elementToScrollTo = document.querySelector('.widerruf-label:nth-of-type(3)');
+      if (!hasAcceptedWiderruf.value)
+        elementToScrollTo = document.querySelector(
+          ".widerruf-label:nth-of-type(1)"
+        );
+      else if (!hasAcceptedLieferzeiten.value)
+        elementToScrollTo = document.querySelector(
+          ".widerruf-label:nth-of-type(2)"
+        );
+      else if (!hasMeasuredCorrectly.value)
+        elementToScrollTo = document.querySelector(
+          ".widerruf-label:nth-of-type(3)"
+        );
     }
 
-    if (!elementToScrollTo) { // Fallback, falls kein spezifisches Label gefunden wurde
-      elementToScrollTo = document.querySelector('.required-checks h2');
+    if (!elementToScrollTo) {
+      // Fallback, falls kein spezifisches Label gefunden wurde
+      elementToScrollTo = document.querySelector(".required-checks h2");
     }
 
     if (elementToScrollTo) {
-      elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      elementToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     // Optional: Fehlermeldung nach einiger Zeit automatisch ausblenden
@@ -270,11 +288,13 @@ function generateConfigurationText() {
     `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
   );
   lines.push(
-    `<br><b>Zylinder korrekt gemessen</b>? ${hasMeasuredCorrectly.value ? "Ja" : "Nein"
+    `<br><b>Zylinder korrekt gemessen</b>? ${
+      hasMeasuredCorrectly.value ? "Ja" : "Nein"
     }`
   );
   lines.push(
-    `<br><b>Lieferzeiten akzeptiert</b>? ${hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
+    `<br><b>Lieferzeiten akzeptiert</b>? ${
+      hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
     }`
   );
   lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
@@ -384,26 +404,44 @@ const sortedAlternativeOffers = computed(() => {
 async function addToCart(systemName, price, productID) {
   const fullConfiguration = generateConfigurationText();
   try {
-    const response = await fetch('https://www.stt-shop.de/wp-json/custom/v1/add_to_cart', {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        product_id: productID,
-        price: price,
-        quantity: 1,
-        anlage_nummer: anlageNr,
-        config_text: fullConfiguration,
-        widerruf_accepted: true, // Bleibt so, da allRequiredChecked es sicherstellt
-      }),
-    });
+    const response = await fetch(
+      "https://www.stt-shop.de/wp-json/custom/v1/add_to_cart",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: productID,
+          price: price,
+          quantity: 1,
+          anlage_nummer: anlageNr,
+          config_text: fullConfiguration,
+          widerruf_accepted: true, // Bleibt so, da allRequiredChecked es sicherstellt
+        }),
+      }
+    );
     if (!response.ok) {
       throw new Error(`Failed to add to cart: ${response.statusText}`);
     }
     isSummaryModalOpen.value = false;
     isSuccessModalOpen.value = true;
+    nextTick(() => {
+      if (isInfoModalOpen.value && window.self !== window.top) {
+        const pageTopElement =
+          document.querySelector(".systeme-page > h2:first-of-type") ||
+          document.querySelector(".filters-container") ||
+          document.body;
+        if (pageTopElement) {
+          pageTopElement.scrollIntoView({ behavior: "auto", block: "start" });
+        } else {
+          console.warn(
+            "Kein geeignetes Element am Seitenanfang für scrollIntoView im ErfolgsModal gefunden."
+          );
+        }
+      }
+    });
     window.open("https://www.stt-shop.de/warenkorb/", "_blank");
   } catch (error) {
     console.error("Error adding to cart:", error);
@@ -471,7 +509,6 @@ onMounted(async () => {
     console.error("Fehler beim Laden der Konfigurationsdaten:", error);
   }
 });
-
 </script>
 
 <template>
@@ -494,7 +531,11 @@ onMounted(async () => {
         </select>
       </div>
     </div>
-    <UButton class="back-button" @click="navigateBack" style="margin: 10px 10px 10px 0px">
+    <UButton
+      class="back-button"
+      @click="navigateBack"
+      style="margin: 10px 10px 10px 0px"
+    >
       Zurück zum Konfigurator
     </UButton>
 
@@ -502,24 +543,35 @@ onMounted(async () => {
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell:</h2>
       <div class="offer highlighted-offer offer-row">
-        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+        <img
+          :src="selectedModelOffer.image"
+          :alt="selectedModelOffer.alt"
+          class="offer-image"
+        />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
 
           <div class="offer-type-info">
             {{
-      selectedModelOffer.isSchliessanlage
-        ? "Schließanlage"
-        : "Gleichschließung"
-    }}
+              selectedModelOffer.isSchliessanlage
+                ? "Schließanlage"
+                : "Gleichschließung"
+            }}
           </div>
           <ul class="offer-features">
-            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+            <li
+              v-for="(feature, i) in selectedModelOffer.features || []"
+              :key="i"
+            >
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton class="info-button" color="gray" variant="ghost"
-            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)">
+          <UButton
+            class="info-button"
+            color="gray"
+            variant="ghost"
+            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)"
+          >
             Mehr&nbsp;Infos
           </UButton>
           <div class="offer-delivery">
@@ -527,10 +579,14 @@ onMounted(async () => {
           </div>
           <div class="offer-price">
             Gesamtpreis:
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong> <span class="shipping">inkl. Versand</span>
+            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
+            <span class="shipping">inkl. Versand</span>
           </div>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="openSummary(selectedModelOffer)">
+          <UButton
+            icon="i-heroicons-shopping-cart-16-solid"
+            class="select-system-button"
+            @click="openSummary(selectedModelOffer)"
+          >
             System kaufen
           </UButton>
         </div>
@@ -541,20 +597,24 @@ onMounted(async () => {
     <div v-if="alternativeOffers.length" style="margin-top: 30px">
       <h2>
         {{
-      selectedModel === "Kein bestimmtes Modell"
-        ? "Angebote für Sie:"
-        : "Weitere passende Angebote:"
-    }}
+          selectedModel === "Kein bestimmtes Modell"
+            ? "Angebote für Sie:"
+            : "Weitere passende Angebote:"
+        }}
       </h2>
       <div class="offer-container">
-        <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
+        <div
+          class="offer offer-row"
+          v-for="(offer, index) in sortedAlternativeOffers"
+          :key="offer.title"
+        >
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
             <div class="offer-type-info">
               {{
-      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-    }}
+                offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+              }}
             </div>
             <ul class="offer-features">
               <li v-for="(feature, i) in offer.features || []" :key="i">
@@ -562,8 +622,12 @@ onMounted(async () => {
               </li>
             </ul>
 
-            <UButton class="info-button" color="gray" variant="ghost"
-              @click="openInfo(offer /* bzw. offer im v-for */)">
+            <UButton
+              class="info-button"
+              color="gray"
+              variant="ghost"
+              @click="openInfo(offer /* bzw. offer im v-for */)"
+            >
               Mehr&nbsp;Infos
             </UButton>
 
@@ -572,9 +636,14 @@ onMounted(async () => {
             </div>
             <div class="offer-price">
               Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong
+              ><span class="shipping">inkl. Versand</span>
             </div>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+            <UButton
+              icon="i-heroicons-shopping-cart-16-solid"
+              class="select-system-button"
+              @click="openSummary(offer)"
+            >
               System kaufen
             </UButton>
           </div>
@@ -582,13 +651,16 @@ onMounted(async () => {
       </div>
     </div>
 
-
     <UButton class="back-button" @click="navigateBack">
       Zurück zum Konfigurator
     </UButton>
   </div>
 
-  <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isSummaryModalOpen"
+    class="summary-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-title">
@@ -597,16 +669,23 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton color="red" class="close-button" icon="i-heroicons-x-mark" @click="isSummaryModalOpen = false">
-            
+          <UButton
+            color="red"
+            class="close-button"
+            icon="i-heroicons-x-mark"
+            @click="isSummaryModalOpen = false"
+          >
           </UButton>
         </div>
       </div>
 
       <div class="modal-body-scrollable">
-
         <div v-if="selectedOffer.imageUrl" class="cylinder-image-container">
-          <img :src="selectedOffer.imageUrl" alt="Zylinderbild" class="cylinder-image" />
+          <img
+            :src="selectedOffer.imageUrl"
+            alt="Zylinderbild"
+            class="cylinder-image"
+          />
         </div>
 
         <div class="content-wrapper">
@@ -628,10 +707,10 @@ onMounted(async () => {
                   <td>{{ pos.POS }}</td>
                   <td>
                     {{
-      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-        ? pos.Bezeichnung
-        : "Tür " + pos.POS
-    }}
+                      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+                        ? pos.Bezeichnung
+                        : "Tür " + pos.POS
+                    }}
                   </td>
                   <td>{{ pos.Typ }}</td>
                   <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
@@ -647,10 +726,16 @@ onMounted(async () => {
 
           <h3 class="config-heading">Schlüsselübersicht</h3>
           <ul class="keys-list">
-            <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
+            <li
+              v-for="(keyItem, index) in schluesselData"
+              :key="keyItem.KeyPOS"
+            >
               <strong>
-                {{ keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== "" ? keyItem.Bezeichnung : "Schlüssel " +
-      keyItem.KeyPOS }}
+                {{
+                  keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+                    ? keyItem.Bezeichnung
+                    : "Schlüssel " + keyItem.KeyPOS
+                }}
               </strong>
               schließt:
               <span>{{ getPositionsForKey(keyItem.KeyPOS) }}</span>
@@ -664,7 +749,11 @@ onMounted(async () => {
             <label class="widerruf-label">
               <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
               <span>Ich stimme der Widerrufsbelehrung zu.</span>
-              <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
+              <div
+                class="info-icon"
+                @mouseenter="hoverWiderruf = true"
+                @mouseleave="hoverWiderruf = false"
+              >
                 <i class="i-heroicons-information-circle" />
                 <transition name="fade">
                   <div v-if="hoverWiderruf" class="tooltip-box">
@@ -672,7 +761,8 @@ onMounted(async () => {
                     von Waren, die nicht vorgefertigt sind und für deren
                     Herstellung eine individuelle Auswahl oder Bestimmung durch
                     den Verbraucher maßgeblich ist oder die eindeutig auf die
-                    persönlichen Bedürfnisse des Verbrauchers zugeschnitten sind.
+                    persönlichen Bedürfnisse des Verbrauchers zugeschnitten
+                    sind.
                   </div>
                 </transition>
               </div>
@@ -680,16 +770,20 @@ onMounted(async () => {
             <label class="widerruf-label" style="margin-top: 10px">
               <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
               <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
-              <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
-                @click.stop>
+              <div
+                class="info-icon"
+                @mouseenter="hoverLieferzeit = true"
+                @mouseleave="hoverLieferzeit = false"
+                @click.stop
+              >
                 <i class="i-heroicons-information-circle" />
                 <transition name="fade">
                   <div v-if="hoverLieferzeit" class="tooltip-box">
                     Die Lieferzeit richtet sich nach der Art Ihrer Schließung.
                     Während einfache Gleichschließungen meist innerhalb von 2
                     Werktagen bis zu einer Woche geliefert werden, können
-                    komplexere Schließanlagen mit vielen Optionen bis zu 4 Wochen
-                    in Anspruch nehmen.
+                    komplexere Schließanlagen mit vielen Optionen bis zu 4
+                    Wochen in Anspruch nehmen.
                   </div>
                 </transition>
               </div>
@@ -706,21 +800,29 @@ onMounted(async () => {
 
           <div class="offer-price-summery" style="margin-top: 20px">
             Gesamtpreis:
-            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br>inkl.
-              Versand</span>
+            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong
+            ><span class="shipping">,<br />inkl. Versand</span>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <UButton :class="{ 'pseudo-disabled': !allRequiredChecked }" color="blue" variant="solid"
-          @click="handlePurchaseClick">
+        <UButton
+          :class="{ 'pseudo-disabled': !allRequiredChecked }"
+          color="blue"
+          variant="solid"
+          @click="handlePurchaseClick"
+        >
           Angebot kaufen
         </UButton>
       </div>
     </div>
   </UModal>
 
-  <UModal :fullscreen="true" v-model="isInfoModalOpen" class="info-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isInfoModalOpen"
+    class="info-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-title">
@@ -729,7 +831,12 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton color="red" class="close-button" icon="i-heroicons-x-mark" @click="isInfoModalOpen = false">
+          <UButton
+            color="red"
+            class="close-button"
+            icon="i-heroicons-x-mark"
+            @click="isInfoModalOpen = false"
+          >
           </UButton>
         </div>
       </div>
@@ -759,8 +866,15 @@ onMounted(async () => {
           </p>
 
           <!-- Optional: Feature-Tags -->
-          <div v-if="selectedOffer.features && selectedOffer.features.length" class="features-preview">
-            <span v-for="feature in selectedOffer.features.slice(0, 3)" :key="feature" class="feature-tag">
+          <div
+            v-if="selectedOffer.features && selectedOffer.features.length"
+            class="features-preview"
+          >
+            <span
+              v-for="feature in selectedOffer.features.slice(0, 3)"
+              :key="feature"
+              class="feature-tag"
+            >
               {{ feature }}
             </span>
             <span v-if="selectedOffer.features.length > 3" class="feature-tag">
@@ -778,8 +892,12 @@ onMounted(async () => {
     </div>
   </UModal>
 
-  <UModal v-model="isSuccessModalOpen" class="success-modal modern-design">
-    <div class="modal-content ">
+  <UModal
+    :fullscreen="true"
+    v-model="isSuccessModalOpen"
+    class="success-modal modern-design"
+  >
+    <div class="modal-content">
       <div class="modal-header flex padding">
         <div class="header-title">
           <h2>Erfolgreich hinzugefügt</h2>
@@ -789,7 +907,12 @@ onMounted(async () => {
           variant="ghost"
           icon="i-heroicons-x-mark-20-solid"
           class="close-button"
-          style="margin-bottom: 20px; border-radius: 50%; width: 40px; height: 40px;"
+          style="
+            margin-bottom: 20px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+          "
           @click="isSuccessModalOpen = false"
         />
       </div>
@@ -800,13 +923,18 @@ onMounted(async () => {
         </div>
         <h3 class="success-title">Konfiguration im Warenkorb</h3>
         <p class="success-message">
-          Ihre individuelle Schließanlage wurde erfolgreich zum Warenkorb hinzugefügt.
-          Bitte überprüfen Sie die Details im Warenkorb, bevor Sie Ihre Bestellung abschließen.
+          Ihre individuelle Schließanlage wurde erfolgreich zum Warenkorb
+          hinzugefügt. Bitte überprüfen Sie die Details im Warenkorb, bevor Sie
+          Ihre Bestellung abschließen.
         </p>
       </div>
 
       <div class="modal-footer-success">
-        <UButton color="gray" variant="ghost" @click="isSuccessModalOpen = false">
+        <UButton
+          color="gray"
+          variant="ghost"
+          @click="isSuccessModalOpen = false"
+        >
           Weiter einkaufen
         </UButton>
         <UButton icon="i-heroicons-arrow-right-16-solid" @click="goToCart">
@@ -815,7 +943,6 @@ onMounted(async () => {
       </div>
     </div>
   </UModal>
-
 </template>
 
 <style scoped>
