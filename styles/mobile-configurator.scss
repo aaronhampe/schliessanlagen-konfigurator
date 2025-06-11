@@ -109,34 +109,22 @@
   /* Allgemeine Sektionen */
   .mobile-section {
     margin-bottom: 20px;
-  
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
-      font-size: 16px;
+    .display-only {
+      border: none;              /* Kein Rahmen */
+      background-color: transparent; /* Kein Hintergrund */
+      padding: 0;                /* Keinen Innenabstand */
+      font-size: 1em;            /* Normale Schriftgröße */
+      font-weight: 500;          /* Etwas fetter, um es hervorzuheben */
+      color: #111827;            /* Dunkle Schriftfarbe (Tailwind gray-900) */
+      width: 100%;               /* Nimmt die volle Breite ein */
+      cursor: default;           /* Zeigt einen normalen Mauszeiger */
+      outline: none;             /* Kein Fokus-Rahmen */
     }
-  
-    input,
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      background-color: white;
-    }
-  
-    &.toggle-section {
-      display: flex;
-      align-items: center;
-  
-      label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-      }
+    
+   
+    .display-only::placeholder {
+      font-weight: 300;
+      color: #6b7280;/* Etwas hellere Farbe für den Platzhalter */
     }
   }
   
