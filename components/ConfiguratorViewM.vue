@@ -1197,7 +1197,7 @@ export default {
             EMail: this.email,
             Telefon: this.phone,
             Firma: this.company,
-            Typ: this.typ,
+            Typ: "Mobil",
             Modell: this.store.selectedModel,
             protect: this.protect,
             Password: this.password,
@@ -1307,7 +1307,7 @@ export default {
           this.email = data.EMail || "";
           this.phone = data.Telefon || "";
           this.company = data.Firma || "";
-          this.typ = data.Typ || "";
+          this.typ = "Mobil";
           this.store.setModel(data.Modell || "Kein bestimmtes Modell");
 
           // HIER IST DER ENTSCHEIDENDE PUNKT: DAS GELADENE PASSWORT SPEICHERN
