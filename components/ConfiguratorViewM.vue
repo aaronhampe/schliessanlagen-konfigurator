@@ -1,6 +1,6 @@
 <template>
   <div class="mobile-container">
-    
+
     <!-- Fortschrittsanzeige -->
     <div class="progress-indicator" id="progress-top">
       <div class="progress-step" :class="{ active: currentStep === 1, completed: currentStep > 1 }"
@@ -21,17 +21,6 @@
       </div>
     </div>
 
-    
-    <div class="bottom-action-bar">
-      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
-
-      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
-
-      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
-        <i class="i-heroicons-building-office-2"></i>
-        <span>Vorlage wählen</span>
-      </UButton>
-    </div>
 
 
 
@@ -209,7 +198,7 @@
 
       <!-- Navigation -->
       <div class="step-navigation" style="padding-bottom: 100px;">
-        <UButton @click="setStep(1)" class="navigation-button back" >
+        <UButton @click="setStep(1)" class="navigation-button back">
           <i class="i-heroicons-arrow-left"></i>
           Zurück
         </UButton>
@@ -466,6 +455,18 @@
         </div>
       </div>
     </div>
+
+    <div class="bottom-action-bar">
+      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
+
+      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
+
+      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
+        <i class="i-heroicons-building-office-2"></i>
+        <span>Vorlage wählen</span>
+      </UButton>
+    </div>
+
   </div>
 </template>
 
@@ -1572,7 +1573,12 @@ export default {
 /* In <style lang="scss" scoped> */
 
 .bottom-action-bar {
-   display: flex;
+
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
   align-items: center;
   gap: 12px;
 
@@ -1610,6 +1616,7 @@ export default {
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
     transition: all 0.2s ease-out;
+
     i {
       color: rgb(0, 0, 0);
       font-size: 1.2rem;
