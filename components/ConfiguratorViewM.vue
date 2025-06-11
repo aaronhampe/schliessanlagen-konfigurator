@@ -1,5 +1,6 @@
 <template>
   <div class="mobile-container">
+    
     <!-- Fortschrittsanzeige -->
     <div class="progress-indicator" id="progress-top">
       <div class="progress-step" :class="{ active: currentStep === 1, completed: currentStep > 1 }"
@@ -20,7 +21,19 @@
       </div>
     </div>
 
-    <!-- Kopfbereich -->
+    
+    <div class="bottom-action-bar">
+      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
+
+      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
+
+      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
+        <i class="i-heroicons-building-office-2"></i>
+        <span>Vorlage wählen</span>
+      </UButton>
+    </div>
+
+
 
     <!-- Anlagennummer -->
     <div class="mobile-section">
@@ -36,8 +49,6 @@
         <i class="i-heroicons-information-circle" />
       </div>
     </div>
-
-
     <div v-if="showInfo" class="info-tooltip">
       Bei einer <strong>Gleichschließung</strong> können alle Schlüssel alle
       Türen öffnen, bei einer <strong>Schließanlage</strong> benötigen Schlüssel
@@ -52,7 +63,7 @@
       <!-- Türliste -->
       <div class="doors-list-header">
         <h2>Meine Türen</h2>
-        <UButton @click="addRow" icon="i-heroicons-plus" class="add-door-button">
+        <UButton @click="addRow" icon="i-heroicons-plus" color="sky" class="add-door-button">
           Tür hinzufügen
         </UButton>
       </div>
@@ -454,17 +465,6 @@
           </UButton>
         </div>
       </div>
-    </div>
-
-    <div class="bottom-action-bar">
-      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
-
-      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
-
-      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
-        <i class="i-heroicons-building-office-2"></i>
-        <span>Vorlage wählen</span>
-      </UButton>
     </div>
   </div>
 </template>
@@ -1572,7 +1572,7 @@ export default {
 /* In <style lang="scss" scoped> */
 
 .bottom-action-bar {
-  position: sticky;
+
   bottom: 0;
   left: 0;
   right: 0;
@@ -1608,14 +1608,15 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    color: white;
+    color: black;
+    background-color: #f3f4f6; // gray-100
 
     font-weight: 600;
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
     transition: all 0.2s ease-out;
     i {
-      color: white;
+      color: rgb(0, 0, 0);
       font-size: 1.2rem;
     }
 
