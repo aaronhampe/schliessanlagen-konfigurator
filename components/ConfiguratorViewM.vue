@@ -22,6 +22,17 @@
     </div>
 
 
+    <div class="bottom-action-bar">
+      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
+
+      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
+
+      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
+        <i class="i-heroicons-building-office-2"></i>
+        <span>Vorlage wählen</span>
+      </UButton>
+    </div>
+
 
 
     <!-- Anlagennummer -->
@@ -455,18 +466,6 @@
         </div>
       </div>
     </div>
-
-    <div class="bottom-action-bar">
-      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
-
-      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
-
-      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
-        <i class="i-heroicons-building-office-2"></i>
-        <span>Vorlage wählen</span>
-      </UButton>
-    </div>
-
   </div>
 </template>
 
@@ -1573,11 +1572,6 @@ export default {
 /* In <style lang="scss" scoped> */
 
 .bottom-action-bar {
-
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   align-items: center;
   gap: 12px;
