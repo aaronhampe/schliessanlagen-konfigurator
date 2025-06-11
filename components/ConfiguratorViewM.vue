@@ -22,8 +22,8 @@
 
     <!-- Kopfbereich -->
 
-     <!-- Anlagennummer -->
-     <div class="mobile-section">
+    <!-- Anlagennummer -->
+    <div class="mobile-section">
       <input type="text" readonly v-model="anlageNr" placeholder="Anlagennummer" class="display-only" />
     </div>
 
@@ -37,21 +37,6 @@
       </div>
     </div>
 
-    <div class="global-actions">
-
-      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" size="sm" variant="soft">
-        Anlage laden
-      </UButton>
-      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" size="sm" variant="soft">
-        Anlage speichern
-      </UButton>
-    </div>
-
-    <div class="global-actions-scnd">
-      <UButton @click="isTemplateSelectorOpen = true" icon="i-heroicons-building-office-2" size="sm" variant="soft" color="blue">
-        Vorlage wählen
-      </UButton>
-    </div>
 
     <div v-if="showInfo" class="info-tooltip">
       Bei einer <strong>Gleichschließung</strong> können alle Schlüssel alle
@@ -159,7 +144,7 @@
       </div>
 
       <!-- Weiter zu Schritt 2 Button -->
-      <UButton @click="goToStep2" class="action-button next-step-button">
+      <UButton @click="goToStep2" class="action-button next-step-button" style="margin-bottom: 100px;">
         Weiter zu Schlüsselkonfiguration
       </UButton>
     </div>
@@ -212,8 +197,8 @@
       </div>
 
       <!-- Navigation -->
-      <div class="step-navigation">
-        <UButton @click="setStep(1)" class="navigation-button back">
+      <div class="step-navigation" style="padding-bottom: 100px;">
+        <UButton @click="setStep(1)" class="navigation-button back" >
           <i class="i-heroicons-arrow-left"></i>
           Zurück
         </UButton>
@@ -267,7 +252,7 @@
       </div>
 
       <div class="summary-actions">
-        <UButton @click="setStep(2)" class="navigation-button back">
+        <UButton @click="setStep(2)" class="navigation-button">
           <i class="i-heroicons-arrow-left"></i>
           Zurück
         </UButton>
@@ -292,7 +277,7 @@
       ).Optionen || []" :key="option" class="option-item">
               <label class="option-label">
                 <input type="checkbox" :value="option" v-model="modalOptionsSelected" />
-                <span class="option-text">{{ option }}</span>
+                <span style="margin-left: 4px;" class="option-text">{{ option }}</span>
               </label>
             </div>
             <div v-if="(
@@ -471,7 +456,16 @@
       </div>
     </div>
 
+    <div class="bottom-action-bar">
+      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
 
+      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
+
+      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
+        <i class="i-heroicons-building-office-2"></i>
+        <span>Vorlage wählen</span>
+      </UButton>
+    </div>
   </div>
 </template>
 
@@ -1575,34 +1569,60 @@ export default {
 
 // In mobile-configurator.scss oder im <style> Block von ConfiguratorViewM.vue
 
-.global-actions {
+/* In <style lang="scss" scoped> */
+
+.bottom-action-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
   display: flex;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
 
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-top: 1px solid #e5e7eb;
+  z-index: 10;
+
+  // Stil für die unauffälligen Icon-Buttons
   .u-button {
-    flex-grow: 1;
-    justify-content: center;
+    color: #4b5563; // gray-600
+    padding: 12px;
 
+    // Wir entfernen den Hover-Effekt, da es auf Mobilgeräten kein Hover gibt
+    &:hover {
+      background-color: #f3f4f6; // gray-100
+    }
   }
-}
 
+  // Hervorgehobener Haupt-Button
+  .template-cta-button {
+    margin-left: auto;
 
-.global-actions-scnd {
-  display: flex;
-  justify-content: center;
-  padding: 10px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  gap: 10px;
-
-  .u-button {
-    flex-grow: 0;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
 
+    font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+    transition: all 0.2s ease-out;
+    i {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+    }
   }
 }
 

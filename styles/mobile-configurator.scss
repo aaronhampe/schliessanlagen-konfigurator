@@ -1,552 +1,843 @@
 .mobile-container {
-    max-width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #111827;
+  background-color: #fafbfc;
+  min-height: 100vh;
+
+  @media (max-width: 640px) {
     padding: 16px;
-    margin: 0 auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+}
+
+/* --- Verbesserter Progress Tracker --- */
+
+.progress-indicator {
+  display: flex;
+  align-items: flex-start;
+  /* Ändert Ausrichtung für stabilere Labels */
+  justify-content: space-around;
+  /* Verteilt Schritte gleichmäßig */
+  padding: 24px 16px;
+  /* Etwas mehr vertikaler, weniger horizontaler Puffer */
+  position: relative;
+  background-color: #f8f9fa;
+  /* Sauberer, solider Hintergrund */
+  border-bottom: 1px solid #e5e7eb;
+  /* Klare Trennlinie zum Inhalt */
+  overflow-x: hidden;
+  /* Sicherheitsnetz gegen versehentliches Scrollen */
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: default;
+  /* flex: 1 und max-width entfernt, um Overflow zu verhindern */
+  width: 80px;
+  /* Gibt jedem Schritt eine feste, aber kompakte Breite */
+}
+
+.progress-step .step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  /* Dezenter Rand für inaktive Schritte */
+  background-color: #ffffff;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+}
+
+.progress-step .step-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+  /* Verhindert Zeilenumbruch-Sprünge */
+}
+
+/* --- Zustand: Aktiv --- */
+.progress-step.active .step-number {
+  background-color: #0ea5e9;
+  /* Aktives Blau */
+  color: white;
+  border-color: #0ea5e9;
+  transform: scale(1.15);
+  /* Etwas stärkere Betonung */
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+  /* Weicherer, sichtbarer Schatten */
+}
+
+.progress-step.active .step-label {
+  color: #0c4a6e;
+  /* Dunkleres Blau für besseren Kontrast */
+  font-weight: 600;
+}
+
+/* --- Zustand: Abgeschlossen --- */
+.progress-step.completed {
+  cursor: pointer;
+  /* Klickbar, um zurückzugehen */
+}
+
+.progress-step.completed .step-number {
+  font-size: 0;
+  /* Versteckt die Nummer (1, 2, 3...) */
+  background-color: #10b981;
+  /* Erfolgs-Grün */
+  border-color: #10b981;
+  color: white;
+}
+
+.progress-step.completed .step-number::after {
+  content: "✓";
+  position: absolute;
+  font-size: 18px;
+  /* Klare Größe für das Häkchen */
+  font-weight: bold;
+  transform: scale(0.8);
+  /* Startet klein */
+  opacity: 0;
+  animation: popIn 0.3s 0.1s forwards;
+  /* Animiert das Häkchen herein */
+}
+
+.progress-step.completed .step-label {
+  color: #047857;
+  /* Dunkleres Grün */
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- VÖLLIG NEUE, ROBUSTERE VERBINDUNGSLINIE --- */
+
+/* Die graue Basislinie, die hinter den Zahlen verläuft */
+.progress-step:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  top: 18px;
+  /* Exakt in der Mitte der 36px hohen Zahl */
+  right: 50%;
+  /* Startet in der Mitte des aktuellen Schritts */
+  height: 3px;
+  background-color: #e5e7eb;
+  z-index: 1;
+  /* Hinter der Zahl, vor dem Container */
+}
+
+/* Die farbige Fortschrittslinie, die sich darüber legt */
+.progress-step.completed+.progress-step::before {
+  background-color: #10b981;
+  /* Färbt die Linie des NÄCHSTEN Schritts grün */
+}
+
+/* Header */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h1 {
+    font-size: 24px;
+    margin: 0;
     color: #333;
-    background-color: #f8f9fa;
   }
-  
-  /* Fortschrittsanzeige */
-  .progress-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    padding: 10px 0;
+
+  .info-icon {
+    cursor: pointer;
+    font-size: 24px;
+    color: #0ea5e9;
   }
-  
-  .progress-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+}
+
+.info-tooltip {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Allgemeine Sektionen */
+.mobile-section {
+  margin-bottom: 20px;
+
+  .display-only {
+    border: none;
+    /* Kein Rahmen */
+    background-color: transparent;
+    /* Kein Hintergrund */
+    padding: 0;
+    /* Keinen Innenabstand */
+    font-size: 1em;
+    /* Normale Schriftgröße */
+    font-weight: 500;
+    /* Etwas fetter, um es hervorzuheben */
+    color: #111827;
+    /* Dunkle Schriftfarbe (Tailwind gray-900) */
+    width: 100%;
+    /* Nimmt die volle Breite ein */
     cursor: default;
-  
-    .step-number {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #ddd;
-      color: #666;
+    /* Zeigt einen normalen Mauszeiger */
+    outline: none;
+    /* Kein Fokus-Rahmen */
+  }
+
+
+  .display-only::placeholder {
+    font-weight: 300;
+    color: #6b7280;
+    /* Etwas hellere Farbe für den Platzhalter */
+  }
+}
+
+/* Listenbereiche */
+.doors-list-header,
+.keys-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .add-door-button,
+  .add-key-button {
+    font-size: 14px;
+  }
+}
+
+/* Akkordeon für Türen */
+/* Akkordeon für Türen */
+.mobile-accordion {
+  background-color: white;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+
+  .accordion-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .door-number {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-  
-    .step-label {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: white;
       font-size: 14px;
-      color: #666;
-    }
-  
-    &.active {
-      .step-number {
-        background-color: #0ea5e9;
-        color: white;
-      }
-  
-      .step-label {
-        color: #0ea5e9;
-        font-weight: bold;
-      }
-    }
-  
-    &.completed {
-      cursor: pointer;
-  
-      .step-number {
-        background-color: #10b981;
-        color: white;
-      }
-  
-      .step-label {
-        color: #10b981;
-      }
-    }
-  }
-  
-  .progress-line {
-    flex-grow: 1;
-    height: 2px;
-    background-color: #ddd;
-    margin: 0 8px;
-    margin-bottom: 15px;
-  }
-  
-  /* Header */
-  .mobile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  
-    h1 {
-      font-size: 24px;
-      margin: 0;
-      color: #333;
-    }
-  
-    .info-icon {
-      cursor: pointer;
-      font-size: 24px;
-      color: #0ea5e9;
-    }
-  }
-  
-  .info-tooltip {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  
-  /* Allgemeine Sektionen */
-  .mobile-section {
-    margin-bottom: 20px;
-    .display-only {
-      border: none;              /* Kein Rahmen */
-      background-color: transparent; /* Kein Hintergrund */
-      padding: 0;                /* Keinen Innenabstand */
-      font-size: 1em;            /* Normale Schriftgröße */
-      font-weight: 500;          /* Etwas fetter, um es hervorzuheben */
-      color: #111827;            /* Dunkle Schriftfarbe (Tailwind gray-900) */
-      width: 100%;               /* Nimmt die volle Breite ein */
-      cursor: default;           /* Zeigt einen normalen Mauszeiger */
-      outline: none;             /* Kein Fokus-Rahmen */
-    }
-    
-   
-    .display-only::placeholder {
-      font-weight: 300;
-      color: #6b7280;/* Etwas hellere Farbe für den Platzhalter */
-    }
-  }
-  
-  /* Listenbereiche */
-  .doors-list-header,
-  .keys-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  
-    h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-  
-    .add-door-button,
-    .add-key-button {
-      font-size: 14px;
-    }
-  }
-  
-  /* Akkordeon für Türen */
-  .mobile-accordion {
-    background-color: white;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .accordion-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background-color: white;
-    cursor: pointer;
-    border-bottom: 1px solid transparent;
-  
-    .accordion-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-  
-      .door-number {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: #0ea5e9;
-        color: white;
-        font-size: 14px;
-        font-weight: 600;
-      }
-  
-      .door-name {
-        font-weight: 600;
-      }
-    }
-  
-    i {
-      color: #0ea5e9;
-      font-size: 18px;
-    }
-  }
-  
-  .accordion-content {
-    padding: 16px;
-    border-top: 1px solid #eee;
-    background-color: #f9f9f9;
-  }
-  
-  /* Input-Gruppen innerhalb von Akkordeon */
-  .input-group {
-    margin-bottom: 16px;
-  
-    label {
-      display: block;
       font-weight: 600;
-      margin-bottom: 4px;
-      font-size: 14px;
+      box-shadow: 0 2px 4px rgba(14, 165, 233, 0.2);
     }
-  
-    .sublabel {
-      font-weight: normal;
-      font-size: 12px;
-      color: #666;
-    }
-  
-    select,
-    input {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 15px;
-    }
-  
-    &.size-group {
-      .size-inputs {
-        display: flex;
-        gap: 12px;
-  
-        .size-input-container {
-          flex: 1;
-        }
-      }
-    }
-  }
-  
-  /* Buttons für Optionen */
-  .options-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 8px 12px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-  
-    .options-button-text {
-      flex: 1;
-      color: #333;
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-right: 8px;
-    }
-  
-    i {
+
+    .door-name {
+      font-weight: 600;
+      color: #111827;
       font-size: 16px;
-      color: #0ea5e9;
     }
   }
-  
-  /* Action Buttons */
-  .action-buttons {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
+
+  i {
+    color: #6b7280;
+    font-size: 20px;
+    transition: transform 0.3s ease;
   }
-  
-  .action-button {
+}
+
+.accordion-content {
+  padding: 20px;
+  background-color: #fafbfc;
+  border-top: 1px solid #f3f4f6;
+  animation: accordionOpen 0.3s ease-out;
+}
+
+@keyframes accordionOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input-Gruppen */
+.input-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #374151;
+    letter-spacing: 0.01em;
+  }
+
+  .sublabel {
+    font-weight: 400;
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  select,
+  input {
     width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    border: none;
-    background-color: #0ea5e9;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 16px;
-  
-    &.next-step-button {
-      background-color: #10b981;
-    }
-  
-    &.save-button {
-      background-color: #f59e0b;
-      max-width: 80%
-    }
-  }
-  
-  /* Schlüsselkarten */
-  .keys-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  
-  .key-card {
+    padding: 10px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 15px;
     background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+
+    &:hover:not(:focus) {
+      border-color: #d1d5db;
+    }
+  }
+
+  &.size-group {
+    .size-inputs {
+      display: flex;
+      gap: 16px;
+
+      .size-input-container {
+        flex: 1;
+
+        select {
+          padding-right: 36px;
+        }
+      }
+    }
+  }
+}
+
+/* Buttons für Optionen */
+.options-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  .options-button-text {
+    flex: 1;
+    color: #333;
+    text-align: left;
+    white-space: nowrap;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  
-    .key-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
+    text-overflow: ellipsis;
+    margin-right: 8px;
+  }
+
+  i {
+    font-size: 16px;
+    color: #0ea5e9;
+  }
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+
+  button {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &:first-child {
       background-color: #f3f4f6;
-      border-bottom: 1px solid #ddd;
-  
-      .key-name {
-        font-weight: 600;
-        font-size: 14px;
+      color: #374151;
+
+      &:hover {
+        background-color: #e5e7eb;
       }
     }
-  
-    .key-card-body {
-      padding: 12px;
-  
-      .key-quantity {
-        margin-bottom: 12px;
-  
-        label {
-          display: block;
-          font-size: 12px;
-          margin-bottom: 4px;
-          color: #666;
-        }
-  
-        .quantity-input {
-          width: 60px;
-          padding: 4px 8px;
-          font-size: 14px;
-        }
-      }
-  
-      .door-assignments {
-        label {
-          display: block;
-          font-size: 12px;
-          margin-bottom: 4px;
-          color: #666;
-        }
-      }
-  
-      .door-checkbox-list {
-        max-height: 150px;
-        overflow-y: auto;
-        border: 1px solid #eee;
-        border-radius: 4px;
-        padding: 4px;
-        margin-bottom: 8px;
-  
-        .door-checkbox-item {
-          margin-bottom: 4px;
-  
-          label {
-            display: flex;
-            align-items: center;
-            font-size: 13px;
-            color: #333;
-  
-            input[type="checkbox"] {
-              margin-right: 6px;
-            }
-          }
-        }
+
+    &:last-child {
+      background-color: #fee2e2;
+      color: #dc2626;
+
+      &:hover {
+        background-color: #fecaca;
       }
     }
   }
-  
-  /* Navigation zwischen Schritten */
-  .step-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-  
-    .navigation-button {
-      display: flex;
-      align-items: center;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-  
-      &.back {
-        background-color: #f3f4f6;
-        color: #333;
-  
-        i {
-          margin-right: 8px;
-        }
-      }
-  
-      &.next {
-        background-color: #10b981;
-        color: white;
-  
-        i {
-          margin-left: 8px;
-        }
-      }
-    }
-  }
-  
-  /* Zusammenfassung */
-  .summary-step {
-    h2 {
-      margin-bottom: 20px;
-    }
-  
-    .summary-section {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  
-      h3 {
-        margin-top: 0;
-        margin-bottom: 12px;
-        font-size: 18px;
-        color: #0ea5e9;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-      }
-    }
-  
-    .summary-item {
-      display: flex;
-      margin-bottom: 8px;
-  
-      .summary-label {
-        width: 150px;
-        font-weight: 600;
-      }
-    }
-  
-    .summary-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-  }
-  
-  /* Modals */
-  .modal-overlay {
-    position: fixed;
+}
+
+.action-button {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+
+  &:hover::before {
+    transform: translateX(100%);
+  }
+
+  &.next-step-button {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+  }
+
+  &.save-button {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    max-width: 200px;
+    margin: 24px auto 0;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    }
+  }
+}
+
+/* Schlüsselkarten */
+.keys-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.key-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .key-card-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: #f3f4f6;
+    border-bottom: 1px solid #ddd;
+
+    .key-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
   }
-  
-  .modal-container {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
-    max-height: 90vh;
-    overflow: visible !important;
-  
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid #eee;
-  
-      h3 {
-        margin: 0;
-        font-size: 18px;
+
+  .key-card-body {
+    padding: 12px;
+
+    .key-quantity {
+      margin-bottom: 12px;
+
+      label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+        color: #666;
       }
-  
-      .modal-close {
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: #999;
-  
-        &:hover {
-          color: #333;
-        }
+
+      .quantity-input {
+        width: 60px;
+        padding: 4px 8px;
+        font-size: 14px;
       }
     }
-  
-    .modal-body {
-      padding: 16px;
-      max-height: 50vh;
+
+    .door-assignments {
+      label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+        color: #666;
+      }
+    }
+
+    .door-checkbox-list {
+      max-height: 150px;
       overflow-y: auto;
-  
-      .option-item {
-        margin-bottom: 10px;
-  
-        .option-label {
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 4px;
+      margin-bottom: 8px;
+
+      .door-checkbox-item {
+        margin-bottom: 4px;
+
+        label {
           display: flex;
           align-items: center;
-          cursor: pointer;
-  
+          font-size: 13px;
+          color: #333;
+
           input[type="checkbox"] {
-            margin-right: 8px;
+            margin-right: 6px;
           }
         }
       }
-  
-      .no-options {
-        color: #666;
-        font-style: italic;
+    }
+  }
+}
+
+/* Navigation zwischen Schritten */
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+
+  .navigation-button {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+
+    &.back {
+      background-color: #f3f4f6;
+      color: #333;
+
+      i {
+        margin-right: 8px;
       }
     }
-  
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
+
+    &.next {
+      background-color: #10b981;
+      color: white;
+
+      i {
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+/* In <style lang="scss" scoped> */
+
+/* Zusammenfassung */
+.summary-step {
+  padding-bottom: 100px;
+  /* Gibt Platz nach unten wegen der fixierten Action Bar */
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .summary-section {
+    background-color: white;
+    border-radius: 16px;
+    /* Etwas runder */
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid #f3f4f6;
+    /* Dezenterer Rand */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #0c4a6e;
+      /* Dunkles Blau passend zum Progress-Tracker */
+      border-bottom: 1px solid #f3f4f6;
+      padding-bottom: 12px;
+    }
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    /* Label und Wert auseinander schieben */
+    margin-bottom: 12px;
+    font-size: 15px;
+
+    .summary-label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: #111827;
+      text-align: right;
+    }
+  }
+
+  /* --- HIER IST DIE KORREKTUR --- */
+  .summary-actions {
+    display: flex;
+    gap: 12px;
+    /* Abstand zwischen den Buttons */
+    margin-top: 24px;
+
+    /* Allgemeine Regel für BEIDE Buttons in diesem Container */
+    .u-button {
+      flex: 1;
+      /* Wichtig: Beide Buttons teilen sich den Platz fair auf */
+      width: auto;
+      /* Überschreibt das problematische width: 100% */
+      margin: 0;
+      /* Setzt alle alten margin-Werte zurück */
       padding: 12px 16px;
-      border-top: 1px solid #eee;
-      gap: 8px;
-  
-      .modal-button {
-        padding: 8px 16px;
-        border-radius: 6px;
-        flex: 0 0 auto;
-        /* kein Stretchen */
-        width: auto !important;
-  
-        &.confirm {
-          background-color: #0ea5e9;
-          color: white;
+      /* Einheitliches Padding */
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      justify-content: center;
+      /* Zentriert den Inhalt im Button (wichtig für Nuxt UI) */
+    }
+
+    /* Spezieller Stil für den "Zurück"-Button */
+    .navigation-button {
+      background-color: #f3f4f6;
+      color: #374151;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #e5e7eb;
+      }
+    }
+
+    /* Spezieller Stil für den "Speichern"-Button */
+    .save-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+      }
+    }
+  }
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow: visible !important;
+  animation: modalSlideUp 0.3s ease-out;
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f3f4f6;
+
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6b7280;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #f3f4f6;
+        color: #111827;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 24px;
+    max-height: 50vh;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+
+      &:hover {
+        background: #9ca3af;
+      }
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 24px;
+    border-top: 1px solid #f3f4f6;
+    gap: 12px;
+
+    .modal-button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+
+      &.confirm {
+        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
-  
-        &.cancel {
-          background-color: #f3f4f6;
-          color: #333;
+      }
+
+      &.cancel {
+        background-color: #f3f4f6;
+        color: #374151;
+
+        &:hover {
+          background-color: #e5e7eb;
         }
       }
     }
   }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
