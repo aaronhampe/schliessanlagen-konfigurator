@@ -1572,12 +1572,7 @@ export default {
 /* In <style lang="scss" scoped> */
 
 .bottom-action-bar {
-
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  display: flex;
+   display: flex;
   align-items: center;
   gap: 12px;
 
