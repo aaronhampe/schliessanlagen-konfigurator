@@ -284,10 +284,8 @@
           Anlage speichern
         </UButton>
 
-        <UButton v-if="showTutorialButton" class="button-secondary" icon="i-heroicons-academic-cap"
-          @click="showTutorial = true" size="sm" color="sky" variant="outline" :trailing="false">
-          Tutorial anzeigen
-        </UButton>
+        <a class="button-secondary" target="_blank"href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s">Tutorial auf&nbsp;YouTube</a>
+       
 
       </div>
     </div>
@@ -423,80 +421,6 @@
     </div>
   </UModal>
 
-  <UModal v-model="showTutorial" class="tutorial-modal">
-    <div class="tutorial-content">
-      <div class="tutorial-header">
-        <h2>Konfigurator Anleitung</h2>
-        <UButton @click="showTutorial = false" icon="i-heroicons-x-mark" class="close-button" color="red"></UButton>
-      </div>
-
-      <div class="tutorial-steps">
-        <!-- Schritt 1: Türen benennen -->
-        <div class="tutorial-step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Türen benennen</h3>
-            <p>Geben Sie im linken Bereich die Namen Ihrer Türen ein (z.B. "Haustür", "Kellertür").</p>
-          </div>
-        </div>
-
-        <!-- Schritt 2: Zylinder und Optionen auswählen -->
-        <div class="tutorial-step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Zylinder auswählen</h3>
-            <p>Wählen Sie für jede Tür den passenden Zylindertyp aus.</p>
-            <p>Fügen Sie bei Bedarf Sonderoptionen hinzu (z.B. Seewasserbeständigkeit oder besonderen Anbohrschutz).</p>
-          </div>
-        </div>
-
-        <!-- Schritt 3: Vorlage laden (optional) -->
-        <div class="tutorial-step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Vorlage laden (optional)</h3>
-            <p>Nutzen Sie die "Vorlage laden"-Funktion, um ein Musterbeispiel zu sehen.</p>
-          </div>
-        </div>
-
-        <!-- Schritt 4: Bestehende Anlage laden (optional) -->
-        <div class="tutorial-step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Bestehende Anlage laden (optional)</h3>
-            <p>Wenn Sie bereits eine Anlage bei uns erstellt haben, können Sie sie hier laden.</p>
-            <p>Geben Sie die Anlagen-Nummer und das Passwort aus der E-Mail ein, die Sie von uns erhalten haben.</p>
-          </div>
-        </div>
-
-        <!-- Schritt 5: E-Mail eingeben und Angebot erhalten -->
-        <div class="tutorial-step">
-          <div class="step-number">5</div>
-          <div class="step-content">
-            <h3>Angebot anfordern</h3>
-            <p>Klicken Sie auf den Button "Zur Modellauswahl".</p>
-            <p>Geben Sie Ihre E-Mail-Adresse ein. Sie erhalten anschließend direkt die passenden Angebote.</p>
-          </div>
-        </div>
-
-        <!-- Schritt 6: Nur speichern -->
-        <div class="tutorial-step">
-          <div class="step-number">6</div>
-          <div class="step-content">
-            <h3>Erstmal nur speichern (optional)</h3>
-            <p>Wollen Sie später an Ihrer Konfiguration weiterarbeiten?</p>
-            <p>Mit dem Button "Anlage speichern" können Sie Ihre bisherige Konfiguration sichern und später weiter daran
-              arbeiten.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="tutorial-footer">
-        <UButton @click="showTutorial = false" color="amber" variant="solid">Verstanden</UButton>
-      </div>
-    </div>
-  </UModal>
-
 </template>
 
 <script>
@@ -545,8 +469,6 @@ export default {
       ///////////////////////////////////
       showIntroText: true,
       activeStep: 1,
-      showTutorial: false,
-      showTutorialButton: true,
       ///////////////////////////////////
       isTemplateModalOpen: false,
       selectedTemplateId: null,
