@@ -230,14 +230,28 @@ export default {
             { outside: 60, inside: 75, price: 151.15 },
             { outside: 60, inside: 80, price: 151.15 },
 
+            { outside: 65, inside: 45, price: 109.15 },
+            { outside: 65, inside: 50, price: 109.15 },
+            { outside: 65, inside: 55, price: 141.70 },
+            { outside: 65, inside: 60, price: 141.70 },
             { outside: 65, inside: 65, price: 151.15 },
             { outside: 65, inside: 70, price: 151.15 },
             { outside: 65, inside: 75, price: 160.60 },
             { outside: 65, inside: 80, price: 160.60 },
 
+
+            { outside: 70, inside: 30, price: 98.65 },
+            { outside: 70, inside: 35, price: 103.90 },
+            { outside: 70, inside: 40, price: 103.90 },
+            { outside: 70, inside: 45, price: 109.15 },
+            { outside: 70, inside: 50, price: 109.15 },
+            { outside: 70, inside: 55, price: 141.70 },
+            { outside: 70, inside: 60, price: 141.70 },
+            { outside: 70, inside: 65, price: 151.15 },
             { outside: 70, inside: 70, price: 151.15 },
             { outside: 70, inside: 75, price: 160.60 },
             { outside: 70, inside: 80, price: 160.60 },
+    
 
             { outside: 75, inside: 30, price: 103.90 },
             { outside: 75, inside: 35, price: 109.15 },
