@@ -1,21 +1,16 @@
 <template>
   <div class="mobile-container">
+
     <!-- Fortschrittsanzeige -->
     <div class="progress-indicator" id="progress-top">
-      <div
-        class="progress-step"
-        :class="{ active: currentStep === 1, completed: currentStep > 1 }"
-        @click="currentStep > 1 && setStep(1)"
-      >
+      <div class="progress-step" :class="{ active: currentStep === 1, completed: currentStep > 1 }"
+        @click="currentStep > 1 && setStep(1)">
         <span class="step-number">1</span>
         <span class="step-label">Türen</span>
       </div>
       <div class="progress-line"></div>
-      <div
-        class="progress-step"
-        :class="{ active: currentStep === 2, completed: currentStep > 2 }"
-        @click="currentStep > 2 && setStep(2)"
-      >
+      <div class="progress-step" :class="{ active: currentStep === 2, completed: currentStep > 2 }"
+        @click="currentStep > 2 && setStep(2)">
         <span class="step-number">2</span>
         <span class="step-label">Schlüssel</span>
       </div>
@@ -26,7 +21,26 @@
       </div>
     </div>
 
-    <!-- Kopfbereich -->
+
+    <div class="bottom-action-bar">
+      <UButton @click="openLoadModal" icon="i-heroicons-folder-open" color="gray" variant="ghost" />
+
+      <UButton @click="handleSaveClick" icon="i-heroicons-cloud-arrow-up" color="gray" variant="ghost" />
+
+      <UButton @click="isTemplateSelectorOpen = true" class="template-cta-button">
+        <i class="i-heroicons-building-office-2"></i>
+        <span>Vorlage wählen</span>
+      </UButton>
+    </div>
+
+
+
+    <!-- Anlagennummer -->
+    <div class="mobile-section">
+      <input type="text" readonly v-model="anlageNr" placeholder="Anlagennummer" class="display-only" />
+    </div>
+
+
     <div class="mobile-header">
       <h1>
         {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
@@ -35,42 +49,12 @@
         <i class="i-heroicons-information-circle" />
       </div>
     </div>
-
-    <div class="global-actions">
-      <UButton
-        @click="openLoadModal"
-        icon="i-heroicons-folder-open"
-        size="sm"
-        variant="soft"
-      >
-        Anlage laden
-      </UButton>
-      <UButton
-        @click="handleSaveClick"
-        icon="i-heroicons-cloud-arrow-up"
-        size="sm"
-        variant="soft"
-      >
-        Anlage speichern
-      </UButton>
-    </div>
-
     <div v-if="showInfo" class="info-tooltip">
       Bei einer <strong>Gleichschließung</strong> können alle Schlüssel alle
       Türen öffnen, bei einer <strong>Schließanlage</strong> benötigen Schlüssel
       eine gezielte Zuweisung.
     </div>
 
-    <!-- Anlagennummer -->
-    <div class="mobile-section">
-      <label>Anlagennummer:</label>
-      <input
-        type="text"
-        readonly
-        v-model="anlageNr"
-        placeholder="Anlagenummer"
-      />
-    </div>
 
     <!-- SCHRITT 1: TÜRKONFIGURATION -->
     <div v-if="currentStep === 1">
@@ -79,33 +63,22 @@
       <!-- Türliste -->
       <div class="doors-list-header">
         <h2>Meine Türen</h2>
-        <UButton
-          @click="addRow"
-          icon="i-heroicons-plus"
-          class="add-door-button"
-        >
+        <UButton @click="addRow" icon="i-heroicons-plus" color="sky" class="add-door-button">
           Tür hinzufügen
         </UButton>
       </div>
 
       <!-- Türdetails (Akkordeon) -->
-      <div
-        class="mobile-accordion"
-        v-for="(row, rowIndex) in rows"
-        :key="rowIndex"
-      >
+      <div class="mobile-accordion" v-for="(row, rowIndex) in rows" :key="rowIndex">
         <div class="accordion-header" @click="toggleAccordion(rowIndex)">
           <div class="accordion-title">
             <span class="door-number">{{ rowIndex + 1 }}</span>
             <span class="door-name">{{ getDoorName(row[0]) }}</span>
           </div>
-          <i
-            :class="
-              accordionOpen[rowIndex]
-                ? 'i-heroicons-chevron-up'
-                : 'i-heroicons-chevron-down'
-            "
-          />
+          <i :class="accordionOpen[rowIndex]
+        ? 'i-heroicons-chevron-up'
+        : 'i-heroicons-chevron-down'
+        " />
         </div>
         <!-- Türposition -->
 
@@ -113,10 +86,7 @@
           <!-- Türbezeichnung -->
           <div class="input-group">
             <label>Türbezeichnung:</label>
-            <UInput
-              v-model="row[0].doorDesignation"
-              placeholder="z.B. Haupteingang"
-            />
+            <UInput v-model="row[0].doorDesignation" placeholder="z.B. Haupteingang" />
           </div>
 
           <!-- Anzahl -->
@@ -130,11 +100,7 @@
             <label>Zylinder-Typ:</label>
             <select v-model="row[0].type" @change="onTypeChange(row[0])">
               <option disabled value="">Bitte auswählen</option>
-              <option
-                v-for="type in store.availableTypes"
-                :key="type"
-                :value="type"
-              >
+              <option v-for="type in store.availableTypes" :key="type" :value="type">
                 {{ type }}
               </option>
             </select>
@@ -146,32 +112,18 @@
             <div class="size-inputs">
               <div class="size-input-container">
                 <label class="sublabel">Außen:</label>
-                <select
-                  v-model="row[0].outside"
-                  @change="onOutsideSizeChange(row[0])"
-                >
+                <select v-model="row[0].outside" @change="onOutsideSizeChange(row[0])">
                   <option value="">Wählen...</option>
-                  <option
-                    v-for="size in getAvailableOutsideSizes(row[0])"
-                    :key="size"
-                    :value="size"
-                  >
+                  <option v-for="size in getAvailableOutsideSizes(row[0])" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
               </div>
               <div class="size-input-container">
                 <label class="sublabel">Innen:</label>
-                <select
-                  v-model="row[0].inside"
-                  @change="onInsideSizeChange(row[0])"
-                >
+                <select v-model="row[0].inside" @change="onInsideSizeChange(row[0])">
                   <option value="">Wählen...</option>
-                  <option
-                    v-for="size in getAvailableInsideSizes(row[0])"
-                    :key="size"
-                    :value="size"
-                  >
+                  <option v-for="size in getAvailableInsideSizes(row[0])" :key="size" :value="size">
                     {{ size }} mm
                   </option>
                 </select>
@@ -182,30 +134,20 @@
           <!-- Optionen -->
           <div class="input-group">
             <label>Optionen:</label>
-            <UButton
-              @click.stop="openOptionsModal(rowIndex)"
-              class="options-button"
-            >
+            <UButton @click.stop="openOptionsModal(rowIndex)" class="options-button">
               <span class="options-button-text">{{
-                getSelectedOptionsText(row[0]) || "Optionen auswählen"
-              }}</span>
+        getSelectedOptionsText(row[0]) || "Optionen auswählen"
+      }}</span>
               <i class="i-heroicons-cog"></i>
             </UButton>
           </div>
 
           <!-- Aktionen (Duplizieren/Löschen) -->
           <div class="action-buttons">
-            <UButton
-              @click="duplicateRow(rowIndex)"
-              icon="i-heroicons-document-duplicate"
-            >
+            <UButton @click="duplicateRow(rowIndex)" icon="i-heroicons-document-duplicate">
               Duplizieren
             </UButton>
-            <UButton
-              @click="deleteRow(rowIndex)"
-              icon="i-heroicons-trash"
-              color="red"
-            >
+            <UButton @click="deleteRow(rowIndex)" icon="i-heroicons-trash" color="red">
               Löschen
             </UButton>
           </div>
@@ -213,7 +155,7 @@
       </div>
 
       <!-- Weiter zu Schritt 2 Button -->
-      <UButton @click="goToStep2" class="action-button next-step-button">
+      <UButton @click="goToStep2" class="action-button next-step-button" style="margin-bottom: 100px;">
         Weiter zu Schlüsselkonfiguration
       </UButton>
     </div>
@@ -224,57 +166,32 @@
 
       <div class="keys-list-header">
         <h2>Meine Schlüssel</h2>
-        <UButton
-          @click="addCheckbox"
-          icon="i-heroicons-plus"
-          class="add-key-button"
-        >
+        <UButton @click="addCheckbox" icon="i-heroicons-plus" class="add-key-button">
           Schlüssel hinzufügen
         </UButton>
       </div>
 
       <!-- Liste der Schlüssel (nur erste Zeile) -->
       <div class="keys-list">
-        <div
-          v-for="(keyItem, colIndex) in rows[0]"
-          :key="colIndex"
-          class="key-card"
-        >
+        <div v-for="(keyItem, colIndex) in rows[0]" :key="colIndex" class="key-card">
           <div class="key-card-header">
             <span class="key-name">{{ keyItem.keyname }}</span>
-            <UButton
-              @click="openKeyModal(colIndex)"
-              icon="i-heroicons-pencil"
-              class="key-edit-button"
-              size="xs"
-              color="sky"
-            />
+            <UButton @click="openKeyModal(colIndex)" icon="i-heroicons-pencil" class="key-edit-button" size="xs"
+              color="sky" />
           </div>
 
           <div class="key-card-body">
             <div class="key-quantity">
               <label>Anzahl:</label>
-              <UInput
-                v-model="keyItem.keyquantity"
-                type="number"
-                min="1"
-                class="quantity-input"
-              />
+              <UInput v-model="keyItem.keyquantity" type="number" min="1" class="quantity-input" />
             </div>
 
             <div v-if="isSchliessanlage" class="door-assignments">
               <label>Öffnet folgende Türen:</label>
               <div class="door-checkbox-list">
-                <div
-                  v-for="(row, rowIndex) in rows"
-                  :key="rowIndex"
-                  class="door-checkbox-item"
-                >
+                <div v-for="(row, rowIndex) in rows" :key="rowIndex" class="door-checkbox-item">
                   <label>
-                    <input
-                      type="checkbox"
-                      v-model="rows[rowIndex][colIndex].checked"
-                    />
+                    <input type="checkbox" v-model="rows[rowIndex][colIndex].checked" />
                     <span>{{ getDoorName(row[0]) }}</span>
                   </label>
                 </div>
@@ -282,12 +199,7 @@
             </div>
 
             <div v-if="colIndex > 0" class="key-actions">
-              <UButton
-                @click="deleteCheckbox(colIndex)"
-                icon="i-heroicons-trash"
-                color="red"
-                size="xs"
-              >
+              <UButton @click="deleteCheckbox(colIndex)" icon="i-heroicons-trash" color="red" size="xs">
                 Löschen
               </UButton>
             </div>
@@ -296,7 +208,7 @@
       </div>
 
       <!-- Navigation -->
-      <div class="step-navigation">
+      <div class="step-navigation" style="padding-bottom: 100px;">
         <UButton @click="setStep(1)" class="navigation-button back">
           <i class="i-heroicons-arrow-left"></i>
           Zurück
@@ -321,8 +233,8 @@
         <div class="summary-item">
           <span class="summary-label">Typ:</span>
           <span class="summary-value">{{
-            isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-          }}</span>
+        isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+      }}</span>
         </div>
         <div class="summary-item">
           <span class="summary-label">Anzahl Türen:</span>
@@ -351,7 +263,7 @@
       </div>
 
       <div class="summary-actions">
-        <UButton @click="setStep(2)" class="navigation-button back">
+        <UButton @click="setStep(2)" class="navigation-button">
           <i class="i-heroicons-arrow-left"></i>
           Zurück
         </UButton>
@@ -363,11 +275,7 @@
 
     <!-- Modals -->
     <!-- Optionen Modal -->
-    <div
-      v-if="modalOptionsVisible"
-      class="modal-overlay"
-      @click.self="closeOptionsModal"
-    >
+    <div v-if="modalOptionsVisible" class="modal-overlay" @click.self="closeOptionsModal">
       <div class="modal-container">
         <div class="modal-header">
           <h3>Optionen auswählen</h3>
@@ -375,51 +283,31 @@
         </div>
         <div class="modal-body">
           <div v-if="activeOptionsModalIndex !== null">
-            <div
-              v-for="option in getAllOptionsForType(
-                rows[activeOptionsModalIndex][0]
-              ).Optionen || []"
-              :key="option"
-              class="option-item"
-            >
+            <div v-for="option in getAllOptionsForType(
+        rows[activeOptionsModalIndex][0]
+      ).Optionen || []" :key="option" class="option-item">
               <label class="option-label">
-                <input
-                  type="checkbox"
-                  :value="option"
-                  v-model="modalOptionsSelected"
-                />
-                <span class="option-text">{{ option }}</span>
+                <input type="checkbox" :value="option" v-model="modalOptionsSelected" />
+                <span style="margin-left: 4px;" class="option-text">{{ option }}</span>
               </label>
             </div>
-            <div
-              v-if="
-                (
-                  getAllOptionsForType(rows[activeOptionsModalIndex][0])
-                    .Optionen || []
-                ).length === 0
-              "
-              class="no-options"
-            >
+            <div v-if="(
+        getAllOptionsForType(rows[activeOptionsModalIndex][0])
+          .Optionen || []
+      ).length === 0
+        " class="no-options">
               Keine Optionen für diesen Zylindertyp verfügbar.
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <UButton @click="applyOptions" class="modal-button confirm"
-            >Übernehmen</UButton
-          >
-          <UButton @click="closeOptionsModal" class="modal-button cancel"
-            >Abbrechen</UButton
-          >
+          <UButton @click="applyOptions" class="modal-button confirm">Übernehmen</UButton>
+          <UButton @click="closeOptionsModal" class="modal-button cancel">Abbrechen</UButton>
         </div>
       </div>
     </div>
 
-    <div
-      v-if="isLoadModalOpen"
-      class="modal-overlay"
-      @click.self="isLoadModalOpen = false"
-    >
+    <div v-if="isLoadModalOpen" class="modal-overlay" @click.self="isLoadModalOpen = false">
       <div class="modal-container">
         <div class="modal-header">
           <h3>Anlage laden</h3>
@@ -434,43 +322,24 @@
           </p>
           <div class="input-group">
             <label>Anlagennummer:</label>
-            <UInput
-              v-model="loadId"
-              type="text"
-              placeholder="Ihre Anlagennummer"
-            />
+            <UInput v-model="loadId" type="text" placeholder="Ihre Anlagennummer" />
           </div>
           <div class="input-group">
             <label>Passwort:</label>
-            <UInput
-              v-model="loadPassword"
-              type="password"
-              placeholder="Ihr Passwort"
-            />
+            <UInput v-model="loadPassword" type="password" placeholder="Ihr Passwort" />
           </div>
-          <p
-            v-if="loadError"
-            style="color: red; font-size: 0.9rem; margin-top: 1rem"
-          >
+          <p v-if="loadError" style="color: red; font-size: 0.9rem; margin-top: 1rem">
             {{ loadError }}
           </p>
         </div>
         <div class="modal-footer">
-          <UButton @click="handleLoad" class="modal-button confirm"
-            >Laden</UButton
-          >
-          <UButton @click="isLoadModalOpen = false" class="modal-button cancel"
-            >Abbrechen</UButton
-          >
+          <UButton @click="handleLoad" class="modal-button confirm">Laden</UButton>
+          <UButton @click="isLoadModalOpen = false" class="modal-button cancel">Abbrechen</UButton>
         </div>
       </div>
     </div>
 
-    <div
-      v-if="isSaveModalOpen"
-      class="modal-overlay"
-      @click.self="isSaveModalOpen = false"
-    >
+    <div v-if="isSaveModalOpen" class="modal-overlay" @click.self="isSaveModalOpen = false">
       <div class="modal-container">
         <div class="modal-header">
           <h3>Anlage speichern</h3>
@@ -485,31 +354,18 @@
           </p>
           <div class="input-group">
             <label>E-Mail-Adresse: *</label>
-            <UInput
-              v-model="email"
-              type="email"
-              required
-              placeholder="ihre@email.de"
-            />
+            <UInput v-model="email" type="email" required placeholder="ihre@email.de" />
           </div>
         </div>
         <div class="modal-footer">
-          <UButton @click="performSave" class="modal-button confirm"
-            >Jetzt Speichern</UButton
-          >
-          <UButton @click="isSaveModalOpen = false" class="modal-button cancel"
-            >Abbrechen</UButton
-          >
+          <UButton @click="performSave" class="modal-button confirm">Jetzt Speichern</UButton>
+          <UButton @click="isSaveModalOpen = false" class="modal-button cancel">Abbrechen</UButton>
         </div>
       </div>
     </div>
 
     <!-- Schlüssel Bearbeiten Modal -->
-    <div
-      v-if="isKeyModalVisible"
-      class="modal-overlay"
-      @click.self="closeKeyModal"
-    >
+    <div v-if="isKeyModalVisible" class="modal-overlay" @click.self="closeKeyModal">
       <div class="modal-container">
         <div class="modal-header">
           <h3>Schlüssel bearbeiten</h3>
@@ -526,12 +382,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <UButton @click="saveKeyChanges" class="modal-button confirm"
-            >Speichern</UButton
-          >
-          <UButton @click="closeKeyModal" class="modal-button cancel"
-            >Abbrechen</UButton
-          >
+          <UButton @click="saveKeyChanges" class="modal-button confirm">Speichern</UButton>
+          <UButton @click="closeKeyModal" class="modal-button cancel">Abbrechen</UButton>
         </div>
       </div>
     </div>
@@ -554,6 +406,61 @@
             Ja, wechseln
           </UButton>
           <UButton @click="cancelChange" class="modal-button cancel">
+            Abbrechen
+          </UButton>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="isTemplateSelectorOpen" class="modal-overlay" @click.self="isTemplateSelectorOpen = false">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Vorlage auswählen</h3>
+          <button class="modal-close" @click="isTemplateSelectorOpen = false">×</button>
+        </div>
+        <div class="modal-body template-selection-body">
+          <p>Starten Sie Ihre Konfiguration mit einem typischen Anwendungsfall.</p>
+          <div v-for="template in templates" :key="template.id" @click="applyTemplate(template.id)"
+            class="template-card" :class="`template-card-${template.color}`">
+            <i :class="template.icon" class="template-icon"></i>
+            <div class="template-info">
+              <span class="template-name">{{ template.name }}</span>
+              <span class="template-description">{{ template.doors.length }} Türen, {{ template.keys.length }}
+                Schlüssel</span>
+            </div>
+            <i class="i-heroicons-chevron-right-solid"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="isTemplateConfirmOpen" class="modal-overlay" @click.self="isTemplateConfirmOpen = false">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Vorlage anwenden?</h3>
+          <button class="modal-close" @click="isTemplateConfirmOpen = false">×</button>
+        </div>
+        <div class="modal-body">
+          <div v-if="selectedTemplate">
+            <p>
+              Möchten Sie die Vorlage <strong>"{{ selectedTemplate.name }}"</strong> anwenden?
+            </p>
+            <div class="alert-box-warning" v-if="rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)">
+              <i class="i-heroicons-exclamation-triangle-solid"></i>
+              <span><strong>Achtung:</strong> Ihre bisherige Konfiguration wird dadurch vollständig
+                überschrieben.</span>
+            </div>
+            <p v-else>
+              Die Vorlage enthält {{ selectedTemplate.doors.length }} Türen und {{ selectedTemplate.keys.length }}
+              Schlüssel.
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <UButton @click="confirmApplyTemplate" class="modal-button confirm" color="amber">
+            Anwenden
+          </UButton>
+          <UButton @click="isTemplateConfirmOpen = false" class="modal-button cancel">
             Abbrechen
           </UButton>
         </div>
@@ -619,6 +526,96 @@ export default {
       loadPassword: "",
       loadError: "",
 
+
+      // Status für Vorlagen-Modals
+      isTemplateSelectorOpen: false,
+      isTemplateConfirmOpen: false,
+      selectedTemplateId: null,
+
+      templates: [
+        {
+          id: 'einfamilienhaus',
+          name: 'Einfamilienhaus',
+          icon: 'i-heroicons-home',
+          color: 'green',
+          doors: [
+            { position: 1, name: 'Haustür', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 3, name: 'Terrassentür', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Gartentür', type: 'Doppelzylinder', outside: 30, inside: 30, options: [] },
+            { position: 5, name: 'Garage', type: 'Halbzylinder', outside: 30, inside: 10, options: [] }
+          ],
+          keys: [
+            { id: 1, name: 'Hauptschlüssel' },
+            { id: 2, name: 'Elternschlüssel' },
+            { id: 3, name: 'Kinderschlüssel' }
+          ],
+          matrix: [
+            [true, true, true],
+            [true, true, false],
+            [true, true, true],
+            [true, true, false],
+            [true, false, false]
+          ]
+        },
+        {
+          id: 'mehrfamilienhaus',
+          name: 'Mehrfamilienhaus',
+          icon: 'i-heroicons-building-office-2',
+          color: 'blue',
+          doors: [
+            { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: ["Not- & Gefahrenfunktion"] },
+            { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 3, name: 'Wohnung 1', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Wohnung 2', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 5, name: 'Wohnung 3', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 6, name: 'Hintereingang', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
+            { position: 7, name: 'Fahrradkeller', type: 'Doppelzylinder', outside: 30, inside: 30, options: [] }
+          ],
+          keys: [
+            { id: 1, name: 'Hausmeister' },
+            { id: 2, name: 'Wohnung 1' },
+            { id: 3, name: 'Wohnung 2' },
+            { id: 4, name: 'Wohnung 3' }
+          ],
+          matrix: [
+            [true, true, true, true],
+            [true, true, true, true],
+            [false, true, false, false],
+            [false, false, true, false],
+            [false, false, false, true],
+            [true, true, true, true],
+            [true, true, true, true]
+          ]
+        },
+        {
+          id: 'betriebsgebaeude',
+          name: 'Betriebsgebäude',
+          icon: 'i-heroicons-building-office',
+          color: 'indigo',
+          doors: [
+            { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 45, inside: 45, options: ["Not- & Gefahrenfunktion"] },
+            { position: 2, name: 'Personaleingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
+            { position: 3, name: 'Büro GF', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 4, name: 'Büro VW', type: 'Doppelzylinder', outside: 35, inside: 40, options: [] },
+            { position: 5, name: 'Serverraum', type: 'Doppelzylinder', outside: 35, inside: 35, options: ["Erhöhter Bohrschutz"] },
+          ],
+          keys: [
+            { id: 1, name: 'General' },
+            { id: 2, name: 'GF' },
+            { id: 3, name: 'Büro' },
+            { id: 4, name: 'IT' }
+          ],
+          matrix: [
+            [true, true, true, true],
+            [true, true, true, true],
+            [true, true, false, false],
+            [true, true, true, false],
+            [true, true, false, true],
+          ]
+        }
+      ],
+
       // Alert
       alertMessage: "",
       alertType: "",
@@ -648,12 +645,25 @@ export default {
     store() {
       return useCylinderStore();
     },
+
+    selectedTemplate() {
+      return this.templates.find(template => template.id === this.selectedTemplateId);
+    },
+
+    hasDataInFirstRow() {
+      if (this.rows.length === 0) return false;
+      const firstRowFirstCol = this.rows[0][0];
+      // Prüft, ob in der ersten Tür schon Daten eingetragen wurden
+      return !!(firstRowFirstCol.doorDesignation || firstRowFirstCol.type || firstRowFirstCol.outside || firstRowFirstCol.inside);
+    },
+
     isSchliessanlage() {
       if (this.overrideToGleichschliessung) {
         return false;
       }
       return this.store.isSchliessanlage;
     },
+
     finalGleichschliessungState: {
       get() {
         if (!this.store.isSchliessanlage) {
@@ -665,6 +675,7 @@ export default {
         }
         return this.overrideToGleichschliessung;
       },
+
       set(val) {
         this.overrideToGleichschliessung = val;
 
@@ -678,6 +689,7 @@ export default {
         }
       },
     },
+
     disableGleichToggle() {
       if (!this.store.isSchliessanlage) {
         return true;
@@ -713,6 +725,59 @@ export default {
       this.loadPassword = "";
       this.loadError = "";
       this.isLoadModalOpen = true;
+    },
+
+    applyTemplate(templateId) {
+      this.selectedTemplateId = templateId;
+      this.isTemplateSelectorOpen = false; // Haupt-Auswahl-Modal schließen
+      this.isTemplateConfirmOpen = true;   // Bestätigungs-Modal öffnen
+    },
+
+    confirmApplyTemplate() {
+      const template = this.selectedTemplate;
+      if (!template) return;
+
+      // 1. Modell explizit zurücksetzen
+      this.store.setModel("Kein bestimmtes Modell");
+
+      // 2. Bestehende Daten leeren
+      this.rows = [];
+
+      // 3. Neue Datenstruktur aus der Vorlage aufbauen
+      const numKeys = template.keys.length;
+
+      template.doors.forEach((door, doorIndex) => {
+        const newRow = [];
+        for (let keyIndex = 0; keyIndex < numKeys; keyIndex++) {
+          const keyInfo = template.keys[keyIndex];
+          newRow.push({
+            position: door.position,
+            doorDesignation: door.name,
+            doorquantity: 1,
+            type: door.type,
+            outside: door.outside,
+            inside: door.inside,
+            options: {},
+            optionsSelected: door.options || [],
+            checked: template.matrix[doorIndex][keyIndex],
+            keyquantity: 1,
+            keyname: keyInfo.name,
+            keycolor: "",
+          });
+        }
+        this.rows.push(newRow);
+      });
+
+      // 4. UI-Status zurücksetzen
+      this.accordionOpen = Array(template.doors.length).fill(false);
+      if (this.accordionOpen.length > 0) {
+        this.accordionOpen[0] = true; // Erste Tür geöffnet lassen
+      }
+      this.isTemplateConfirmOpen = false; // Modal schließen
+      this.currentStep = 1; // Sicherstellen, dass wir in Schritt 1 sind
+
+      // 5. Erfolgsmeldung
+      alert(`Vorlage "${template.name}" erfolgreich angewendet!`);
     },
 
     // Navigation und UI-Methoden
@@ -1197,7 +1262,7 @@ export default {
             EMail: this.email,
             Telefon: this.phone,
             Firma: this.company,
-            Typ: this.typ,
+            Typ: "Mobil",
             Modell: this.store.selectedModel,
             protect: this.protect,
             Password: this.password,
@@ -1307,7 +1372,7 @@ export default {
           this.email = data.EMail || "";
           this.phone = data.Telefon || "";
           this.company = data.Firma || "";
-          this.typ = data.Typ || "";
+          this.typ = "Mobil";
           this.store.setModel(data.Modell || "Kein bestimmtes Modell");
 
           // HIER IST DER ENTSCHEIDENDE PUNKT: DAS GELADENE PASSWORT SPEICHERN
@@ -1354,17 +1419,17 @@ export default {
             this.rows[i][j] = {
               ...(j === 0
                 ? {
-                    position: i + 1,
-                    doorDesignation: doorData.Bezeichnung || "",
-                    doorquantity: doorData.Anzahl || 1,
-                    type: doorData.Typ || "",
-                    outside: doorData.SizeA || "",
-                    inside: doorData.SizeI || "",
-                    optionsSelected: (doorData.Option || "")
-                      .split(",")
-                      .map((s) => s.trim())
-                      .filter(Boolean),
-                  }
+                  position: i + 1,
+                  doorDesignation: doorData.Bezeichnung || "",
+                  doorquantity: doorData.Anzahl || 1,
+                  type: doorData.Typ || "",
+                  outside: doorData.SizeA || "",
+                  inside: doorData.SizeI || "",
+                  optionsSelected: (doorData.Option || "")
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                }
                 : {}),
               checked: !!mat?.Berechtigung,
               keyquantity: keyData.Anzahl || 1,
@@ -1429,45 +1494,38 @@ export default {
             <table style="border-collapse: collapse; width: 100%;">
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Anlagennummer:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.anlageNr
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.anlageNr
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Modell:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.store.selectedModel
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.store.selectedModel
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Typ:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.name || "-"
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.name || "-"
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>E-Mail:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.email
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.email
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Telefon:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.phone || "-"
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.phone || "-"
+        }</td>
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;"><strong>Passwort:</strong></td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${
-                  this.password
-                }</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${this.password
+        }</td>
               </tr>
             </table>
             <p style="margin-top: 20px;">Diese Konfiguration wurde in der Datenbank gespeichert.</p>
@@ -1496,11 +1554,10 @@ export default {
   mounted() {
     if (!this.$route.query.anlageNr) {
       console.log("Keine Anlage in URL gefunden, starte neue Konfiguration.");
-      // Setzt den Anfangszustand für eine leere Konfiguration zurück.
-      
+      // Den initialen Zustand für eine leere Konfiguration sicherstellen
+      this.accordionOpen = [true]; // Das erste Akkordeon standardmäßig öffnen
     }
 
-    // Modell aus dem Store laden (dies kann bleiben)
     this.selectedModelLocal = this.store.selectedModel;
     this.oldModel = this.store.selectedModel;
   },
@@ -1512,25 +1569,146 @@ export default {
 
 // In mobile-configurator.scss oder im <style> Block von ConfiguratorViewM.vue
 
-.global-actions {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  gap: 10px;
+/* In <style lang="scss" scoped> */
 
+.bottom-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-top: 1px solid #e5e7eb;
+  z-index: 10;
+
+  // Stil für die unauffälligen Icon-Buttons
   .u-button {
-    flex-grow: 1;
+    color: #4b5563; // gray-600
+    padding: 12px;
+
+    // Wir entfernen den Hover-Effekt, da es auf Mobilgeräten kein Hover gibt
+    &:hover {
+      background-color: #f3f4f6; // gray-100
+    }
+  }
+
+  // Hervorgehobener Haupt-Button
+  .template-cta-button {
+    margin-left: auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: black;
+    background-color: #f3f4f6; // gray-100
+
+    font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+    transition: all 0.2s ease-out;
+
+    i {
+      color: rgb(0, 0, 0);
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+    }
   }
 }
+
 .input-group {
   margin-bottom: 1rem;
+
   label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
     font-size: 0.9rem;
   }
+}
+
+.template-selection-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.template-card:hover {
+  border-color: #0ea5e9;
+  /* sky-500 */
+  background-color: #f0f9ff;
+  /* sky-50 */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.template-card .template-icon {
+  font-size: 1.75rem;
+  margin-right: 16px;
+}
+
+.template-card .template-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.template-card .template-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.template-card .template-description {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.template-card-green .template-icon {
+  color: #10b981;
+}
+
+.template-card-blue .template-icon {
+  color: #3b82f6;
+}
+
+.template-card-indigo .template-icon {
+  color: #6366f1;
+}
+
+.alert-box-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fffbeb;
+  /* amber-50 */
+  color: #b45309;
+  /* amber-700 */
+  border: 1px solid #fde68a;
+  /* amber-200 */
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.alert-box-warning i {
+  font-size: 1.25rem;
 }
 </style>

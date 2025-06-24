@@ -22,7 +22,7 @@ export default {
     
     Nachhaltigkeit
     Mit einem Patentschutz bis 2043 ist der rs Sirius eine zukunftssichere Investition in Ihre Sicherheit.`,
-    deliveryTime: "Eine Woche",
+    deliveryTime: "2-4 Woche",
     "Doppelzylinder": {
         "sizes": [
             { "outside": 30, "inside": 30, "price": 28.36 },
