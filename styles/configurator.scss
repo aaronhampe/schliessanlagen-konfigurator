@@ -592,6 +592,7 @@ $color-sky: #0ea5e9;
     writing-mode: vertical-rl;
     @include flex-center;
     border: 2px solid $color-amber;
+    border-radius: 40px;
     background-color: white;
     color: $primary-color;
     font-weight: 600;
