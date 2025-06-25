@@ -821,35 +821,55 @@ export default {
     },
 
     goToStep3() {
-      // Erst zu Schritt 3, wenn bei Schließanlage alle Berechtigungen korrekt sind
+      // Nur prüfen, wenn es sich um eine Schließanlage handelt
       if (this.isSchliessanlage) {
         const colCount = this.rows[0].length;
 
+        /* 1) Jeder Schlüssel (Spalte) muss mind. eine Tür schließen */
         for (let c = 0; c < colCount; c++) {
-          let foundAtLeastOne = false;
-
+          let keyHasDoor = false;
           for (let r = 0; r < this.rows.length; r++) {
             if (this.rows[r][c].checked) {
-              foundAtLeastOne = true;
+              keyHasDoor = true;
               break;
             }
           }
-
-          if (!foundAtLeastOne) {
+          if (!keyHasDoor) {
             alert(
               `Bitte weisen Sie dem Schlüssel "${this.rows[0][c].keyname}" mindestens eine Tür zu.`
             );
             return;
           }
         }
+
+        /* 2) NEU: Jeder Zylinder/Tür (Zeile) muss mind. von einem Schlüssel geschlossen werden */
+        for (let r = 0; r < this.rows.length; r++) {
+          let doorHasKey = false;
+          for (let c = 0; c < colCount; c++) {
+            if (this.rows[r][c].checked) {
+              doorHasKey = true;
+              break;
+            }
+          }
+          if (!doorHasKey) {
+            alert(
+              `Bitte wählen Sie mindestens einen Schlüssel für die Tür "${this.getDoorName(
+                this.rows[r][0]
+              )}".`
+            );
+            return;
+          }
+        }
       }
 
+      /* Alles ok -> weiter zu Schritt 3 */
       document.getElementById("progress-top")?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
       this.setStep(3);
     },
+
 
     toggleInfo() {
       this.showInfo = !this.showInfo;

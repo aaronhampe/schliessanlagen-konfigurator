@@ -283,9 +283,9 @@
           color="amber" variant="solid" :trailing="false">
           Anlage speichern
         </UButton>
+        <a class="button-secondary" target="_blank" href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s">Tutorial
+          auf&nbsp;YouTube</a>
 
-        <a class="button-secondary" target="_blank"href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s">Tutorial auf&nbsp;YouTube</a>
-       
 
       </div>
     </div>
@@ -1198,7 +1198,7 @@ export default {
 
 
     validateConfiguration() {
-      // 1) Prüfe, ob alle Tür-Eingaben vorhanden sind
+      /* 1) Prüfe, ob alle Pflichtfelder der Türen ausgefüllt sind */
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
         const { type, outside, inside } = this.rows[rowIndex][0];
         if (!type) {
@@ -1215,30 +1215,49 @@ export default {
         }
       }
 
-      // 2) Wenn es sich um eine Schließanlage handelt: Prüfe, ob in jeder Spalte mindestens eine Berechtigung gesetzt ist.
+      /* 2) Falls Schließanlage: jeder Schlüssel (Spalte) muss mind. einen Zylinder schließen */
       if (this.isSchliessanlage) {
         const colCount = this.rows[0].length;
+
         for (let c = 0; c < colCount; c++) {
-          let foundAtLeastOne = false;
+          let keyHasLock = false;
           for (let r = 0; r < this.rows.length; r++) {
             if (this.rows[r][c].checked) {
-              foundAtLeastOne = true;
+              keyHasLock = true;
               break;
             }
           }
-          if (!foundAtLeastOne) {
-            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+          if (!keyHasLock) {
+            alert(
+              `Bitte mindestens eine Berechtigung in Spalte #${c + 1} setzen (Schließanlage).`
+            );
+            return false;
+          }
+        }
+
+        /* 3) NEU: jeder Zylinder (Zeile) muss mind. von einem Schlüssel geschlossen werden */
+        for (let r = 0; r < this.rows.length; r++) {
+          let lockHasKey = false;
+          for (let c = 0; c < colCount; c++) {
+            if (this.rows[r][c].checked) {
+              lockHasKey = true;
+              break;
+            }
+          }
+          if (!lockHasKey) {
+            alert(
+              `Bitte mindestens einen Schlüssel für den Zylinder in Zeile ${r + 1} auswählen.`
+            );
             return false;
           }
         }
       }
 
-      // Falls weitere Prüfungen (z. B. für Schlüssel oder Optionsprüfungen) nötig sind,
-      // füge sie hier hinzu.
+      /* 4) Weitere Prüfungen (Optionen, etc.) hier einfügen */
 
-      // Wenn alle Prüfungen erfolgreich waren:
-      return true;
+      return true; // alle Checks bestanden
     },
+
 
     async saveInstallation() {
       // Validierung prüfen
