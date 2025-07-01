@@ -68,10 +68,10 @@ export const useCylinderStore = defineStore('cylinderStore', {
           // z.B. "Vorhangschloss 50mm"
           const parts = typeKey.split(' ')
           const dimension = parts[1] // "50mm" oder "80mm"
-          if (modelData.Vorhangschloss 
-              && modelData.Vorhangschloss.types 
-              && modelData.Vorhangschloss.types[dimension] 
-              && Array.isArray(modelData.Vorhangschloss.types[dimension].options)
+          if (modelData.Vorhangschloss
+            && modelData.Vorhangschloss.types
+            && modelData.Vorhangschloss.types[dimension]
+            && Array.isArray(modelData.Vorhangschloss.types[dimension].options)
           ) {
             return modelData.Vorhangschloss.types[dimension].options
           } else {
@@ -89,6 +89,13 @@ export const useCylinderStore = defineStore('cylinderStore', {
       if (!state.selectedModel) return false
       const modelData = cylinderModels[state.selectedModel]
       return modelData && modelData.isSchliessanlage === true
+    },
+
+    padlockVariants(state) {
+      const model = cylinderModels[state.selectedModel]
+      return model?.Vorhangschloss?.types
+        ? Object.keys(model.Vorhangschloss.types)
+        : []
     }
   },
 
@@ -160,6 +167,10 @@ export const useCylinderStore = defineStore('cylinderStore', {
       } else {
         return modelData[typeKey]?.options || []
       }
+    },
+    getOptionsForPadlock(variant) {
+      const model = cylinderModels[this.selectedModel]
+      return model?.Vorhangschloss?.types?.[variant]?.options ?? []
     }
   }
 })

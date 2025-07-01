@@ -466,12 +466,12 @@ export default {
   },
   Vorhangschloss: {
     types: {
-      "50mm": {
+      "ABUS 86/TI 45": {
         options: [
-          "Seewasserfest",
+          
         ]
       },
-      "80mm": {
+      "ABUS 86/TI 55": {
         options: [
           "Seewasserfest",
         ]
@@ -488,5 +488,6 @@ export default {
     "Doppelzylinder",
     "Knaufzylinder (innen)",
     "Halbzylinder",
+    "Vorhangschloss",
   ],
 }
