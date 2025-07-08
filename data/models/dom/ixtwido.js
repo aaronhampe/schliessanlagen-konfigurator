@@ -251,7 +251,7 @@ export default {
             { outside: 70, inside: 70, price: 151.15 },
             { outside: 70, inside: 75, price: 160.60 },
             { outside: 70, inside: 80, price: 160.60 },
-    
+
 
             { outside: 75, inside: 30, price: 103.90 },
             { outside: 75, inside: 35, price: 109.15 },
@@ -319,12 +319,8 @@ export default {
     ////////////////////////////////////////////////////////////////////////
     Vorhangschloss: {
         types: {
-            "50mm": {
-                options: ["Seenwasserfest"],
-            },
-            "80mm": {
-                options: ["Seenwasserfest"],
-            },
+            "ABUS 86/TI 45": { price: 45.90, options: [] },
+            "ABUS 86/TI 55": { price: 55.90, options: ["Seewasserfest"] },
         },
     },
 
@@ -345,5 +341,6 @@ export default {
         "Doppelzylinder",
         "Knaufzylinder (innen)",
         "Halbzylinder",
+        "Vorhangschloss",
     ],
 };

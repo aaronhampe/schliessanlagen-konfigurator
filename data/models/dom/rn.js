@@ -237,20 +237,6 @@ export default {
             "Not- & Gefahrenfunktion",
         ],
     },
-    Vorhangschloss: {
-        types: {
-            "50mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
-            "80mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
-        },
-    },
     Briefkastenschloss: {
         options: {
             Art: ["Surface", "Mortise"],

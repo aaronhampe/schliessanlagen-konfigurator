@@ -470,6 +470,27 @@ $color-sky: #0ea5e9;
       }
     }
 
+    .padlock-select {
+      background-color: white;
+      border: 1px solid $color-sky;
+      height: 32px;
+      color: #333333;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      width: 170px;
+      text-align: left;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      outline: none;
+    }
+
     .options {
       margin-top: 0px;
       width: 360px;
