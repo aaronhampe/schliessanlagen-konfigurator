@@ -234,6 +234,8 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
     return false;
   }
 
+  if (typeKey === "Vorhangschloss") return true;
+
   const foundSize = modelConfig[typeKey].sizes.find(
     (sz) =>
       Number(sz.inside) === Number(zylinderItem.SizeI) &&
@@ -288,11 +290,13 @@ function generateConfigurationText() {
     `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
   );
   lines.push(
-    `<br><b>Zylinder korrekt gemessen</b>? ${hasMeasuredCorrectly.value ? "Ja" : "Nein"
+    `<br><b>Zylinder korrekt gemessen</b>? ${
+      hasMeasuredCorrectly.value ? "Ja" : "Nein"
     }`
   );
   lines.push(
-    `<br><b>Lieferzeiten akzeptiert</b>? ${hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
+    `<br><b>Lieferzeiten akzeptiert</b>? ${
+      hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
     }`
   );
   lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
@@ -305,10 +309,20 @@ function calculatePriceForModel(modelName, positionArr, totalKeys = 0) {
   if (!modelConfig) return 0;
   let totalPrice = 0;
   positionArr.forEach((item) => {
+    
     const typeKey = mapTypToModelKey(item.Typ);
     if (!modelConfig[typeKey]) {
       return;
     }
+
+    if (typeKey === "Vorhangschloss") {
+      const variant = (item.Option || "").split(",")[0]?.trim(); // z. B. „ABUS 86/TI 55“
+      const variantCfg = modelConfig[typeKey].types[variant] || {};
+      const doorCount = Number(item.Anzahl) || 1;
+      totalPrice += (variantCfg.price || 0) * doorCount;
+      return; // <-- Rest überspringen
+    }
+
     const sizeMatch = modelConfig[typeKey].sizes.find(
       (sz) =>
         Number(sz.outside) === Number(item.SizeA) &&
@@ -424,10 +438,9 @@ async function addToCart(systemName, price, productID) {
       throw new Error(`Failed to add to cart: ${response.statusText}`);
     }
 
-
     await $fetch("/api/updateProtect", {
       method: "POST",
-      body: { ID: anlageNr }      
+      body: { ID: anlageNr },
     });
 
     isSummaryModalOpen.value = false;
@@ -537,7 +550,11 @@ onMounted(async () => {
         </select>
       </div>
     </div>
-    <UButton class="back-button" @click="navigateBack" style="margin: 10px 10px 10px 0px">
+    <UButton
+      class="back-button"
+      @click="navigateBack"
+      style="margin: 10px 10px 10px 0px"
+    >
       Zurück zum Konfigurator
     </UButton>
 
@@ -545,24 +562,35 @@ onMounted(async () => {
     <div v-if="selectedModelOffer">
       <h2>Angebot für Ihr ausgewähltes Modell:</h2>
       <div class="offer highlighted-offer offer-row">
-        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+        <img
+          :src="selectedModelOffer.image"
+          :alt="selectedModelOffer.alt"
+          class="offer-image"
+        />
         <div class="offer-details">
           <h3>{{ selectedModelOffer.title }}</h3>
 
           <div class="offer-type-info">
             {{
-      selectedModelOffer.isSchliessanlage
-        ? "Schließanlage"
-        : "Gleichschließung"
-    }}
+              selectedModelOffer.isSchliessanlage
+                ? "Schließanlage"
+                : "Gleichschließung"
+            }}
           </div>
           <ul class="offer-features">
-            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+            <li
+              v-for="(feature, i) in selectedModelOffer.features || []"
+              :key="i"
+            >
               <i class="icon-check"></i> {{ feature }}
             </li>
           </ul>
-          <UButton class="info-button" color="gray" variant="ghost"
-            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)">
+          <UButton
+            class="info-button"
+            color="gray"
+            variant="ghost"
+            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)"
+          >
             Mehr&nbsp;Infos
           </UButton>
           <div class="offer-delivery">
@@ -573,8 +601,11 @@ onMounted(async () => {
             <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
             <span class="shipping">inkl. Versand</span>
           </div>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="openSummary(selectedModelOffer)">
+          <UButton
+            icon="i-heroicons-shopping-cart-16-solid"
+            class="select-system-button"
+            @click="openSummary(selectedModelOffer)"
+          >
             System kaufen
           </UButton>
         </div>
@@ -585,20 +616,24 @@ onMounted(async () => {
     <div v-if="alternativeOffers.length" style="margin-top: 30px">
       <h2>
         {{
-      selectedModel === "Kein bestimmtes Modell"
-        ? "Angebote für Sie:"
-        : "Weitere passende Angebote:"
-    }}
+          selectedModel === "Kein bestimmtes Modell"
+            ? "Angebote für Sie:"
+            : "Weitere passende Angebote:"
+        }}
       </h2>
       <div class="offer-container">
-        <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
+        <div
+          class="offer offer-row"
+          v-for="(offer, index) in sortedAlternativeOffers"
+          :key="offer.title"
+        >
           <img :src="offer.image" :alt="offer.alt" class="offer-image" />
           <div class="offer-details">
             <h3>{{ offer.title }}</h3>
             <div class="offer-type-info">
               {{
-      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-    }}
+                offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
+              }}
             </div>
             <ul class="offer-features">
               <li v-for="(feature, i) in offer.features || []" :key="i">
@@ -606,8 +641,12 @@ onMounted(async () => {
               </li>
             </ul>
 
-            <UButton class="info-button" color="gray" variant="ghost"
-              @click="openInfo(offer /* bzw. offer im v-for */)">
+            <UButton
+              class="info-button"
+              color="gray"
+              variant="ghost"
+              @click="openInfo(offer /* bzw. offer im v-for */)"
+            >
               Mehr&nbsp;Infos
             </UButton>
 
@@ -616,9 +655,14 @@ onMounted(async () => {
             </div>
             <div class="offer-price">
               Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
+              <strong class="price">{{ roundPrice(offer.price) }}€</strong
+              ><span class="shipping">inkl. Versand</span>
             </div>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+            <UButton
+              icon="i-heroicons-shopping-cart-16-solid"
+              class="select-system-button"
+              @click="openSummary(offer)"
+            >
               System kaufen
             </UButton>
           </div>
@@ -631,7 +675,11 @@ onMounted(async () => {
     </UButton>
   </div>
 
-  <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isSummaryModalOpen"
+    class="summary-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-title">
@@ -640,14 +688,23 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton color="red" class="close-button" icon="i-heroicons-x-mark" @click="isSummaryModalOpen = false">
+          <UButton
+            color="red"
+            class="close-button"
+            icon="i-heroicons-x-mark"
+            @click="isSummaryModalOpen = false"
+          >
           </UButton>
         </div>
       </div>
 
       <div class="modal-body-scrollable">
         <div v-if="selectedOffer.imageUrl" class="cylinder-image-container">
-          <img :src="selectedOffer.imageUrl" alt="Zylinderbild" class="cylinder-image" />
+          <img
+            :src="selectedOffer.imageUrl"
+            alt="Zylinderbild"
+            class="cylinder-image"
+          />
         </div>
 
         <div class="content-wrapper">
@@ -669,10 +726,10 @@ onMounted(async () => {
                   <td>{{ pos.POS }}</td>
                   <td>
                     {{
-      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-        ? pos.Bezeichnung
-        : "Tür " + pos.POS
-    }}
+                      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+                        ? pos.Bezeichnung
+                        : "Tür " + pos.POS
+                    }}
                   </td>
                   <td>{{ pos.Typ }}</td>
                   <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
@@ -688,13 +745,16 @@ onMounted(async () => {
 
           <h3 class="config-heading">Schlüsselübersicht</h3>
           <ul class="keys-list">
-            <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
+            <li
+              v-for="(keyItem, index) in schluesselData"
+              :key="keyItem.KeyPOS"
+            >
               <strong>
                 {{
-      keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-        ? keyItem.Bezeichnung
-        : "Schlüssel " + keyItem.KeyPOS
-    }}
+                  keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+                    ? keyItem.Bezeichnung
+                    : "Schlüssel " + keyItem.KeyPOS
+                }}
               </strong>
               schließt:
               <span>{{ getPositionsForKey(keyItem.KeyPOS) }}</span>
@@ -708,7 +768,11 @@ onMounted(async () => {
             <label class="widerruf-label">
               <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
               <span>Ich stimme der Widerrufsbelehrung zu.</span>
-              <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
+              <div
+                class="info-icon"
+                @mouseenter="hoverWiderruf = true"
+                @mouseleave="hoverWiderruf = false"
+              >
                 <i class="i-heroicons-information-circle" />
                 <transition name="fade">
                   <div v-if="hoverWiderruf" class="tooltip-box">
@@ -725,8 +789,12 @@ onMounted(async () => {
             <label class="widerruf-label" style="margin-top: 10px">
               <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
               <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
-              <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
-                @click.stop>
+              <div
+                class="info-icon"
+                @mouseenter="hoverLieferzeit = true"
+                @mouseleave="hoverLieferzeit = false"
+                @click.stop
+              >
                 <i class="i-heroicons-information-circle" />
                 <transition name="fade">
                   <div v-if="hoverLieferzeit" class="tooltip-box">
@@ -751,21 +819,29 @@ onMounted(async () => {
 
           <div class="offer-price-summery" style="margin-top: 20px">
             Gesamtpreis:
-            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br />inkl.
-              Versand</span>
+            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong
+            ><span class="shipping">,<br />inkl. Versand</span>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <UButton :class="{ 'pseudo-disabled': !allRequiredChecked }" color="blue" variant="solid"
-          @click="handlePurchaseClick">
+        <UButton
+          :class="{ 'pseudo-disabled': !allRequiredChecked }"
+          color="blue"
+          variant="solid"
+          @click="handlePurchaseClick"
+        >
           Angebot kaufen
         </UButton>
       </div>
     </div>
   </UModal>
 
-  <UModal :fullscreen="true" v-model="isInfoModalOpen" class="info-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isInfoModalOpen"
+    class="info-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-title">
@@ -774,7 +850,12 @@ onMounted(async () => {
             -
             {{ isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
           </h2>
-          <UButton color="red" class="close-button" icon="i-heroicons-x-mark" @click="isInfoModalOpen = false">
+          <UButton
+            color="red"
+            class="close-button"
+            icon="i-heroicons-x-mark"
+            @click="isInfoModalOpen = false"
+          >
           </UButton>
         </div>
       </div>
@@ -804,8 +885,15 @@ onMounted(async () => {
           </p>
 
           <!-- Optional: Feature-Tags -->
-          <div v-if="selectedOffer.features && selectedOffer.features.length" class="features-preview">
-            <span v-for="feature in selectedOffer.features.slice(0, 3)" :key="feature" class="feature-tag">
+          <div
+            v-if="selectedOffer.features && selectedOffer.features.length"
+            class="features-preview"
+          >
+            <span
+              v-for="feature in selectedOffer.features.slice(0, 3)"
+              :key="feature"
+              class="feature-tag"
+            >
               {{ feature }}
             </span>
             <span v-if="selectedOffer.features.length > 3" class="feature-tag">
@@ -823,18 +911,29 @@ onMounted(async () => {
     </div>
   </UModal>
 
-  <UModal :fullscreen="true" v-model="isSuccessModalOpen" class="success-modal modern-design">
+  <UModal
+    :fullscreen="true"
+    v-model="isSuccessModalOpen"
+    class="success-modal modern-design"
+  >
     <div class="modal-content">
       <div class="modal-header flex padding">
         <div class="header-title">
           <h2>Erfolgreich hinzugefügt</h2>
         </div>
-        <UButton color="red" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="close-button" style="
+        <UButton
+          color="red"
+          variant="ghost"
+          icon="i-heroicons-x-mark-20-solid"
+          class="close-button"
+          style="
             margin-bottom: 20px;
             border-radius: 50%;
             width: 40px;
             height: 40px;
-          " @click="isSuccessModalOpen = false" />
+          "
+          @click="isSuccessModalOpen = false"
+        />
       </div>
 
       <div class="modal-body-success">
@@ -850,7 +949,11 @@ onMounted(async () => {
       </div>
 
       <div class="modal-footer-success">
-        <UButton color="gray" variant="ghost" @click="isSuccessModalOpen = false">
+        <UButton
+          color="gray"
+          variant="ghost"
+          @click="isSuccessModalOpen = false"
+        >
           Weiter einkaufen
         </UButton>
         <UButton icon="i-heroicons-arrow-right-16-solid" @click="goToCart">

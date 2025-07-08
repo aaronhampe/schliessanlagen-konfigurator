@@ -334,7 +334,7 @@
                     { invalid: !checkbox.padlockVariant },
                   ]"
                 >
-                  <option disabled value="">Bitte Typ wählen</option>
+                  <option disabled value="">Schloss wählen</option>
                   <option
                     v-for="variant in store.padlockVariants"
                     :key="variant"
@@ -1262,7 +1262,7 @@ export default {
       this.selectedTemplateId = templateId;
       this.isTemplateModalOpen = true;
     },
-     isPadlock(type) {
+    isPadlock(type) {
       return typeof type === "string" && /^vorhangschloss/i.test(type);
     },
 
@@ -1712,8 +1712,10 @@ export default {
     validateConfiguration() {
       /* 1) Prüfe, ob alle Pflichtfelder der Türen ausgefüllt sind */
       for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
-        const { type, outside, inside } = this.rows[rowIndex][0];
-        if (this.isPadlock(type) && !checkbox.padlockVariant) {
+        const { type, outside, inside, padlockVariant } =
+          this.rows[rowIndex][0];
+
+        if (this.isPadlock(type) && !padlockVariant) {
           alert(`Bitte Vorhangschloss-Typ in Zeile ${rowIndex + 1} wählen.`);
           return false;
         }
@@ -1806,7 +1808,12 @@ export default {
           Typ: row[0].type || "",
           SizeA: row[0].outside || "",
           SizeI: row[0].inside || "",
-          Option: (row[0].optionsSelected || []).join(", "),
+          Option: [
+            row[0].padlockVariant || "", // „ABUS 86/TI 55“
+            ...(row[0].optionsSelected || []), // weitere Optionen
+          ]
+            .filter(Boolean)
+            .join(", "),
         }));
         await $fetch("./api/sqlpostposition?ID=" + this.anlageNr, {
           method: "post",
