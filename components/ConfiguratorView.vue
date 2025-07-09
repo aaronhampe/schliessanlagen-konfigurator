@@ -273,7 +273,7 @@
                 @change="onTypeChange(checkbox)"
                 class="cylinder-type"
               >
-                <option disabled value="">Bitte Typ auswählen</option>
+                <option disabled value="">Typ wählen...</option>
                 <option
                   v-for="type in store.availableTypes"
                   :key="type"
@@ -326,7 +326,7 @@
             <div v-else>
               <!-- neuer Variant-Select -->
               <div class="padlock-type">
-                <h3 v-if="rowIndex < 1">Typ</h3>
+                <h3 v-if="rowIndex < 1">Schloss</h3>
                 <select
                   v-model="checkbox.padlockVariant"
                   :class="[
@@ -334,7 +334,7 @@
                     { invalid: !checkbox.padlockVariant },
                   ]"
                 >
-                  <option disabled value="">Schloss wählen</option>
+                  <option disabled value="">Schloss wählen...</option>
                   <option
                     v-for="variant in store.padlockVariants"
                     :key="variant"
@@ -357,7 +357,7 @@
                 class="dropdown-button"
                 icon="i-heroicons-cog"
               >
-                {{ getSelectedOptionsText(checkbox) || "..." }}
+                {{ getSelectedOptionsText(checkbox) || "Optionen wählen..." }}
               </UButton>
             </div>
 

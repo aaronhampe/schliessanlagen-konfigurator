@@ -191,26 +191,21 @@ export default {
             "Not- & Gefahrenfunktion",
         ],
     },
+
+    ////////////////////////////////////////////////////////////////////////
+    // VORHANGSCHLOSS 
+    ////////////////////////////////////////////////////////////////////////
     Vorhangschloss: {
         types: {
-            "50mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
-            "80mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
+            "ABUS 86/TI 45": { price: 78.95, options: [] },
+            "ABUS 86/TI 55": { price: 89.95, options: ["Seewasserfest"] },
         },
     },
-    Briefkastenschloss: {
-        options: {
-            Art: ["Surface", "Mortise"],
-            Material: ["Nickel", "Bronze"],
-        },
-    },
+
+
+    ////////////////////////////////////////////////////////////////////////
+    // VERFÜGBARE TYPEN
+    ////////////////////////////////////////////////////////////////////////
     availableTypes: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",

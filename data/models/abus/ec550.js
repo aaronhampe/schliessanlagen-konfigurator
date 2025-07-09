@@ -20,9 +20,10 @@ export default {
   ////////////////////////////////////////////////////////////////////////
   Doppelzylinder: {
     sizes: [
+      //////////////////
       { outside: 28, inside: 34, price: 19.80 },
       { outside: 28, inside: 39, price: 24.20 },
-
+      //////////////////
       { outside: 30, inside: 30, price: 19.79 },
       { outside: 30, inside: 35, price: 22.00 },
       { outside: 30, inside: 40, price: 24.20 },
@@ -37,7 +38,7 @@ export default {
       { outside: 30, inside: 100, price: 53.97 },
       { outside: 30, inside: 110, price: 59.48 },
       { outside: 30, inside: 120, price: 63.89 },
-
+      //////////////////
       { outside: 35, inside: 30, price: 22.00 },
       { outside: 35, inside: 35, price: 24.20 },
       { outside: 35, inside: 40, price: 27.51 },
@@ -47,7 +48,7 @@ export default {
       { outside: 35, inside: 60, price: 37.43 },
       { outside: 35, inside: 65, price: 39.64 },
       { outside: 35, inside: 70, price: 44.05 },
-
+      //////////////////
       { outside: 40, inside: 30, price: 24.20 },
       { outside: 40, inside: 35, price: 27.51 },
       { outside: 40, inside: 40, price: 28.30 },
@@ -57,7 +58,7 @@ export default {
       { outside: 40, inside: 60, price: 39.64 },
       { outside: 40, inside: 65, price: 44.05 },
       { outside: 40, inside: 70, price: 44.05 },
-
+      //////////////////
       { outside: 45, inside: 30, price: 27.51 },
       { outside: 45, inside: 35, price: 28.30 },
       { outside: 45, inside: 40, price: 31.92 },
@@ -67,7 +68,7 @@ export default {
       { outside: 45, inside: 60, price: 44.04 },
       { outside: 45, inside: 65, price: 49.56 },
       { outside: 45, inside: 70, price: 49.56 },
-
+      //////////////////
       { outside: 50, inside: 30, price: 28.30 },
       { outside: 50, inside: 35, price: 31.92 },
       { outside: 50, inside: 40, price: 35.23 },
@@ -76,7 +77,7 @@ export default {
       { outside: 50, inside: 55, price: 44.04 },
       { outside: 50, inside: 60, price: 44.04 },
       { outside: 50, inside: 65, price: 49.56 },
-
+      //////////////////
       { outside: 55, inside: 30, price: 28.30 },
       { outside: 55, inside: 35, price: 31.92 },
       { outside: 55, inside: 40, price: 35.23 },
@@ -85,7 +86,7 @@ export default {
       { outside: 55, inside: 55, price: 44.04 },
       { outside: 55, inside: 60, price: 49.56 },
       { outside: 55, inside: 65, price: 55.07 },
-
+      //////////////////
       { outside: 60, inside: 30, price: 28.30 },
       { outside: 60, inside: 35, price: 31.92 },
       { outside: 60, inside: 40, price: 35.23 },
@@ -93,30 +94,30 @@ export default {
       { outside: 60, inside: 50, price: 39.64 },
       { outside: 60, inside: 55, price: 44.04 },
       { outside: 60, inside: 60, price: 49.56 },
-
+      //////////////////
       { outside: 70, inside: 30, price: 49.56 },
-
+      //////////////////
       { outside: 80, inside: 30, price: 49.56 },
-
+      //////////////////
       { outside: 90, inside: 30, price: 49.56 },
-
+      //////////////////
       { outside: 100, inside: 30, price: 49.56 },
-
+      //////////////////
       { outside: 110, inside: 30, price: 49.56 },
-
+      //////////////////
       { outside: 120, inside: 30, price: 49.56 },
     ],
     options: ["Not- & Gefahrenfunktion"],
   },
 
   ////////////////////////////////////////////////////////////////////////
-  // KNAUFZYLINDER (innen)
+  // KNAUFZYLINDER
   ////////////////////////////////////////////////////////////////////////
   Knaufzylinder: {
     sizes: [
 
       { outside: 28, inside: 34, price: 30.40 },
-
+      //////////////////
       { outside: 30, inside: 30, price: 30.40 },
       { outside: 30, inside: 35, price: 32.50 },
       { outside: 30, inside: 40, price: 35.65 },
@@ -129,7 +130,7 @@ export default {
       { outside: 30, inside: 80, price: 53.50 },
       { outside: 30, inside: 85, price: 58.75 },
       { outside: 30, inside: 90, price: 49.56 },
-
+      //////////////////
       { outside: 35, inside: 30, price: 32.50 },
       { outside: 35, inside: 35, price: 35.65 },
       { outside: 35, inside: 40, price: 37.95 },
@@ -139,7 +140,7 @@ export default {
       { outside: 35, inside: 60, price: 47.20 },
       { outside: 35, inside: 65, price: 49.30 },
       { outside: 35, inside: 70, price: 53.50 },
-
+      //////////////////
       { outside: 40, inside: 30, price: 34.60 },
       { outside: 40, inside: 35, price: 36.34 },
       { outside: 40, inside: 40, price: 39.85 },
@@ -149,7 +150,7 @@ export default {
       { outside: 40, inside: 60, price: 49.30 },
       { outside: 40, inside: 65, price: 53.50 },
       { outside: 40, inside: 70, price: 53.50 },
-
+      //////////////////
       { outside: 45, inside: 30, price: 37.75 },
       { outside: 45, inside: 35, price: 39.45 },
       { outside: 45, inside: 40, price: 34.60 },
@@ -159,7 +160,7 @@ export default {
       { outside: 45, inside: 60, price: 34.60 },
       { outside: 45, inside: 65, price: 34.60 },
       { outside: 45, inside: 70, price: 34.60 },
-
+      //////////////////
       { outside: 50, inside: 30, price: 39.85 },
       { outside: 50, inside: 40, price: 45.10 },
       { outside: 50, inside: 45, price: 48.25 },
@@ -167,14 +168,14 @@ export default {
       { outside: 50, inside: 55, price: 53.50 },
       { outside: 50, inside: 60, price: 53.50 },
       { outside: 50, inside: 65, price: 58.75 },
-
+      //////////////////
       { outside: 55, inside: 30, price: 41.94 },
       { outside: 55, inside: 35, price: 45.10 },
       { outside: 55, inside: 40, price: 48.24 },
       { outside: 55, inside: 50, price: 55.60 },
       { outside: 55, inside: 55, price: 58.75 },
       { outside: 55, inside: 60, price: 58.75 },
-
+      //////////////////
       { outside: 60, inside: 30, price: 44.05 },
       { outside: 60, inside: 35, price: 47.20 },
       { outside: 60, inside: 40, price: 50.35 },
@@ -182,13 +183,13 @@ export default {
       { outside: 60, inside: 50, price: 55.60 },
       { outside: 60, inside: 55, price: 58.75 },
       { outside: 60, inside: 60, price: 58.75 },
-
+      //////////////////
       { outside: 65, inside: 30, price: 47.20 },
       { outside: 65, inside: 35, price: 49.30 },
       { outside: 65, inside: 40, price: 54.55 },
       { outside: 65, inside: 45, price: 59.80 },
       { outside: 65, inside: 50, price: 59.80 },
-
+      //////////////////
       { outside: 70, inside: 30, price: 49.30 },
       { outside: 70, inside: 35, price: 53.50 },
       { outside: 70, inside: 40, price: 54.55 },
@@ -213,20 +214,23 @@ export default {
     options: [],
   },
 
+  ////////////////////////////////////////////////////////////////////////
+  // VORHANGSCHLOSS 
+  ////////////////////////////////////////////////////////////////////////
   Vorhangschloss: {
     types: {
-      "Vorhangschloss 50mm": {
-        options: []
-      },
-      "Vorhangschloss 50mm": {
-        options: []
-      },
+      "ABUS 86/TI 45": { price: 43.95, options: [] },
+      "ABUS 86/TI 55": { price: 52.95, options: ["Seewasserfest"] },
     },
   },
 
+  ////////////////////////////////////////////////////////////////////////
+  // VERFÜGBARE TYPEN
+  ////////////////////////////////////////////////////////////////////////
   availableTypes: [
     "Doppelzylinder",
     "Knaufzylinder (innen)",
     "Halbzylinder",
+    "Vorhangschloss",
   ],
 }

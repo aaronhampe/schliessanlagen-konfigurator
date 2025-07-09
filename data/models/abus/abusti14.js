@@ -19,7 +19,7 @@ export default {
   Doppelzylinder: {
     sizes: [
       { outside: 28, inside: 34, price: 13.63 },
-      ////////////////////////////////////////////
+     
       { outside: 30, inside: 30, price: 13.63 },
       { outside: 30, inside: 35, price: 14.68 },
       { outside: 30, inside: 40, price: 16.78 },
@@ -48,10 +48,23 @@ export default {
     ],
   },
 
+  ////////////////////////////////////////////////////////////////////////
+  // HALBZYLINDER
+  ////////////////////////////////////////////////////////////////////////
   Halbzylinder: {
     sizes: [
       { outside: 30, inside: 10, price: 12.57 },
     ],
+  },
+
+  ////////////////////////////////////////////////////////////////////////
+  // VORHANGSCHLOSS 
+  ////////////////////////////////////////////////////////////////////////
+  Vorhangschloss: {
+    types: {
+      "ABUS 86/TI 45": { price: 34.95, options: [] },
+      "ABUS 86/TI 55": { price: 39.95, options: ["Seewasserfest"] },
+    },
   },
 
   availableTypes: [

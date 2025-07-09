@@ -343,11 +343,13 @@ export default {
             { outside: 65, inside: 10, price: 58.75 },
             { outside: 70, inside: 10, price: 58.75 },
         ],
-        options: ["Not- & Gefahrenfunktion",
+        options: [
+            "Not- & Gefahrenfunktion",
             "Erhöhter Bohrschutz",
             "Modulare Bauweise",
             "Seewasserfest",
-            "Freilauf",],
+            "Freilauf",
+        ],
     },
 
     ////////////////////////////////////////////////////////////////////////
@@ -355,26 +357,8 @@ export default {
     ////////////////////////////////////////////////////////////////////////
     Vorhangschloss: {
         types: {
-            "50mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
-            "80mm": {
-                options: [
-                    "Seenwasserfest",
-                ]
-            },
-        },
-    },
-
-    ////////////////////////////////////////////////////////////////////////
-    // BRIEFKASTENSCHLOSS 
-    ////////////////////////////////////////////////////////////////////////
-    Briefkastenschloss: {
-        options: {
-            Art: ["Surface", "Mortise"],
-            Material: ["Nickel", "Bronze"],
+            "ABUS 86/TI 45": { price: 45.90, options: [] },
+            "ABUS 86/TI 55": { price: 55.90, options: ["Seewasserfest"] },
         },
     },
 

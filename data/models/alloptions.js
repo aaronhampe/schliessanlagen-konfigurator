@@ -466,22 +466,8 @@ export default {
   },
   Vorhangschloss: {
     types: {
-      "ABUS 86/TI 45": {
-        options: [
-          
-        ]
-      },
-      "ABUS 86/TI 55": {
-        options: [
-          "Seewasserfest",
-        ]
-      },
-    },
-  },
-  Briefkastenschloss: {
-    options: {
-      Art: ["Surface", "Mortise"],
-      Material: ["Nickel", "Bronze"],
+      "ABUS 86/TI 45": { options: [] },
+      "ABUS 86/TI 55": { options: ["Seewasserfest",] },
     },
   },
   availableTypes: [

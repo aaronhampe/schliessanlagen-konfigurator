@@ -23,8 +23,8 @@ export default {
     Nachhaltigkeit
     Mit einem Patentschutz bis 2043 ist der rs Sirius eine zukunftssichere Investition in Ihre Sicherheit.`,
     deliveryTime: "2-4 Woche",
-    "Doppelzylinder": {
-        "sizes": [
+    Doppelzylinder: {
+        sizes: [
             { "outside": 30, "inside": 30, "price": 28.36 },
             { "outside": 27, "inside": 35, "price": 28.36 },
             { "outside": 30, "inside": 35, "price": 33.72 },
@@ -274,6 +274,15 @@ export default {
             "Seewasserfest",
             "Freilauf"
         ]
+    },
+    ////////////////////////////////////////////////////////////////////////
+    // VORHANGSCHLOSS 
+    ////////////////////////////////////////////////////////////////////////
+    Vorhangschloss: {
+        types: {
+            "ABUS 86/TI 45": { price: 45.90, options: [] },
+            "ABUS 86/TI 55": { price: 55.90, options: ["Seewasserfest"] },
+        },
     },
     "availableTypes": [
         "Doppelzylinder",
