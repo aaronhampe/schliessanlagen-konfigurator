@@ -143,6 +143,7 @@ export default {
             { outside: 120, inside: 30, price: 101.38 },
             { outside: 120, inside: 35, price: 104.69 },
             { outside: 120, inside: 40, price: 107.99 },
+            ////////
         ],
         options: [
             "Not- & Gefahrenfunktion",
@@ -245,6 +246,7 @@ export default {
     },
     Halbzylinder: {
         sizes: [
+            /////////////
             { outside: 30, inside: 10, price: 33.02 },
             { outside: 35, inside: 10, price: 36.33 },
             { outside: 40, inside: 10, price: 39.64 },
@@ -254,6 +256,7 @@ export default {
             { outside: 60, inside: 10, price: 52.87 },
             { outside: 65, inside: 10, price: 59.48 },
             { outside: 70, inside: 10, price: 66.10 },
+            /////////////
         ],
         options: [
             "Not- & Gefahrenfunktion",

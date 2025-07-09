@@ -21,7 +21,7 @@ export default {
     sizes: [
       { outside: 28, inside: 34, price: 30.4 },
       { outside: 28, inside: 39, price: 36.7 },
-
+      /////////////
       { outside: 30, inside: 30, price: 30.4 },
       { outside: 30, inside: 35, price: 33.55 },
       { outside: 30, inside: 40, price: 36.7 },
@@ -36,7 +36,7 @@ export default {
       { outside: 30, inside: 100, price: 77.65 },
       { outside: 30, inside: 110, price: 85.0 },
       { outside: 30, inside: 120, price: 91.3 },
-
+      /////////////
       { outside: 35, inside: 30, price: 33.55 },
       { outside: 35, inside: 35, price: 36.7 },
       { outside: 35, inside: 40, price: 39.85 },
@@ -46,7 +46,7 @@ export default {
       { outside: 35, inside: 60, price: 50.35 },
       { outside: 35, inside: 65, price: 53.5 },
       { outside: 35, inside: 70, price: 64.0 },
-
+      /////////////
       { outside: 40, inside: 30, price: 36.7 },
       { outside: 40, inside: 35, price: 39.85 },
       { outside: 40, inside: 40, price: 41.95 },
@@ -56,7 +56,7 @@ export default {
       { outside: 40, inside: 60, price: 53.5 },
       { outside: 40, inside: 65, price: 64.0 },
       { outside: 40, inside: 70, price: 64.0 },
-
+      /////////////
       { outside: 45, inside: 30, price: 39.85 },
       { outside: 45, inside: 35, price: 41.95 },
       { outside: 45, inside: 40, price: 47.95 },
@@ -66,7 +66,7 @@ export default {
       { outside: 45, inside: 60, price: 64.0 },
       { outside: 45, inside: 65, price: 71.35 },
       { outside: 45, inside: 70, price: 71.35 },
-
+      /////////////
       { outside: 50, inside: 30, price: 41.95 },
       { outside: 50, inside: 35, price: 47.95 },
       { outside: 50, inside: 40, price: 48.25 },
@@ -76,7 +76,7 @@ export default {
       { outside: 50, inside: 60, price: 64.0 },
       { outside: 50, inside: 65, price: 71.35 },
       { outside: 50, inside: 70, price: 71.35 },
-
+      /////////////
       { outside: 55, inside: 30, price: 47.95 },
       { outside: 55, inside: 35, price: 48.25 },
       { outside: 55, inside: 40, price: 50.35 },
@@ -203,15 +203,14 @@ export default {
   },
 
   ////////////////////////////////////////////////////////////////////////
-    // VORHANGSCHLOSS 
-    ////////////////////////////////////////////////////////////////////////
-    Vorhangschloss: {
-      types: {
-          "ABUS 86/TI 45": { price: 56.65, options: [] },
-          "ABUS 86/TI 55": { price: 65.05, options: ["Seewasserfest"] },
-      },
+  // VORHANGSCHLOSS 
+  ////////////////////////////////////////////////////////////////////////
+  Vorhangschloss: {
+    types: {
+      "ABUS 86/TI 45": { price: 56.65, options: [] },
+      "ABUS 86/TI 55": { price: 65.05, options: ["Seewasserfest"] },
+    },
   },
-
 
   ////////////////////////////////////////////////////////////////////////
   // VERFÜGBARE TYPEN

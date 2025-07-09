@@ -203,6 +203,7 @@ export default {
   ////////////////////////////////////////////////////////////////////////
   Halbzylinder: {
     sizes: [
+      //////////////////////////////////
       { outside: 30, inside: 10, price: 14.65 },
       { outside: 35, inside: 10, price: 17.80 },
       { outside: 40, inside: 10, price: 19.90 },
@@ -210,6 +211,7 @@ export default {
       { outside: 50, inside: 10, price: 24.10 },
       { outside: 60, inside: 10, price: 29.35 },
       { outside: 70, inside: 10, price: 33.55 },
+      //////////////////////////////////
     ],
     options: [],
   },
