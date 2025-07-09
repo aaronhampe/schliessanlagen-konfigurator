@@ -3,8 +3,8 @@ export default {
     image: "./images/abus-magtec-doppelzylinder-schluessel-logo-500x500.png",
     keyPrice: 4.38,
     productID: 28679,
-    useCase: "privat & gewerblich", 
-    securityLevel: 7, 
+    useCase: "privat & gewerblich",
+    securityLevel: 7,
     features: [
         "Magnettechnologie im Schlüssel und Zylinder",
         "Individuelle Schließberechtigungen",
@@ -259,9 +259,24 @@ export default {
             "Not- & Gefahrenfunktion",
         ],
     },
+
+    ////////////////////////////////////////////////////////////////////////
+    // VORHANGSCHLOSS 
+    ////////////////////////////////////////////////////////////////////////
+    Vorhangschloss: {
+        types: {
+            "ABUS 86/TI 45": { price: 56.50, options: [] },
+            "ABUS 86/TI 55": { price: 62.50, options: ["Seewasserfest"] },
+        },
+    },
+
+    ////////////////////////////////////////////////////////////////////////
+    // VERFÜGBARE TYPEN
+    ////////////////////////////////////////////////////////////////////////
     availableTypes: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",
         "Halbzylinder",
-      ],
+        "Vorhangschloss",
+    ],
 }

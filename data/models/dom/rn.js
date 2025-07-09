@@ -237,12 +237,17 @@ export default {
             "Not- & Gefahrenfunktion",
         ],
     },
-    Briefkastenschloss: {
-        options: {
-            Art: ["Surface", "Mortise"],
-            Material: ["Nickel", "Bronze"],
+
+    ////////////////////////////////////////////////////////////////////////
+    // VORHANGSCHLOSS 
+    ////////////////////////////////////////////////////////////////////////
+    Vorhangschloss: {
+        types: {
+            "ABUS 86/TI 45": { price: 45.90, options: [] },
+            "ABUS 86/TI 55": { price: 55.90, options: ["Seewasserfest"] },
         },
     },
+
     availableTypes: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",

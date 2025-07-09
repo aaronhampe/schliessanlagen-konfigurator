@@ -20,7 +20,6 @@ export default {
   ////////////////////////////////////////////////////////////////////////
   Doppelzylinder: {
     sizes: [
-
       ////////
       { outside: 28, inside: 28, price: 12.21 },
       { outside: 28, inside: 32, price: 12.21 },
@@ -71,7 +70,7 @@ export default {
       { outside: 35, inside: 115, price: 60.69 },
       { outside: 35, inside: 120, price: 63.38 },
       { outside: 35, inside: 125, price: 66.08 },
-
+      ////////
       { outside: 40, inside: 30, price: 14.61 },
       { outside: 40, inside: 35, price: 17 },
       { outside: 40, inside: 40, price: 18.6 },
@@ -193,6 +192,10 @@ export default {
     ],
     options: ["Not- & Gefahrenfunktion"],
   },
+
+  ////////////////////////////////////////////////////////////////////////
+    // KNAUFZYLINDER
+    ////////////////////////////////////////////////////////////////////////
   Knaufzylinder: {
     sizes: [
       ////////
@@ -303,6 +306,10 @@ export default {
     ],
     options: [],
   },
+
+  ////////////////////////////////////////////////////////////////////////
+  // HALBZYLINDER
+  ////////////////////////////////////////////////////////////////////////
   Halbzylinder: {
     sizes: [
       ////////
@@ -329,25 +336,24 @@ export default {
     ],
     options: [],
   },
+
+  ////////////////////////////////////////////////////////////////////////
+  // VORHANGSCHLOSS 
+  ////////////////////////////////////////////////////////////////////////
   Vorhangschloss: {
     types: {
-      "50mm": {
-        options: ["Seenwasserfest"]
-      },
-      "80mm": {
-        options: ["Seenwasserfest"]
-      },
+      "ABUS 86/TI 45": { price: 34.95, options: [] },
+      "ABUS 86/TI 55": { price: 39.95, options: ["Seewasserfest"] },
     },
   },
-  Briefkastenschloss: {
-    options: {
-      Art: ["Surface", "Mortise"],
-      Material: ["Nickel", "Bronze"],
-    },
-  },
+
+  ////////////////////////////////////////////////////////////////////////
+  // VERFÜGBARE TYPEN
+  ////////////////////////////////////////////////////////////////////////
   availableTypes: [
     "Doppelzylinder",
     "Knaufzylinder (innen)",
     "Halbzylinder",
+    "Vorhangschloss",
   ],
 }

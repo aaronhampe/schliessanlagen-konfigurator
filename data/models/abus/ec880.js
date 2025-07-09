@@ -18,7 +18,6 @@ export default {
     ////////////////////////////////////////////////////////////////////////
     Doppelzylinder: {
         sizes: [
-
             /////////////////
             { outside: 30, inside: 30, price: 55.60 },
             { outside: 30, inside: 35, price: 59.80 },
@@ -34,7 +33,6 @@ export default {
             { outside: 30, inside: 100, price: 103.90 },
             { outside: 30, inside: 110, price: 110.20 },
             { outside: 30, inside: 120, price: 117.55 },
-
             ////////////////////
             { outside: 35, inside: 30, price: 59.80 },
             { outside: 35, inside: 35, price: 62.95 },
@@ -50,7 +48,6 @@ export default {
             { outside: 35, inside: 100, price: 107.05 },
             { outside: 35, inside: 110, price: 114.40 },
             { outside: 35, inside: 120, price: 120.70 },
-
             //////////////////
             { outside: 40, inside: 30, price: 59.80 },
             { outside: 40, inside: 35, price: 66.10 },
@@ -66,7 +63,6 @@ export default {
             { outside: 40, inside: 100, price: 110.20 },
             { outside: 40, inside: 110, price: 117.55 },
             { outside: 40, inside: 120, price: 123.85 },
-
             ///////////////////
             { outside: 45, inside: 30, price: 66.10 },
             { outside: 45, inside: 35, price: 69.25 },
@@ -77,7 +73,6 @@ export default {
             { outside: 45, inside: 60, price: 87.10 },
             { outside: 45, inside: 65, price: 92.25 },
             { outside: 45, inside: 70, price: 96.55 },
-
             ///////////////////
             { outside: 50, inside: 30, price: 76.60 },
             { outside: 50, inside: 35, price: 79.75 },
@@ -88,7 +83,6 @@ export default {
             { outside: 50, inside: 60, price: 90.25 },
             { outside: 50, inside: 65, price: 93.40 },
             { outside: 50, inside: 70, price: 96.55 },
-
             ///////////////////
             { outside: 55, inside: 30, price: 73.45 },
             { outside: 55, inside: 35, price: 76.60 },
@@ -99,7 +93,6 @@ export default {
             { outside: 55, inside: 60, price: 93.40 },
             { outside: 55, inside: 65, price: 96.55 },
             { outside: 55, inside: 70, price: 100.75 },
-
             ///////////////////
             { outside: 60, inside: 30, price: 76.60 },
             { outside: 60, inside: 35, price: 79.75 },
@@ -110,7 +103,6 @@ export default {
             { outside: 60, inside: 60, price: 96.55 },
             { outside: 60, inside: 65, price: 100.75 },
             { outside: 60, inside: 70, price: 103.90 },
-
             ///////////////////
             { outside: 65, inside: 30, price: 79.75 },
             { outside: 65, inside: 35, price: 82.90 },
@@ -121,7 +113,6 @@ export default {
             { outside: 65, inside: 60, price: 100.75 },
             { outside: 65, inside: 65, price: 103.90 },
             { outside: 65, inside: 70, price: 107.05 },
-
             //////////////////
             { outside: 70, inside: 30, price: 82.90 },
             { outside: 70, inside: 35, price: 87.10 },
@@ -137,7 +128,6 @@ export default {
     },
     Knaufzylinder: {
         sizes: [
-
             ///////////////////
             { outside: 30, inside: 30, price: 49.30 },
             { outside: 30, inside: 35, price: 52.45 },
@@ -152,7 +142,6 @@ export default {
             { outside: 30, inside: 100, price: 96.55 },
             { outside: 30, inside: 110, price: 102.85 },
             { outside: 30, inside: 120, price: 110.20 },
-
             ///////////////////
             { outside: 35, inside: 30, price: 55.60 },
             { outside: 35, inside: 35, price: 55.60 },
@@ -167,7 +156,6 @@ export default {
             { outside: 35, inside: 100, price: 99.70 },
             { outside: 35, inside: 110, price: 107.05 },
             { outside: 35, inside: 120, price: 113.35 },
-
             ///////////////////
             { outside: 40, inside: 30, price: 55.60 },
             { outside: 40, inside: 35, price: 58.75 },
@@ -182,7 +170,6 @@ export default {
             { outside: 40, inside: 100, price: 102.85 },
             { outside: 40, inside: 110, price: 110.20 },
             { outside: 40, inside: 120, price: 116.50 },
-
             ///////////////////
             { outside: 45, inside: 30, price: 58.75 },
             { outside: 45, inside: 35, price: 61.90 },
@@ -193,7 +180,6 @@ export default {
             { outside: 45, inside: 60, price: 79.75 },
             { outside: 45, inside: 65, price: 82.90 },
             { outside: 45, inside: 70, price: 86.05 },
-
             ///////////////
             { outside: 50, inside: 30, price: 61.90 },
             { outside: 50, inside: 35, price: 66.10 },
@@ -204,8 +190,6 @@ export default {
             { outside: 50, inside: 60, price: 82.90 },
             { outside: 50, inside: 65, price: 86.05 },
             { outside: 50, inside: 70, price: 89.20 },
-
-
             ///////////////
             { outside: 55, inside: 30, price: 66.10 },
             { outside: 55, inside: 35, price: 69.25 },
@@ -215,7 +199,6 @@ export default {
             { outside: 55, inside: 55, price: 82.90 },
             { outside: 55, inside: 60, price: 86.05 },
             { outside: 55, inside: 65, price: 89.20 },
-
             ////////////////
             { outside: 60, inside: 30, price: 69.25 },
             { outside: 60, inside: 35, price: 72.40 },
@@ -224,49 +207,45 @@ export default {
             { outside: 60, inside: 50, price: 82.90 },
             { outside: 60, inside: 55, price: 86.05 },
             { outside: 60, inside: 60, price: 89.20 },
-
             ///////////////
             { outside: 65, inside: 30, price: 72.40 },
             { outside: 65, inside: 35, price: 75.55 },
             { outside: 65, inside: 40, price: 79.75 },
             { outside: 65, inside: 45, price: 82.90 },
             { outside: 65, inside: 50, price: 86.05 },
-
             ///////////////
             { outside: 70, inside: 30, price: 75.55 },
             { outside: 70, inside: 35, price: 79.75 },
             { outside: 70, inside: 40, price: 82.90 },
             { outside: 70, inside: 45, price: 86.05 },
-
             ////////////////
             { outside: 80, inside: 30, price: 82.90 },
             { outside: 80, inside: 35, price: 86.05 },
             { outside: 80, inside: 40, price: 89.20 },
-
             ///////////////
             { outside: 90, inside: 30, price: 89.20 },
             { outside: 90, inside: 35, price: 92.35 },
             { outside: 90, inside: 40, price: 96.55 },
-
             //////////////
             { outside: 100, inside: 30, price: 96.55 },
             { outside: 100, inside: 35, price: 99.70 },
             { outside: 100, inside: 40, price: 102.85 },
-
             //////////////
             { outside: 110, inside: 30, price: 102.85 },
             { outside: 110, inside: 35, price: 107.05 },
             { outside: 110, inside: 40, price: 110.20 },
-
             /////////////////
             { outside: 120, inside: 30, price: 110.20 },
             { outside: 120, inside: 35, price: 113.35 },
             { outside: 120, inside: 40, price: 116.50 },
-
             //////////////
         ],
         options: [],
     },
+
+    ////////////////////////////////////////////////////////////////////////
+    // HALBZYLINDER 
+    ////////////////////////////////////////////////////////////////////////
     Halbzylinder: {
         sizes: [
             { outside: 30, inside: 10, price: 50.34 },
@@ -281,25 +260,24 @@ export default {
         ],
         options: [],
     },
+
+    ////////////////////////////////////////////////////////////////////////
+    // VORHANGSCHLOSS 
+    ////////////////////////////////////////////////////////////////////////
     Vorhangschloss: {
         types: {
-            "50mm": {
-                options: []
-            },
-            "80mm": {
-                options: []
-            },
+            "ABUS 86/TI 45": { price: 78.95, options: [] },
+            "ABUS 86/TI 55": { price: 89.95, options: ["Seewasserfest"] },
         },
     },
-    Briefkastenschloss: {
-        options: {
-            Art: ["Surface", "Mortise"],
-            Material: ["Nickel", "Bronze"],
-        },
-    },
+
+    ////////////////////////////////////////////////////////////////////////
+    // VERFÜGBARE TYPEN 
+    ////////////////////////////////////////////////////////////////////////
     availableTypes: [
         "Doppelzylinder",
         "Knaufzylinder (innen)",
         "Halbzylinder",
+        "Vorhangschloss",
     ],
 }
