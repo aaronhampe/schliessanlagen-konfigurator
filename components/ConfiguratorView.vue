@@ -1750,11 +1750,11 @@ export default {
               break;
             }
           }
-          if (!foundAtLeastOne) {
+          if (!keyHasLock) {
             alert(
               `Bitte mindestens eine Berechtigung in Spalte #${
                 c + 1
-              } anklicken (Schließanlage).`
+              } anklicken.`
             );
             return false;
           }
