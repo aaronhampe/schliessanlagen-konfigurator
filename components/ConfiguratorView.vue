@@ -516,9 +516,12 @@
           Anlage speichern
         </UButton>
 
-        <a class="button-secondary" target="_blank"href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s">Tutorial auf&nbsp;YouTube</a>
-       
-
+        <a
+          class="button-secondary"
+          target="_blank"
+          href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s"
+          >Tutorial auf&nbsp;YouTube</a
+        >
       </div>
     </div>
     <UButton
@@ -1748,7 +1751,11 @@ export default {
             }
           }
           if (!foundAtLeastOne) {
-            alert(`Bitte mindestens eine Berechtigung in Spalte #${c + 1} anklicken (Schließanlage).`);
+            alert(
+              `Bitte mindestens eine Berechtigung in Spalte #${
+                c + 1
+              } anklicken (Schließanlage).`
+            );
             return false;
           }
         }
