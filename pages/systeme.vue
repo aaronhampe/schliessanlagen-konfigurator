@@ -427,7 +427,7 @@ async function addToCart(systemName, price, productID) {
 
     await $fetch("/api/updateProtect", {
       method: "POST",
-      body: { ID: anlageNr }      
+      body: { ID: anlageNr }
     });
 
     isSummaryModalOpen.value = false;
@@ -519,106 +519,117 @@ onMounted(async () => {
 
 <template>
   <div class="systeme-page">
-    <h2>Systemübersicht</h2>
-    <div v-if="anlageNr">
-      <p>
-        Anlagennummer: <strong>{{ anlageNr }}</strong>
-      </p>
+    <!-- Verbesserter Header mit Breadcrumb und Support -->
+    <div class="page-header">
+      <div class="header-top">
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Konfigurator</span>
+          <i class="i-heroicons-chevron-right breadcrumb-separator"></i>
+          <span class="breadcrumb-item current">Systemauswahl</span>
+        </div>
 
-      <div class="filters-container">
-        <label class="filter-label"> Sortieren nach: </label>
-        <!-- Sortier-Select -->
-        <select v-model="selectedSort" class="filter-select">
-          <option value="none">Keine Sortierung</option>
-          <option value="priceAsc">Preis (aufsteigend)</option>
-          <option value="priceDesc">Preis (absteigend)</option>
-          <option value="securityAsc">Sicherheit (aufsteigend)</option>
-          <option value="securityDesc">Sicherheit (absteigend)</option>
-        </select>
+        <!-- Support-Bereich (rechts oben) -->
+        <div class="support-widget">
+          <div class="support-icon">
+            <i class="i-heroicons-phone"></i>
+          </div>
+          <div class="support-text">
+            <span class="support-label">Beratung gewünscht?</span>
+            <a href="tel:+4951306093900" class="support-phone">
+              +49 5130 609390
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
-    <UButton class="back-button" @click="navigateBack" style="margin: 10px 10px 10px 0px">
-      Zurück zum Konfigurator
-    </UButton>
 
-    <!-- Haupt-Angebot -->
-    <div v-if="selectedModelOffer">
-      <h2>Angebot für Ihr ausgewähltes Modell:</h2>
-      <div class="offer highlighted-offer offer-row">
-        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
-        <div class="offer-details">
-          <h3>{{ selectedModelOffer.title }}</h3>
-
-          <div class="offer-type-info">
-            {{
-      selectedModelOffer.isSchliessanlage
-        ? "Schließanlage"
-        : "Gleichschließung"
-    }}
-          </div>
-          <ul class="offer-features">
-            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
-              <i class="icon-check"></i> {{ feature }}
-            </li>
-          </ul>
-          <UButton class="info-button" color="gray" variant="ghost"
-            @click="openInfo(selectedModelOffer /* bzw. offer im v-for */)">
-            Mehr&nbsp;Infos
-          </UButton>
-          <div class="offer-delivery">
-            <strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}
-          </div>
-          <div class="offer-price">
-            Gesamtpreis:
-            <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
-            <span class="shipping">inkl. Versand</span>
-          </div>
-          <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button"
-            @click="openSummary(selectedModelOffer)">
-            System kaufen
-          </UButton>
+      <div class="page-title-section">
+        <h2>Passende Schließsysteme für Ihre Konfiguration</h2>
+        <div class="anlage-info" v-if="anlageNr">
+          <i class="i-heroicons-identification anlage-icon"></i>
+          <span>Anlage: <strong>{{ anlageNr }}</strong></span>
         </div>
       </div>
     </div>
 
-    <!-- Alternative Angebote -->
-    <div v-if="alternativeOffers.length" style="margin-top: 30px">
-      <h2>
-        {{
-      selectedModel === "Kein bestimmtes Modell"
-        ? "Angebote für Sie:"
-        : "Weitere passende Angebote:"
-    }}
-      </h2>
-      <div class="offer-container">
-        <div class="offer offer-row" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
-          <img :src="offer.image" :alt="offer.alt" class="offer-image" />
-          <div class="offer-details">
-            <h3>{{ offer.title }}</h3>
+    <!-- Verbesserte Filter-Sektion -->
+    <div class="controls-section">
+      <div class="filters-container">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="i-heroicons-funnel filter-icon"></i>
+            Sortieren nach:
+          </label>
+          <select v-model="selectedSort" class="filter-select">
+            <option value="none">Empfehlung</option>
+            <option value="priceAsc">Preis (günstig → teuer)</option>
+            <option value="priceDesc">Preis (teuer → günstig)</option>
+            <option value="securityAsc">Sicherheit (niedrig → hoch)</option>
+            <option value="securityDesc">Sicherheit (hoch → niedrig)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <UButton class="action-btn secondary" @click="navigateBack" icon="i-heroicons-arrow-left" variant="outline"
+          color="gray">
+          Konfiguration bearbeiten
+        </UButton>
+      </div>
+    </div>
+
+    <!-- Haupt-Angebot (verbessertes Design) -->
+    <div v-if="selectedModelOffer" class="main-offer-section">
+      <div class="section-header">
+        <h3>
+          <i class="i-heroicons-star section-icon"></i>
+          Ihr ausgewähltes Modell
+        </h3>
+        <div class="recommendation-badge">Empfohlen</div>
+      </div>
+
+      <div class="offer main-offer">
+        <div class="offer-badge">Ihre Auswahl</div>
+        <img :src="selectedModelOffer.image" :alt="selectedModelOffer.alt" class="offer-image" />
+        <div class="offer-details">
+          <div class="offer-header">
+            <h4>{{ selectedModelOffer.title }}</h4>
             <div class="offer-type-info">
-              {{
-      offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-    }}
+              <i class="i-heroicons-lock-closed type-icon"></i>
+              {{ selectedModelOffer.isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
             </div>
-            <ul class="offer-features">
-              <li v-for="(feature, i) in offer.features || []" :key="i">
-                <i class="icon-check"></i> {{ feature }}
-              </li>
-            </ul>
+          </div>
 
-            <UButton class="info-button" color="gray" variant="ghost"
-              @click="openInfo(offer /* bzw. offer im v-for */)">
-              Mehr&nbsp;Infos
-            </UButton>
+          <ul class="offer-features">
+            <li v-for="(feature, i) in selectedModelOffer.features || []" :key="i">
+              <i class="i-heroicons-check-circle feature-check"></i>
+              {{ feature }}
+            </li>
+          </ul>
 
+          <div class="offer-meta">
             <div class="offer-delivery">
-              <strong>Lieferzeit:</strong> {{ offer.deliveryTime }}
+              <i class="i-heroicons-truck delivery-icon"></i>
+              <span><strong>Lieferzeit:</strong> {{ selectedModelOffer.deliveryTime }}</span>
             </div>
+
+            <UButton class="info-button" color="gray" variant="ghost" icon="i-heroicons-information-circle"
+              @click="openInfo(selectedModelOffer)">
+              Details ansehen
+            </UButton>
+          </div>
+
+          <div class="offer-footer">
             <div class="offer-price">
-              Gesamtpreis:
-              <strong class="price">{{ roundPrice(offer.price) }}€</strong><span class="shipping">inkl. Versand</span>
+              <span class="price-label">Gesamtpreis:</span>
+              <div class="price-value">
+                <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
+                <span class="shipping">inkl. Versand</span>
+              </div>
             </div>
-            <UButton icon="i-heroicons-shopping-cart-16-solid" class="select-system-button" @click="openSummary(offer)">
+
+            <UButton icon="i-heroicons-shopping-cart" class="select-system-button primary"
+              @click="openSummary(selectedModelOffer)">
               System kaufen
             </UButton>
           </div>
@@ -626,10 +637,77 @@ onMounted(async () => {
       </div>
     </div>
 
-    <UButton style="margin-top: 20px" class="back-button" @click="navigateBack">
-      Zurück zum Konfigurator
-    </UButton>
+    <!-- Alternative Angebote (verbessertes Listen-Design) -->
+    <div v-if="alternativeOffers.length" class="alternatives-section">
+      <div class="section-header">
+        <h3>
+          <i class="i-heroicons-squares-2x2 section-icon"></i>
+          {{ selectedModel === "Kein bestimmtes Modell" ? "Alle passenden Systeme" : "Weitere Optionen" }}
+        </h3>
+        <span class="result-count">{{ alternativeOffers.length }} Alternativen</span>
+      </div>
+
+      <div class="offer-container">
+        <div class="offer alternative-offer" v-for="(offer, index) in sortedAlternativeOffers" :key="offer.title">
+          <img :src="offer.image" :alt="offer.alt" class="offer-image" />
+          <div class="offer-details">
+            <div class="offer-header">
+              <h4>{{ offer.title }}</h4>
+              <div class="offer-type-info">
+                <i class="i-heroicons-lock-closed type-icon"></i>
+                {{ offer.isSchliessanlage ? "Schließanlage" : "Gleichschließung" }}
+              </div>
+            </div>
+
+            <ul class="offer-features">
+              <li v-for="(feature, i) in offer.features?.slice(0, 2) || []" :key="i">
+                <i class="i-heroicons-check-circle feature-check"></i>
+                {{ feature }}
+              </li>
+              <li v-if="offer.features?.length > 2" class="more-features">
+                +{{ offer.features.length - 2 }} weitere Features
+              </li>
+            </ul>
+
+            <div class="offer-meta">
+              <div class="offer-delivery">
+                <i class="i-heroicons-truck delivery-icon"></i>
+                <span><strong>Lieferzeit:</strong> {{ offer.deliveryTime }}</span>
+              </div>
+
+              <UButton class="info-button" color="gray" variant="ghost" icon="i-heroicons-information-circle"
+                @click="openInfo(offer)">
+                Details
+              </UButton>
+            </div>
+
+            <div class="offer-footer">
+              <div class="offer-price">
+                <span class="price-label">Gesamtpreis:</span>
+                <div class="price-value">
+                  <strong>{{ roundPrice(offer.price) }} €</strong>
+                  <span class="shipping">inkl. Versand</span>
+                </div>
+              </div>
+
+              <UButton icon="i-heroicons-shopping-cart" class="select-system-button" @click="openSummary(offer)">
+                Auswählen
+              </UButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Navigation -->
+    <div class="page-footer">
+      <UButton class="back-button-footer" @click="navigateBack" icon="i-heroicons-arrow-left" variant="outline"
+        color="gray">
+        Zurück zum Konfigurator
+      </UButton>
+    </div>
   </div>
+
 
   <UModal :fullscreen="true" v-model="isSummaryModalOpen" class="summary-modal modern-design">
     <div class="modal-content">
@@ -669,10 +747,10 @@ onMounted(async () => {
                   <td>{{ pos.POS }}</td>
                   <td>
                     {{
-      pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
-        ? pos.Bezeichnung
-        : "Tür " + pos.POS
-    }}
+          pos.Bezeichnung && pos.Bezeichnung.trim() !== ""
+            ? pos.Bezeichnung
+            : "Tür " + pos.POS
+        }}
                   </td>
                   <td>{{ pos.Typ }}</td>
                   <td>{{ pos.SizeA }} / {{ pos.SizeI }}</td>
@@ -691,10 +769,10 @@ onMounted(async () => {
             <li v-for="(keyItem, index) in schluesselData" :key="keyItem.KeyPOS">
               <strong>
                 {{
-      keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
-        ? keyItem.Bezeichnung
-        : "Schlüssel " + keyItem.KeyPOS
-    }}
+          keyItem.Bezeichnung && keyItem.Bezeichnung.trim() !== ""
+            ? keyItem.Bezeichnung
+            : "Schlüssel " + keyItem.KeyPOS
+        }}
               </strong>
               schließt:
               <span>{{ getPositionsForKey(keyItem.KeyPOS) }}</span>

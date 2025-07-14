@@ -2,7 +2,8 @@
   <!-- Neuer stylischer Header-Bereich ohne Hintergrund -->
   <div class="configurator-header">
     <div class="header-content">
-      <div class="title-section">
+      <!-- Titel mit integriertem Progress Tracker -->
+      <div class="title-progress-section">
         <h1>
           {{
             isSchliessanlage
@@ -11,66 +12,66 @@
           }}
         </h1>
 
-
-      </div>
-
-      <div class="config-overview">
-        <div class="anlage-badge">
-          <span class="label">Anlagennummer:</span>
-          <div class="anlage-display">
-            <span class="anlage-number">{{ anlageNr || '' }}</span>
-            <div class="anlage-actions">
-              <UButton class="anlage-action-button" icon="i-heroicons-folder-open" size="xs" color="sky" variant="ghost"
-                @click="isOpenL = true" title="Anlage laden">
-                Laden
-              </UButton>
+        <!-- Kompakter Progress Tracker -->
+        <div class="compact-progress">
+          <div class="progress-step" :class="{ active: activeStep >= 1, completed: activeStep > 1 }">
+            <div class="step-indicator">
+              <span v-if="activeStep > 1" class="checkmark">✓</span>
+              <span v-else>1</span>
             </div>
+            <span class="step-label">Konfiguration</span>
+          </div>
+          <div class="progress-connector" :class="{ active: activeStep > 1 }"></div>
+          <div class="progress-step" :class="{ active: activeStep >= 2 }">
+            <div class="step-indicator">2</div>
+            <span class="step-label">Angebote</span>
           </div>
         </div>
       </div>
 
-      <div class="progress-tracker">
-        <!-- Schritt 1 -->
-        <div class="progress-step" :class="{ active: activeStep >= 1, completed: activeStep > 1 }"
-          @click="activeStep > 1 && setStepIfAllowed(1)">
-          <div class="step-indicator">
-            <span v-if="activeStep > 1" class="checkmark">✓</span>
-            <span v-else>1</span>
-          </div>
-          <div class="step-label">Türen &amp; Zylinder konfigurieren</div>
+      <!-- Kompakte Info- und Aktions-Leiste -->
+      <div class="header-actions">
+        <!-- Anlagennummer + Laden Button -->
+        <div class="anlage-section">
+          <span class="label">Anlage:</span>
+          <span class="anlage-number">{{ anlageNr || 'Neu' }}</span>
+          <UButton class="action-btn" icon="i-heroicons-folder-open" size="xs" color="sky" variant="ghost"
+            @click="isOpenL = true" title="Anlage laden">
+            Laden
+          </UButton>
         </div>
 
-        <!-- Verbindung -->
-        <div class="progress-connector" :class="{ active: activeStep > 1 }"></div>
-
-        <!-- Schritt 2 -->
-        <div class="progress-step" :class="{ active: activeStep >= 2 }">
-          <div class="step-indicator">2</div>
-          <div class="step-label">Angebote erhalten</div>
-        </div>
-      </div>
-
-
-      <div class="intro-banner template-selector">
-        <div class="banner-content">
-          <i class="i-heroicons-template banner-icon"></i>
-          <div class="template-message">
-            <p>Starten Sie mit einer <strong>Vorlage</strong> für Ihre Konfiguration:</p>
-            <div class="template-options">
-              <UButton v-for="template in templates" :key="template.id" @click="applyTemplate(template.id)"
-                class="template-button" :color="template.color" variant="soft" size="sm">
-                <i :class="template.icon"></i>
-                {{ template.name }}
-              </UButton>
-            </div>
+        <!-- Support-Link -->
+        <div class="support-section">
+          <i class="i-heroicons-phone support-icon"></i>
+          <div class="support-text">
+            <span class="support-label">Benötigen Sie Hilfe?</span>
+            <a href="tel:+4951306093900" class="support-link">
+              +49 5130 609390
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Vorlagen-Modal mit Bestätigung -->
-
+      <!-- Vorlagen-Bereich -->
+      <div class="templates-section">
+        <div class="templates-header">
+          <i class="i-heroicons-template template-icon"></i>
+          <span>Schnellstart mit Vorlage:</span>
+        </div>
+        <div class="template-buttons">
+          <UButton v-for="template in templates" :key="template.id" @click="applyTemplate(template.id)"
+            class="template-btn" :color="template.color" variant="soft" size="sm">
+            <i :class="template.icon"></i>
+            {{ template.name }}
+          </UButton>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Vorlagen-Modal mit Bestätigung -->
+
 
   <UModal v-model="isWarningModalOpen" class="improved-warning-modal">
     <div class="warning-modal-content">
