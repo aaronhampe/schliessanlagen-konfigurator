@@ -624,7 +624,7 @@ onMounted(async () => {
               <span class="price-label">Gesamtpreis:</span>
               <div class="price-value">
                 <strong>{{ roundPrice(selectedModelOffer.price) }} €</strong>
-                <span class="shipping">inkl. Versand</span>
+                <span class="shipping">{{ selectedModelOffer.price < 70 ? 'zzgl. Versand (freier Versand ab 70€ Warenwert)' : 'inkl. Versand' }}</span>
               </div>
             </div>
 
@@ -686,7 +686,7 @@ onMounted(async () => {
                 <span class="price-label">Gesamtpreis:</span>
                 <div class="price-value">
                   <strong>{{ roundPrice(offer.price) }} €</strong>
-                  <span class="shipping">inkl. Versand</span>
+                  <span class="shipping">{{ offer.price < 70 ? 'zzgl. Versand (freier Versand ab 70€ Warenwert)' : 'inkl. Versand' }}</span>
                 </div>
               </div>
 
@@ -829,8 +829,7 @@ onMounted(async () => {
 
           <div class="offer-price-summery" style="margin-top: 20px">
             Gesamtpreis:
-            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br />inkl.
-              Versand</span>
+            <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br />{{ selectedOffer.price < 70 ? 'zzgl. Versand (freier Versand ab 70€ Warenwert)' : 'inkl. Versand' }}</span>
           </div>
         </div>
       </div>
