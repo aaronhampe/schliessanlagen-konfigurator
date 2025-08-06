@@ -132,68 +132,7 @@ function goToCart() {
 
 // NEU: Funktion, die vom Kaufen-Button aufgerufen wird
 function handlePurchaseClick() {
-  // Optional: Bestehenden Timeout löschen, falls verwendet
-  // if (requirementErrorTimeout.value) {
-  //   clearTimeout(requirementErrorTimeout.value);
-  // }
-
-  if (allRequiredChecked.value) {
-    // Hier wird das computed property .value geprüft
-    showRequirementError.value = false; // Fehlermeldung ausblenden, falls sie sichtbar war
-    performActualPurchase();
-  } else {
-    requirementErrorText.value =
-      "Bitte bestätigen Sie alle Hinweise, um fortzufahren.";
-    showRequirementError.value = true;
-
-    // Versuch, zum ersten nicht angehakten Element oder der Sektion zu scrollen
-    let targetElementId = null;
-    if (!hasAcceptedWiderruf.value) {
-      // Du müsstest den Labels IDs geben, z.B. id="widerruf-label"
-      targetElementId = "widerruf-checkbox-label"; // Beispiel-ID
-    } else if (!hasAcceptedLieferzeiten.value) {
-      targetElementId = "lieferzeiten-checkbox-label"; // Beispiel-ID
-    } else if (!hasMeasuredCorrectly.value) {
-      targetElementId = "gemessen-checkbox-label"; // Beispiel-ID
-    }
-
-    let elementToScrollTo = null;
-    if (targetElementId) {
-      // Versuche zuerst, ein spezifisches Label anhand einer ID zu finden
-      // Gib hierfür deinen Labels entsprechende IDs, z.B.
-      // <label id="widerruf-checkbox-label" class="widerruf-label">...</label>
-      // elementToScrollTo = document.getElementById(targetElementId);
-
-      // Als Fallback oder wenn IDs nicht verwendet werden, scrolle zum allgemeinen Bereich
-      // Diese Selektoren müssen ggf. an deine exakte HTML-Struktur angepasst werden.
-      if (!hasAcceptedWiderruf.value)
-        elementToScrollTo = document.querySelector(
-          ".widerruf-label:nth-of-type(1)"
-        );
-      else if (!hasAcceptedLieferzeiten.value)
-        elementToScrollTo = document.querySelector(
-          ".widerruf-label:nth-of-type(2)"
-        );
-      else if (!hasMeasuredCorrectly.value)
-        elementToScrollTo = document.querySelector(
-          ".widerruf-label:nth-of-type(3)"
-        );
-    }
-
-    if (!elementToScrollTo) {
-      // Fallback, falls kein spezifisches Label gefunden wurde
-      elementToScrollTo = document.querySelector(".required-checks h2");
-    }
-
-    if (elementToScrollTo) {
-      elementToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    // Optional: Fehlermeldung nach einiger Zeit automatisch ausblenden
-    // requirementErrorTimeout.value = setTimeout(() => {
-    //   showRequirementError.value = false;
-    // }, 7000); // Nach 7 Sekunden
-  }
+  performActualPurchase();
 }
 
 // NEU: Watcher, um die Fehlermeldung auszublenden, sobald alle Checkboxen angehakt sind.
@@ -779,54 +718,9 @@ onMounted(async () => {
             </li>
           </ul>
         </div>
-
+        
         <div class="price-and-widerruf">
-          <div class="required-checks">
-            <h2>Wichtige Hinweise:</h2>
-            <label class="widerruf-label">
-              <UCheckbox color="sky" v-model="hasAcceptedWiderruf" />
-              <span>Ich stimme der Widerrufsbelehrung zu.</span>
-              <div class="info-icon" @mouseenter="hoverWiderruf = true" @mouseleave="hoverWiderruf = false">
-                <i class="i-heroicons-information-circle" />
-                <transition name="fade">
-                  <div v-if="hoverWiderruf" class="tooltip-box">
-                    Das Widerrufsrecht besteht nicht bei Verträgen zur Lieferung
-                    von Waren, die nicht vorgefertigt sind und für deren
-                    Herstellung eine individuelle Auswahl oder Bestimmung durch
-                    den Verbraucher maßgeblich ist oder die eindeutig auf die
-                    persönlichen Bedürfnisse des Verbrauchers zugeschnitten
-                    sind.
-                  </div>
-                </transition>
-              </div>
-            </label>
-            <label class="widerruf-label" style="margin-top: 10px">
-              <UCheckbox color="sky" v-model="hasAcceptedLieferzeiten" />
-              <span>Ich habe die Lieferzeiten zur Kenntnis genommen.</span>
-              <div class="info-icon" @mouseenter="hoverLieferzeit = true" @mouseleave="hoverLieferzeit = false"
-                @click.stop>
-                <i class="i-heroicons-information-circle" />
-                <transition name="fade">
-                  <div v-if="hoverLieferzeit" class="tooltip-box">
-                    Die Lieferzeit richtet sich nach der Art Ihrer Schließung.
-                    Während einfache Gleichschließungen meist innerhalb von 2
-                    Werktagen bis zu einer Woche geliefert werden, können
-                    komplexere Schließanlagen mit vielen Optionen bis zu 4
-                    Wochen in Anspruch nehmen.
-                  </div>
-                </transition>
-              </div>
-            </label>
-            <label class="widerruf-label" style="margin-top: 10px">
-              <UCheckbox color="sky" v-model="hasMeasuredCorrectly" />
-              <span>Ich habe alle Zylinder/Schlösser korrekt gemessen.</span>
-            </label>
-            <p v-if="showRequirementError" class="error-message-pflichtfelder">
-              <i class="i-heroicons-exclamation-triangle error-icon"></i>
-              <span class="error-text-content">{{ requirementErrorText }}</span>
-            </p>
-          </div>
-
+          
           <div class="offer-price-summery" style="margin-top: 20px">
             Gesamtpreis:
             <strong>{{ roundPrice(selectedOffer.price || 0) }} €</strong><span class="shipping">,<br />{{ selectedOffer.price < 70 ? 'zzgl. Versand (freier Versand ab 70€ Warenwert)' : 'inkl. Versand' }}</span>
@@ -834,8 +728,8 @@ onMounted(async () => {
         </div>
       </div>
       <div class="modal-footer">
-        <UButton :class="{ 'pseudo-disabled': !allRequiredChecked }" color="blue" variant="solid"
-          @click="handlePurchaseClick">
+        <UButton  color="blue" variant="solid"
+          @click="performActualPurchase">
           Angebot kaufen
         </UButton>
       </div>

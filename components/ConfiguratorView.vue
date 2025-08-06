@@ -70,86 +70,70 @@
     </div>
   </div>
 
-  <!-- Vorlagen-Modal mit Bestätigung -->
-
-
-  <UModal v-model="isWarningModalOpen" class="improved-warning-modal">
-    <div class="warning-modal-content">
-      <div class="warning-modal-header">
-        <div class="warning-title">
-          <i class="i-heroicons-exclamation-triangle warning-icon"></i>
-          <h2>Achtung!</h2>
-        </div>
-        <UButton class="close-button" color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="cancelChange" />
-      </div>
-
-      <div class="warning-modal-body">
-        <div class="warning-message">
-          <p class="question">Haben Sie bereits mit dem Konfigurieren begonnen?</p>
-
-          <div class="alert-box">
-            <p>Beim Wechsel des Modells gehen <strong>alle bisher eingegebenen Daten verloren.</strong></p>
-          </div>
-
-          <p class="confirmation-question">Möchten Sie wirklich wechseln?</p>
-        </div>
-      </div>
-
-      <div class="warning-modal-footer">
-        <UButton class="cancel-button" variant="soft" color="gray" @click="cancelChange">
-          Abbrechen
-        </UButton>
-
-        <UButton class="confirm-button" variant="solid" color="red" @click="confirmChange"
-          icon="i-heroicons-arrow-path">
-          Ja, Modell wechseln
-        </UButton>
-      </div>
-    </div>
-  </UModal>
-
+  <!-- Modernisiertes Template Modal -->
   <UModal v-model="isTemplateModalOpen" class="template-modal">
-    <div class="modal-content">
+    <div class="modal-container">
       <div class="modal-header">
-        <h2 class="modal-h2">{{ selectedTemplate ? selectedTemplate.name : 'Vorlage anwenden' }}</h2>
-        <UButton class="close-button" color="red" icon="i-heroicons-x-mark" @click="isTemplateModalOpen = false">
+        <div class="header-content">
+          <div class="header-icon">
+            <i class="i-heroicons-document-duplicate-16-solid"></i>
+          </div>
+          <div class="header-text">
+            <h2 class="modal-h2">Vorlage anwenden</h2>
+            <p class="template-name">{{ selectedTemplate?.name }}</p>
+          </div>
+        </div>
+        <UButton class="close-button" color="red" icon="i-heroicons-x-mark" @click="isTemplateModalOpen = false"
+          variant="ghost">
         </UButton>
       </div>
+
       <div class="modal-body">
-        <p v-if="rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)">
-          Wenn Sie diese Vorlage anwenden, werden Ihre bisherigen Konfigurationen überschrieben.
-          Möchten Sie fortfahren?
-        </p>
-        <div v-else>
-          <p>Die Vorlage <strong>{{ selectedTemplate?.name }}</strong> enthält folgende Konfiguration:</p>
-          <div class="template-preview">
-            <div v-if="selectedTemplate" class="template-doors">
-              <h3>Enthaltene Türen:</h3>
-              <ul>
-                <li v-for="door in selectedTemplate.doors" :key="door.position">
-                  <span class="door-name">{{ door.name }}</span>
-                  <span class="door-type">({{ door.type }})</span>
-                </li>
-              </ul>
-            </div>
-            <div v-if="selectedTemplate" class="template-keys">
-              <h3>Enthaltene Schlüssel:</h3>
-              <ul>
-                <li v-for="key in selectedTemplate.keys" :key="key.id">
-                  {{ key.name }}
-                </li>
-              </ul>
+        <!-- Warnung bei bestehender Konfiguration -->
+        <div v-if="rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)" class="warning-section">
+          <div class="warning-icon">
+            <i class="i-heroicons-exclamation-triangle-16-solid"></i>
+          </div>
+          <div class="warning-content">
+            <h3>Achtung: Bestehende Konfiguration</h3>
+            <p>
+              Das Anwenden dieser Vorlage wird Ihre aktuelle Konfiguration vollständig ersetzen.
+              Alle bisher eingetragenen Türen und Schlüssel gehen verloren.
+            </p>
+            <div class="current-config-info">
+              <span><strong>{{ rows.length }}</strong> konfigurierte Türen</span>
+              <span><strong>{{ rows[0]?.length || 0 }}</strong> Schlüssel</span>
             </div>
           </div>
         </div>
+
+        <!-- Bestätigung ohne bestehende Konfiguration -->
+        <div v-else class="confirmation-section">
+          <div class="confirmation-icon">
+            <i class="i-heroicons-sparkles-16-solid"></i>
+          </div>
+          <div class="confirmation-content">
+            <h3>Vorlage wird geladen</h3>
+            <p>
+              Die Vorlage <strong>"{{ selectedTemplate?.name }}"</strong> wird in Ihren Konfigurator geladen
+              und Sie können direkt mit der Anpassung beginnen.
+            </p>
+          </div>
+        </div>
       </div>
+
       <div class="modal-footer">
-        <UButton @click="confirmApplyTemplate" class="confirm-button" color="amber" variant="solid">
-          Vorlage anwenden
-        </UButton>
-        <UButton @click="isTemplateModalOpen = false" class="cancel-button" color="gray" variant="outline">
-          Abbrechen
-        </UButton>
+        <div class="footer-actions">
+          <UButton @click="isTemplateModalOpen = false" class="cancel-button" color="gray" variant="outline">
+            Abbrechen
+          </UButton>
+          <UButton @click="confirmApplyTemplate" class="confirm-button"
+            :color="(rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)) ? 'red' : 'green'" variant="solid"
+            :icon="(rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)) ? 'i-heroicons-arrow-path-16-solid' : 'i-heroicons-check-16-solid'">
+            {{ (rows.length > 1 || (rows.length === 1 && hasDataInFirstRow)) ? 'Überschreiben und fortfahren' :
+            'Vorlage anwenden' }}
+          </UButton>
+        </div>
       </div>
     </div>
   </UModal>
@@ -276,14 +260,7 @@
       </div>
       <div class="buttons" style="margin-top: 20px">
 
-        <UButton class="button-default" icon="i-heroicons-cloud-arrow-down" @click="isOpenL = true" size="sm"
-          color="amber" variant="solid" :trailing="false">Anlage laden
-        </UButton>
 
-        <UButton class="button-default" icon="i-heroicons-cloud-arrow-up" @click="handleAnlageSpeichern" size="sm"
-          color="amber" variant="solid" :trailing="false">
-          Anlage speichern
-        </UButton>
         <a class="button-secondary" target="_blank" href="https://www.youtube.com/watch?v=sgfnnyLsAXk&t=2s">Tutorial
           auf&nbsp;YouTube</a>
 
@@ -299,94 +276,215 @@
     <!-- ///////////////////////////////////////////////////////////////
                         MODALE 
     ///////////////////////////////////////////////////////////////////////-->
+    <!-- Modernisiertes Optionen Modal -->
     <UModal v-for="(row, rowIndex) in rows" :key="'options-modal-' + rowIndex" v-model="isOptionsModalOpen[rowIndex]"
       class="options-modal">
-      <div class="modal-content">
+      <div class="modal-container">
         <div class="modal-header">
-          <h2 class="modal-h2">Optionen auswählen</h2>
-          <UButton class="close-button" icon="i-heroicons-x-mark" color="red" @click="closeOptionsModal(rowIndex)">
-
+          <div class="header-content">
+            <div class="header-icon">
+              <i class="i-heroicons-cog-6-tooth-16-solid"></i>
+            </div>
+            <div class="header-text">
+              <h2 class="modal-h2">Optionen konfigurieren</h2>
+              <p class="modal-subtitle">Tür {{ rowIndex + 1 }}: {{ row[0]?.doorname || 'Unbenannte Tür' }}</p>
+            </div>
+          </div>
+          <UButton class="close-button" icon="i-heroicons-x-mark" color="red" @click="closeOptionsModal(rowIndex)"
+            variant="ghost">
           </UButton>
         </div>
-        <h6>Bitte wählen Sie die gewünschten Optionen aus.</h6>
-        <div>
-          <div v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
-            <div v-for="option in store.getOptionsForType(checkbox.type)" :key="option" class="option-item">
-              <label>
-                <UCheckbox color="sky" :value="option" v-model="checkbox.optionsSelected" class="option-checkbox" />
-                &nbsp{{ option }}
-              </label>
+
+        <div class="modal-body">
+          <div class="info-section">
+            <i class="i-heroicons-information-circle-16-solid"></i>
+            <p>Wählen Sie die gewünschten Zusatzoptionen für diesen Zylinder aus. Alle Optionen sind optional.</p>
+          </div>
+
+          <div class="options-container">
+            <div v-for="(checkbox, colIndex) in row" :key="colIndex" v-show="colIndex < 1">
+              <!-- Prüfung ob Optionen verfügbar sind -->
+              <div v-if="store.getOptionsForType(checkbox.type)?.length > 0" class="options-grid">
+                <div v-for="option in store.getOptionsForType(checkbox.type)" :key="option" class="option-item">
+                  <label class="option-label">
+                    <UCheckbox color="blue" :value="option" v-model="checkbox.optionsSelected"
+                      class="option-checkbox" />
+                    <div class="option-content">
+                      <span class="option-text">{{ option }}</span>
+                      <!-- Hier könnte später eine Beschreibung ergänzt werden -->
+                      <!-- <span class="option-description">Zusätzliche Informationen zur Option</span> -->
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Fallback wenn keine Optionen verfügbar -->
+              <div v-else class="no-options">
+                <div class="no-options-icon">
+                  <i class="i-heroicons-archive-box-x-mark-16-solid"></i>
+                </div>
+                <h3>Keine Optionen verfügbar</h3>
+                <p>Für den gewählten Zylindertyp <strong>"{{ checkbox.type }}"</strong> sind derzeit keine
+                  Zusatzoptionen verfügbar.</p>
+              </div>
             </div>
           </div>
         </div>
+
         <div class="modal-footer">
-          <UButton class="save-button" style="color: white" color="amber" @click="closeOptionsModal(rowIndex)">
-            Speichern
-          </UButton>
+          <div class="footer-content">
+            <div class="selected-count" v-if="getSelectedOptionsCount(row[0]) > 0">
+              <i class="i-heroicons-check-circle-16-solid"></i>
+              <span>{{ getSelectedOptionsCount(row[0]) }} Option(en) ausgewählt</span>
+            </div>
+            <div class="footer-actions">
+
+              <UButton class="save-button" color="blue" variant="solid" @click="closeOptionsModal(rowIndex)"
+                icon="i-heroicons-check-16-solid">
+                Optionen übernehmen
+              </UButton>
+            </div>
+          </div>
         </div>
       </div>
     </UModal>
   </div>
-  <UModal v-model="isOpenL">
+
+
+  <!-- Modernisiertes Anlage laden Modal -->
+  <UModal v-model="isOpenL" class="load-modal">
     <div class="p-4 modal-container">
       <div class="modal-header">
-        <h2 class="modal-h2">Anlage laden</h2>
+        <h2 class="modal-h2">Gespeicherte Anlage laden</h2>
         <UButton color="red" @click="isOpenL = false" icon="i-heroicons-x-mark" class="close-button"></UButton>
       </div>
-      <p class="modal-info">
-        Bitte geben Sie die Anlagennummer und Ihr Passwort ein, um Ihre
-        gespeicherte Konfiguration zu laden.
-      </p>
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="id">Anlagennummer:</label>
-          <UInput color="amber" id="id" v-model="id" min="1" type="number" required />
-        </div>
-        <div class="form-group">
-          <label for="passwordinput">Passwort:</label>
-          <UInput color="amber" id="passwordinput" v-model="passwordinput" min="1" type="password" required />
-        </div>
-        <transition name="fade">
-          <div v-if="passwordwarning" class="password-warning">
-            <i class="i-heroicons-exclamation-circle"></i>
-            <span>Das eingegebene Passwort ist falsch!</span>
+
+      <div class="modal-content">
+        <!-- Info Section mit Icon -->
+        <div class="info-section">
+          <div class="info-icon">
+            <i class="i-heroicons-folder-open-16-solid"></i>
           </div>
-        </transition>
-        <UButton @click="buttonladen" type="submit" color="amber" variant="solid" class="modal-button">
-          Laden
-        </UButton>
-      </form>
+          <p class="modal-description">
+            Laden Sie Ihre zuvor gespeicherte Schließanlage mit den per E-Mail erhaltenen Zugangsdaten.
+          </p>
+        </div>
+
+        <!-- Formular -->
+        <form @submit.prevent="handleSubmit" class="load-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="id">
+                <i class="i-heroicons-hashtag-16-solid"></i>
+                Anlagennummer
+              </label>
+              <UInput color="amber" id="id" v-model="id" type="number" min="1" required placeholder="z.B. 12345"
+                class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <label for="passwordinput">
+                <i class="i-heroicons-lock-closed-16-solid"></i>
+                Passwort
+              </label>
+              <UInput color="amber" id="passwordinput" v-model="passwordinput" type="password" required
+                placeholder="Ihr Passwort" class="input-field" />
+            </div>
+          </div>
+
+          <!-- Fehleranzeige -->
+          <transition name="slide-down">
+            <div v-if="passwordwarning" class="error-message">
+              <i class="i-heroicons-exclamation-triangle-16-solid"></i>
+              <span>Die eingegebenen Zugangsdaten sind nicht korrekt. Bitte überprüfen Sie Ihre Eingaben.</span>
+            </div>
+          </transition>
+
+          <!-- Action Button -->
+          <UButton @click="buttonladen" type="submit" color="blue" variant="solid" class="load-button" size="lg"
+            icon="i-heroicons-arrow-down-tray-16-solid">
+            Anlage laden
+          </UButton>
+
+          <!-- Hilfe-Hinweis -->
+          <div class="help-section">
+            <i class="i-heroicons-information-circle-16-solid"></i>
+            <p>
+              Die Zugangsdaten haben Sie per E-Mail erhalten, als Sie Ihre Anlage gespeichert haben.
+              <a href="mailto:office@stt-shop.de" class="help-link">Hilfe benötigt?</a>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   </UModal>
 
-  <!-- Neues Modal: Kontaktdaten vor Angeboten -->
+  <!-- Modernisiertes Modal: Fokus auf Design und UX -->
   <UModal v-model="isOfferModalOpen" class="offer-modal">
     <div class="p-4 modal-container">
       <div class="modal-header">
-        <h2 class="modal-h2">Kontaktdaten bestätigen</h2>
         <UButton color="red" @click="isOfferModalOpen = false" icon="i-heroicons-x-mark" class="close-button"></UButton>
       </div>
-      <p class="modal-info">
-        Bitte geben Sie Ihre E-Mail-Adresse ein (Pflichtfeld). Zusätzlich können Sie Ihren Namen und Ihre Telefonnummer
-        angeben.
-      </p>
-      <form @submit.prevent="saveAndProceed">
-        <div class="form-group">
-          <label for="offer-email">E-Mail:</label>
-          <UInput color="amber" id="offer-email" v-model="email" type="email" required />
+
+      <div class="modal-content">
+        <!-- Success Icon und Beschreibung -->
+        <div class="success-section">
+          <div class="success-icon">
+            <i class="i-heroicons-check-circle-solid"></i>
+          </div>
+          <h2 class="modal-h2">Zum Preisvergleich</h2><br>
+          <p class="modal-description">
+
+            Möchten Sie Ihre Konfiguration <b>speichern und später wieder laden</b>? Dann hinterlassen Sie einfach Ihre
+            E-Mail –
+            Sie erhalten dann Anlagennummer und Passwort.
+          </p>
         </div>
-        <div class="form-group">
-          <label for="offer-name">Name (optional):</label>
-          <UInput color="amber" id="offer-name" v-model="name" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="offer-phone">Telefon (optional):</label>
-          <UInput color="amber" id="offer-phone" v-model="phone" type="tel" />
-        </div>
-        <UButton type="submit" color="amber" variant="solid" class="modal-button">
-          Weiter zu den Angeboten
-        </UButton>
-      </form>
+
+        <!-- Kontaktformular -->
+        <form @submit.prevent="saveAndProceed" class="contact-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="offer-email">
+                <i class="i-heroicons-envelope-16-solid"></i>
+                E-Mail
+                <span class="optional-badge">optional</span>
+              </label>
+              <UInput color="amber" id="offer-email" v-model="email" type="email" placeholder="ihre@email.de" />
+            </div>
+
+            <div class="form-group">
+              <label for="offer-name">
+                <i class="i-heroicons-user-16-solid"></i>
+                Name
+                <span class="optional-badge">optional</span>
+              </label>
+              <UInput color="amber" id="offer-name" v-model="name" type="text" placeholder="Max Mustermann" />
+            </div>
+
+            <div class="form-group">
+              <label for="offer-phone">
+                <i class="i-heroicons-phone-16-solid"></i>
+                Telefon
+                <span class="optional-badge">optional</span>
+              </label>
+              <UInput color="amber" id="offer-phone" v-model="phone" type="tel" placeholder="+49 123 456789" />
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <UButton type="submit" color="green" variant="solid" class="cta-button" size="lg"
+            icon="i-heroicons-arrow-right-16-solid">
+            Zu der Preisübersicht
+          </UButton>
+
+          <!-- Hinweis -->
+          <p class="form-hint">
+            <i class="i-heroicons-information-circle-16-solid"></i>
+            Sie können auch ohne Angaben fortfahren und die Angebote direkt einsehen.
+          </p>
+        </form>
+      </div>
     </div>
   </UModal>
 
@@ -750,6 +848,33 @@ export default {
     },
   },
   methods: {
+
+    getSelectedOptionsCount(checkbox) {
+      if (!checkbox || !checkbox.optionsSelected) return 0;
+      return checkbox.optionsSelected.length;
+    },
+
+    // Alle Optionen einer Tür abwählen
+    clearAllOptions(checkbox) {
+      if (checkbox && checkbox.optionsSelected) {
+        checkbox.optionsSelected = [];
+      }
+    },
+
+    // Optional: Schnellauswahl für häufige Kombinationen
+    selectCommonOptions(checkbox, type) {
+      // Beispiel für häufige Optionen je nach Zylindertyp
+      const commonOptions = {
+        'Profilzylinder': ['Gleichschließend', 'Sicherheitskarte'],
+        'Halbzylinder': ['Gleichschließend'],
+        'Knaufzylinder': ['Gleichschließend', 'Sicherheitskarte'],
+        // Weitere Typen nach Bedarf
+      };
+
+      if (checkbox && commonOptions[type]) {
+        checkbox.optionsSelected = [...commonOptions[type]];
+      }
+    },
     applyTemplate(templateId) {
       this.selectedTemplateId = templateId;
       this.isTemplateModalOpen = true;
