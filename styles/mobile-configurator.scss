@@ -628,6 +628,13 @@
     /* Dezenterer Rand */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 
+    p {
+      font-size: 12px;
+      color: grey;
+      padding-bottom: 6px;
+      text-align: justify;
+    }
+
     h3 {
       margin-top: 0;
       margin-bottom: 16px;

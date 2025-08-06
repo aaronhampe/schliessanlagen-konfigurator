@@ -429,9 +429,7 @@
       <div class="modal-content">
         <!-- Success Icon und Beschreibung -->
         <div class="success-section">
-          <div class="success-icon">
-            <i class="i-heroicons-check-circle-solid"></i>
-          </div>
+          
           <h2 class="modal-h2">Zum Preisvergleich</h2><br>
           <p class="modal-description">
 

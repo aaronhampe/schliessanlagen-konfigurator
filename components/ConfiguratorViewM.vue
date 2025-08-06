@@ -226,16 +226,7 @@
 
       <div class="summary-section">
         <h3>Allgemeine Informationen</h3>
-        <div class="summary-item">
-          <span class="summary-label">Modell:</span>
-          <span class="summary-value">{{ selectedModelLocal }}</span>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">Typ:</span>
-          <span class="summary-value">{{
-        isSchliessanlage ? "Schließanlage" : "Gleichschließung"
-      }}</span>
-        </div>
+        
         <div class="summary-item">
           <span class="summary-label">Anzahl Türen:</span>
           <span class="summary-value">{{ rows.length }}</span>
@@ -248,9 +239,13 @@
 
       <div class="summary-section">
         <h3>Kontaktdaten</h3>
+        <p class="text">Möchten Sie Ihre Konfiguration <b>speichern und später wieder laden</b>? Hinterlassen Sie
+          einfach Ihre
+          E-Mail –
+          Sie erhalten dann Anlagennummer und Passwort.</p>
         <div class="input-group">
-          <label>E-Mail-Adresse: *</label>
-          <UInput v-model="email" type="email" required />
+          <label>E-Mail-Adresse: </label>
+          <UInput v-model="email" type="email" />
         </div>
         <div class="input-group">
           <label>Name:</label>
@@ -1244,11 +1239,6 @@ export default {
       // Modal auf jeden Fall schließen, falls es offen war
       this.isSaveModalOpen = false;
 
-      // Erneute Validierung der E-Mail
-      if (!this.email || !this.validateEmail(this.email)) {
-        alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
-        return false; // Speichern abbrechen
-      }
 
       try {
         // NEU: Eine Variable, um zu prüfen, ob es die allererste Speicherung ist.
@@ -1330,7 +1320,7 @@ export default {
 
           // Gib eine spezifische Meldung für die Ersterstellung.
           alert(
-            `Ihre neue Anlage wurde erfolgreich unter der Nummer ${this.anlageNr} erstellt.\nSie erhalten Ihre Zugangsdaten in Kürze per E-Mail.`
+            `Ihre neue Anlage wurde erfolgreich unter der Nummer ${this.anlageNr} erstellt.`
           );
         } else {
           // Gib bei allen weiteren Speicherungen nur eine einfache Bestätigung.
