@@ -835,9 +835,10 @@ onMounted(async () => {
 <style scoped>
 @import "@/styles/systems.scss";
 
-html {
+html,body {
   overflow:hidden;
 }
+
 
 .padding {
   padding: 20px;

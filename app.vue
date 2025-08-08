@@ -33,6 +33,7 @@ export default {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
   background: inherit;
+  overflow: hidden;
 
   @media(prefers-color-scheme: dark) {
     body {
