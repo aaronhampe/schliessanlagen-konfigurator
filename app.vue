@@ -7,24 +7,48 @@
   <br />
 </template>
 
-<script>
-export default {
-  mounted() {
-    this.sendHeight(); // Direkt Höhe senden
-    this.intervalId = setInterval(this.sendHeight, 500); // Alle 500ms die Höhe senden
-  },
-  beforeUnmount() {
-    clearInterval(this.intervalId); // Intervall beenden
-  },
-  methods: {
-    sendHeight() {
-      if (typeof window !== "undefined") {
-        const height = document.body.scrollHeight; // Nutze body.scrollHeight für korrekte Höhe
-        window.parent.postMessage({ type: "resize", height }, "*");
-      }
-    }
+<script setup>
+import { onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+function sendHeight() {
+  // Only send from the Konfigurator page
+  if (route.name !== 'index') return
+  if (typeof window !== "undefined") {
+    const height = document.body.scrollHeight; // Nutze body.scrollHeight für korrekte Höhe
+    window.parent.postMessage({ type: "resize", height }, "*");
   }
-};
+}
+
+// Control starting/stopping any listeners/observers that trigger sendHeight
+let heightSyncActive = false
+function startHeightSync() {
+  if (heightSyncActive) return
+  window.addEventListener('resize', sendHeight)
+  heightSyncActive = true
+  sendHeight()
+}
+function stopHeightSync() {
+  if (!heightSyncActive) return
+  window.removeEventListener('resize', sendHeight)
+  heightSyncActive = false
+}
+
+// Initialize once and react to route changes
+onMounted(() => {
+  if (route.name === 'index') startHeightSync()
+})
+
+watch(() => route.name, (name) => {
+  if (name === 'index') startHeightSync()
+  else stopHeightSync()
+})
+
+onBeforeUnmount(() => {
+  stopHeightSync()
+})
 </script>
 
 <style lang="scss">
