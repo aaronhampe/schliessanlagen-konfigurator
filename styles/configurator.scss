@@ -541,12 +541,13 @@ $color-sky: #0ea5e9;
 
     .checkbox {
       background: rgb(255, 255, 255);
+
       input {
         &:not(:checked) {
           background: transparent;
           border-color: rgb(var(--color-gray-300) / var(--tw-border-opacity));
         }
-        
+
       }
     }
 
@@ -914,6 +915,8 @@ $color-sky: #0ea5e9;
 
 /* Tutorial Modal */
 .tutorial-modal {
+  background: white;
+
   .tutorial-content {
     padding: 1.5rem;
     max-width: 650px;
@@ -1278,6 +1281,8 @@ $color-sky: #0ea5e9;
 /* Verbessertes Styling für das Template-Modal */
 .template-modal {
 
+  background: white;
+
   /* Verbesserte Modal-Styling */
   :deep(.u-modal-content) {
     border-radius: 12px;
@@ -1503,6 +1508,8 @@ $color-sky: #0ea5e9;
   }
 
   .template-modal {
+    background: white;
+
     .modal-content {
       width: 95%;
       max-height: 80vh;
@@ -1570,6 +1577,8 @@ $color-sky: #0ea5e9;
 
 // OFFER MODAL
 .offer-modal {
+  background: white;
+
   .modal-container {
     max-width: 500px;
     margin: auto;
@@ -1814,6 +1823,8 @@ $color-sky: #0ea5e9;
 //Anlage laden Modal
 
 .load-modal {
+  background: white;
+
   .modal-container {
     max-width: 480px;
     margin: auto;
@@ -2300,12 +2311,15 @@ $color-sky: #0ea5e9;
           }
 
 
-          // Checkbox styling
-          :deep(.u-checkbox) {
-            .u-checkbox__check {
-              width: 20px;
-              height: 20px;
-              border-radius: 4px;
+          .option-checkbox {
+            background: rgb(255, 255, 255);
+
+            input {
+              &:not(:checked) {
+                background: transparent;
+                border-color: rgb(var(--color-gray-300) / var(--tw-border-opacity));
+              }
+
             }
           }
 
@@ -2547,6 +2561,8 @@ $color-sky: #0ea5e9;
 
 /* Styles für die Template-Seite */
 .template-modal {
+  background: white;
+
   .modal-container {
     max-width: 500px;
     margin: auto;
