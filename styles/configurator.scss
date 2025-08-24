@@ -2172,15 +2172,7 @@ $color-sky: #0ea5e9;
 // Options Modal
 
 .options-modal {
-  background: transparent;
-  .modal-container {
-    max-width: 550px;
-    margin: auto;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
-  }
+  background: white;
 
   // Header
   .modal-header {
