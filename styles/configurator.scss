@@ -43,311 +43,313 @@ $color-sky: #0ea5e9;
 /***********************************************************
    *                   NEUER HEADER-BEREICH
    ***********************************************************/
-   .configurator-header {
-    position: relative;
-    margin-bottom: 30px;
-    margin-right: 100px;
-    z-index: 1;
-  
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+.configurator-header {
+  position: relative;
+  margin-bottom: 30px;
+  margin-right: 100px;
+  z-index: 1;
+
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  // Titel mit integriertem Progress
+  .title-progress-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+      flex: 1;
     }
-  
-    // Titel mit integriertem Progress
-    .title-progress-section {
+
+    // Kompakter Progress Tracker
+    .compact-progress {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      padding: 16px 0;
-      border-bottom: 1px solid #e5e7eb;
-  
-      h1 {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-        flex: 1;
-      }
-  
-      // Kompakter Progress Tracker
-      .compact-progress {
+      gap: 12px;
+
+      .progress-step {
         display: flex;
         align-items: center;
-        gap: 12px;
-        
-        .progress-step {
+        gap: 8px;
+
+        .step-indicator {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background-color: #f0f4f8;
+          border: 2px solid #d0d5db;
+          color: #667085;
           display: flex;
           align-items: center;
-          gap: 8px;
-          
-          .step-indicator {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background-color: #f0f4f8;
-            border: 2px solid #d0d5db;
-            color: #667085;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-  
-            .checkmark {
-              color: white;
-              font-size: 14px;
-            }
-          }
-  
-          .step-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #667085;
-            transition: color 0.3s ease;
-          }
-  
-          &.active {
-            .step-indicator {
-              background-color: $color-sky;
-              border-color: $color-sky;
-              color: white;
-            }
-  
-            .step-label {
-              color: $color-sky;
-              font-weight: 600;
-            }
-          }
-  
-          &.completed {
-            .step-indicator {
-              background-color: #10b981;
-              border-color: #10b981;
-            }
-  
-            .step-label {
-              color: #10b981;
-            }
-          }
-        }
-  
-        .progress-connector {
-          width: 40px;
-          height: 2px;
-          background-color: #e0e4e8;
-          transition: background-color 0.3s ease;
-  
-          &.active {
-            background-color: #10b981;
-          }
-        }
-      }
-    }
-  
-    // Kompakte Info- und Aktions-Leiste
-    .header-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #f8fafc;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      border: 1px solid #e5e7eb;
-  
-      .anlage-section {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-  
-        .label {
+          justify-content: center;
           font-weight: 600;
-          font-size: 14px;
-          color: #4b5563;
-        }
-  
-        .anlage-number {
-          font-weight: 500;
-          color: #111827;
-          background-color: white;
-          padding: 4px 8px;
-          border-radius: 4px;
-          border: 1px solid #d1d5db;
-          min-width: 60px;
-          text-align: center;
-          font-size: 14px;
-        }
-  
-        .action-btn {
-          padding: 4px 8px;
-          font-size: 12px;
-          
-          &:hover {
-            background-color: rgba(14, 165, 233, 0.1);
-          }
-        }
-      }
-  
-      .support-section {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-  
-        .support-icon {
-          color: #10b981;
-          font-size: 18px;
-        }
-  
-        .support-text {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-  
-          .support-label {
-            font-size: 12px;
-            color: #6b7280;
-            font-weight: 500;
-          }
-  
-          .support-link {
+          font-size: 13px;
+          transition: all 0.3s ease;
+
+          .checkmark {
+            color: white;
             font-size: 14px;
-            font-weight: 600;
-            color: #10b981;
-            text-decoration: none;
-            transition: color 0.2s;
-  
-            &:hover {
-              color: #059669;
-              text-decoration: underline;
-            }
           }
         }
-      }
-    }
-  
-    // Kompakter Vorlagen-Bereich
-    .templates-section {
-      background-color: rgba(14, 165, 233, 0.05);
-      border: 1px solid rgba(14, 165, 233, 0.2);
-      border-radius: 8px;
-      padding: 12px 16px;
-  
-      .templates-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-  
-        .template-icon {
-          color: $color-sky;
-          font-size: 18px;
-        }
-  
-        span {
-          font-size: 14px;
-          font-weight: 600;
-          color: #374151;
-        }
-      }
-  
-      .template-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-  
-        .template-btn {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 6px 10px;
+
+        .step-label {
           font-size: 13px;
           font-weight: 500;
-          transition: all 0.2s;
-  
-          &:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          color: #667085;
+          transition: color 0.3s ease;
+        }
+
+        &.active {
+          .step-indicator {
+            background-color: $color-sky;
+            border-color: $color-sky;
+            color: white;
           }
-  
-          i {
-            font-size: 14px;
-          }
-        }
-      }
-    }
-  }
-  
-  /* Responsive Anpassungen für kompakten Header */
-  @media (max-width: 1024px) {
-    .configurator-header {
-      .title-progress-section {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-  
-        h1 {
-          font-size: 20px;
-        }
-  
-        .compact-progress {
-          align-self: center;
-        }
-      }
-  
-      .header-actions {
-        flex-direction: column;
-        gap: 12px;
-        align-items: stretch;
-  
-        .support-section {
-          justify-content: center;
-        }
-      }
-  
-      .templates-section {
-        .template-buttons {
-          justify-content: center;
-  
-          .template-btn {
-            flex: 0 0 calc(50% - 4px);
-          }
-        }
-      }
-    }
-  }
-  
-  @media (max-width: 640px) {
-    .configurator-header {
-      .header-content {
-        padding: 0 12px;
-      }
-  
-      .title-progress-section {
-        h1 {
-          font-size: 18px;
-        }
-  
-        .compact-progress {
+
           .step-label {
-            display: none; // Verstecke Labels auf sehr kleinen Bildschirmen
+            color: $color-sky;
+            font-weight: 600;
+          }
+        }
+
+        &.completed {
+          .step-indicator {
+            background-color: #10b981;
+            border-color: #10b981;
+          }
+
+          .step-label {
+            color: #10b981;
           }
         }
       }
-  
-      .templates-section {
-        .template-buttons {
-          .template-btn {
-            flex: 0 0 100%;
-            justify-content: center;
+
+      .progress-connector {
+        width: 40px;
+        height: 2px;
+        background-color: #e0e4e8;
+        transition: background-color 0.3s ease;
+
+        &.active {
+          background-color: #10b981;
+        }
+      }
+    }
+  }
+
+  // Kompakte Info- und Aktions-Leiste
+  .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+
+    .anlage-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #4b5563;
+      }
+
+      .anlage-number {
+        font-weight: 500;
+        color: #111827;
+        background-color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+        min-width: 60px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .action-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+
+        &:hover {
+          background-color: rgba(14, 165, 233, 0.1);
+        }
+      }
+    }
+
+    .support-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .support-icon {
+        color: #10b981;
+        font-size: 18px;
+      }
+
+      .support-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .support-label {
+          font-size: 12px;
+          color: #6b7280;
+          font-weight: 500;
+        }
+
+        .support-link {
+          font-size: 14px;
+          font-weight: 600;
+          color: #10b981;
+          text-decoration: none;
+          transition: color 0.2s;
+
+          &:hover {
+            color: #059669;
+            text-decoration: underline;
           }
         }
       }
     }
   }
+
+  // Kompakter Vorlagen-Bereich
+  .templates-section {
+    background-color: rgba(14, 165, 233, 0.05);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+
+    .templates-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+
+      .template-icon {
+        color: $color-sky;
+        font-size: 18px;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+      }
+    }
+
+    .template-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .template-btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 10px;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+
+       
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        i {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+/* Responsive Anpassungen für kompakten Header */
+@media (max-width: 1024px) {
+  .configurator-header {
+    .title-progress-section {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .compact-progress {
+        align-self: center;
+      }
+    }
+
+    .header-actions {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .support-section {
+        justify-content: center;
+      }
+    }
+
+    .templates-section {
+      .template-buttons {
+        justify-content: center;
+
+        .template-btn {
+          flex: 0 0 calc(50% - 4px);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .configurator-header {
+    .header-content {
+      padding: 0 12px;
+    }
+
+    .title-progress-section {
+      h1 {
+        font-size: 18px;
+      }
+
+      .compact-progress {
+        .step-label {
+          display: none; // Verstecke Labels auf sehr kleinen Bildschirmen
+        }
+      }
+    }
+
+    .templates-section {
+      .template-buttons {
+        .template-btn {
+          flex: 0 0 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
 
 /***********************************************************
    *                 HAUPT-CONTAINER (KONFIGURATOR)
@@ -358,7 +360,7 @@ $color-sky: #0ea5e9;
   justify-content: center;
   gap: 10px;
   margin-top: 100px;
-  margin-right: 120px; 
+  margin-right: 120px;
   position: relative;
   z-index: 5;
   /* Höherer z-index für die Schlüssel-Inputs */
@@ -378,10 +380,14 @@ $color-sky: #0ea5e9;
     .u-badge {
       @include flex-center;
       width: 30px;
+
+      @media (prefers-color-scheme: dark) {
+        color: rgb(255, 255, 255) !important;
+        -webkit-text-fill-color: rgb(255, 255, 255) !important;
+      }
     }
 
     .door-designation,
-    .quantity-input,
     .cylinder-type {
       margin-top: 0px;
       width: 200px;
@@ -415,9 +421,18 @@ $color-sky: #0ea5e9;
       }
     }
 
-    .quantity-input {
-      width: 60px;
+    .quantity {
+      .quantity-input {
+        width: 60px;
+
+        @media (prefers-color-scheme: dark) {
+          color: rgb(0, 0, 0) !important;
+          -webkit-text-fill-color: rgb(0, 0, 0) !important;
+        }
+      }
     }
+
+
 
     .sizes {
       display: flex;
@@ -491,6 +506,8 @@ $color-sky: #0ea5e9;
     flex-direction: column;
     margin-right: 10px;
     padding-bottom: -10px;
+    background: white;
+    
 
     .key-name {
       width: 32px;
@@ -1554,7 +1571,7 @@ $color-sky: #0ea5e9;
     width: 100%;
     padding: 1.5rem 1.5rem 0;
     margin-bottom: 1.5rem;
-    
+
     .modal-h2 {
       color: #065f46;
       font-weight: 700;
@@ -1674,6 +1691,11 @@ $color-sky: #0ea5e9;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
       margin-bottom: 1rem;
 
+      @media (prefers-color-scheme: dark) {
+        color: rgb(255, 255, 255) !important;
+        -webkit-text-fill-color: rgb(255, 246, 246) !important;
+      }
+
       &:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
@@ -1711,10 +1733,12 @@ $color-sky: #0ea5e9;
     0% {
       opacity: 1;
     }
+
     50% {
       opacity: 0.8;
       transform: scale(1.05);
     }
+
     100% {
       opacity: 1;
       transform: scale(1);
@@ -1731,7 +1755,7 @@ $color-sky: #0ea5e9;
 
     .modal-header {
       padding: 1rem 1rem 0;
-      
+
       .modal-h2 {
         font-size: 1.25rem;
         padding-right: 3rem; // Platz für Close-Button
@@ -1756,7 +1780,7 @@ $color-sky: #0ea5e9;
       .form-group {
         label {
           font-size: 0.85rem;
-          
+
           .optional-badge {
             font-size: 0.7rem;
           }
@@ -1793,7 +1817,7 @@ $color-sky: #0ea5e9;
     padding: 1.5rem 1.5rem 0;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #f1f5f9;
-    
+
     .modal-h2 {
       color: #1e40af;
       font-weight: 700;
@@ -1879,6 +1903,7 @@ $color-sky: #0ea5e9;
       }
 
       :deep(.u-input) {
+
         .input-field,
         input {
           height: 48px;
@@ -1913,7 +1938,7 @@ $color-sky: #0ea5e9;
       &#id {
         :deep(input[type="number"]) {
           -moz-appearance: textfield;
-          
+
           &::-webkit-outer-spin-button,
           &::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -1963,6 +1988,15 @@ $color-sky: #0ea5e9;
       margin-bottom: 1.5rem;
       position: relative;
       overflow: hidden;
+
+      span{
+        background: rgb(255, 255, 255);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        color: rgb(255, 255, 255) !important;
+        -webkit-text-fill-color: rgb(255, 255, 255) !important;
+      }
 
       &:hover {
         transform: translateY(-2px) !important;
@@ -2042,9 +2076,26 @@ $color-sky: #0ea5e9;
   }
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-    20%, 40%, 60%, 80% { transform: translateX(2px); }
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-2px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(2px);
+    }
   }
 
   // Responsive
@@ -2056,8 +2107,8 @@ $color-sky: #0ea5e9;
     }
 
     .modal-header {
-      padding: 1rem 1rem 0;
-      
+      padding: 1rem;
+
       .modal-h2 {
         font-size: 1.25rem;
         padding-right: 3rem;
@@ -2071,7 +2122,7 @@ $color-sky: #0ea5e9;
     .info-section {
       flex-direction: column;
       text-align: center;
-      
+
       .modal-description {
         font-size: 0.9rem;
       }
@@ -2097,7 +2148,7 @@ $color-sky: #0ea5e9;
       .help-section {
         flex-direction: column;
         text-align: center;
-        
+
         p {
           font-size: 0.8rem;
         }
@@ -2382,7 +2433,7 @@ $color-sky: #0ea5e9;
   .modal-body::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 3px;
-    
+
     &:hover {
       background: #94a3b8;
     }
@@ -2398,30 +2449,30 @@ $color-sky: #0ea5e9;
 
     .modal-header {
       padding: 1rem;
-      
+
       .header-content {
         gap: 0.75rem;
-        
+
         .header-icon {
           width: 40px;
           height: 40px;
-          
+
           i {
             font-size: 1.25rem;
           }
         }
-        
+
         .header-text {
           .modal-h2 {
             font-size: 1.25rem;
           }
-          
+
           .modal-subtitle {
             font-size: 0.8rem;
           }
         }
       }
-      
+
       .close-button {
         width: 32px !important;
         height: 32px !important;
@@ -2431,18 +2482,18 @@ $color-sky: #0ea5e9;
     .modal-body {
       padding: 1rem;
       max-height: 50vh;
-      
+
       .options-container {
         .options-grid {
           grid-template-columns: 1fr;
           gap: 0.5rem;
         }
-        
+
         .option-item {
           .option-label {
             padding: 0.75rem;
             gap: 0.5rem;
-            
+
             .option-content {
               .option-text {
                 font-size: 0.9rem;
@@ -2450,18 +2501,18 @@ $color-sky: #0ea5e9;
             }
           }
         }
-        
+
         .no-options {
           padding: 2rem 1rem;
-          
+
           .no-options-icon i {
             font-size: 2.5rem;
           }
-          
+
           h3 {
             font-size: 1rem;
           }
-          
+
           p {
             font-size: 0.85rem;
           }
@@ -2471,15 +2522,15 @@ $color-sky: #0ea5e9;
 
     .modal-footer {
       padding: 1rem;
-      
+
       .footer-content {
         flex-direction: column;
         align-items: stretch;
         gap: 0.75rem;
-        
+
         .footer-actions {
           width: 100%;
-          
+
           .save-button {
             flex: 1;
           }
@@ -2607,11 +2658,11 @@ $color-sky: #0ea5e9;
           display: flex;
           gap: 1.5rem;
           font-size: 0.875rem;
-          
+
           span {
             color: #7f1d1d;
             font-weight: 500;
-            
+
             strong {
               color: #991b1b;
               font-weight: 700;
@@ -2696,6 +2747,11 @@ $color-sky: #0ea5e9;
         transition: all 0.2s ease !important;
         min-width: 180px;
 
+        @media (prefers-color-scheme: dark) {
+          color: rgb(255, 252, 252) !important;
+          -webkit-text-fill-color: rgb(255, 255, 255) !important;
+        }
+
         &:hover {
           transform: translateY(-1px) !important;
         }
@@ -2726,10 +2782,12 @@ $color-sky: #0ea5e9;
     0% {
       opacity: 1;
     }
+
     50% {
       opacity: 0.7;
       transform: scale(1.05);
     }
+
     100% {
       opacity: 1;
       transform: scale(1);
@@ -2737,14 +2795,18 @@ $color-sky: #0ea5e9;
   }
 
   @keyframes sparkle {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: rotate(0deg) scale(1);
       opacity: 1;
     }
+
     25% {
       transform: rotate(-5deg) scale(1.1);
       opacity: 0.8;
     }
+
     75% {
       transform: rotate(5deg) scale(1.1);
       opacity: 0.8;
@@ -2761,30 +2823,30 @@ $color-sky: #0ea5e9;
 
     .modal-header {
       padding: 1rem;
-      
+
       .header-content {
         gap: 0.75rem;
-        
+
         .header-icon {
           width: 40px;
           height: 40px;
-          
+
           i {
             font-size: 1.25rem;
           }
         }
-        
+
         .header-text {
           .modal-h2 {
             font-size: 1.25rem;
           }
-          
+
           .template-name {
             font-size: 0.8rem;
           }
         }
       }
-      
+
       .close-button {
         width: 32px !important;
         height: 32px !important;
@@ -2793,29 +2855,31 @@ $color-sky: #0ea5e9;
 
     .modal-body {
       padding: 1rem;
-      
+
+      max-height: 50vh;
+
       .warning-section,
       .confirmation-section {
         flex-direction: column;
         text-align: center;
         padding: 1rem;
-        
+
         .warning-icon,
         .confirmation-icon {
           align-self: center;
         }
-        
+
         .warning-content,
         .confirmation-content {
           h3 {
             font-size: 1rem;
           }
-          
+
           p {
             font-size: 0.9rem;
           }
         }
-        
+
         .current-config-info {
           justify-content: center;
           flex-wrap: wrap;
@@ -2825,16 +2889,15 @@ $color-sky: #0ea5e9;
 
     .modal-footer {
       padding: 1rem;
-      
+
       .footer-actions {
         flex-direction: column-reverse;
         gap: 0.75rem;
-        
+
         .confirm-button,
         .cancel-button {
           width: 100%;
           justify-content: center;
-          min-width: auto;
         }
       }
     }

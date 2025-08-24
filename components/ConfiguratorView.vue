@@ -521,6 +521,7 @@
 </template>
 
 <script>
+import { _white } from "#tailwind-config/theme/accentColor";
 import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 
@@ -574,7 +575,7 @@ export default {
           id: 'einfamilienhaus',
           name: 'Einfamilienhaus',
           icon: 'i-heroicons-home',
-          color: 'green',
+          color: 'black',
           doors: [
             { position: 1, name: 'Haustür', type: 'Doppelzylinder', outside: 40, inside: 40, options: [] },
             { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
@@ -599,7 +600,7 @@ export default {
           id: 'mehrfamilienhaus',
           name: 'Mehrfamilienhaus',
           icon: 'i-heroicons-building-office-2',
-          color: 'blue',
+          color: 'purple',
           doors: [
             { position: 1, name: 'Haupteingang', type: 'Doppelzylinder', outside: 40, inside: 40, options: ["Not- & Gefahrenfunktion"] },
             { position: 2, name: 'Kellertür', type: 'Doppelzylinder', outside: 35, inside: 35, options: [] },
