@@ -268,7 +268,7 @@ $color-sky: #0ea5e9;
         font-weight: 500;
         transition: all 0.2s;
 
-       
+
 
         &:hover {
           transform: translateY(-1px);
@@ -507,7 +507,7 @@ $color-sky: #0ea5e9;
     margin-right: 10px;
     padding-bottom: -10px;
     background: white;
-    
+
 
     .key-name {
       width: 32px;
@@ -537,6 +537,10 @@ $color-sky: #0ea5e9;
       &.gleichschliessung-margin {
         margin-top: -20.8em;
       }
+    }
+
+    .checkbox {
+      background: rgb(255, 255, 255);
     }
 
     .key-quantity {
@@ -1989,7 +1993,7 @@ $color-sky: #0ea5e9;
       position: relative;
       overflow: hidden;
 
-      span{
+      span {
         background: rgb(255, 255, 255);
       }
 
@@ -2294,6 +2298,7 @@ $color-sky: #0ea5e9;
           &:hover {
             background: #f8fafc;
           }
+
 
           // Checkbox styling
           :deep(.u-checkbox) {
