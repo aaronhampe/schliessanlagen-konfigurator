@@ -542,7 +542,10 @@ $color-sky: #0ea5e9;
     .checkbox {
       background: rgb(255, 255, 255);
       input {
-        background: transparent;
+        &:not(:checked) {
+          background: transparent;
+        }
+        
       }
     }
 
