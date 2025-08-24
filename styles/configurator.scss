@@ -544,6 +544,7 @@ $color-sky: #0ea5e9;
       input {
         &:not(:checked) {
           background: transparent;
+          border-color: rgb(var(--color-gray-300) / var(--tw-border-opacity));
         }
         
       }
