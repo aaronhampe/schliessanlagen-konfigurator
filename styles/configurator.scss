@@ -1280,17 +1280,11 @@ $color-sky: #0ea5e9;
 
 /* Verbessertes Styling für das Template-Modal */
 .template-modal {
-
-  background: white;
-
-  /* Verbesserte Modal-Styling */
-  :deep(.u-modal-content) {
-    border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
+  background: rgb(255, 255, 255);
 
   .modal-content {
-    max-width: 700px;
+    max-width: 1000px;
+    background: rgb(255, 255, 255);
 
     .modal-header {
       padding: 18px 24px;
@@ -1511,6 +1505,7 @@ $color-sky: #0ea5e9;
     background: white;
 
     .modal-content {
+      background: rgb(255, 255, 255);
       width: 95%;
       max-height: 80vh;
     }
