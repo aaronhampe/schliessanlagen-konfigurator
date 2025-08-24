@@ -355,8 +355,10 @@ $color-sky: #0ea5e9;
 .flex-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 10px;
-  margin: 100px 0 0 200px;
+  margin-top: 100px;
+  margin-right: 120px; 
   position: relative;
   z-index: 5;
   /* Höherer z-index für die Schlüssel-Inputs */
