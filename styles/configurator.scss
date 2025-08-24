@@ -392,6 +392,11 @@ $color-sky: #0ea5e9;
       margin-top: 0px;
       width: 200px;
 
+       @media (prefers-color-scheme: dark) {
+          color: rgb(0, 0, 0) !important;
+          -webkit-text-fill-color: rgb(0, 0, 0) !important;
+        }
+
       select {
         @include input-style;
         width: 100%;
@@ -1669,29 +1674,34 @@ $color-sky: #0ea5e9;
         }
       }
 
-      :deep(.u-input) {
-        input {
-          height: 44px;
-          border-radius: 8px;
-          border: 2px solid #e5e7eb;
-          padding: 0 1rem;
-          font-size: 0.95rem;
-          transition: all 0.2s ease;
-          background: #fafafa;
 
-          &:focus {
-            background: white;
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-            outline: none;
-          }
+      input {
+        height: 44px;
+        border-radius: 8px;
+        border: 2px solid #e5e7eb;
+        padding: 0 1rem;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        background: #fafafa;
 
-          &::placeholder {
-            color: #9ca3af;
-            font-style: italic;
-          }
+        @media (prefers-color-scheme: dark) {
+          color: rgb(0, 0, 0) !important;
+          -webkit-text-fill-color: rgb(0, 0, 0) !important;
+        }
+
+        &:focus {
+          background: white;
+          border-color: #f59e0b;
+          box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+          outline: none;
+        }
+
+        &::placeholder {
+          color: #9ca3af;
+          font-style: italic;
         }
       }
+
     }
 
     .cta-button {
@@ -1920,37 +1930,16 @@ $color-sky: #0ea5e9;
         }
       }
 
-      :deep(.u-input) {
 
-        .input-field,
-        input {
-          height: 48px;
-          border-radius: 8px;
-          border: 2px solid #e2e8f0;
-          padding: 0 1rem;
-          font-size: 1rem;
-          font-weight: 500;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          background: #fafafa;
 
-          &:focus {
-            background: white;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            outline: none;
-            transform: translateY(-1px);
-          }
-
-          &::placeholder {
-            color: #9ca3af;
-            font-weight: 400;
-          }
-
-          &:valid {
-            border-color: #10b981;
-          }
+      .input-field,
+      input {
+        @media (prefers-color-scheme: dark) {
+          color: rgb(0, 0, 0) !important;
+          -webkit-text-fill-color: rgb(0, 0, 0) !important;
         }
       }
+
 
       // Spezielle Styles für Number Input
       &#id {
@@ -2425,6 +2414,11 @@ $color-sky: #0ea5e9;
           padding: 0.75rem 1.5rem !important;
           border-radius: 8px !important;
           transition: all 0.2s ease !important;
+
+          @media (prefers-color-scheme: dark) {
+            color: rgb(255, 255, 255) !important;
+            -webkit-text-fill-color: rgb(255, 255, 255) !important;
+          }
 
           &:hover {
             transform: translateY(-1px) !important;
