@@ -5,6 +5,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #111827;
   background-color: #fafbfc;
+
   @media (max-width: 640px) {
     padding: 16px;
   }
@@ -235,6 +236,7 @@
   .add-door-button,
   .add-key-button {
     font-size: 14px;
+    color: white;
   }
 }
 
@@ -559,14 +561,36 @@
       .door-checkbox-item {
         margin-bottom: 4px;
 
+
+
         label {
           display: flex;
           align-items: center;
           font-size: 13px;
           color: #333;
 
-          input[type="checkbox"] {
-            margin-right: 6px;
+          .input-checkbox {
+            margin-right: 8px;
+            background: white !important;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+
+            @media (prefers-color-scheme: dark) {
+              background: #ffffff !important;
+              // color: white; // nicht nötig
+              opacity: 1;
+              // overlay: white; // ungültige CSS-Eigenschaft, entfernen
+              color-scheme: light; // verhindert das automatische „Verdunkeln“ durch den Browser
+              border-color: #4b5563;
+            }
+
+            &:checked {
+              background: #10b981 !important;
+              border-color: #10b981;
+            }
           }
         }
       }
@@ -671,6 +695,7 @@
     gap: 12px;
     /* Abstand zwischen den Buttons */
     margin-top: 24px;
+    justify-content:  space-between;
 
     /* Allgemeine Regel für BEIDE Buttons in diesem Container */
     .u-button {
@@ -706,6 +731,8 @@
       color: white;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
       transition: all 0.2s ease;
+      margin: 20px 0;
+      padding: 10px 20px;
 
       &:hover {
         transform: translateY(-2px);

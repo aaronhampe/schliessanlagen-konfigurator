@@ -728,8 +728,9 @@ onMounted(async () => {
         </div>
       </div>
       <div class="modal-footer">
-        <UButton  color="blue" variant="solid"
+        <UButton  class="buy-button" color="blue" variant="solid"
           @click="performActualPurchase">
+          <i style="background: white; " class="i-heroicons-shopping-bag"></i>
           Angebot kaufen
         </UButton>
       </div>

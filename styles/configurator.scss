@@ -1288,7 +1288,6 @@ $color-sky: #0ea5e9;
   background: rgb(255, 255, 255);
 
   .modal-content {
-    max-width: 1000px;
     background: rgb(255, 255, 255);
 
     .modal-header {
@@ -1508,10 +1507,9 @@ $color-sky: #0ea5e9;
 
   .template-modal {
     background: white;
-
+    max-width: 600px;
     .modal-content {
       background: rgb(255, 255, 255);
-      width: 95%;
       max-height: 80vh;
     }
 
@@ -1580,7 +1578,7 @@ $color-sky: #0ea5e9;
   background: white;
 
   .modal-container {
-    max-width: 500px;
+    max-width: 650px;
     margin: auto;
     background: white;
     border-radius: 16px;
@@ -2554,7 +2552,7 @@ $color-sky: #0ea5e9;
   background: white;
 
   .modal-container {
-    max-width: 500px;
+    max-width: 600px;
     margin: auto;
     background: white;
     border-radius: 16px;

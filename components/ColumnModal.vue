@@ -110,6 +110,45 @@ export default {
 </script>
 
 <style scoped>
+/* CSS Custom Properties für bessere Dark Mode Unterstützung */
+:root {
+  --modal-bg: #ffffff;
+  --modal-header-bg: #fef3c7;
+  --modal-header-border: #fde68a;
+  --modal-footer-bg: #f9fafb;
+  --modal-footer-border: #e5e7eb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-hint: #6b7280;
+  --input-border: #d1d5db;
+  --input-border-hover: #9ca3af;
+  --suggestion-bg: #f3f4f6;
+  --suggestion-border: #e5e7eb;
+  --cancel-button-bg: #f3f4f6;
+  --cancel-button-text: #4b5563;
+  --cancel-button-hover: #e5e7eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --modal-bg: #1f2937;
+    --modal-header-bg: #374151;
+    --modal-header-border: #4b5563;
+    --modal-footer-bg: #111827;
+    --modal-footer-border: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-hint: #9ca3af;
+    --input-border: #4b5563;
+    --input-border-hover: #6b7280;
+    --suggestion-bg: #374151;
+    --suggestion-border: #4b5563;
+    --cancel-button-bg: #374151;
+    --cancel-button-text: #d1d5db;
+    --cancel-button-hover: #4b5563;
+  }
+}
+
 .improved-column-modal :deep(.u-modal-overlay) {
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
@@ -130,15 +169,15 @@ export default {
 }
 
 .column-modal-content {
-  background-color: white;
+  background-color: var(--modal-bg);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .column-modal-header {
-  background-color: #fef3c7;
-  border-bottom: 1px solid #fde68a;
+  background-color: var(--modal-header-bg);
+  border-bottom: 1px solid var(--modal-header-border);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -150,16 +189,16 @@ export default {
     gap: 12px;
   }
   
-  .modal-icon {
-    color: #d97706;
-    font-size: 20px;
-  }
-  
   .modal-title {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #92400e;
+    color: var(--text-primary);
     margin: 0;
+  }
+  
+  .modal-icon {
+    color: #d97706;
+    font-size: 20px;
   }
   
   .close-button {
@@ -187,7 +226,7 @@ export default {
     display: block;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #4b5563;
+    color: var(--text-secondary);
     margin-bottom: 8px;
   }
   
@@ -199,14 +238,20 @@ export default {
     width: 100%;
     
     :deep(.u-input__field) {
-      border-color: #d1d5db;
+      background-color: var(--modal-bg);
+      border-color: var(--input-border);
+      color: var(--text-primary);
       transition: all 0.2s ease;
       border-radius: 8px;
       padding: 10px 12px;
       font-size: 1rem;
       
+      &::placeholder {
+        color: var(--text-hint);
+      }
+      
       &:hover {
-        border-color: #9ca3af;
+        border-color: var(--input-border-hover);
       }
       
       &:focus {
@@ -218,7 +263,7 @@ export default {
   
   .input-hint {
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--text-hint);
     margin-top: 6px;
   }
   
@@ -228,7 +273,7 @@ export default {
     .suggestions-label {
       font-size: 0.85rem;
       font-weight: 500;
-      color: #4b5563;
+      color: var(--text-secondary);
       margin-bottom: 8px;
     }
     
@@ -238,13 +283,13 @@ export default {
       gap: 8px;
       
       .suggestion-chip {
-        background-color: #f3f4f6;
-        border: 1px solid #e5e7eb;
+        background-color: var(--suggestion-bg);
+        border: 1px solid var(--suggestion-border);
         border-radius: 16px;
         padding: 6px 12px;
         font-size: 0.85rem;
         font-weight: 500;
-        color: #4b5563;
+        color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.2s ease;
         
@@ -264,8 +309,8 @@ export default {
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 20px;
-  background-color: #f9fafb;
-  border-top: 1px solid #e5e7eb;
+  background-color: var(--modal-footer-bg);
+  border-top: 1px solid var(--modal-footer-border);
   
   .save-button, .cancel-button {
     padding: 8px 16px;
@@ -289,11 +334,11 @@ export default {
   }
   
   .cancel-button {
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: var(--cancel-button-bg);
+    color: var(--cancel-button-text);
     
     &:hover {
-      background-color: #e5e7eb;
+      background-color: var(--cancel-button-hover);
     }
   }
 }
@@ -331,66 +376,21 @@ export default {
   }
 }
 
-/* Dark Mode Support */
+/* Dark Mode Support - Entfernen der alten Implementierung */
 @media (prefers-color-scheme: dark) {
+  .improved-column-modal :deep(.u-modal-overlay) {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+  
   .column-modal-content {
-    background-color: #1f2937;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
   
   .column-modal-header {
-    background-color: #fef3c7;
-    border-bottom-color: #fde68a;
-    
-    .modal-title {
-      color: #92400e;
+    .close-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
-    
-    .modal-icon {
-      color: #d97706;
-    }
-  }
-  
-  .column-modal-body {
-    .input-label {
-      color: #e5e7eb;
-    }
-    
-    .key-name-input :deep(.u-input__field) {
-      background-color: #374151;
-      border-color: #4b5563;
-      color: #e5e7eb;
-      
-      &::placeholder {
-        color: #9ca3af;
-      }
-    }
-    
-    .input-hint {
-      color: #9ca3af;
-    }
-    
-    .name-suggestions {
-      .suggestions-label {
-        color: #d1d5db;
-      }
-      
-      .suggestion-chip {
-        background-color: #374151;
-        border-color: #4b5563;
-        color: #e5e7eb;
-        
-        &:hover {
-          background-color: #fef3c7;
-          border-color: #fde68a;
-          color: #92400e;
-        }
-      }
-    }
-  }
-  
-  .column-modal-footer {
-    background-color: #111827;
-    border-top-color: #374151;
   }
 }
 </style>
