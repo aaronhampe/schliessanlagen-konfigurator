@@ -1,0 +1,231 @@
+/* CSS Custom Properties für bessere Dark Mode Unterstützung */
+:root {
+  --modal-bg: #ffffff;
+  --modal-header-bg: #fef3c7;
+  --modal-header-border: #fde68a;
+  --modal-footer-bg: #f9fafb;
+  --modal-footer-border: #e5e7eb;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-hint: #6b7280;
+  --input-border: #d1d5db;
+  --input-border-hover: #9ca3af;
+  --suggestion-bg: #f3f4f6;
+  --suggestion-border: #e5e7eb;
+  --cancel-button-bg: #f3f4f6;
+  --cancel-button-text: #4b5563;
+  --cancel-button-hover: #e5e7eb;
+}
+
+
+
+.column-modal-content {
+  background-color: var(--modal-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.column-modal-header {
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid var(--modal-header-border);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .modal-icon {
+    color: #d97706;
+    font-size: 20px;
+  }
+
+  .close-button {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.column-modal-body {
+  padding: 24px 20px;
+  background-color: rgb(255, 255, 255);
+
+  .input-group {
+    margin-bottom: 16px;
+  }
+
+  .input-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .key-name-input {
+    width: 100%;
+    border: 1px solid var(--input-border);
+    background-color: var(--modal-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 1rem;
+
+    &:hover {
+      border-color: var(--input-border-hover);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 12px 30px rgba(177, 167, 26, 0.4),
+        0 6px 20px rgba(219, 149, 20, 0.582), 0 0 0 4px rgba(207, 162, 11, 0.15);
+    }
+  }
+
+  .input-hint {
+    font-size: 0.8rem;
+    color: var(--text-hint);
+    margin-top: 6px;
+  }
+
+  .name-suggestions {
+    margin-top: 16px;
+
+    .suggestions-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .suggestion-chip {
+        background-color: var(--suggestion-bg);
+        border: 1px solid var(--suggestion-border);
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #fef3c7;
+          border-color: #fde68a;
+          color: #92400e;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
+.column-modal-footer {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--modal-footer-border);
+
+  .save-button,
+  .cancel-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .save-button {
+    background-color: #f59e0b;
+    color: white;
+
+    &:hover {
+      background-color: #d97706;
+    }
+  }
+
+  .cancel-button {
+    background-color: var(--cancel-button-bg);
+    color: var(--cancel-button-text);
+
+    &:hover {
+      background-color: var(--cancel-button-hover);
+    }
+  }
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 640px) {
+  .column-modal-header {
+    padding: 12px 16px;
+
+    .modal-title {
+      font-size: 1rem;
+    }
+  }
+
+  .column-modal-body {
+    padding: 16px;
+  }
+
+  .column-modal-footer {
+    padding: 12px 16px;
+
+    .save-button,
+    .cancel-button {
+      padding: 8px 12px;
+      font-size: 0.875rem;
+    }
+  }
+
+  .name-suggestions {
+    .suggestion-chips {
+      .suggestion-chip {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+/* Dark Mode Support - Entfernen der alten Implementierung */
+@media (prefers-color-scheme: dark) {
+}

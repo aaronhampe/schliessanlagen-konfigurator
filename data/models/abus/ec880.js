@@ -1,7 +1,7 @@
 export default {
     isSchliessanlage: false,
     image: "./images/abus-ec880-doppelzylinder-logo-500x500.png",
-    keyPrice: 3.99,
+    keyPrice: 9.75,
     productID: 28478,
     useCase: "privat",
     securityLevel: 7,

@@ -1,7 +1,7 @@
 export default {
     isSchliessanlage: true,
     image: "./images/keso-omega-8000-doppelzylinder-schluessel-logo-500x500.png",
-    keyPrice: 3.60,
+    keyPrice: 5.60,
     productID: 28724,
     useCase: "gewerblich",
     securityLevel: 10,
