@@ -379,12 +379,12 @@ export default {
 /* Dark Mode Support - Entfernen der alten Implementierung */
 @media (prefers-color-scheme: dark) {
   .improved-column-modal :deep(.u-modal-overlay) {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(4px);
   }
   
   .column-modal-content {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(255, 255, 255, 0.3), 0 10px 10px -5px rgba(255, 255, 255, 0.2);
   }
   
   .column-modal-header {
