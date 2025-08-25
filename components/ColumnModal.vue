@@ -149,24 +149,6 @@ export default {
   }
 }
 
-.improved-column-modal :deep(.u-modal-overlay) {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-}
-
-.improved-column-modal :deep(.u-modal-container) {
-  align-items: center;
-  padding: 1rem;
-}
-
-.improved-column-modal :deep(.u-modal-content) {
-  background: transparent;
-  padding: 0;
-  max-width: 480px;
-  width: 95%;
-  border-radius: 12px;
-  overflow: hidden;
-}
 
 .column-modal-content {
   background-color: var(--modal-bg);
@@ -176,7 +158,7 @@ export default {
 }
 
 .column-modal-header {
-  background-color: var(--modal-header-bg);
+  background-color: rgb(255, 255, 255);
   border-bottom: 1px solid var(--modal-header-border);
   padding: 16px 20px;
   display: flex;
@@ -217,6 +199,7 @@ export default {
 
 .column-modal-body {
   padding: 24px 20px;
+  background-color: rgb(255, 255, 255);
   
   .input-group {
     margin-bottom: 16px;
@@ -305,11 +288,11 @@ export default {
 }
 
 .column-modal-footer {
+  background-color: rgb(255, 255, 255);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 20px;
-  background-color: var(--modal-footer-bg);
   border-top: 1px solid var(--modal-footer-border);
   
   .save-button, .cancel-button {
@@ -378,19 +361,6 @@ export default {
 
 /* Dark Mode Support - Entfernen der alten Implementierung */
 @media (prefers-color-scheme: dark) {
-  .improved-column-modal :deep(.u-modal-overlay) {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(4px);
-  }
   
-  .column-modal-content {
-    box-shadow: 0 20px 25px -5px rgba(255, 255, 255, 0.3), 0 10px 10px -5px rgba(255, 255, 255, 0.2);
-  }
-  
-  .column-modal-header {
-    .close-button:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
 }
 </style>
