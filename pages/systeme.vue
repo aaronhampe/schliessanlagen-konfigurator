@@ -344,8 +344,7 @@ async function addToCart(systemName, price, productID) {
           price: price,
           quantity: 1,
           anlage_nummer: anlageNr,
-          config_text: fullConfiguration,
-          widerruf_accepted: true, // Bleibt so, da allRequiredChecked es sicherstellt
+          config_text: fullConfiguration
         }),
       }
     );
