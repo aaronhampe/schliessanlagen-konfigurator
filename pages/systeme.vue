@@ -171,6 +171,7 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
   const typeKey = mapTypToModelKey(zylinderItem.Typ);
   if (!modelConfig[typeKey]) {
     return false;
+    //blubb
   }
 
   const foundSize = modelConfig[typeKey].sizes.find(
