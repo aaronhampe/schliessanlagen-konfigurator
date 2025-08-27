@@ -223,20 +223,7 @@ function generateConfigurationText() {
     const positions = getPositionsForKey(keyItem.KeyPOS);
     lines.push(`-<b> ${keyName}</b> schließt: ${positions}<br>`);
   });
-  lines.push("<br>");
-  lines.push(
-    `<b>Widerruf akzeptiert999</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
-  );
-  lines.push(
-    `<br><b>Zylinder korrekt gemessen</b>? ${
-      hasMeasuredCorrectly.value ? "Ja" : "Nein"
-    }`
-  );
-  lines.push(
-    `<br><b>Lieferzeiten akzeptiert</b>? ${
-      hasAcceptedLieferzeiten.value ? "Ja" : "Nein"
-    }`
-  );
+
   lines.push(`<br> <b>Gesamtschlüssel:</b> ${totalGlobalKeys.value}`);
   return lines.join("\n");
 }
