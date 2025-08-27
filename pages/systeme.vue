@@ -695,7 +695,7 @@ onMounted(async () => {
                 class="select-system-button"
                 @click="openSummary(offer)"
               >
-                Auswählen
+                Kaufen
               </UButton>
             </div>
           </div>
