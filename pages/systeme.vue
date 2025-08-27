@@ -225,7 +225,7 @@ function generateConfigurationText() {
   });
   lines.push("<br>");
   lines.push(
-    `<b>Widerruf akzeptiert</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
+    `<b>Widerruf akzeptiert999</b>? ${hasAcceptedWiderruf.value ? "Ja" : "Nein"}`
   );
   lines.push(
     `<br><b>Zylinder korrekt gemessen</b>? ${
