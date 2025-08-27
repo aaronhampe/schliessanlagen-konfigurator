@@ -1,6 +1,7 @@
 export default {
     isSchliessanlage: true,
     image: "./images/dom-ix-twido-schluessel-zylinder-logo-500x500.png",
+    brand: "DOM",
     keyPrice: 8.87,
     productID: 28348,
     useCase: "gewerblich",

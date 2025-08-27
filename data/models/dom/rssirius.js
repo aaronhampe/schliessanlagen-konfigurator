@@ -1,6 +1,7 @@
 export default {
     "isSchliessanlage": true,
     image: "./images/dom-rs-sirius-schluessel-zylinder-logo-500x500 (1).png",
+    brand: "DOM",
     keyPrice: 5.28,
     productID: 30869,
     securityLevel: 8,

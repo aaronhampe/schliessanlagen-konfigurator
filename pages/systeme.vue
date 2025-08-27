@@ -198,6 +198,58 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
   return true;
 }
 
+/**
+ * Überprüft ob die Konfiguration Sonderoptionen enthält, die zu längeren Lieferzeiten führen
+ * @param {Array} positionData - Array mit allen Zylinder-Positionen
+ * @returns {boolean} - true wenn Sonderoptionen vorhanden sind
+ */
+ function hasSpecialOptionsForDelivery(positionData) {
+  // Definiere die Optionen, die zu längeren Lieferzeiten führen
+  const specialOptions = [
+    "Modulare Bauweise",
+    "Erhöhter Bohrschutz", 
+    "Seewasserfest",
+    "Freilauf"
+  ];
+
+  // Durchlaufe alle Positionen und prüfe ihre Optionen
+  return positionData.some(position => {
+    if (!position.Option) return false;
+    
+    // Teile die Options-String in einzelne Optionen auf
+    const selectedOptions = position.Option
+      .split(",")
+      .map(opt => opt.trim())
+      .filter(opt => opt);
+    
+    // Prüfe ob eine der besonderen Optionen ausgewählt wurde
+    return selectedOptions.some(option => 
+      specialOptions.includes(option)
+    );
+  });
+}
+
+/**
+ * Manipuliert die Lieferzeit basierend auf den gewählten Sonderoptionen
+ * @param {string} originalDeliveryTime - Original Lieferzeit aus der Modellkonfiguration
+ * @param {Array} positionData - Array mit allen Zylinder-Positionen
+ * @param {string} brand - Marke des Produkts (z.B. "DOM", "KESO", etc.)
+ * @returns {string} - Angepasste Lieferzeit
+ */
+ function adjustDeliveryTime(originalDeliveryTime, positionData, brand) {
+  // Prüfe ob Sonderoptionen vorhanden sind
+  const hasSpecialOptions = hasSpecialOptionsForDelivery(positionData);
+  
+  // Längere Lieferzeit nur bei Sonderoptionen UND DOM-Produkten
+  if (hasSpecialOptions && brand === "DOM") {
+    return "2-4 Wochen"; // Längere Lieferzeit bei DOM-Sonderoptionen
+  }
+  
+  // Rückgabe der ursprünglichen Lieferzeit in allen anderen Fällen
+  return originalDeliveryTime;
+}
+
+
 function generateConfigurationText() {
   let lines = [];
   lines.push("<br>");
@@ -422,6 +474,14 @@ onMounted(async () => {
         positionData.value,
         totalGlobalKeys.value
       );
+
+        
+        const adjustedDeliveryTime = adjustDeliveryTime(
+        modelConfig.deliveryTime || "Lieferzeit nicht definiert",
+        positionData.value,
+        modelConfig.brand || ""
+      );
+
       return {
         title: modelName,
         price,
@@ -434,7 +494,7 @@ onMounted(async () => {
         features: modelConfig.features || [],
         infoText: modelConfig.infoText || "",
         securityLevel: modelConfig.securityLevel || 1,
-        deliveryTime: modelConfig.deliveryTime || "Lieferzeit nicht definiert",
+        deliveryTime: adjustedDeliveryTime, 
       };
     });
     offers.value = tempOffers;
