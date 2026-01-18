@@ -45,7 +45,7 @@
         <div class="support-section">
           <i class="i-heroicons-phone support-icon"></i>
           <div class="support-text">
-            <span class="support-label">Benötigen Sie Hilfe?</span>
+            <span class="support-label">Sie benötigen Hilfe?</span>
             <a href="tel:+4951306093900" class="support-link">
               +49 5130 609390
             </a>
