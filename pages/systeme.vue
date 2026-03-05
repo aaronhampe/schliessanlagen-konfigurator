@@ -234,9 +234,20 @@ function checkZylinderCompatibility(modelName, zylinderItem) {
  * @param {string} originalDeliveryTime - Original Lieferzeit aus der Modellkonfiguration
  * @param {Array} positionData - Array mit allen Zylinder-Positionen
  * @param {string} brand - Marke des Produkts (z.B. "DOM", "KESO", etc.)
+ * @param {string} modelName - Name des Modells
+ * @param {boolean} isAllChecked - True, wenn alle Checkboxen angehakt sind (Gleichschließung)
  * @returns {string} - Angepasste Lieferzeit
  */
- function adjustDeliveryTime(originalDeliveryTime, positionData, brand) {
+ function adjustDeliveryTime(originalDeliveryTime, positionData, brand, modelName, isAllChecked) {
+  // Sonderregel für ABUS Magtec 1500 bezüglich Schließanlage vs Gleichschließung
+  if (modelName === "ABUS Magtec 1500") {
+    if (!isAllChecked) {
+      return "3-4 Wochen";
+    } else {
+      return "2-3 Werktage";
+    }
+  }
+
   // Prüfe ob Sonderoptionen vorhanden sind
   const hasSpecialOptions = hasSpecialOptionsForDelivery(positionData);
   
@@ -479,7 +490,9 @@ onMounted(async () => {
         const adjustedDeliveryTime = adjustDeliveryTime(
         modelConfig.deliveryTime || "Lieferzeit nicht definiert",
         positionData.value,
-        modelConfig.brand || ""
+        modelConfig.brand || "",
+        modelName,
+        allAreChecked.value
       );
 
       return {
