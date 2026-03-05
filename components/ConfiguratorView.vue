@@ -7,7 +7,7 @@
         <h1>
           {{
             isSchliessanlage
-              ? "Konfigurator für eine Schließanlage"
+              ? "Konfigurieren Sie eine Schließanlage"
               : "Konfigurator für eine Gleichschließung"
           }}
         </h1>
