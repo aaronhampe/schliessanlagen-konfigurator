@@ -29,8 +29,7 @@ const selectedOffer = ref(null);
 const hasAcceptedWiderruf = ref(false);
 const hasMeasuredCorrectly = ref(false);
 const hasAcceptedLieferzeiten = ref(false);
-const hoverWiderruf = ref(false);
-const hoverLieferzeit = ref(false);
+
 
 // NEU: Refs für die Fehlermeldung und deren Text
 const showRequirementError = ref(false);
