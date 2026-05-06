@@ -253,7 +253,7 @@
         <!-- Verbesserter Call-to-Action Button -->
         <UButton class="button-cta" @click="handleWeiterZuAngeboten" size="md" color="green" variant="solid"
           icon="i-heroicons-shopping-cart">
-          Zur Modellauswahl und den Preisen
+          {{ directModelFlow ? "Konfiguration abschließen" : "Zur Modellauswahl und den Preisen" }}
         </UButton>
 
 
@@ -265,6 +265,54 @@
           auf&nbsp;YouTube</a>
 
 
+      </div>
+
+      <div
+        v-if="isPurchaseReady && currentOffer"
+        ref="inlinePurchasePanel"
+        class="inline-purchase-panel"
+      >
+        <div class="inline-purchase-media">
+          <img :src="currentOffer.image" :alt="currentOffer.title" />
+        </div>
+        <div class="inline-purchase-content">
+          <span class="inline-purchase-kicker">Fertige Konfiguration</span>
+          <h2>{{ currentOffer.title }}</h2>
+          <p>
+            Ihre Anlage {{ anlageNr }} wurde gespeichert. Sie können dieses
+            konfigurierte System jetzt direkt in den Warenkorb legen.
+          </p>
+          <div class="inline-purchase-meta">
+            <span v-if="currentOffer.deliveryTime">
+              Lieferzeit: <strong>{{ currentOffer.deliveryTime }}</strong>
+            </span>
+            <span>
+              Schlüssel gesamt: <strong>{{ configuredTotalKeys }}</strong>
+            </span>
+          </div>
+          <div class="inline-purchase-footer">
+            <div class="inline-purchase-price">
+              <span>Gesamtpreis</span>
+              <strong>{{ formatEuro(currentOffer.price) }} €</strong>
+            </div>
+            <UButton
+              class="inline-buy-button"
+              color="green"
+              variant="solid"
+              icon="i-heroicons-shopping-bag"
+              :loading="isAddingToCart"
+              @click="addCurrentOfferToCart"
+            >
+              Jetzt kaufen
+            </UButton>
+          </div>
+          <p v-if="purchaseError" class="inline-purchase-error">
+            {{ purchaseError }}
+          </p>
+          <p v-if="purchaseSuccess" class="inline-purchase-success">
+            Die Konfiguration wurde zum Warenkorb hinzugefügt.
+          </p>
+        </div>
       </div>
     </div>
     <UButton class="button-add-key" icon="i-heroicons-plus-16-solid" @click="addCheckbox" size="sm" color="amber"
@@ -430,12 +478,19 @@
         <!-- Success Icon und Beschreibung -->
         <div class="success-section">
           
-          <h2 class="modal-h2">Zum Preisvergleich</h2><br>
+          <h2 class="modal-h2">
+            {{ directModelFlow ? "Angebot vorbereiten" : "Zum Preisvergleich" }}
+          </h2><br>
           <p class="modal-description">
-
-            Möchten Sie Ihre Konfiguration <b>speichern und später wieder laden</b>? Dann hinterlassen Sie einfach Ihre
-            E-Mail –
-            Sie erhalten dann Anlagennummer und Passwort.
+            <template v-if="directModelFlow">
+              Speichern Sie Ihre Konfiguration, damit sie anschließend direkt
+              gekauft werden kann. E-Mail, Name und Telefon sind optional.
+            </template>
+            <template v-else>
+              Möchten Sie Ihre Konfiguration <b>speichern und später wieder laden</b>? Dann hinterlassen Sie einfach Ihre
+              E-Mail –
+              Sie erhalten dann Anlagennummer und Passwort.
+            </template>
           </p>
         </div>
 
@@ -473,13 +528,17 @@
           <!-- CTA Button -->
           <UButton type="submit" color="green" variant="solid" class="cta-button" size="lg"
             icon="i-heroicons-arrow-right-16-solid">
-            Zu der Preisübersicht
+            {{ directModelFlow ? "Angebot anzeigen" : "Zu der Preisübersicht" }}
           </UButton>
 
           <!-- Hinweis -->
           <p class="form-hint">
             <i class="i-heroicons-information-circle-16-solid"></i>
-            Sie können auch ohne Angaben fortfahren und die Angebote direkt einsehen.
+            {{
+              directModelFlow
+                ? "Sie können auch ohne Angaben fortfahren und das Angebot direkt kaufen."
+                : "Sie können auch ohne Angaben fortfahren und die Angebote direkt einsehen."
+            }}
           </p>
         </form>
       </div>
@@ -524,6 +583,13 @@
 import { _white } from "#tailwind-config/theme/accentColor";
 import ColumnModal from "./ColumnModal.vue";
 import { useCylinderStore } from "@/stores/cylinderStores.js";
+import cylinderModels from "@/data/cylinderModels.js";
+import {
+  calculatePriceForRows,
+  formatEuro,
+  generateConfigurationTextFromRows,
+  getTotalKeysFromRows,
+} from "@/data/utils/configurationPricing.js";
 
 export default {
   components: {
@@ -567,6 +633,10 @@ export default {
       ///////////////////////////////////
       showIntroText: true,
       activeStep: 1,
+      isPurchaseReady: false,
+      isAddingToCart: false,
+      purchaseError: "",
+      purchaseSuccess: false,
       ///////////////////////////////////
       isTemplateModalOpen: false,
       selectedTemplateId: null,
@@ -733,7 +803,38 @@ export default {
     },
 
     modelOptions() {
-      return Object.keys(zylindermodelle);
+      return Object.keys(cylinderModels);
+    },
+
+    directModelFlow() {
+      return (
+        !!this.$route.query.model &&
+        !!this.store.selectedModel &&
+        this.store.selectedModel !== "Kein bestimmtes Modell"
+      );
+    },
+
+    selectedModelConfig() {
+      return cylinderModels[this.store.selectedModel] || null;
+    },
+
+    configuredTotalKeys() {
+      return getTotalKeysFromRows(this.rows);
+    },
+
+    configuredPrice() {
+      return calculatePriceForRows(this.store.selectedModel, this.rows);
+    },
+
+    currentOffer() {
+      if (!this.selectedModelConfig || !this.directModelFlow) return null;
+      return {
+        title: this.store.selectedModel,
+        price: this.configuredPrice,
+        productID: this.selectedModelConfig.productID,
+        image: this.selectedModelConfig.image,
+        deliveryTime: this.selectedModelConfig.deliveryTime || "",
+      };
     },
 
     finalGleichschliessungState: {
@@ -744,7 +845,7 @@ export default {
         }
 
         // 2) Falls das Modell z.B. ABUS Ec 550 => immer Gleichschließung
-        const model = this.store.currentModel || "";
+        const model = this.store.selectedModel || "";
         if (model === "ABUS Ec 550") {
           return true;
         }
@@ -762,7 +863,7 @@ export default {
         // => schon Gleichschließung => nichts zu toggeln
         return true;
       }
-      if (this.store.currentModel === "ABUS Ec 550") {
+      if (this.store.selectedModel === "ABUS Ec 550") {
         // => immer Gleichschließung => nichts zu toggeln
         return true;
       }
@@ -776,7 +877,7 @@ export default {
     },
     selectedModel: {
       get() {
-        return this.store.currentModel;
+        return this.store.selectedModel;
       },
       set(value) {
         this.store.setModel(value);
@@ -806,14 +907,14 @@ export default {
     // — falls im Store schon “Kein bestimmtes Modell” steht, nimm das,
     //   ansonsten nimm den ersten Wert aus availableModels
     this.selectedModelLocal =
-      this.store.currentModel ||
+      this.store.selectedModel ||
       (this.store.availableModels.length > 0
         ? this.store.availableModels[0]
         : "");
     this.oldModel = this.selectedModelLocal;
 
     // Setze optional auch im Store den Default, falls noch leer
-    if (!this.store.currentModel) {
+    if (!this.store.selectedModel) {
       this.store.setModel(this.selectedModelLocal);
     }
   },
@@ -829,13 +930,6 @@ export default {
         }
       },
     },
-    'store.currentModel': {
-      immediate: true,
-      handler(v) {
-        this.selectedModelLocal = v;
-        this.oldModel = v;
-      }
-    },
     "$route.query.anlageNr": {
       handler(newVal) {
         if (newVal) {
@@ -847,6 +941,79 @@ export default {
     },
   },
   methods: {
+    formatEuro,
+
+    showInlinePurchase() {
+      this.isPurchaseReady = true;
+      this.purchaseError = "";
+      this.purchaseSuccess = false;
+      this.activeStep = 2;
+      this.$nextTick(() => {
+        const panel = this.$refs.inlinePurchasePanel;
+        if (panel?.scrollIntoView) {
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    },
+
+    async addCurrentOfferToCart() {
+      if (!this.currentOffer?.productID) {
+        this.purchaseError =
+          "Das Angebot konnte nicht vorbereitet werden. Bitte speichern Sie die Konfiguration erneut.";
+        return;
+      }
+
+      this.isAddingToCart = true;
+      this.purchaseError = "";
+      this.purchaseSuccess = false;
+
+      try {
+        const saved = await this.saveInstallation();
+        if (!saved) {
+          this.purchaseError =
+            "Bitte prüfen Sie die Konfiguration. Der Kauf wurde noch nicht gestartet.";
+          return;
+        }
+
+        const response = await fetch(
+          "https://www.stt-shop.de/wp-json/custom/v1/add_to_cart",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              product_id: this.currentOffer.productID,
+              price: this.currentOffer.price,
+              quantity: 1,
+              anlage_nummer: this.anlageNr,
+              config_text: generateConfigurationTextFromRows(
+                this.rows,
+                this.configuredTotalKeys
+              ),
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to add to cart: ${response.statusText}`);
+        }
+
+        await $fetch("/api/updateProtect", {
+          method: "POST",
+          body: { ID: this.anlageNr },
+        });
+
+        this.purchaseSuccess = true;
+        window.open("https://www.stt-shop.de/warenkorb/", "_blank");
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+        this.purchaseError = `Fehler beim Hinzufügen zum Warenkorb: ${error.message}`;
+      } finally {
+        this.isAddingToCart = false;
+      }
+    },
 
     getSelectedOptionsCount(checkbox) {
       if (!checkbox || !checkbox.optionsSelected) return 0;
@@ -882,10 +1049,12 @@ export default {
       const template = this.selectedTemplate;
       if (!template) return;
 
-      // 1. Modell explizit auf "Kein bestimmtes Modell" setzen
-      this.store.setModel("Kein bestimmtes Modell");
-      this.selectedModelLocal = "Kein bestimmtes Modell";
-      this.oldModel = "Kein bestimmtes Modell";
+      if (!this.directModelFlow) {
+        // 1. Modell explizit auf "Kein bestimmtes Modell" setzen
+        this.store.setModel("Kein bestimmtes Modell");
+        this.selectedModelLocal = "Kein bestimmtes Modell";
+        this.oldModel = "Kein bestimmtes Modell";
+      }
 
       // 2. Alte Daten löschen und neue Türen hinzufügen
       this.rows = [];
@@ -935,7 +1104,9 @@ export default {
       this.isTemplateModalOpen = false;
 
       // Erfolgs-Meldung anzeigen
-      this.alertMessage = `Vorlage "${template.name}" erfolgreich angewendet! Das Modell wurde auf "Kein bestimmtes Modell" zurückgesetzt.`;
+      this.alertMessage = this.directModelFlow
+        ? `Vorlage "${template.name}" erfolgreich angewendet.`
+        : `Vorlage "${template.name}" erfolgreich angewendet! Das Modell wurde auf "Kein bestimmtes Modell" zurückgesetzt.`;
       this.alertType = "success";
       setTimeout(() => {
         this.alertMessage = "";
@@ -1307,6 +1478,12 @@ export default {
 
       await this.buttonspeichern();
 
+      if (this.directModelFlow) {
+        this.isOfferModalOpen = false;
+        this.showInlinePurchase();
+        return;
+      }
+
       this.$router.push({
         name: "systeme",
         query: {
@@ -1503,6 +1680,10 @@ export default {
         // Bestehende Anlage: direkt speichern (ohne erneute E-Mail) und weiterleiten
         const saved = await this.saveInstallation();
         if (saved) {
+          if (this.directModelFlow) {
+            this.showInlinePurchase();
+            return;
+          }
           this.$router.push({
             name: "systeme",
             query: {
@@ -1708,11 +1889,11 @@ export default {
       this.generateRandomAnlagenNummer();
       document.addEventListener("click", this.closeAllDropdowns);
       // Wenn noch kein Modell im Store steht, auf den Default‑Placeholder zurücksetzen:
-      this.selectedModelLocal = this.store.currentModel || "";
+      this.selectedModelLocal = this.store.selectedModel || "";
       this.oldModel = this.selectedModelLocal;
 
       // Falls du direkt auch im Store den Default repräsentieren willst:
-      if (!this.store.currentModel) {
+      if (!this.store.selectedModel) {
         this.store.setModel("");
       }
 

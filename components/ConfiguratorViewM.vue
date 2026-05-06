@@ -369,8 +369,52 @@
           Zurück
         </UButton>
         <UButton @click="saveInstallation" class="save-button">
-          Speichern und fortfahren
+          {{ directModelFlow ? "Speichern und Angebot anzeigen" : "Speichern und fortfahren" }}
         </UButton>
+      </div>
+
+      <div
+        v-if="isPurchaseReady && currentOffer"
+        ref="mobilePurchasePanel"
+        class="mobile-purchase-panel"
+      >
+        <div class="mobile-purchase-header">
+          <img :src="currentOffer.image" :alt="currentOffer.title" />
+          <div>
+            <span>Fertige Konfiguration</span>
+            <h3>{{ currentOffer.title }}</h3>
+          </div>
+        </div>
+        <p>
+          Ihre Anlage {{ anlageNr }} wurde gespeichert und kann direkt gekauft
+          werden.
+        </p>
+        <div class="mobile-purchase-meta">
+          <span v-if="currentOffer.deliveryTime">
+            Lieferzeit: <strong>{{ currentOffer.deliveryTime }}</strong>
+          </span>
+          <span>Schlüssel: <strong>{{ configuredTotalKeys }}</strong></span>
+        </div>
+        <div class="mobile-purchase-footer">
+          <div class="mobile-purchase-price">
+            <span>Gesamtpreis</span>
+            <strong>{{ formatEuro(currentOffer.price) }} €</strong>
+          </div>
+          <UButton
+            color="green"
+            icon="i-heroicons-shopping-bag"
+            :loading="isAddingToCart"
+            @click="addCurrentOfferToCart"
+          >
+            Jetzt kaufen
+          </UButton>
+        </div>
+        <p v-if="purchaseError" class="mobile-purchase-error">
+          {{ purchaseError }}
+        </p>
+        <p v-if="purchaseSuccess" class="mobile-purchase-success">
+          Die Konfiguration wurde zum Warenkorb hinzugefügt.
+        </p>
       </div>
     </div>
 
@@ -669,6 +713,13 @@
 
 <script>
 import { useCylinderStore } from "@/stores/cylinderStores.js";
+import cylinderModels from "@/data/cylinderModels.js";
+import {
+  calculatePriceForRows,
+  formatEuro,
+  generateConfigurationTextFromRows,
+  getTotalKeysFromRows,
+} from "@/data/utils/configurationPricing.js";
 
 import { nextTick } from "vue";
 
@@ -705,6 +756,10 @@ export default {
       isWarningModalOpen: false,
       pendingModel: null,
       overrideToGleichschliessung: false,
+      isPurchaseReady: false,
+      isAddingToCart: false,
+      purchaseError: "",
+      purchaseSuccess: false,
 
       // Optionen Modal
       activeOptionsModalIndex: null,
@@ -992,7 +1047,7 @@ export default {
         if (!this.store.isSchliessanlage) {
           return true;
         }
-        const model = this.store.currentModel || "";
+        const model = this.store.selectedModel || "";
         if (model === "ABUS Ec 550") {
           return true;
         }
@@ -1017,10 +1072,41 @@ export default {
       if (!this.store.isSchliessanlage) {
         return true;
       }
-      if (this.store.currentModel === "ABUS Ec 550") {
+      if (this.store.selectedModel === "ABUS Ec 550") {
         return true;
       }
       return false;
+    },
+
+    directModelFlow() {
+      return (
+        !!this.$route.query.model &&
+        !!this.store.selectedModel &&
+        this.store.selectedModel !== "Kein bestimmtes Modell"
+      );
+    },
+
+    selectedModelConfig() {
+      return cylinderModels[this.store.selectedModel] || null;
+    },
+
+    configuredTotalKeys() {
+      return getTotalKeysFromRows(this.rows);
+    },
+
+    configuredPrice() {
+      return calculatePriceForRows(this.store.selectedModel, this.rows);
+    },
+
+    currentOffer() {
+      if (!this.selectedModelConfig || !this.directModelFlow) return null;
+      return {
+        title: this.store.selectedModel,
+        price: this.configuredPrice,
+        productID: this.selectedModelConfig.productID,
+        image: this.selectedModelConfig.image,
+        deliveryTime: this.selectedModelConfig.deliveryTime || "",
+      };
     },
   },
   watch: {
@@ -1042,6 +1128,80 @@ export default {
     },
   },
   methods: {
+    formatEuro,
+
+    showInlinePurchase() {
+      this.isPurchaseReady = true;
+      this.purchaseError = "";
+      this.purchaseSuccess = false;
+      this.currentStep = 3;
+      nextTick(() => {
+        const panel = this.$refs.mobilePurchasePanel;
+        if (panel?.scrollIntoView) {
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    },
+
+    async addCurrentOfferToCart() {
+      if (!this.currentOffer?.productID) {
+        this.purchaseError =
+          "Das Angebot konnte nicht vorbereitet werden. Bitte speichern Sie die Konfiguration erneut.";
+        return;
+      }
+
+      this.isAddingToCart = true;
+      this.purchaseError = "";
+      this.purchaseSuccess = false;
+
+      try {
+        const saved = await this.performSave();
+        if (!saved) {
+          this.purchaseError =
+            "Bitte prüfen Sie die Konfiguration. Der Kauf wurde noch nicht gestartet.";
+          return;
+        }
+
+        const response = await fetch(
+          "https://www.stt-shop.de/wp-json/custom/v1/add_to_cart",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              product_id: this.currentOffer.productID,
+              price: this.currentOffer.price,
+              quantity: 1,
+              anlage_nummer: this.anlageNr,
+              config_text: generateConfigurationTextFromRows(
+                this.rows,
+                this.configuredTotalKeys
+              ),
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to add to cart: ${response.statusText}`);
+        }
+
+        await $fetch("/api/updateProtect", {
+          method: "POST",
+          body: { ID: this.anlageNr },
+        });
+
+        this.purchaseSuccess = true;
+        window.open("https://www.stt-shop.de/warenkorb/", "_blank");
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+        this.purchaseError = `Fehler beim Hinzufügen zum Warenkorb: ${error.message}`;
+      } finally {
+        this.isAddingToCart = false;
+      }
+    },
+
     // Laden-Modal öffnen
     openLoadModal() {
       this.loadId = "";
@@ -1060,8 +1220,10 @@ export default {
       const template = this.selectedTemplate;
       if (!template) return;
 
-      // 1. Modell explizit zurücksetzen
-      this.store.setModel("Kein bestimmtes Modell");
+      if (!this.directModelFlow) {
+        // 1. Modell explizit zurücksetzen
+        this.store.setModel("Kein bestimmtes Modell");
+      }
 
       // 2. Bestehende Daten leeren
       this.rows = [];
@@ -1672,6 +1834,10 @@ export default {
 
       // Nur wenn das Speichern erfolgreich war, zur nächsten Seite weiterleiten
       if (wasSuccessful) {
+        if (this.directModelFlow) {
+          this.showInlinePurchase();
+          return;
+        }
         this.$router.push({
           name: "systeme",
           query: {
@@ -2194,5 +2360,96 @@ export default {
       }
     }
   }
+}
+
+.mobile-purchase-panel {
+  margin: 20px 0 110px;
+  padding: 18px;
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.mobile-purchase-header {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 6px;
+  }
+
+  span {
+    color: #0f766e;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 3px 0 0;
+    font-size: 1.15rem;
+    line-height: 1.2;
+  }
+}
+
+.mobile-purchase-panel p {
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.mobile-purchase-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 14px 0;
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+.mobile-purchase-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.mobile-purchase-price {
+  display: flex;
+  flex-direction: column;
+
+  span {
+    color: #64748b;
+    font-size: 0.82rem;
+  }
+
+  strong {
+    color: #0f172a;
+    font-size: 1.25rem;
+  }
+}
+
+.mobile-purchase-error,
+.mobile-purchase-success {
+  margin-top: 12px !important;
+  font-weight: 600;
+}
+
+.mobile-purchase-error {
+  color: #b91c1c !important;
+}
+
+.mobile-purchase-success {
+  color: #15803d !important;
 }
 </style>

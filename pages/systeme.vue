@@ -3,6 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted, computed, watch, nextTick } from "vue"; // watch hinzugefügt
 import { useCylinderStore } from "@/stores/cylinderStores.js";
 import cylinderModels from "@/data/cylinderModels.js";
+import { getBaseCylinderPrice, formatEuro } from "@/data/utils/configurationPricing.js";
 import {
   mapOptionToUpchargeKey,
   mapTypToModelKey,
@@ -29,6 +30,76 @@ const selectedOffer = ref(null);
 const hasAcceptedWiderruf = ref(false);
 const hasMeasuredCorrectly = ref(false);
 const hasAcceptedLieferzeiten = ref(false);
+
+const securityClassMeta = {
+  basis: { label: "Basis Schutz", color: "green" },
+  elevated: { label: "Gehobener Schutz", color: "blue" },
+  high: { label: "Hoher Schutz", color: "red" },
+  premium: { label: "Premium Schutz", color: "premium" },
+};
+
+const modelHighlights = {
+  "DOM RS Sigma": "Markenqualität zum Einstiegspreis",
+  "ABUS Magtec 1500": "Innovative Magnet-Technologie",
+  "DOM RS Sirius": "Robust und langlebig für Eigenheime",
+  "ABUS Magtec 2500": "Maximaler Kopierschutz mit Magnet-Technologie",
+  "DOM IX Twido": "Komfortabler Wendeschlüssel",
+  "KESO 8000 Omega": "Schweizer High-End Präzision",
+};
+
+const preferredSystemOrder = [
+  "DOM RS Sigma",
+  "ABUS Magtec 1500",
+  "DOM RS Sirius",
+  "ABUS Magtec 2500",
+  "DOM IX Twido",
+  "KESO 8000 Omega",
+];
+
+function getSecurityClass(modelConfig) {
+  const level = Number(modelConfig?.securityLevel) || 1;
+  if (level >= 10) return securityClassMeta.premium;
+  if (level >= 8) return securityClassMeta.high;
+  if (level >= 6) return securityClassMeta.elevated;
+  return securityClassMeta.basis;
+}
+
+const productSelectionRows = computed(() => {
+  return Object.keys(cylinderModels)
+    .filter((modelName) => {
+      const modelConfig = cylinderModels[modelName];
+      return modelName !== "Kein bestimmtes Modell" && modelConfig?.isSchliessanlage;
+    })
+    .map((modelName) => {
+      const modelConfig = cylinderModels[modelName];
+      return {
+        title: modelName,
+        basePrice: getBaseCylinderPrice(modelName),
+        security: getSecurityClass(modelConfig),
+        highlight:
+          modelHighlights[modelName] ||
+          modelConfig.features?.[0] ||
+          modelConfig.useCase ||
+          "",
+      };
+    })
+    .sort((a, b) => {
+      const indexA = preferredSystemOrder.indexOf(a.title);
+      const indexB = preferredSystemOrder.indexOf(b.title);
+      if (indexA !== -1 || indexB !== -1) {
+        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+      }
+      return a.basePrice - b.basePrice;
+    });
+});
+
+function selectProductModel(modelName) {
+  store.setModel(modelName);
+  router.push({
+    name: "index",
+    query: { model: modelName },
+  });
+}
 
 
 // NEU: Refs für die Fehlermeldung und deren Text
@@ -524,7 +595,9 @@ onMounted(async () => {
         <div class="breadcrumb">
           <span class="breadcrumb-item">Konfigurator</span>
           <i class="i-heroicons-chevron-right breadcrumb-separator"></i>
-          <span class="breadcrumb-item current">Systemauswahl</span>
+          <span class="breadcrumb-item current">
+            {{ anlageNr ? "Systemauswahl" : "Produktauswahl" }}
+          </span>
         </div>
 
         <!-- Support-Bereich (rechts oben) -->
@@ -542,7 +615,13 @@ onMounted(async () => {
       </div>
 
       <div class="page-title-section">
-        <h2>Passende Schließsysteme für Ihre Konfiguration</h2>
+        <h2>
+          {{
+            anlageNr
+              ? "Passende Schließsysteme für Ihre Konfiguration"
+              : "Produktauswahl Schließanlagen"
+          }}
+        </h2>
         <div class="anlage-info" v-if="anlageNr">
           <i class="i-heroicons-identification anlage-icon"></i>
           <span
@@ -552,6 +631,52 @@ onMounted(async () => {
       </div>
     </div>
 
+    <div v-if="!anlageNr" class="product-selection-section">
+      <div class="product-selection-intro">
+        <p>
+          Wählen Sie zuerst das gewünschte Schließsystem. Danach konfigurieren
+          Sie Türen, Schlüssel, Maße und Optionen nur noch für dieses Modell.
+        </p>
+      </div>
+
+      <div class="product-table-wrap">
+        <table class="product-selection-table">
+          <thead>
+            <tr>
+              <th>System</th>
+              <th>Sicherheitsklasse</th>
+              <th>Besonderheit</th>
+              <th>Preis (ab 30/30 mm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="system in productSelectionRows"
+              :key="system.title"
+              @click="selectProductModel(system.title)"
+              class="product-selection-row"
+            >
+              <td class="system-name">{{ system.title }}</td>
+              <td>
+                <span class="security-class">
+                  <span
+                    class="security-dot"
+                    :class="`security-dot-${system.security.color}`"
+                  ></span>
+                  {{ system.security.label }}
+                </span>
+              </td>
+              <td>{{ system.highlight }}</td>
+              <td class="base-price">
+                {{ formatEuro(system.basePrice) }} €
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <template v-else>
     <!-- Verbesserte Filter-Sektion -->
     <div class="controls-section">
       <div class="filters-container">
@@ -773,6 +898,7 @@ onMounted(async () => {
         Zurück zum Konfigurator
       </UButton>
     </div>
+    </template>
   </div>
 
   <UModal
